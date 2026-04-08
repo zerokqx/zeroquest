@@ -8,6 +8,21 @@
     },
     {
       "path": "./apps/zeroquest"
+    },
+    {
+      "path": "./apps/api-e2e"
+    },
+    {
+      "path": "./apps/api"
+    },
+    {
+      "path": "./apps/telegram-bot-e2e"
+    },
+    {
+      "path": "./apps/telegram-bot"
+    },
+    {
+      "path": "./libs/types"
     }
   ]
 }

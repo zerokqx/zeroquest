@@ -1,0 +1,26 @@
+{
+  "name": "@zeroquest/telegram-bot-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@zeroquest/telegram-bot"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/telegram-bot-e2e/jest.config.cts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@zeroquest/telegram-bot:build",
+          "@zeroquest/telegram-bot:serve"
+        ]
+      }
+    }
+  }
+}
