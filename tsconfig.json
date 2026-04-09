@@ -23,6 +23,9 @@
     },
     {
       "path": "./libs/types"
+    },
+    {
+      "path": "./libs/converters"
     }
   ]
 }

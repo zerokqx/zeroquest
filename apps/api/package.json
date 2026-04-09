@@ -4,6 +4,27 @@
   "private": true,
   "nx": {
     "targets": {
+      "docker:db": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "docker compose -f ./compose.db.yaml {args}",
+          "cwd": "apps/api"
+        }
+      },
+      "docker:redis": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "docker compose -f ./compose.redis.yaml {args}",
+          "cwd": "apps/api"
+        }
+      },
+      "docker:down:all": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "docker stop $(docker ps -q)",
+          "cwd": "apps/api"
+        }
+      },
       "build": {
         "executor": "nx:run-commands",
         "options": {
@@ -85,7 +106,9 @@
   "dependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
+    "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.0",
+    "dotenv": "^17.4.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0"

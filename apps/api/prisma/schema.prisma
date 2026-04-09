@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  WAITING_FOR_CONFIRMATION
+  SUCCEEDED
+  FAILED
+  CANCELED
+  REFUND_PENDING
+  REFUNDED
+}
+
+enum PaymentAppliedStatus {
+  PROCESSING
+  PENDING
+  FAILED
+  SUCCEEDED
+}
+
+enum SubscribeStatus {
+  STOPPED
+  ACTIVE
+  PENDING
+}
+
+model ClientType {
+  id       Int       @id @default(autoincrement())
+  name     String
+  sessions Session[]
+}
+
+model Session {
+  id           Int        @id @default(autoincrement())
+  userAgent    String     @map("user_agent")
+  clientType   ClientType @relation(fields: [clientTypeId], references: [id])
+  clientTypeId Int        @map("client_type_id")
+  refreshToken String     @map("refresh_token")
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @map("user_id")
+
+  @@map("sessions")
+}
+
+model Refund {
+  id          Int       @id @default(autoincrement())
+  payment     Payment   @relation(fields: [paymentId], references: [id])
+  paymentId   Int       @unique @map("payment_id")
+  subscribe   Subscribe @relation(fields: [subscribeId], references: [id])
+  subscribeId Int       @map("subscribe_id")
+
+  @@map("refunds")
+}
+
+model Inbound {
+  id Int @id @default(autoincrement())
+  inboundId Int @map("inbount_id")
+
+  @@map("inbounds")
+}
+
+model Plan {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  price       Int
+  description String?
+  payments    Payment[]
+  subscribes  Subscribe[]
+
+  @@map("plans")
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique @map("user_id")
+  content   String
+  rating    Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("reviews")
+}
+
+model Payment {
+  id                Int                  @id @default(autoincrement())
+  providerPaymentId String               @unique @map("provider_payment_id")
+  status            PaymentStatus        @default(PENDING)
+  paid              Boolean              @default(false)
+  currency          String               @default("RUB")
+  appliedStatus     PaymentAppliedStatus @default(PENDING)
+  value             Int
+  createdAt         DateTime             @default(now()) @map("created_at")
+  description       String?
+  user              User                 @relation(fields: [userId], references: [id])
+  userId            String               @map("user_id")
+  plan              Plan                 @relation(fields: [planId], references: [id])
+  planId            Int                  @map("plan_id")
+  subscribe         Subscribe?           @relation(fields: [subscribeId], references: [id])
+  subscribeId       Int?                 @map("subscribe_id")
+  refund            Refund?
+  autoPayment       Boolean              @default(false) @map("auto_payment")
+
+  @@map("payments")
+}
+
+model Subscribe {
+  id        Int             @id @default(autoincrement())
+  link      String
+  owner     User            @relation(fields: [ownerId], references: [id])
+  ownerId   String          @map("owner_id")
+  status    SubscribeStatus @default(PENDING)
+  expiresAt DateTime        @map("expires_at")
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+  plan      Plan            @relation(fields: [planId], references: [id])
+  planId    Int             @map("plan_id")
+  refunds   Refund[]
+  payments  Payment[]
+
+  @@map("subscribers")
+}
+
+model User {
+  id           String      @id @default(cuid())
+  login        String      @unique
+  telegramId   Int?        @map("telegram_id")
+  passwordHash String      @map("password_hash")
+  subscribes   Subscribe[]
+  isBanned     Boolean     @default(false) @map("is_banned")
+  role         UserRole?   @default(USER)
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  payments     Payment[]
+  sessions     Session[]
+  review       Review?
+  canComment   Boolean     @default(false) @map("can_comment")
+
+  @@map("users")
+}
