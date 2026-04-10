@@ -1,7 +1,15 @@
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
+const { rules } = require('eslint-config-prettier');
 const { join } = require('path');
-
-const externalPackages = new Set(['@nestjs/microservices', 'ioredis','argon2']);
+const externalPackages = new Set([
+  '@nestjs/microservices',
+  '@nestjs/swagger',
+  'ioredis',
+  'argon2',
+]);
+const swcDefaultConfig =
+  require('@nestjs/cli/lib/compiler/defaults/swc-defaults').swcDefaultsFactory()
+    .swcOptions;
 
 module.exports = {
   externals: [
@@ -12,7 +20,17 @@ module.exports = {
       callback();
     },
   ],
-  ignoreWarnings: [/Failed to parse source map/], output: { path: join(__dirname, 'dist'),
+  ignoreWarnings: [/Failed to parse source map/],
+  resolve: {
+    alias: {
+      // webpack statically resolves both branches in @nestjs/mapped-types
+      'class-transformer/storage': require.resolve(
+        'class-transformer/cjs/storage',
+      ),
+    },
+  },
+  output: {
+    path: join(__dirname, 'dist'),
 
     clean: true,
     ...(process.env.NODE_ENV !== 'production' && {
