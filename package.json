@@ -1,8 +1,8 @@
 {
   "name": "@zeroquest/source",
+  "type": "module",
   "version": "0.0.0",
-  "license": "MIT",
-  "scripts": {},
+  "license": "MIT", "scripts": {},
   "private": true,
   "dependencies": {
     "@nestjs/common": "^11.0.0",
@@ -10,6 +10,8 @@
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
     "axios": "^1.6.0",
+    "bcryptjs": "^3.0.3",
+    "pg": "^8.20.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "6.30.3",
@@ -67,7 +69,7 @@
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "22.6.4",
     "prettier": "~3.6.2",
-    "prisma": "^7.7.0",
+    "prisma": "^7.3.0",
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",

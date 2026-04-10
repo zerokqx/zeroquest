@@ -1,9 +1,19 @@
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
 const { join } = require('path');
 
+const externalPackages = new Set(['@nestjs/microservices', 'ioredis','argon2']);
+
 module.exports = {
-  output: {
-    path: join(__dirname, 'dist'),
+  externals: [
+    ({ request }, callback) => {
+      if (externalPackages.has(request)) {
+        return callback(null, `commonjs ${request}`);
+      }
+      callback();
+    },
+  ],
+  ignoreWarnings: [/Failed to parse source map/], output: { path: join(__dirname, 'dist'),
+
     clean: true,
     ...(process.env.NODE_ENV !== 'production' && {
       devtoolModuleFilenameTemplate: '[absolute-resource-path]',
@@ -11,6 +21,8 @@ module.exports = {
   },
   plugins: [
     new NxAppWebpackPlugin({
+      useTsconfigPaths: true,
+      mergeExternals: true,
       target: 'node',
       compiler: 'tsc',
       main: './src/main.ts',

@@ -4,6 +4,13 @@
   "private": true,
   "nx": {
     "targets": {
+      "docker:all": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "docker compose -f ./compose.db.yaml -f ./compose.redis.yaml {args}",
+          "cwd": "apps/api"
+        }
+      },
       "docker:db": {
         "executor": "nx:run-commands",
         "options": {
@@ -16,6 +23,42 @@
         "options": {
           "command": "docker compose -f ./compose.redis.yaml {args}",
           "cwd": "apps/api"
+        }
+      },
+      "prisma:generate": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bunx prisma generate --schema ./apps/api/prisma/schema.prisma {args}"
+        }
+      },
+      "prisma:migrate:dev": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "devenv shell -- bunx prisma migrate dev --schema ./apps/api/prisma/schema.prisma {args}"
+        }
+      },
+      "prisma:migrate:deploy": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "devenv shell -- bunx prisma migrate deploy --schema ./apps/api/prisma/schema.prisma {args}"
+        }
+      },
+      "devenv:prisma:generate": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "devenv shell -- nx prisma:generate api {args}"
+        }
+      },
+      "devenv:prisma:migrate:dev": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "devenv shell -- nx prisma:migrate:dev api {args}"
+        }
+      },
+      "devenv:prisma:migrate:deploy": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "devenv shell -- nx prisma:migrate:deploy api {args}"
         }
       },
       "docker:down:all": {
@@ -88,9 +131,7 @@
           "runBuildTargetDependencies": false
         },
         "configurations": {
-          "development": {
-            "buildTarget": "@zeroquest/api:build:development"
-          },
+          "development": {},
           "production": {
             "buildTarget": "@zeroquest/api:build:production"
           }
@@ -106,14 +147,28 @@
   "dependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
+    "@nestjs/jwt": "^11.0.2",
     "@nestjs/mapped-types": "*",
+    "@nestjs/microservices": "^11.1.18",
     "@nestjs/platform-express": "^11.0.0",
+    "@prisma/adapter-pg": "^7.7.0",
+    "@zeroquest/types": "workspace:*",
+    "argon2": "^0.44.0",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.1",
+    "ioredis": "^5.10.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@nestjs/testing": "^11.0.0"
+    "@nestjs/testing": "^11.0.0",
+    "@prisma/client": "^7.7.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^5.0.6"
   }
 }

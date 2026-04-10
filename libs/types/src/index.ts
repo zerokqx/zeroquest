@@ -1,1 +1,1 @@
-export * from './lib/types.js';
+export type * as AuthServiceTypes from './lib/auth.types.ts';

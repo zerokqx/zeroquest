@@ -14,7 +14,11 @@
   packages = with pkgs; [
     git
     prisma-engines
-    prisma
+    openssl
+
+    stdenv.cc.cc.lib
+    gcc
+
   ];
 
   languages.javascript = {
@@ -25,6 +29,7 @@
   env = {
     # OpenSSL для prisma
     PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
+    LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH";
 
     # Prisma engines (фикс для nix)
     PRISMA_SCHEMA_ENGINE_BINARY = "${pkgs.prisma-engines}/bin/schema-engine";
