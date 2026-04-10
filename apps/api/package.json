@@ -145,9 +145,11 @@
     }
   },
   "dependencies": {
+    "@nestjs/cache-manager": "^3.1.0",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/jwt": "^11.0.2",
+    "@nestjs/mapped-types": "^2.1.1",
     "@nestjs/microservices": "^11.1.18",
     "@nestjs/platform-express": "^11.0.0",
     "@nestjs/swagger": "^11.2.7",
@@ -155,6 +157,7 @@
     "@zeroquest/types": "workspace:*",
     "argon2": "^0.44.0",
     "bcrypt": "^6.0.0",
+    "cache-manager": "^7.2.8",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "cookie-parser": "^1.4.7",

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from '../config/configuration';
-
+import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '@/prisma.module';
@@ -11,9 +11,14 @@ import { ClientTypeGuard } from '@/common/guards/client-type/client-type.guard';
 import { AuthGuard } from '@/auth/auth.guard';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { env } from 'process';
+import { InboundModule } from '@/inbound/inbound.module';
+import { UserModule } from '@/user/user.module';
 
 @Module({
   imports: [
+    CacheModule.register({
+      isGlobal:true
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', '.env', '.env.example'],
@@ -31,6 +36,8 @@ import { env } from 'process';
     ]),
     AuthModule,
     PrismaModule,
+    InboundModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [

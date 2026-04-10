@@ -161,3 +161,8 @@ model User {
 
   @@map("users")
 }
+
+model Inbound {
+  id        Int @default(autoincrement())
+  inboundId Int @map("inbound_id")
+}
