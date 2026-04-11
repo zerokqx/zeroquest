@@ -2,11 +2,13 @@ import { Global, Module } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { InboundModule } from './inbound/inbound.module';
 import { UserModule } from './user/user.module';
+import { SessionModule } from './session/session.module';
+import { TokenModule } from './token/token.module';
 
 @Global()
 @Module({
   providers: [PrismaService],
   exports: [PrismaService],
-  imports: [InboundModule, UserModule],
+  imports: [InboundModule, UserModule, SessionModule, TokenModule],
 })
 export class PrismaModule {}

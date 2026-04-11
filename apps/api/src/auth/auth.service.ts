@@ -6,76 +6,23 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import type { AuthServiceTypes } from '@zeroquest/types';
-import { hash as argon2Hash, verify as argon2Verify } from 'argon2';
-import { createHash, randomUUID } from 'crypto';
+import { createHash } from 'crypto';
+import { TokenService } from '@/token/token.service';
+import { SessionService } from '@/session/session.service';
 
 @Injectable()
 export class AuthService {
   private logger = new Logger(AuthService.name);
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService,
+    private tokenService: TokenService,
+    private sessionService: SessionService,
   ) {}
 
-  async createTokenPair(
-    userAgentHash: string,
-    clientType: string,
-    sid: string,
-    sub: string,
-  ): Promise<
-    [{ accessToken: string; refreshToken: string }, { refreshTokenJti: string }]
-  > {
-    const accessToken = await this.jwtService.signAsync(
-      {
-        userAgentHash,
-        clientType,
-        sid,
-        sub,
-        jti: randomUUID(),
-        type: 'access',
-      } satisfies AuthServiceTypes.JwtPayload,
-      {
-        expiresIn: '60s',
-      },
-    );
-    const refreshTokenJti = randomUUID();
-    const refreshToken = await this.jwtService.signAsync(
-      {
-        userAgentHash,
-        clientType,
-        sid,
-        sub,
-        type: 'refresh',
-        jti: refreshTokenJti,
-      } satisfies AuthServiceTypes.JwtPayload,
-      {
-        expiresIn: '30d',
-      },
-    );
-
-    return [{ accessToken, refreshToken }, { refreshTokenJti }];
-  }
   sha256(data: string) {
     return createHash('sha256').update(data).digest('hex');
   }
-
-  private async hashRefreshToken(refreshToken: string) {
-    return argon2Hash(refreshToken);
-  }
-
-  private async verifyRefreshTokenHash(
-    refreshTokenHash: string,
-    refreshToken: string,
-  ) {
-    try {
-      return await argon2Verify(refreshTokenHash, refreshToken);
-    } catch {
-      return false;
-    }
-  }
-
   async password(
     login: string,
     password: string,
@@ -91,33 +38,30 @@ export class AuthService {
       const userAgentHash = this.sha256(userAgent);
       this.logger.debug(`Хэширования userAgent для ${userAgent}`);
       return await this.prisma.$transaction(async (tx) => {
-        const session = await tx.session.create({
-          data: {
-            clientType: {
-              connect: {
-                name: clientType,
-              },
-            },
-            user: { connect: { id: user.id } },
+        const session = await this.sessionService.create(
+          {
+            clientType,
             userAgentHash,
-            refreshTokenHash: '',
-            refreshTokenJti: '',
+            userId: user.id,
           },
-        });
+          { tx },
+        );
 
         this.logger.verbose(`Создана сессия для ${userAgent}`);
-        const [tokens, inputs] = await this.createTokenPair(
+        const [tokens, inputs] = await this.tokenService.createTokenPair({
           userAgentHash,
           clientType,
-          session.id,
-          user.id,
-        );
+          sid: session.id,
+          sub: user.id,
+        });
 
         this.logger.debug(`Сгенерированы токены для ${userAgent}`);
         await tx.session.update({
           where: { id: session.id },
           data: {
-            refreshTokenHash: await this.hashRefreshToken(tokens.refreshToken),
+            refreshTokenHash: await this.tokenService.hashToken(
+              tokens.refreshToken,
+            ),
             refreshTokenJti: inputs.refreshTokenJti,
           },
         });
@@ -160,37 +104,30 @@ export class AuthService {
       });
       this.logger.debug(`Пользователя для ${userAgent} был создан`, user);
 
-      const session = await tx.session.create({
-        data: {
-          refreshTokenHash: '',
-          refreshTokenJti: '',
+      const session = await this.sessionService.create(
+        {
+          clientType,
           userAgentHash,
-          user: {
-            connect: {
-              id: user.id,
-            },
-          },
-          clientType: {
-            connect: {
-              name: clientType,
-            },
-          },
+          userId: user.id,
         },
-      });
+        { tx },
+      );
 
       this.logger.debug(`Инициализирована сессия для ${userAgent}`, session);
-      const [tokens, inputs] = await this.createTokenPair(
+      const [tokens, inputs] = await this.tokenService.createTokenPair({
         userAgentHash,
         clientType,
-        session.id,
-        session.userId,
-      );
+        sid: session.id,
+        sub: session.userId,
+      });
 
       this.logger.debug(`Пары токенов были созданы для ${userAgent}`);
       await tx.session.update({
         where: { id: session.id },
         data: {
-          refreshTokenHash: await this.hashRefreshToken(tokens.refreshToken),
+          refreshTokenHash: await this.tokenService.hashToken(
+            tokens.refreshToken,
+          ),
           refreshTokenJti: inputs.refreshTokenJti,
         },
       });
@@ -217,10 +154,7 @@ export class AuthService {
     const userAgentHash = this.sha256(userAgent);
     let payload: AuthServiceTypes.JwtPayload;
     try {
-      payload =
-        await this.jwtService.verifyAsync<AuthServiceTypes.JwtPayload>(
-          refreshToken,
-        );
+      payload = await this.tokenService.verify(refreshToken);
     } catch {
       throw new UnauthorizedException();
     }
@@ -253,7 +187,7 @@ export class AuthService {
       !session ||
       session.clientType.name !== payload.clientType ||
       userAgentHash !== session.userAgentHash ||
-      !(await this.verifyRefreshTokenHash(
+      !(await this.tokenService.compareHashWitPlain(
         session.refreshTokenHash,
         refreshToken,
       )) ||
@@ -263,16 +197,18 @@ export class AuthService {
       throw new UnauthorizedException();
 
     this.logger.debug(`2 Стадия валидация пройдена для ${userAgent}`);
-    const [tokens, inputs] = await this.createTokenPair(
-      session.userAgentHash,
+    const [tokens, inputs] = await this.tokenService.createTokenPair({
+      userAgentHash: session.userAgentHash,
       clientType,
-      session.id,
-      session.userId,
-    );
+      sid: session.id,
+      sub: session.userId,
+    });
 
     this.logger.debug(`Созданы пары токенов для ${userAgent}`);
 
-    const refreshTokenHash = await this.hashRefreshToken(tokens.refreshToken);
+    const refreshTokenHash = await this.tokenService.hashToken(
+      tokens.refreshToken,
+    );
 
     this.logger.debug(`Хеширование refresh токена для ${userAgent}`);
     const updated = await this.prisma.session.updateMany({

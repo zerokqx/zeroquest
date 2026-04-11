@@ -34,13 +34,13 @@
       "prisma:migrate:dev": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "devenv shell -- bunx prisma migrate dev --schema ./apps/api/prisma/schema.prisma {args}"
+          "command": "bunx prisma migrate dev --schema ./apps/api/prisma/schema.prisma {args}"
         }
       },
       "prisma:migrate:deploy": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "devenv shell -- bunx prisma migrate deploy --schema ./apps/api/prisma/schema.prisma {args}"
+          "command": "bunx prisma migrate deploy --schema ./apps/api/prisma/schema.prisma {args}"
         }
       },
       "devenv:prisma:generate": {
