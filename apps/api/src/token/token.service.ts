@@ -23,6 +23,7 @@ export class TokenService {
       ...payload,
       type: 'access',
       jti: accessTokenJti,
+
     } satisfies AuthServiceTypes.JwtPayload);
 
     const refreshToken = await this.jwtService.signAsync({

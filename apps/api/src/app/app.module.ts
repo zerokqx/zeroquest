@@ -9,6 +9,7 @@ import { PrismaModule } from '@/prisma.module';
 import { APP_GUARD } from '@nestjs/core';
 import { ClientTypeGuard } from '@/common/guards/client-type/client-type.guard';
 import { AuthGuard } from '@/auth/auth.guard';
+import { RoleGuard } from '@/common/guards/role/role.guard';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { env } from 'process';
 import { InboundModule } from '@/inbound/inbound.module';
@@ -44,6 +45,7 @@ import { UserModule } from '@/user/user.module';
     AppService,
     { provide: APP_GUARD, useClass: ClientTypeGuard },
     { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: RoleGuard },
   ],
 })
 export class AppModule {}

@@ -25,12 +25,11 @@ import {
   ApiClientType,
   ClientType,
 } from '@/common/guards/client-type/client-type.decorator';
-import { LoginDto } from './login.dto';
-import { RegisterDto } from './register.dto';
-import { Public } from './auth.decorator';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import { AuthPayload, AuthToken, Public } from './auth.decorator';
 import { type Response } from 'express';
-import { AuthServiceTypes } from '@zeroquest/types';
-import { Cookies } from '@/common/guards/cookie/cookie.decorator';
+import type { AuthServiceTypes } from '@zeroquest/types';
 import { ApiUserAgent } from '@/common/guards/user-agent.guard';
 
 type RequestWithClientType = {
@@ -90,7 +89,9 @@ export class AuthController {
     @Req() req: RequestWithClientType,
     @Res({ passthrough: true }) res: Response,
   ) {
-    this.logger.log(`Запрос на логин по поролю`);
+    this.logger.log(
+      `Запрос на вход по паролю: login=${body.login}, clientType=${req.clientType}`,
+    );
     const tokens = await this.authService.password(
       body.login,
       body.password,
@@ -145,7 +146,9 @@ export class AuthController {
     @Req() req: RequestWithClientType,
     @Res({ passthrough: true }) res: Response,
   ) {
-    this.logger.debug(`Регистрация пользователя: ${body.login}`);
+    this.logger.log(
+      `Запрос на регистрацию: login=${body.login}, clientType=${req.clientType}`,
+    );
     const tokens = await this.authService.register(
       body.login,
       body.password,
@@ -170,7 +173,7 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(200)
   @ClientType('web')
-  @Public()
+  @AuthToken('refresh')
   @ApiClientType()
   @ApiOperation({
     summary: 'Обновление access и refresh токенов',
@@ -189,19 +192,23 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse({
     description: 'Refresh токен отсутствует, истёк или недействителен',
+
   })
   async refresh(
     @Headers('user-agent') userAgent: string,
     @Req() req: RequestWithClientType,
     @Res({ passthrough: true }) res: Response,
-    @Cookies('zeroquestRefresh' as keyof AuthServiceTypes.AuthCookie)
-    refresh: string,
+    // @Cookies('zeroquestRefresh' as keyof AuthServiceTypes.AuthCookie)
+    @AuthPayload()
+    payload: AuthServiceTypes.JwtPayload,
   ) {
-    this.logger.debug(`Куки для ${userAgent}`, refresh);
+    this.logger.debug(
+      `Запрошено обновление токенов: login=${payload.login}, clientType=${req.clientType}`,
+    );
     const tokens = await this.authService.refresh(
       userAgent,
       req.clientType,
-      refresh,
+      payload,
     );
 
     res.cookie(
@@ -215,8 +222,9 @@ export class AuthController {
       { httpOnly: true },
     );
 
-    this.logger.debug(`Для ${userAgent} были установлены новые токены`);
-
+    this.logger.log(
+      `Токены обновлены: login=${payload.login}, sessionId=${payload.sid}`,
+    );
     return { message: 'Токены успешно обновлены' };
   }
 }

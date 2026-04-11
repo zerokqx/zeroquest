@@ -8,7 +8,7 @@ import { EnvironmentVariables } from '@/config/configuration';
 export class PrismaService extends PrismaClient {
   constructor(config: ConfigService<EnvironmentVariables>) {
     const adapter = new PrismaPg({
-      connectionString: config.get('postgres')?.url,
+      connectionString: config.getOrThrow('postgres', { infer: true }).url,
     });
     super({ adapter });
   }

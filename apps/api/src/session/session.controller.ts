@@ -1,34 +1,45 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Delete } from '@nestjs/common';
 import { SessionService } from './session.service';
-import { CreateSessionDto } from './dto/create-session.dto';
-import { UpdateSessionDto } from './dto/update-session.dto';
+import { AuthPayload, AuthToken } from '@/auth/auth.decorator';
+import type { AuthServiceTypes } from '@zeroquest/types';
+import {
+  ApiClientType,
+  ClientType,
+} from '@/common/guards/client-type/client-type.decorator';
+import { TokenService } from '@/token/token.service';
 
 @Controller('session')
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
-  @Post()
-  create(@Body() createSessionDto: CreateSessionDto) {
-    return this.sessionService.create(createSessionDto);
+  @Get()
+  findAll(@AuthPayload() user: AuthServiceTypes.JwtPayload) {
+    return this.sessionService.findAll(user.sub);
   }
 
-  @Get()
-  findAll() {
-    return this.sessionService.findAll();
+  @Get('current-user')
+  async currentUserSession(
+    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+  ) {
+    return this.sessionService.findSessionByRefresh(payload.sub, payload.sid);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sessionService.findOne(+id);
+  async findOne(
+    @Param('id') id: string,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+  ) {
+    return this.sessionService.findOne(id, payload.sub);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSessionDto: UpdateSessionDto) {
-    return this.sessionService.update(+id, updateSessionDto);
-  }
-
+  @ClientType('web')
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sessionService.remove(+id);
+  @AuthToken('refresh')
+  @ApiClientType()
+  async remove(
+    @Param('id') id: string,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+  ) {
+    return this.sessionService.remove(id, payload);
   }
 }

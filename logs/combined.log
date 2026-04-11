@@ -1,0 +1,41 @@
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PrismaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"AppController {/api}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"AuthService","level":"info","message":"Refresh выполнен успешно: login=zerok1, sessionId=cmnukegwb000088gqnpyulo8q"}
+{"context":"AuthController","level":"info","message":"Токены обновлены: login=zerok1, sessionId=cmnukegwb000088gqnpyulo8q"}

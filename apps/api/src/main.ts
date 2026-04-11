@@ -10,9 +10,12 @@ import { AppModule } from './app/app.module';
 import { env } from 'process';
 import cookieParser from 'cookie-parser';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { logger } from './logger.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule,{
+    logger
+  });
   const globalPrefix = 'api';
   const config = new DocumentBuilder()
     .setTitle('Zeroquest Swagger')
@@ -21,6 +24,7 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
+
   const port = process.env.PORT || 3000;
   app.connectMicroservice({
     transport: Transport.REDIS,
@@ -29,6 +33,7 @@ async function bootstrap() {
       port: Number(env.REDIS_PORT),
     },
   });
+
   await app.startAllMicroservices();
   SwaggerModule.setup('docs', app, () =>
     SwaggerModule.createDocument(app, config),

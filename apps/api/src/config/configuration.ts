@@ -23,6 +23,26 @@ const config = () => ({
   jwt: {
     expires: (process.env.JWT_EXPIRES_TIME ?? '30m')  ,
   },
+  threeXUi: {
+    protocol: process.env.THREE_X_UI_PROTOCOL ?? 'https',
+    host: process.env.THREE_X_UI_HOST ?? '',
+    port: process.env.THREE_X_UI_PORT ?? '',
+    webBasePath: process.env.THREE_X_UI_WEB_BASE_PATH ?? '',
+    username: process.env.THREE_X_UI_USERNAME ?? '',
+    password: process.env.THREE_X_UI_PASSWORD ?? '',
+    timeoutMs: parseInt(process.env.THREE_X_UI_TIMEOUT_MS ?? '10000', 10),
+    get panelBaseUrl() {
+      const protocol = this.protocol.replace(/:$/, '');
+      const path = this.webBasePath.replace(/^\/+|\/+$/g, '');
+      const port = this.port ? `:${this.port}` : '';
+      const basePath = path ? `/${path}` : '';
+
+      return `${protocol}://${this.host}${port}${basePath}`;
+    },
+    get apiBaseUrl() {
+      return `${this.panelBaseUrl}/panel/api`;
+    },
+  },
   pgadmin: {
     port: parseInt(process.env.PGADMIN_PORT ?? '5050', 10),
     email: process.env.PGADMIN_DEFAULT_EMAIL || 'admin@admin.com',

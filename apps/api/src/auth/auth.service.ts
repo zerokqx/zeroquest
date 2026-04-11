@@ -10,6 +10,7 @@ import type { AuthServiceTypes } from '@zeroquest/types';
 import { createHash } from 'crypto';
 import { TokenService } from '@/token/token.service';
 import { SessionService } from '@/session/session.service';
+import { UserRole } from '@/generated/prisma/enums';
 
 @Injectable()
 export class AuthService {
@@ -36,7 +37,6 @@ export class AuthService {
     });
     if (user && (await compare(password, user?.passwordHash))) {
       const userAgentHash = this.sha256(userAgent);
-      this.logger.debug(`Хэширования userAgent для ${userAgent}`);
       return await this.prisma.$transaction(async (tx) => {
         const session = await this.sessionService.create(
           {
@@ -47,15 +47,15 @@ export class AuthService {
           { tx },
         );
 
-        this.logger.verbose(`Создана сессия для ${userAgent}`);
         const [tokens, inputs] = await this.tokenService.createTokenPair({
           userAgentHash,
           clientType,
           sid: session.id,
           sub: user.id,
+          role: user.role ?? UserRole.USER,
+          login,
         });
 
-        this.logger.debug(`Сгенерированы токены для ${userAgent}`);
         await tx.session.update({
           where: { id: session.id },
           data: {
@@ -65,12 +65,15 @@ export class AuthService {
             refreshTokenJti: inputs.refreshTokenJti,
           },
         });
-        this.logger.verbose(
-          `Создана обновлена с актуальными токенами для ${userAgent}`,
+        this.logger.log(
+          `Пользователь успешно вошёл: login=${login}, sessionId=${session.id}, clientType=${clientType}`,
         );
         return tokens;
       });
     }
+    this.logger.warn(
+      `Неуспешная попытка входа: login=${login}, clientType=${clientType}`,
+    );
     throw new UnauthorizedException();
   }
 
@@ -86,23 +89,24 @@ export class AuthService {
         login,
       },
     });
-    this.logger.debug(`Запрос на регистрацию: ${login}`);
+    this.logger.debug(
+      `Проверка возможности регистрации: login=${login}, clientType=${clientType}`,
+    );
 
-    if (user?.login === login) throw new ConflictException();
+    if (user?.login === login) {
+      this.logger.warn(`Регистрация отклонена: login=${login} уже существует`);
+      throw new ConflictException();
+    }
     const salt = await genSalt();
-    this.logger.debug(`Хеширование userAgent для ${userAgent}`);
     const userAgentHash = this.sha256(userAgent);
     const passwordHash = await hash(password, salt);
-    this.logger.debug(`Хеширование пароля для ${userAgent}`);
     const result = await this.prisma.$transaction(async (tx) => {
-      this.logger.debug(`Транзакция регистрации началась для ${userAgent}`);
       const user = await tx.user.create({
         data: {
           login,
           passwordHash,
         },
       });
-      this.logger.debug(`Пользователя для ${userAgent} был создан`, user);
 
       const session = await this.sessionService.create(
         {
@@ -113,15 +117,15 @@ export class AuthService {
         { tx },
       );
 
-      this.logger.debug(`Инициализирована сессия для ${userAgent}`, session);
       const [tokens, inputs] = await this.tokenService.createTokenPair({
         userAgentHash,
         clientType,
         sid: session.id,
         sub: session.userId,
+        role: user.role ?? UserRole.USER,
+        login: user.login,
       });
 
-      this.logger.debug(`Пары токенов были созданы для ${userAgent}`);
       await tx.session.update({
         where: { id: session.id },
         data: {
@@ -132,8 +136,9 @@ export class AuthService {
         },
       });
 
-      this.logger.debug(`Обновление сессии на актуальные токены ${userAgent}`);
-      this.logger.debug(`Пользователь ${login} зарегистрирован`);
+      this.logger.log(
+        `Пользователь зарегистрирован: login=${login}, sessionId=${session.id}, clientType=${clientType}`,
+      );
       return tokens;
     });
     return result;
@@ -147,70 +152,55 @@ export class AuthService {
   async refresh(
     userAgent: string,
     clientType: string,
-    refreshToken: string | undefined,
+    payload: AuthServiceTypes.JwtPayload,
   ) {
-    if (!refreshToken) throw new UnauthorizedException();
-
     const userAgentHash = this.sha256(userAgent);
-    let payload: AuthServiceTypes.JwtPayload;
-    try {
-      payload = await this.tokenService.verify(refreshToken);
-    } catch {
+    const isClientTypeValid = clientType === payload.clientType;
+    const isRefreshToken = payload.type === 'refresh';
+    const isUserAgentValid = userAgentHash === payload.userAgentHash;
+
+    if (!isClientTypeValid || !isRefreshToken || !isUserAgentValid) {
+      this.logger.warn(
+        `Refresh отклонён на этапе проверки payload: login=${payload.login}, sessionId=${payload.sid}, clientTypeMatch=${isClientTypeValid}, userAgentMatch=${isUserAgentValid}, tokenType=${payload.type}`,
+      );
       throw new UnauthorizedException();
     }
 
     this.logger.debug(
-      `Hash Равенство для ${userAgent}`,
-      userAgentHash === payload.userAgentHash,
-      [userAgent, payload.userAgentHash],
+      `Payload refresh токена подтверждён: login=${payload.login}, sessionId=${payload.sid}`,
     );
-    this.logger.debug(
-      `ClientType Равенство для ${userAgent}`,
-      clientType === payload.clientType,
-      [clientType, payload.clientType],
-    );
-    // 1) Первая стадия
-    if (
-      clientType !== payload.clientType ||
-      payload.type !== 'refresh' ||
-      userAgentHash !== payload.userAgentHash
-    )
-      throw new UnauthorizedException();
-    this.logger.debug(`1 Стадия валидация пройдена для ${userAgent}`);
 
-    // 2) Вторая стадия
     const session = await this.prisma.session.findUnique({
       where: { id: payload.sid },
-      include: { clientType: true },
+      include: { clientType: true, user: { select: { role: true } } },
     });
-    if (
-      !session ||
-      session.clientType.name !== payload.clientType ||
-      userAgentHash !== session.userAgentHash ||
-      !(await this.tokenService.compareHashWitPlain(
-        session.refreshTokenHash,
-        refreshToken,
-      )) ||
-      payload.sub !== session?.userId ||
-      session?.refreshTokenJti !== payload.jti
-    )
-      throw new UnauthorizedException();
 
-    this.logger.debug(`2 Стадия валидация пройдена для ${userAgent}`);
+    const isSessionValid =
+      !!session &&
+      session.clientType.name === payload.clientType &&
+      userAgentHash === session.userAgentHash &&
+      session.refreshTokenJti === payload.jti &&
+      payload.sub === session.userId;
+
+    if (!isSessionValid) {
+      this.logger.warn(
+        `Refresh отклонён на этапе проверки сессии: login=${payload.login}, sessionId=${payload.sid}`,
+      );
+      throw new UnauthorizedException();
+    }
+
     const [tokens, inputs] = await this.tokenService.createTokenPair({
       userAgentHash: session.userAgentHash,
       clientType,
       sid: session.id,
       sub: session.userId,
+      role: session.user.role ?? UserRole.USER,
+      login: payload.login,
     });
-
-    this.logger.debug(`Созданы пары токенов для ${userAgent}`);
 
     const refreshTokenHash = await this.tokenService.hashToken(
       tokens.refreshToken,
     );
-
-    this.logger.debug(`Хеширование refresh токена для ${userAgent}`);
     const updated = await this.prisma.session.updateMany({
       where: {
         id: session.id,
@@ -221,9 +211,16 @@ export class AuthService {
         refreshTokenHash,
       },
     });
-    if (updated.count !== 1) throw new UnauthorizedException();
+    if (updated.count !== 1) {
+      this.logger.warn(
+        `Refresh не завершён: не удалось атомарно обновить сессию ${session.id}`,
+      );
+      throw new UnauthorizedException();
+    }
 
-    this.logger.debug(`Обновление сессии ${userAgent}`);
+    this.logger.log(
+      `Refresh выполнен успешно: login=${payload.login}, sessionId=${session.id}`,
+    );
     return tokens;
   }
 }

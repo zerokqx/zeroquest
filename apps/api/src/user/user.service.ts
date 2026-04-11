@@ -44,7 +44,7 @@ export class UserService {
     const payload = this.getPayload(accessToken);
     const userCached = await this.cacheManager.get(`user:me:${payload.sub}`);
     if (userCached) {
-      this.logger.debug('Профиль взят из кеша');
+      this.logger.debug(`Профиль пользователя взят из кеша: userId=${payload.sub}`);
       return userCached;
     }
 
@@ -57,7 +57,7 @@ export class UserService {
 
     if (!user) throw new NotFoundException();
     await this.cacheManager.set(`user:me:${payload.sub}`, user, 10000);
-    this.logger.debug('Профиль закеширован');
+    this.logger.debug(`Профиль пользователя сохранён в кеш: userId=${payload.sub}`);
     return user;
   }
 

@@ -7,15 +7,23 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
-import { IS_PUBLIC_KEY } from './auth.decorator';
+import {
+  AUTH_TOKEN_TYPE_KEY,
+  type AuthTokenType,
+  IS_PUBLIC_KEY,
+} from './auth.decorator';
 import type { AuthServiceTypes } from '@zeroquest/types';
 
 type AuthenticatedRequest = Request & {
   user?: AuthServiceTypes.JwtPayload;
 };
 
-function extractTokenFromCookie(req: Request): string | undefined {
-  return req.cookies?.zeroquestAccess;
+function extractTokenFromCookie( req: Request,
+  tokenType: AuthTokenType,
+): string | undefined {
+  return tokenType === 'refresh'
+    ? req.cookies?.zeroquestRefresh
+    : req.cookies?.zeroquestAccess;
 }
 
 @Injectable()
@@ -34,8 +42,13 @@ export class AuthGuard implements CanActivate {
     if (isPublic) return true;
 
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
+    const tokenType =
+      this.reflector.getAllAndOverride<AuthTokenType>(AUTH_TOKEN_TYPE_KEY, [
+        context.getHandler(),
+        context.getClass(),
+      ]) ?? 'access';
 
-    const token = extractTokenFromCookie(request);
+    const token = extractTokenFromCookie(request, tokenType);
 
     if (!token) {
       throw new UnauthorizedException();
@@ -44,7 +57,7 @@ export class AuthGuard implements CanActivate {
     try {
       const payload =
         await this.jwtService.verifyAsync<AuthServiceTypes.JwtPayload>(token);
-      if (payload.type !== 'access') throw new UnauthorizedException();
+      if (payload.type !== tokenType) throw new UnauthorizedException();
       request.user = payload;
     } catch {
       throw new UnauthorizedException();

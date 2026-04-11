@@ -10,25 +10,26 @@ import {
 import { InboundService } from './inbound.service';
 import { CreateInboundDto } from './dto/create-inbound.dto';
 import { UpdateInboundDto } from './dto/update-inbound.dto';
+import { ThreeXUiService } from '@/three-x-ui/three-x-ui.service';
 
 @Controller('inbound')
 export class InboundController {
-  constructor(private readonly inboundService: InboundService) {}
+  constructor(
+    private readonly inboundService: InboundService,
+
+    private readonly threeXUiService: ThreeXUiService,
+  ) {}
 
   @Post()
-  create(@Body() createInboundDto: CreateInboundDto) {
+  async create(@Body() createInboundDto: CreateInboundDto) {
+
     return this.inboundService.create(createInboundDto);
   }
 
   @Get()
   async findAll() {
-
-    return fetch('https://89.125.54.155:20262/r6MpYwYdkrIngyJO4V/api/login',{body:{
-      username:'k6RcFVCa7Z',
-      password:"SQtzzZwTRl"
-    },method:'POST'})
+    return this.threeXUiService.request('/inbounds/list', {});
   }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.inboundService.findOne(+id);
