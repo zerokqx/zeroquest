@@ -41,7 +41,7 @@ export class InboundController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.inboundService.remove(+id);
   }
 }
