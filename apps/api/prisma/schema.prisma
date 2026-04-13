@@ -74,7 +74,7 @@ model Refund {
   payment     Payment   @relation(fields: [paymentId], references: [id])
   paymentId   Int       @unique @map("payment_id")
   subscribe   Subscribe @relation(fields: [subscribeId], references: [id])
-  subscribeId Int       @map("subscribe_id")
+  subscribeId String    @map("subscribe_id")
 
   @@map("refunds")
 }
@@ -94,6 +94,7 @@ model Plan {
   name           String      @unique
   price          Int
   description    String?
+  totalGb        Int         @default(30)
   payments       Payment[]
   subscribes     Subscribe[]
   inbound        Inbound     @relation(fields: [inboundId], references: [id])
@@ -121,7 +122,7 @@ model Payment {
   status            PaymentStatus        @default(PENDING)
   paid              Boolean              @default(false)
   currency          String               @default("RUB")
-  appliedStatus     PaymentAppliedStatus @default(PENDING)
+  appliedStatus     PaymentAppliedStatus @default(PENDING) @map("applied_status")
   value             Int
   createdAt         DateTime             @default(now()) @map("created_at")
   description       String?
@@ -130,7 +131,7 @@ model Payment {
   plan              Plan                 @relation(fields: [planId], references: [id])
   planId            Int                  @map("plan_id")
   subscribe         Subscribe?           @relation(fields: [subscribeId], references: [id])
-  subscribeId       Int?                 @map("subscribe_id")
+  subscribeId       String?              @map("subscribe_id")
   refund            Refund?
   confirmationUrl   String               @map("confirmation_url")
   autoPayment       Boolean              @default(false) @map("auto_payment")
@@ -140,20 +141,21 @@ model Payment {
 }
 
 model Subscribe {
-  id        Int             @id @default(autoincrement())
-  name      String
-  link      String
-  user      User            @relation(fields: [userId], references: [id])
-  userId    String          @map("user_id")
-  status    SubscribeStatus @default(PENDING)
-  expiresAt DateTime        @map("expires_at")
-  createdAt DateTime        @default(now()) @map("created_at")
-  updatedAt DateTime        @updatedAt @map("updated_at")
-  plan      Plan            @relation(fields: [planId], references: [id])
-  planId    Int             @map("plan_id")
-  refund    Refund[]
-  totalGb   Int             @map("total_gb")
-  payments  Payment[]
+  id            String          @id @default(cuid())
+  name          String
+  link          String
+  user          User            @relation(fields: [userId], references: [id])
+  vlessClientId String          @map("vless_client_id")
+  userId        String          @map("user_id")
+  status        SubscribeStatus @default(PENDING)
+  expiresAt     DateTime        @map("expires_at")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+  plan          Plan            @relation(fields: [planId], references: [id])
+  planId        Int             @map("plan_id")
+  refund        Refund[]
+  totalGb       Int             @map("total_gb")
+  payments      Payment[]
 
   @@unique([id, userId])
   @@map("subscribers")

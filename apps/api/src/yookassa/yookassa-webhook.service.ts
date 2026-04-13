@@ -4,7 +4,7 @@ import {
   YookassaWebhookDto,
 } from './dto/webhook-event.dto';
 import { PaymentRepository } from '@/payment/payment.repository';
-import { Payment, PaymentStatus } from '@/generated/prisma/client';
+import { PaymentStatus, Prisma } from '@/generated/prisma/client';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import {
@@ -12,6 +12,7 @@ import {
   SubscribeNew,
 } from '@/subscribe/dto/subscribe-new.dto';
 
+type Payment = Prisma.PaymentGetPayload<{ include: { plan: true } }>;
 @Injectable()
 export class YookassaWebhookService {
   constructor(
@@ -19,9 +20,11 @@ export class YookassaWebhookService {
     @InjectQueue('subscribe') private readonly subscribeQueue: Queue,
   ) {}
   async handleWebhook(data: YookassaWebhookDto) {
-    const payment = await this.paymentRepository.findByProviderPaymentId(
+    const payment = (await this.paymentRepository.findByProviderPaymentId(
       data.object.id,
-    );
+      { plan: true },
+    )) as Payment;
+
     if (!payment || payment.status === PaymentStatus.SUCCEEDED) return;
     switch (data.event) {
       case YOOKASSA_WEBHOOK_EVENT.PaymentSucceeded: {
@@ -35,11 +38,11 @@ export class YookassaWebhookService {
 
   async succesedEvent({ object }: YookassaWebhookDto, payment: Payment) {
     const metadata = object.metadata;
-
-    this.subscribeQueue.add(SUBSCRIBE_EVENTS.NEW, {
+    await this.subscribeQueue.add(SUBSCRIBE_EVENTS.NEW, {
+      ...metadata,
       paymentId: object.id,
-      planId: metadata.planId,
-      userId: metadata.userId,
+      inboundId: payment.plan.inboundId,
+      planId: Number(metadata.planId),
     } satisfies SubscribeNew);
   }
 }

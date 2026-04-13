@@ -1,6 +1,11 @@
 import { Prisma } from '@/generated/prisma/client';
+import { TransactionClient } from '@/generated/prisma/internal/prismaNamespace';
 import { PrismaService } from '@/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
+
+export interface Options {
+  tx?: TransactionClient;
+}
 
 @Injectable()
 export class SubscribeRepository {
@@ -8,8 +13,8 @@ export class SubscribeRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: Prisma.SubscribeCreateInput) {
-    return this.prisma.subscribe.create({ data });
+  create(data: Prisma.SubscribeCreateInput, opts?: Options) {
+    return (opts?.tx ?? this.prisma).subscribe.create({ data });
   }
 
   findMany(where: Prisma.SubscribeWhereInput) {
@@ -28,7 +33,9 @@ export class SubscribeRepository {
   }
 
   findOneByIdAndUserId(id: number, userId: string) {
-    this.logger.debug(`Запрошена подписка: subscribeId=${id}, userId=${userId}`);
+    this.logger.debug(
+      `Запрошена подписка: subscribeId=${id}, userId=${userId}`,
+    );
     return this.prisma.subscribe.findUnique({
       where: {
         id_userId: { id, userId },
@@ -40,9 +47,10 @@ export class SubscribeRepository {
     id: number,
     userId: string,
     data: Prisma.SubscribeUpdateInput,
+    opts?: Options,
   ) {
     this.logger.log(`Обновление подписки: subscribeId=${id}, userId=${userId}`);
-    return this.prisma.subscribe.update({
+    return (opts?.tx ?? this.prisma).subscribe.update({
       where: {
         id_userId: { id, userId },
       },

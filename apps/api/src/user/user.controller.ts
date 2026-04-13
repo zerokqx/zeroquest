@@ -1,22 +1,46 @@
 import { Body, Controller, Get, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
 import type { AuthServiceTypes } from '@zeroquest/types';
-import { ApiCookieAuth } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiCookieAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PatchMeDto } from './dto/patch-me.dto';
 import { AuthPayload } from '@/auth/auth.decorator';
 
+@ApiTags('User')
+@ApiCookieAuth('zeroquestAccess')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiCookieAuth('zeroquestAccess')
   @Get('me')
+  @ApiOperation({
+    summary: 'Получить мой профиль',
+    description: 'Возвращает профиль текущего пользователя.',
+  })
+  @ApiOkResponse({
+    description: 'Профиль успешно получен.',
+  })
   async me(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
     return this.userService.me(payload);
   }
 
-  @ApiCookieAuth('zeroquestAccess')
   @Patch('me')
+  @ApiOperation({
+    summary: 'Обновить мой профиль',
+    description: 'Обновляет профиль текущего пользователя.',
+  })
+  @ApiBody({
+    type: PatchMeDto,
+    description: 'Поля профиля для обновления.',
+  })
+  @ApiOkResponse({
+    description: 'Профиль успешно обновлён.',
+  })
   async mePatch(
     @Body() body: PatchMeDto,
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,

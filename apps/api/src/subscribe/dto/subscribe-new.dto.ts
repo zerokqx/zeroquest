@@ -10,6 +10,8 @@ export type SubscribeEventMap = {
     paymentId: string;
     planId: number;
     userId: string
+    name: string,
+    inboundId:number,
   };
 };
 

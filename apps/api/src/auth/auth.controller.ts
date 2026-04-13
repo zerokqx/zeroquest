@@ -13,6 +13,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiCookieAuth,
+  ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -83,6 +84,9 @@ export class AuthController {
   @ApiUnauthorizedResponse({
     description: 'Неверный логин или пароль',
   })
+  @ApiForbiddenResponse({
+    description: 'Указан неподдерживаемый client type.',
+  })
   async password(
     @Body() body: LoginDto,
     @Headers('user-agent') userAgent: string,
@@ -140,6 +144,9 @@ export class AuthController {
   @ApiBadRequestResponse({
     description: 'Некорректные данные или пользователь уже существует',
   })
+  @ApiForbiddenResponse({
+    description: 'Указан неподдерживаемый client type.',
+  })
   async register(
     @Body() body: RegisterDto,
     @Headers('user-agent') userAgent: string,
@@ -192,7 +199,9 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse({
     description: 'Refresh токен отсутствует, истёк или недействителен',
-
+  })
+  @ApiForbiddenResponse({
+    description: 'Указан неподдерживаемый client type.',
   })
   async refresh(
     @Headers('user-agent') userAgent: string,

@@ -2,10 +2,19 @@ import { Role } from '@/common/role/role.decorator';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ThreeXUiService } from './three-x-ui.service';
 import { XuiClient } from './dto/three-x-ui-client.dto';
-import { ApiCookieAuth, ApiParam } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiCookieAuth,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ApiRoleOnly } from '@/common/role/api-role-only.decorator';
 import { LogAccessToRoute } from '@/common/decorators/log-access-to-route.decorator';
 
+@ApiTags('Three X UI')
+@ApiCookieAuth('zeroquestAccess')
 @Role('ADMIN')
 @Controller('three-x-ui')
 export class ThreeXUiController {
@@ -14,6 +23,16 @@ export class ThreeXUiController {
   @LogAccessToRoute()
   @ApiRoleOnly('ADMIN')
   @Get()
+  @ApiOperation({
+    summary: 'Получить inbound из 3x-ui',
+    description: 'Запрашивает список inbound из внешней x-ui панели.',
+  })
+  @ApiOkResponse({
+    description: 'Список inbound из 3x-ui успешно получен.',
+  })
+  @ApiForbiddenResponse({
+    description: 'Доступ разрешён только ADMIN.',
+  })
   async getInbounds() {
     return this.threeXUiService.getInbounds();
   }
@@ -21,8 +40,18 @@ export class ThreeXUiController {
   @LogAccessToRoute()
   @ApiRoleOnly('ADMIN')
   @ApiCookieAuth('zeroquestAccess')
-  @ApiParam({ type: XuiClient, name: 'Добавить клиента' })
   @Post()
+  @ApiOperation({
+    summary: 'Добавить клиента в 3x-ui',
+    description: 'Создаёт клиента во внешней x-ui панели.',
+  })
+  @ApiBody({
+    type: XuiClient,
+    description: 'Данные клиента для отправки в 3x-ui.',
+  })
+  @ApiOkResponse({
+    description: 'Клиент успешно добавлен в 3x-ui.',
+  })
   async addClient(@Body() body: XuiClient) {
     return this.threeXUiService.addClient(1, { clients: [body] });
   }

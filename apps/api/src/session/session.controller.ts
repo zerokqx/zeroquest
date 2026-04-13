@@ -6,17 +6,41 @@ import {
   ApiClientType,
   ClientType,
 } from '@/client-type/client-type.decorator';
+import {
+  ApiCookieAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
+@ApiTags('Session')
+@ApiCookieAuth('zeroquestAccess')
 @Controller('session')
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Получить мои сессии',
+    description: 'Возвращает список сессий текущего пользователя.',
+  })
+  @ApiOkResponse({
+    description: 'Список сессий успешно получен.',
+  })
   findAll(@AuthPayload() user: AuthServiceTypes.JwtPayload) {
     return this.sessionService.findAll(user.sub);
   }
 
   @Get('current-user')
+  @ApiOperation({
+    summary: 'Получить текущую сессию',
+    description: 'Возвращает сессию, соответствующую текущему refresh-контексту.',
+  })
+  @ApiOkResponse({
+    description: 'Текущая сессия успешно получена.',
+  })
   async currentUserSession(
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
   ) {
@@ -24,6 +48,18 @@ export class SessionController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Получить сессию по id',
+    description: 'Возвращает одну сессию текущего пользователя по идентификатору.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'Идентификатор сессии.',
+  })
+  @ApiOkResponse({
+    description: 'Сессия успешно найдена.',
+  })
   async findOne(
     @Param('id') id: string,
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
@@ -35,6 +71,23 @@ export class SessionController {
   @Delete(':id')
   @AuthToken('refresh')
   @ApiClientType()
+  @ApiCookieAuth('zeroquestRefresh')
+  @ApiOperation({
+    summary: 'Удалить сессию',
+    description:
+      'Удаляет сессию по id. Требует refresh cookie и x-client-type=web.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'Идентификатор сессии.',
+  })
+  @ApiOkResponse({
+    description: 'Сессия успешно удалена.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh токен отсутствует, недействителен или операция запрещена.',
+  })
   async remove(
     @Param('id') id: string,
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,

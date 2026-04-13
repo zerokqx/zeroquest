@@ -1,15 +1,22 @@
 import {
   Body,
   Controller,
-  HttpCode,
-  HttpStatus,
+  HttpCode, HttpStatus,
   Post,
 } from '@nestjs/common';
 import { Public } from '@/auth/auth.decorator';
 import { YookassaWebhookDto } from './dto/webhook-event.dto';
 import { AllowIp } from '@/common/ip/allow-ip.decorator';
 import { YookassaWebhookService } from './yookassa-webhook.service';
+import {
+  ApiBody,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('YooKassa')
 @Controller('yookassa')
 export class YookassaController {
   constructor(
@@ -20,6 +27,21 @@ export class YookassaController {
   @Post('webhook')
   @AllowIp(['77.75.153.78', '77.75.154.206 '])
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Webhook YooKassa',
+    description:
+      'Принимает webhook от YooKassa и запускает локальную обработку платежного события.',
+  })
+  @ApiBody({
+    type: YookassaWebhookDto,
+    description: 'Webhook payload от YooKassa.',
+  })
+  @ApiOkResponse({
+    description: 'Webhook успешно принят.',
+  })
+  @ApiForbiddenResponse({
+    description: 'IP-адрес отправителя не входит в allowlist.',
+  })
   async webhook(@Body() body: YookassaWebhookDto) {
     await this.yookassaWebhookService.handleWebhook(body);
   }

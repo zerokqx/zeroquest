@@ -6,10 +6,37 @@ import {
   IsInt,
   IsOptional,
   IsString,
+  IsUUID,
   ValidateNested,
 } from 'class-validator';
 
 export class XuiClient {
+  @ApiProperty({
+    description: 'UUID клиента в x-ui',
+    example: 'e77f917c-9c0a-4e8b-9b8f-a216d493ed1a',
+    required: false,
+  })
+  @IsUUID()
+  @IsOptional()
+  id?: string;
+
+  @ApiProperty({
+    description: 'Email/label клиента в x-ui',
+    example: 'ZeroQuest Private',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  email?: string;
+
+  @ApiProperty({
+    description: 'Sub ID клиента в x-ui',
+    example: 'neebwqzo',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  subId?: string;
 
   @ApiProperty({
     description: 'Flow (обычно пустая строка для большинства случаев)',
@@ -75,6 +102,14 @@ export class ThreeXUiAddClientSettings {
   @Type(() => XuiClient)
   clients!: XuiClient[];
 }
+
+export type ThreeXUiAddClientInput = Omit<XuiClient, 'totalGB'> & {
+  totalGb?: number | bigint;
+};
+
+export type ThreeXUiAddClientInputSettings = {
+  clients: ThreeXUiAddClientInput[];
+};
 
 export class ThreeXUiAddClientRequestBody {
   @ApiProperty({

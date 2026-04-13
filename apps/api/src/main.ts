@@ -11,6 +11,7 @@ import { env } from 'process';
 import cookieParser from 'cookie-parser';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { logger } from './logger.config';
+import { SniffInterceptor } from './common/request-logger/request-logger.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -23,6 +24,7 @@ async function bootstrap() {
     .build();
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalInterceptors(new SniffInterceptor ())
   app.use(cookieParser());
   app.enableCors();
   const port = process.env.PORT || 3000;

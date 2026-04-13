@@ -8,31 +8,53 @@ import {
   Delete,
 } from '@nestjs/common';
 import { SubscribeService } from './subscribe.service';
-import { CreateSubscribeDto } from './dto/create-subscribe.dto';
-import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
-import { Role } from '@/common/role/role.decorator';
-import { AuthPayload } from '@/auth/auth.decorator';
+import { CreateSubscribeDto } from './dto/create-subscribe.dto'; import { UpdateSubscribeDto } from './dto/update-subscribe.dto'; import { Role } from '@/common/role/role.decorator'; import { AuthPayload } from '@/auth/auth.decorator';
 import type { AuthServiceTypes } from '@zeroquest/types';
+import {
+  ApiBody,
+  ApiCookieAuth,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('Subscribe')
+@ApiCookieAuth('zeroquestAccess')
 @Controller('subscribe')
 export class SubscribeController {
-  constructor(private readonly subscribeService: SubscribeService) {}
+  constructor(
+    private readonly subscribeService: SubscribeService,
+  ) {}
 
-  @Role('ADMIN')
-  @Post()
-  create(
-    @Body() createSubscribeDto: CreateSubscribeDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
-  ) {
-    return this.subscribeService.create(createSubscribeDto, payload);
-  }
+
 
   @Get()
+  @ApiOperation({
+    summary: 'Получить мои подписки',
+    description: 'Возвращает список подписок текущего пользователя.',
+  })
+  @ApiOkResponse({
+    description: 'Список подписок успешно получен.',
+  })
   findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
     return this.subscribeService.findAll(payload);
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Получить подписку по id',
+    description: 'Возвращает одну подписку текущего пользователя.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Идентификатор подписки.',
+  })
+  @ApiOkResponse({
+    description: 'Подписка успешно найдена.',
+  })
   findOne(
     @Param('id') id: string,
 
@@ -43,6 +65,22 @@ export class SubscribeController {
 
   @Role('ADMIN')
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Обновить подписку',
+    description: 'Обновляет подписку. Доступно только ADMIN.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Идентификатор подписки.',
+  })
+  @ApiBody({
+    type: UpdateSubscribeDto,
+    description: 'Поля подписки для обновления.',
+  })
+  @ApiOkResponse({
+    description: 'Подписка успешно обновлена.',
+  })
   update(
     @Param('id') id: string,
     @Body() updateSubscribeDto: UpdateSubscribeDto,
@@ -53,6 +91,18 @@ export class SubscribeController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Удалить подписку',
+    description: 'Удаляет подписку текущего пользователя.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Идентификатор подписки.',
+  })
+  @ApiOkResponse({
+    description: 'Подписка успешно удалена.',
+  })
   remove(
     @Param('id') id: string,
 

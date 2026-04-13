@@ -40,6 +40,7 @@ export class PaymentService {
         clientType: payload.clientType,
         userId: payload.sub,
         planId: createPaymentDto.planId,
+        name: createPaymentDto.name,
       },
       amount: {
         currency: 'RUB',

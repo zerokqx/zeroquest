@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateSubscribeDto } from './dto/create-subscribe.dto';
 import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
 import { AuthServiceTypes } from '@zeroquest/types';
-import { SubscribeRepository } from './subscribe.repository';
+import { Options, SubscribeRepository } from './subscribe.repository';
 
 @Injectable()
 export class SubscribeService {
@@ -10,6 +10,7 @@ export class SubscribeService {
   async create(
     { providerPaymentId, planId, ...subscribeCreateDto }: CreateSubscribeDto,
     payload: AuthServiceTypes.JwtPayload,
+    opts?: Options,
   ) {
     return this.subscribeRepository.create({
       user: {
@@ -30,7 +31,7 @@ export class SubscribeService {
 
       status: 'ACTIVE',
       ...subscribeCreateDto,
-    });
+    }, opts);
   }
 
   async findAll(payload: AuthServiceTypes.JwtPayload) {
@@ -55,4 +56,6 @@ export class SubscribeService {
   async remove(id: number, payload: AuthServiceTypes.JwtPayload) {
     return this.subscribeRepository.deleteByIdAndUserId(id, payload.sub);
   }
+
+  createVlessLink() {}
 }

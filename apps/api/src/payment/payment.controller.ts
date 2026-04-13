@@ -16,7 +16,19 @@ import { AuthPayload } from '@/auth/auth.decorator';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import { PaymentEventService } from './payment-event.service';
 import { interval, map, merge } from 'rxjs';
+import {
+  ApiBody,
+  ApiCookieAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiProduces,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
+@ApiTags('Payment')
+@ApiCookieAuth('zeroquestAccess')
 @Controller('payment')
 export class PaymentController {
   private readonly logger = new Logger(PaymentController.name);
@@ -26,6 +38,21 @@ export class PaymentController {
   ) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Создать платёж',
+    description:
+      'Создаёт платёж у провайдера YooKassa и сохраняет локальную запись в таблице payments.',
+  })
+  @ApiBody({
+    type: CreatePaymentDto,
+    description: 'Данные для создания платежа.',
+  })
+  @ApiOkResponse({
+    description: 'Платёж успешно создан.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Требуется access cookie для авторизации.',
+  })
   async create(
     @Body() createPaymentDto: CreatePaymentDto,
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
@@ -34,11 +61,30 @@ export class PaymentController {
   }
 
   @Get()
+  @ApiOperation({
+    summary: 'Получить список моих платежей',
+    description: 'Возвращает платежи текущего пользователя.',
+  })
+  @ApiOkResponse({
+    description: 'Список платежей успешно получен.',
+  })
   async findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
     return this.paymentService.findAll(payload);
   }
 
   @Sse('events')
+  @ApiOperation({
+    summary: 'SSE-стрим событий платежей',
+    description:
+      'Открывает text/event-stream соединение с heartbeat и пользовательскими событиями по платежам.',
+  })
+  @ApiProduces('text/event-stream')
+  @ApiOkResponse({
+    description: 'SSE-соединение успешно установлено.',
+    schema: {
+      example: 'event: message\ndata: {"type":"ping"}\n\n',
+    },
+  })
   events(
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
     @Req() req: Request,
@@ -64,6 +110,18 @@ export class PaymentController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Получить платёж по id',
+    description: 'Возвращает один платёж текущего пользователя.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Идентификатор платежа.',
+  })
+  @ApiOkResponse({
+    description: 'Платёж успешно найден.',
+  })
   findOne(
     @Param('id', ParseIntPipe) id: number,
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
