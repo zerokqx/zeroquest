@@ -14,7 +14,7 @@ import { Role } from '@/common/role/role.decorator';
 import {
   ApiClientType,
   ClientType,
-} from '@/common/client-type/client-type.decorator';
+} from '@/client-type/client-type.decorator';
 import { ApiCookieAuth, ApiParam } from '@nestjs/swagger';
 
 

@@ -24,7 +24,7 @@ import { AuthService } from './auth.service';
 import {
   ApiClientType,
   ClientType,
-} from '@/common/client-type/client-type.decorator';
+} from '@/client-type/client-type.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AuthPayload, AuthToken, Public } from './auth.decorator';

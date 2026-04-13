@@ -1,4 +1,3 @@
-import { PrismaService } from '@/prisma.service';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import {
   Inject,
@@ -9,12 +8,13 @@ import {
 import { AuthServiceTypes } from '@zeroquest/types';
 import { PatchMeDto } from './dto/patch-me.dto';
 import { Prisma } from '@/generated/prisma/client';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
   constructor(
-    private prisma: PrismaService,
+    private readonly userRepository: UserRepository,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
@@ -39,12 +39,7 @@ export class UserService {
       return userCached;
     }
 
-    const user = await this.prisma.user.findUnique({
-      select: this.userSelect(),
-      where: {
-        id: payload.sub,
-      },
-    });
+    const user = await this.userRepository.findById(payload.sub, this.userSelect());
 
     if (!user) throw new NotFoundException();
     await this.cacheManager.set(`user:me:${payload.sub}`, user, 10000);
@@ -55,10 +50,10 @@ export class UserService {
   }
 
   async patchMe(payload: AuthServiceTypes.JwtPayload, dto: PatchMeDto) {
-    return await this.prisma.user.update({
-      where: { id: payload.sub },
-      data: dto,
-      select: this.userSelect(),
-    });
+    return await this.userRepository.updateById(
+      payload.sub,
+      dto,
+      this.userSelect(),
+    );
   }
 }

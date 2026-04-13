@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '@/prisma.module';
 import { APP_GUARD } from '@nestjs/core';
-import { ClientTypeGuard } from '@/common/client-type/client-type.guard';
+import { ClientTypeGuard } from '@/client-type/client-type.guard';
 import { AuthGuard } from '@/auth/auth.guard';
 import { RoleGuard } from '@/common/role/role.guard';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -16,9 +16,9 @@ import { BullModule } from '@nestjs/bullmq';
 import { QueueModule } from '@/queue.module';
 import { PaymentModule } from '@/payment/payment.module';
 import { PlanModule } from '@/plan/plan.module';
-import { ThreeXUiService } from '@/three-x-ui/three-x-ui.service';
 import { ThreeXUiModule } from '@/three-x-ui/three-x-ui.module';
 import { SubscribeModule } from '@/subscribe/subscribe.module';
+import { ClientTypeModule } from '@/client-type/client-type.module';
 
 @Module({
   imports: [
@@ -32,12 +32,12 @@ import { SubscribeModule } from '@/subscribe/subscribe.module';
     }),
     ClientsModule.register([
       {
-        name: 'JWT_SERVICE',
+        name: 'SUBSCRIBE_SERVICE',
         transport: Transport.REDIS,
-
         options: {
           host: 'localhost',
           port: Number(env.REDIS_PORT),
+          wildcards: true,
         },
       },
     ]),
@@ -56,6 +56,7 @@ import { SubscribeModule } from '@/subscribe/subscribe.module';
     PaymentModule,
     ThreeXUiModule,
     SubscribeModule,
+    ClientTypeModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ClientTypeGuard },

@@ -1,38 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { CreateInboundDto } from './dto/create-inbound.dto';
 import { UpdateInboundDto } from './dto/update-inbound.dto';
-import { PrismaService } from '@/prisma.service';
+import { InboundRepository } from './inbound.repository';
 
 @Injectable()
 export class InboundService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly inboundRepository: InboundRepository) {}
   async create(createInboundDto: CreateInboundDto) {
-    return this.prisma.inbound.create({ data: createInboundDto });
+    return this.inboundRepository.create(createInboundDto);
   }
 
   async findAll() {
-    return this.prisma.inbound.findMany();
+    return this.inboundRepository.findMany();
   }
 
   async findOneByInboundId(id: number) {
-    return this.prisma.inbound.findUnique({ where: { inboundId: id } });
+    return this.inboundRepository.findByInboundId(id);
   }
   async findOne(id: number) {
-    return this.prisma.inbound.findUnique({ where: { id } });
+    return this.inboundRepository.findById(id);
   }
 
   async update(id: number, updateInboundDto: UpdateInboundDto) {
-    return this.prisma.inbound.update({
-      where: { id },
-      data: updateInboundDto,
-    });
+    return this.inboundRepository.updateById(id, updateInboundDto);
   }
 
   async remove(id: number) {
-    return this.prisma.inbound.delete({ where: { id } });
+    return this.inboundRepository.deleteById(id);
   }
-
-
-
-
 }

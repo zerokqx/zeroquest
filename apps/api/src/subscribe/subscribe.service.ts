@@ -1,51 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSubscribeDto } from './dto/create-subscribe.dto';
 import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
-import { PrismaService } from '@/prisma.service';
 import { AuthServiceTypes } from '@zeroquest/types';
+import { SubscribeRepository } from './subscribe.repository';
 
 @Injectable()
 export class SubscribeService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly subscribeRepository: SubscribeRepository) {}
   async create(
     { providerPaymentId, planId, ...subscribeCreateDto }: CreateSubscribeDto,
     payload: AuthServiceTypes.JwtPayload,
   ) {
-    return this.prisma.subscribe.create({
-      data: {
-        user: {
-          connect: {
-            id: payload.sub,
-          },
+    return this.subscribeRepository.create({
+      user: {
+        connect: {
+          id: payload.sub,
         },
-        payments: {
-          connect: {
-            providerPaymentId,
-          },
-        },
-        plan: {
-          connect: {
-            id: planId,
-          },
-        },
-
-        status: 'ACTIVE',
-        ...subscribeCreateDto,
       },
+      payments: {
+        connect: {
+          providerPaymentId,
+        },
+      },
+      plan: {
+        connect: {
+          id: planId,
+        },
+      },
+
+      status: 'ACTIVE',
+      ...subscribeCreateDto,
     });
   }
 
   async findAll(payload: AuthServiceTypes.JwtPayload) {
-    return this.prisma.subscribe.findMany({ where: { userId: payload.sub } });
+    return this.subscribeRepository.findManyByUserId(payload.sub);
   }
 
   async findOne(id: number, payload: AuthServiceTypes.JwtPayload) {
-    return this.prisma.subscribe.findUnique({
-      where: {
-        id,
-        userId: payload.sub,
-      },
-    });
+    return this.subscribeRepository.findOneByIdAndUserId(id, payload.sub);
   }
 
   async update(
@@ -53,21 +46,13 @@ export class SubscribeService {
     payload: AuthServiceTypes.JwtPayload,
     updateSubscribeDto: UpdateSubscribeDto,
   ) {
-    return this.prisma.subscribe.update({
-      where: {
-        id,
-        userId: payload.sub,
-      },
-      data: updateSubscribeDto,
-    });
+    return this.subscribeRepository.updateByIdAndUserId(
+      id,
+      payload.sub,
+      updateSubscribeDto,
+    );
   }
-
   async remove(id: number, payload: AuthServiceTypes.JwtPayload) {
-    return this.prisma.subscribe.delete({
-      where: {
-        userId: payload.sub,
-        id,
-      },
-    });
+    return this.subscribeRepository.deleteByIdAndUserId(id, payload.sub);
   }
 }

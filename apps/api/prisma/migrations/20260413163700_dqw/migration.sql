@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "client_types" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;

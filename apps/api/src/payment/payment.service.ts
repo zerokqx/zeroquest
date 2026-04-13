@@ -1,21 +1,21 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { toPenny } from '@zeroquest/converters';
-import { PrismaService } from '@/prisma.service';
 import { YookassaService } from '@/yookassa/yookassa.service';
 import { AuthServiceTypes } from '@zeroquest/types';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '@/config/configuration';
 import { PaymentRepository } from './payment.repository';
+import { PlanRepository } from '@/plan/plan.repository';
 
 @Injectable()
 export class PaymentService {
   private readonly logger = new Logger(PaymentService.name);
   constructor(
-    private prisma: PrismaService,
     private readonly yookassaService: YookassaService,
     private readonly config: ConfigService<EnvironmentVariables>,
     private readonly paymentRepository: PaymentRepository,
+    private readonly planRepository: PlanRepository,
   ) {}
 
   async create(
@@ -26,9 +26,7 @@ export class PaymentService {
       `Создание платежа начато: userId=${payload.sub}, planId=${createPaymentDto.planId}, clientType=${payload.clientType}`,
     );
 
-    const plan = await this.prisma.plan.findUnique({
-      where: { id: createPaymentDto.planId },
-    });
+    const plan = await this.planRepository.findById(createPaymentDto.planId);
     if (!plan) {
       this.logger.warn(
         `Создание платежа отклонено: план не найден, userId=${payload.sub}, planId=${createPaymentDto.planId}`,

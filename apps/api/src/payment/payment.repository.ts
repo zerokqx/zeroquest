@@ -67,8 +67,7 @@ export class PaymentRepository {
     this.logger.debug(`Запрошен платёж: paymentId=${id}, userId=${userId}`);
     return this.prisma.payment.findUnique({
       where: {
-        id,
-        userId,
+        id_userId: { id, userId },
       },
     });
   }

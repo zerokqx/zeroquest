@@ -1,4 +1,3 @@
-import { PrismaService } from '@/prisma.service';
 import { genSalt, compare, hash } from 'bcryptjs';
 import {
   BadRequestException,
@@ -12,14 +11,15 @@ import { createHash } from 'crypto';
 import { TokenService } from '@/token/token.service';
 import { SessionService } from '@/session/session.service';
 import { UserRole } from '@/generated/prisma/enums';
+import { AuthRepository } from './auth.repository';
 
 @Injectable()
 export class AuthService {
   private logger = new Logger(AuthService.name);
   constructor(
-    private prisma: PrismaService,
-    private tokenService: TokenService,
-    private sessionService: SessionService,
+    private readonly authRepository: AuthRepository,
+    private readonly tokenService: TokenService,
+    private readonly sessionService: SessionService,
   ) {}
 
   sha256(data: string) {
@@ -40,14 +40,10 @@ export class AuthService {
     userAgent: string | undefined,
     clientType: string,
   ) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        login,
-      },
-    });
+    const user = await this.authRepository.findUserByLogin(login);
     if (user && (await compare(password, user?.passwordHash))) {
       const userAgentHash = this.getUserAgentHash(userAgent);
-      return await this.prisma.$transaction(async (tx) => {
+      return await this.authRepository.transaction(async (tx) => {
         const session = await this.sessionService.create(
           {
             clientType,
@@ -66,15 +62,16 @@ export class AuthService {
           login,
         });
 
-        await tx.session.update({
-          where: { id: session.id },
-          data: {
+        await this.authRepository.updateSessionRefreshData(
+          session.id,
+          {
             refreshTokenHash: await this.tokenService.hashToken(
               tokens.refreshToken,
             ),
             refreshTokenJti: inputs.refreshTokenJti,
           },
-        });
+          { tx },
+        );
         this.logger.log(
           `Пользователь успешно вошёл: login=${login}, sessionId=${session.id}, clientType=${clientType}`,
         );
@@ -93,12 +90,7 @@ export class AuthService {
     userAgent: string | undefined,
     clientType: string,
   ) {
-    const user = await this.prisma.user.findUnique({
-      select: { login: true },
-      where: {
-        login,
-      },
-    });
+    const user = await this.authRepository.findUserLoginByLogin(login);
     this.logger.debug(
       `Проверка возможности регистрации: login=${login}, clientType=${clientType}`,
     );
@@ -110,13 +102,14 @@ export class AuthService {
     const salt = await genSalt();
     const userAgentHash = this.getUserAgentHash(userAgent);
     const passwordHash = await hash(password, salt);
-    const result = await this.prisma.$transaction(async (tx) => {
-      const user = await tx.user.create({
-        data: {
+    const result = await this.authRepository.transaction(async (tx) => {
+      const user = await this.authRepository.createUser(
+        {
           login,
           passwordHash,
         },
-      });
+        { tx },
+      );
 
       const session = await this.sessionService.create(
         {
@@ -136,15 +129,16 @@ export class AuthService {
         login: user.login,
       });
 
-      await tx.session.update({
-        where: { id: session.id },
-        data: {
+      await this.authRepository.updateSessionRefreshData(
+        session.id,
+        {
           refreshTokenHash: await this.tokenService.hashToken(
             tokens.refreshToken,
           ),
           refreshTokenJti: inputs.refreshTokenJti,
         },
-      });
+        { tx },
+      );
 
       this.logger.log(
         `Пользователь зарегистрирован: login=${login}, sessionId=${session.id}, clientType=${clientType}`,
@@ -180,10 +174,7 @@ export class AuthService {
       `Payload refresh токена подтверждён: login=${payload.login}, sessionId=${payload.sid}`,
     );
 
-    const session = await this.prisma.session.findUnique({
-      where: { id: payload.sid },
-      include: { clientType: true, user: { select: { role: true } } },
-    });
+    const session = await this.authRepository.findSessionForRefresh(payload.sid);
 
     const isSessionValid =
       !!session &&
@@ -211,16 +202,14 @@ export class AuthService {
     const refreshTokenHash = await this.tokenService.hashToken(
       tokens.refreshToken,
     );
-    const updated = await this.prisma.session.updateMany({
-      where: {
-        id: session.id,
-        refreshTokenJti: payload.jti,
-      },
-      data: {
+    const updated = await this.authRepository.updateSessionRefreshDataIfJtiMatches(
+      session.id,
+      payload.jti,
+      {
         refreshTokenJti: inputs.refreshTokenJti,
         refreshTokenHash,
       },
-    });
+    );
     if (updated.count !== 1) {
       this.logger.warn(
         `Refresh не завершён: не удалось атомарно обновить сессию ${session.id}`,
