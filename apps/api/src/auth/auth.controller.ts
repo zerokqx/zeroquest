@@ -24,13 +24,13 @@ import { AuthService } from './auth.service';
 import {
   ApiClientType,
   ClientType,
-} from '@/common/guards/client-type/client-type.decorator';
+} from '@/common/client-type/client-type.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AuthPayload, AuthToken, Public } from './auth.decorator';
 import { type Response } from 'express';
 import type { AuthServiceTypes } from '@zeroquest/types';
-import { ApiUserAgent } from '@/common/guards/user-agent.guard';
+import { ApiUserAgent } from '@/common/user-agent/user-agent.decorator';
 
 type RequestWithClientType = {
   clientType: string;
@@ -198,7 +198,6 @@ export class AuthController {
     @Headers('user-agent') userAgent: string,
     @Req() req: RequestWithClientType,
     @Res({ passthrough: true }) res: Response,
-    // @Cookies('zeroquestRefresh' as keyof AuthServiceTypes.AuthCookie)
     @AuthPayload()
     payload: AuthServiceTypes.JwtPayload,
   ) {

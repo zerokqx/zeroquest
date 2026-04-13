@@ -5,7 +5,7 @@ export function ApiUserAgent() {
   return applyDecorators(
     ApiHeader({
       name: 'user-agent',
-      required: false,
+      required: true,
       description: 'User-Agent клиента',
       schema: {
         type: 'string',

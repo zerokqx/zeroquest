@@ -1,6 +1,7 @@
 import { PrismaService } from '@/prisma.service';
 import { genSalt, compare, hash } from 'bcryptjs';
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   Logger,
@@ -24,10 +25,19 @@ export class AuthService {
   sha256(data: string) {
     return createHash('sha256').update(data).digest('hex');
   }
+
+  private getUserAgentHash(userAgent?: string) {
+    if (!userAgent?.trim()) {
+      throw new BadRequestException('user-agent header is required');
+    }
+
+    return this.sha256(userAgent);
+  }
+
   async password(
     login: string,
     password: string,
-    userAgent: string,
+    userAgent: string | undefined,
     clientType: string,
   ) {
     const user = await this.prisma.user.findUnique({
@@ -36,7 +46,7 @@ export class AuthService {
       },
     });
     if (user && (await compare(password, user?.passwordHash))) {
-      const userAgentHash = this.sha256(userAgent);
+      const userAgentHash = this.getUserAgentHash(userAgent);
       return await this.prisma.$transaction(async (tx) => {
         const session = await this.sessionService.create(
           {
@@ -80,7 +90,7 @@ export class AuthService {
   async register(
     login: string,
     password: string,
-    userAgent: string,
+    userAgent: string | undefined,
     clientType: string,
   ) {
     const user = await this.prisma.user.findUnique({
@@ -98,7 +108,7 @@ export class AuthService {
       throw new ConflictException();
     }
     const salt = await genSalt();
-    const userAgentHash = this.sha256(userAgent);
+    const userAgentHash = this.getUserAgentHash(userAgent);
     const passwordHash = await hash(password, salt);
     const result = await this.prisma.$transaction(async (tx) => {
       const user = await tx.user.create({
@@ -150,11 +160,11 @@ export class AuthService {
    * 2) После того как проверки предыдущие выдали true валидируем старый токен с данными сессии.
    * */
   async refresh(
-    userAgent: string,
+    userAgent: string | undefined,
     clientType: string,
     payload: AuthServiceTypes.JwtPayload,
   ) {
-    const userAgentHash = this.sha256(userAgent);
+    const userAgentHash = this.getUserAgentHash(userAgent);
     const isClientTypeValid = clientType === payload.clientType;
     const isRefreshToken = payload.type === 'refresh';
     const isUserAgentValid = userAgentHash === payload.userAgentHash;

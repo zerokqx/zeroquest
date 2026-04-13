@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Cookies } from '@/common/guards/cookie/cookie.decorator';
-import { AuthServiceTypes } from '@zeroquest/types';
+import type { AuthServiceTypes } from '@zeroquest/types';
 import { ApiCookieAuth } from '@nestjs/swagger';
-import { PatchMeDto } from './patch-me.dto';
+import { PatchMeDto } from './dto/patch-me.dto';
+import { AuthPayload } from '@/auth/auth.decorator';
 
 @Controller('user')
 export class UserController {
@@ -11,20 +11,16 @@ export class UserController {
 
   @ApiCookieAuth('zeroquestAccess')
   @Get('me')
-  async me(
-    @Cookies('zeroquestAccess' as keyof AuthServiceTypes.AuthCookie)
-    access: string,
-  ) {
-    return this.userService.me(access);
+  async me(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
+    return this.userService.me(payload);
   }
 
   @ApiCookieAuth('zeroquestAccess')
   @Patch('me')
   async mePatch(
-    @Cookies('zeroquestAccess' as keyof AuthServiceTypes.AuthCookie)
-    access: string,
     @Body() body: PatchMeDto,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
   ) {
-    return this.userService.patchMe(access, body);
+    return this.userService.patchMe(payload, body);
   }
 }

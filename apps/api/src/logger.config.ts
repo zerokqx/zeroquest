@@ -3,6 +3,7 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 export const logger = WinstonModule.createLogger({
+  level:"silly",
   transports: [
     new winston.transports.Console({
       format: winston.format.combine(

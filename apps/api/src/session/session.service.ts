@@ -4,7 +4,6 @@ import { UpdateSessionDto } from './dto/update-session.dto';
 import { PrismaService } from '@/prisma.service';
 import { Prisma } from '@/generated/prisma/client';
 import { AuthServiceTypes } from '@zeroquest/types';
-import { TokenService } from '@/token/token.service';
 
 @Injectable()
 export class SessionService {
@@ -12,7 +11,6 @@ export class SessionService {
   constructor(
     private readonly prisma: PrismaService,
 
-    private readonly tokenService: TokenService,
   ) {}
   async create(
     {

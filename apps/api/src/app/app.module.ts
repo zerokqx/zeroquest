@@ -1,24 +1,29 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import configuration from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '@/prisma.module';
 import { APP_GUARD } from '@nestjs/core';
-import { ClientTypeGuard } from '@/common/guards/client-type/client-type.guard';
+import { ClientTypeGuard } from '@/common/client-type/client-type.guard';
 import { AuthGuard } from '@/auth/auth.guard';
-import { RoleGuard } from '@/common/guards/role/role.guard';
+import { RoleGuard } from '@/common/role/role.guard';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { env } from 'process';
 import { InboundModule } from '@/inbound/inbound.module';
 import { UserModule } from '@/user/user.module';
+import { BullModule } from '@nestjs/bullmq';
+import { QueueModule } from '@/queue.module';
+import { PaymentModule } from '@/payment/payment.module';
+import { PlanModule } from '@/plan/plan.module';
+import { ThreeXUiService } from '@/three-x-ui/three-x-ui.service';
+import { ThreeXUiModule } from '@/three-x-ui/three-x-ui.module';
+import { SubscribeModule } from '@/subscribe/subscribe.module';
 
 @Module({
   imports: [
     CacheModule.register({
-      isGlobal:true
+      isGlobal: true,
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -29,20 +34,30 @@ import { UserModule } from '@/user/user.module';
       {
         name: 'JWT_SERVICE',
         transport: Transport.REDIS,
+
         options: {
           host: 'localhost',
           port: Number(env.REDIS_PORT),
         },
       },
     ]),
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: Number(process.env.REDIS_PORT),
+      },
+    }),
+    PlanModule,
     AuthModule,
     PrismaModule,
     InboundModule,
-    UserModule
+    UserModule,
+    QueueModule,
+    PaymentModule,
+    ThreeXUiModule,
+    SubscribeModule,
   ],
-  controllers: [AppController],
   providers: [
-    AppService,
     { provide: APP_GUARD, useClass: ClientTypeGuard },
     { provide: APP_GUARD, useClass: AuthGuard },
     { provide: APP_GUARD, useClass: RoleGuard },

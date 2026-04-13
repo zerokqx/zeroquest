@@ -43,6 +43,20 @@ const config = () => ({
       return `${this.panelBaseUrl}/panel/api`;
     },
   },
+  yookassa: {
+    token: process.env.YOOKASSA_API_TOKEN ?? process.env.YOOKASSA_TOKEN ?? '',
+    shopId: process.env.YOOKASSA_SHOP_ID ?? '',
+    redirectTo: process.env.YOOKASSA_REDIRECT_TO ?? '',
+    get apiBaseUrl() {
+      return 'https://api.yookassa.ru/v3';
+    },
+    get paymentsUrl() {
+      return `${this.apiBaseUrl}/payments`;
+    },
+    get authHeader() {
+      return `Basic ${Buffer.from(`${this.shopId}:${this.token}`).toString('base64')}`;
+    },
+  },
   pgadmin: {
     port: parseInt(process.env.PGADMIN_PORT ?? '5050', 10),
     email: process.env.PGADMIN_DEFAULT_EMAIL || 'admin@admin.com',

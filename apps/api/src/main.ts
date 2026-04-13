@@ -13,8 +13,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { logger } from './logger.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule,{
-    logger
+  const app = await NestFactory.create(AppModule, {
+    logger,
   });
   const globalPrefix = 'api';
   const config = new DocumentBuilder()
@@ -24,7 +24,7 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
-
+  app.enableCors();
   const port = process.env.PORT || 3000;
   app.connectMicroservice({
     transport: Transport.REDIS,

@@ -1,5 +1,4 @@
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
-const { rules } = require('eslint-config-prettier');
 const { join } = require('path');
 const externalPackages = new Set([
   '@nestjs/microservices',
@@ -7,9 +6,6 @@ const externalPackages = new Set([
   'ioredis',
   'argon2',
 ]);
-const swcDefaultConfig =
-  require('@nestjs/cli/lib/compiler/defaults/swc-defaults').swcDefaultsFactory()
-    .swcOptions;
 
 module.exports = {
   externals: [
@@ -46,7 +42,7 @@ module.exports = {
       main: './src/main.ts',
       tsConfig: './tsconfig.app.json',
       assets: ['./src/assets'],
-      optimization: false,
+      optimization: true,
       outputHashing: 'none',
       generatePackageJson: false,
       sourceMap: true,

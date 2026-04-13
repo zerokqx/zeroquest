@@ -5,8 +5,7 @@ import type { AuthServiceTypes } from '@zeroquest/types';
 import {
   ApiClientType,
   ClientType,
-} from '@/common/guards/client-type/client-type.decorator';
-import { TokenService } from '@/token/token.service';
+} from '@/common/client-type/client-type.decorator';
 
 @Controller('session')
 export class SessionController {

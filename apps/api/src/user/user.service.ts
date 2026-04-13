@@ -5,11 +5,9 @@ import {
   Injectable,
   Logger,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { AuthServiceTypes } from '@zeroquest/types';
-import { PatchMeDto } from './patch-me.dto';
+import { PatchMeDto } from './dto/patch-me.dto';
 import { Prisma } from '@/generated/prisma/client';
 
 @Injectable()
@@ -17,7 +15,6 @@ export class UserService {
   private readonly logger = new Logger(UserService.name);
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
@@ -33,18 +30,12 @@ export class UserService {
       canComment: true,
     };
   }
-  private getPayload(accessToken: string): AuthServiceTypes.JwtPayload {
-    try {
-      return this.jwtService.verify<AuthServiceTypes.JwtPayload>(accessToken);
-    } catch {
-      throw new UnauthorizedException();
-    }
-  }
-  async me(accessToken: string) {
-    const payload = this.getPayload(accessToken);
+  async me(payload: AuthServiceTypes.JwtPayload) {
     const userCached = await this.cacheManager.get(`user:me:${payload.sub}`);
     if (userCached) {
-      this.logger.debug(`Профиль пользователя взят из кеша: userId=${payload.sub}`);
+      this.logger.debug(
+        `Профиль пользователя взят из кеша: userId=${payload.sub}`,
+      );
       return userCached;
     }
 
@@ -57,17 +48,17 @@ export class UserService {
 
     if (!user) throw new NotFoundException();
     await this.cacheManager.set(`user:me:${payload.sub}`, user, 10000);
-    this.logger.debug(`Профиль пользователя сохранён в кеш: userId=${payload.sub}`);
+    this.logger.debug(
+      `Профиль пользователя сохранён в кеш: userId=${payload.sub}`,
+    );
     return user;
   }
 
-  async patchMe(accessToken: string, dto: PatchMeDto) {
-    const payload = this.getPayload(accessToken);
-    this.jwtService.verify<AuthServiceTypes.JwtPayload>(accessToken);
+  async patchMe(payload: AuthServiceTypes.JwtPayload, dto: PatchMeDto) {
     return await this.prisma.user.update({
       where: { id: payload.sub },
       data: dto,
-      select:this.userSelect()
+      select: this.userSelect(),
     });
   }
 }

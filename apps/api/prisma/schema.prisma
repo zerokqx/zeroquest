@@ -5,12 +5,10 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/generated/prisma"
-  moduleFormat = "cjs"
-}
+  provider = "prisma-client"
+  output       = "../src/generated/prisma" moduleFormat = "cjs" }
 
-datasource db {
+  datasource db {
   provider = "postgresql"
 }
 
@@ -48,13 +46,16 @@ model ClientType {
   name     String    @unique
   sessions Session[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("client_types")
 }
 
 model Session {
   id               String     @id @default(cuid())
   userAgentHash    String     @map("user_agent_hash")
-  clientType       ClientType @relation(fields: [clientTypeId], references: [id])
+  clientType       ClientType @relation(fields: [clientTypeId], references: [id], onDelete: Cascade)
   clientTypeId     Int        @map("client_type_id")
   refreshTokenJti  String     @map("refrest_token_jti")
   refreshTokenHash String     @map("refresh_token_hash")
@@ -76,19 +77,25 @@ model Refund {
 }
 
 model Inbound {
-  id        Int @id @default(autoincrement())
-  inboundId Int @map("inbount_id")
+  id        Int     @id @default(autoincrement())
+  enable    Boolean @default(true)
+  name      String
+  inboundId Int     @unique @map("inbount_id")
+  plans     Plan[]
 
   @@map("inbounds")
 }
 
 model Plan {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  price       Int
-  description String?
-  payments    Payment[]
-  subscribes  Subscribe[]
+  id             Int         @id @default(autoincrement())
+  name           String      @unique
+  price          Int
+  description    String?
+  payments       Payment[]
+  subscribes     Subscribe[]
+  inbound        Inbound     @relation(fields: [inboundId], references: [id])
+  inboundId      Int         @map("inbound_id")
+  duratationDays Int         @map("durataton_days")
 
   @@map("plans")
 }
@@ -122,6 +129,7 @@ model Payment {
   subscribe         Subscribe?           @relation(fields: [subscribeId], references: [id])
   subscribeId       Int?                 @map("subscribe_id")
   refund            Refund?
+  confirmationUrl   String               @map("confirmation_url")
   autoPayment       Boolean              @default(false) @map("auto_payment")
 
   @@map("payments")
@@ -129,16 +137,18 @@ model Payment {
 
 model Subscribe {
   id        Int             @id @default(autoincrement())
+  name      String
   link      String
-  owner     User            @relation(fields: [ownerId], references: [id])
-  ownerId   String          @map("owner_id")
+  user      User            @relation(fields: [userId], references: [id])
+  userId    String          @map("user_id")
   status    SubscribeStatus @default(PENDING)
   expiresAt DateTime        @map("expires_at")
   createdAt DateTime        @default(now()) @map("created_at")
   updatedAt DateTime        @updatedAt @map("updated_at")
   plan      Plan            @relation(fields: [planId], references: [id])
   planId    Int             @map("plan_id")
-  refunds   Refund[]
+  refund    Refund[]
+  totalGb   Int             @map("total_gb")
   payments  Payment[]
 
   @@map("subscribers")
@@ -161,8 +171,3 @@ model User {
 
   @@map("users")
 }
-
-// model Inbound {
-//   id        Int @default(autoincrement())
-//   inboundId Int @map("inbound_id")
-// }

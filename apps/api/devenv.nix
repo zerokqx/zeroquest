@@ -15,6 +15,7 @@
     git
     prisma-engines
     openssl
+    ngrok
 
     stdenv.cc.cc.lib
     gcc
