@@ -11,7 +11,7 @@ import { env } from 'process';
 import cookieParser from 'cookie-parser';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { logger } from './logger.config';
-import { SniffInterceptor } from './common/request-logger/request-logger.interceptor';
+import { SniffInterceptor } from '@zeroquest/nest-shared';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -19,7 +19,7 @@ async function bootstrap() {
   });
   const globalPrefix = 'api';
   const config = new DocumentBuilder()
-    .setTitle('Zeroquest Swagger')
+    .setTitle('Zeroquest API')
     .setVersion('1.0')
     .build();
   app.setGlobalPrefix(globalPrefix);
@@ -27,7 +27,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new SniffInterceptor());
   app.use(cookieParser());
   app.enableCors();
-  const port = process.env.PORT || 3000;
+  const port = Number(
+    process.env.API_PORT ?? process.env.BACKEND_PORT ?? process.env.PORT ?? 3000,
+  );
   app.connectMicroservice({
     transport: Transport.REDIS,
     options: {

@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { AuthPayload } from '@/auth/auth.decorator';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import { PaymentEventService } from './payment-event.service';
 import { interval, map, merge } from 'rxjs';
@@ -26,6 +25,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { AuthPayload } from '@zeroquest/nest-shared';
 
 @ApiTags('Payment')
 @ApiCookieAuth('zeroquestAccess')

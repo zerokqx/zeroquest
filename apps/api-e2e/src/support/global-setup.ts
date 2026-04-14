@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { waitForPortOpen } from '@nx/node/utils';
 
 /* eslint-disable */
@@ -8,7 +9,11 @@ module.exports = async function () {
   console.log('\nSetting up...\n');
 
   const host = process.env.HOST ?? 'localhost';
-  const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+  const port = process.env.API_PORT
+    ? Number(process.env.API_PORT)
+    : process.env.PORT
+      ? Number(process.env.PORT)
+      : 3000;
   await waitForPortOpen(port, { host });
 
   // Hint: Use `globalThis` to pass variables to global teardown.

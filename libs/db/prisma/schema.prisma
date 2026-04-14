@@ -31,9 +31,8 @@ enum PaymentStatus {
 }
 
 enum WalletHistoryType {
-  DEPOSIT
-  REFUND
-  SUBSCRIBTION
+  CREDIT
+  DEBIT
   BONUS
 }
 

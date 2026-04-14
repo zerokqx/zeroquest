@@ -1,11 +1,6 @@
 import { Controller, Get, Param, Delete } from '@nestjs/common';
 import { SessionService } from './session.service';
-import { AuthPayload, AuthToken } from '@/auth/auth.decorator';
 import type { AuthServiceTypes } from '@zeroquest/types';
-import {
-  ApiClientType,
-  ClientType,
-} from '@/client-type/client-type.decorator';
 import {
   ApiCookieAuth,
   ApiOkResponse,
@@ -14,6 +9,12 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import {
+  ApiClientType,
+  AuthPayload,
+  AuthToken,
+  ClientType,
+} from '@zeroquest/nest-shared';
 
 @ApiTags('Session')
 @ApiCookieAuth('zeroquestAccess')

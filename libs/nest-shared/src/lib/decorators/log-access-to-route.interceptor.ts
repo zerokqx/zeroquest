@@ -7,8 +7,7 @@ import {
 } from '@nestjs/common';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import type { Request } from 'express';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, tap } from 'rxjs';
 
 type RequestWithIdentity = Request & {
   user?: AuthServiceTypes.JwtPayload;

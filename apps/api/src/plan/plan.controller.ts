@@ -10,7 +10,6 @@ import {
 import { PlanService } from './plan.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/update-plan.dto';
-import { Role } from '@/common/role/role.decorator';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -21,7 +20,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { Public } from '@/auth/auth.decorator';
+import { Public, Role } from '@zeroquest/nest-shared';
 
 @ApiTags('Plan')
 @Controller('plan')

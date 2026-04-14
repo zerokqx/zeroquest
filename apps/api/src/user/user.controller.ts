@@ -9,7 +9,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PatchMeDto } from './dto/patch-me.dto';
-import { AuthPayload } from '@/auth/auth.decorator';
+import { AuthPayload } from '@zeroquest/nest-shared';
 
 @ApiTags('User')
 @ApiCookieAuth('zeroquestAccess')

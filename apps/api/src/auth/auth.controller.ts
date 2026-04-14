@@ -22,16 +22,18 @@ import {
   ApiCreatedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import {
-  ApiClientType,
-  ClientType,
-} from '@/client-type/client-type.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { AuthPayload, AuthToken, Public } from './auth.decorator';
 import { type Response } from 'express';
 import type { AuthServiceTypes } from '@zeroquest/types';
-import { ApiUserAgent } from '@/common/user-agent/user-agent.decorator';
+import {
+  ApiClientType,
+  ApiUserAgent,
+  AuthPayload,
+  AuthToken,
+  ClientType,
+  Public,
+} from '@zeroquest/nest-shared';
 
 type RequestWithClientType = {
   clientType: string;

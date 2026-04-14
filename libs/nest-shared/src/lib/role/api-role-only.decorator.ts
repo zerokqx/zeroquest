@@ -2,7 +2,7 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiForbiddenResponse,
   ApiOperation,
-  ApiOperationOptions,
+  type ApiOperationOptions,
 } from '@nestjs/swagger';
 import type { AuthServiceTypes } from '@zeroquest/types';
 

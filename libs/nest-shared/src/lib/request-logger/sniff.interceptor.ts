@@ -19,29 +19,26 @@ export class SniffInterceptor implements NestInterceptor {
     );
   }
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const req = context.switchToHttp().getRequest();
-    const res = context.switchToHttp().getResponse();
-
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
+    const request = context.switchToHttp().getRequest();
+    const response = context.switchToHttp().getResponse();
     const start = Date.now();
 
     const controller = context.getClass().name;
     const handler = context.getHandler().name;
-
     const ip =
-      req.headers['x-forwarded-for']?.toString().split(',')[0].trim() ||
-      req.socket?.remoteAddress ||
-      req.ip;
+      request.headers['x-forwarded-for']?.toString().split(',')[0].trim() ||
+      request.socket?.remoteAddress ||
+      request.ip;
+    const method = request.method;
+    const url = request.originalUrl || request.url;
 
-    const method = req.method;
-    const url = req.originalUrl || req.url;
+    const sanitize = (value: Record<string, unknown> | undefined) => {
+      if (!value) {
+        return value;
+      }
 
-    // 🔒 маскируем чувствительные данные
-    const sanitize = (obj: any) => {
-      if (!obj) return obj;
-
-      const clone = { ...obj };
-
+      const clone = { ...value };
       const hiddenFields = [
         'password',
         'token',
@@ -59,11 +56,6 @@ export class SniffInterceptor implements NestInterceptor {
       return clone;
     };
 
-    const headers = sanitize(req.headers);
-    const body = sanitize(req.body);
-    const query = req.query;
-    const params = req.params;
-
     this.logger.debug(
       this.stringify({
         type: 'request',
@@ -72,16 +64,16 @@ export class SniffInterceptor implements NestInterceptor {
         url,
         controller,
         handler,
-        headers,
-        body,
-        query,
-        params,
+        headers: sanitize(request.headers),
+        body: sanitize(request.body),
+        query: request.query,
+        params: request.params,
       }),
     );
 
     return next.handle().pipe(
       tap({
-        next: (response) => {
+        next: (payload) => {
           const duration = Date.now() - start;
 
           this.logger.debug(
@@ -92,9 +84,9 @@ export class SniffInterceptor implements NestInterceptor {
               url,
               controller,
               handler,
-              status: res.statusCode,
+              status: response.statusCode,
               duration: `${duration}ms`,
-              response,
+              response: payload,
             }),
           );
         },
@@ -109,7 +101,7 @@ export class SniffInterceptor implements NestInterceptor {
               url,
               controller,
               handler,
-              status: res.statusCode,
+              status: response.statusCode,
               duration: `${duration}ms`,
               message: error?.message,
             }),

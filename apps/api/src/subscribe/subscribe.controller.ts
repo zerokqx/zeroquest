@@ -8,7 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { SubscribeService } from './subscribe.service';
-import { CreateSubscribeDto } from './dto/create-subscribe.dto'; import { UpdateSubscribeDto } from './dto/update-subscribe.dto'; import { Role } from '@/common/role/role.decorator'; import { AuthPayload } from '@/auth/auth.decorator';
+import { CreateSubscribeDto } from './dto/create-subscribe.dto';
+import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import {
   ApiBody,
@@ -19,6 +20,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { AuthPayload, Role } from '@zeroquest/nest-shared';
 
 @ApiTags('Subscribe')
 @ApiCookieAuth('zeroquestAccess')

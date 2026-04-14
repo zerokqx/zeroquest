@@ -1,6 +1,5 @@
 import { Body, Controller, Get } from '@nestjs/common';
 import { ClientTypeService } from './client-type.service';
-import { Role } from '@/common/role/role.decorator';
 import { ClientTypeExistDto } from './dto/client-type-exist.dto';
 import {
   ApiBody,
@@ -10,6 +9,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { Role } from '@zeroquest/nest-shared';
 
 @ApiTags('Client Type')
 @ApiCookieAuth('zeroquestAccess')

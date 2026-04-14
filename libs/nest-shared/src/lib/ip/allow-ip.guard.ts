@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
+
 import { ALLOW_IP_KEY } from './allow-ip.decorator';
 
 const normalizeIp = (value?: string | null) => {
@@ -28,10 +29,11 @@ const getCandidateIps = (request: Request) => {
     ? forwardedForHeader[0]
     : forwardedForHeader;
 
-  const forwardedIps = forwardedFor
-    ?.split(',')
-    .map((ip) => normalizeIp(ip))
-    .filter((ip): ip is string => Boolean(ip)) ?? [];
+  const forwardedIps =
+    forwardedFor
+      ?.split(',')
+      .map((ip) => normalizeIp(ip))
+      .filter((ip): ip is string => Boolean(ip)) ?? [];
 
   const directIps = [request.ip, request.socket.remoteAddress]
     .map((ip) => normalizeIp(ip))
@@ -62,7 +64,9 @@ export class AllowIpGuard implements CanActivate {
       .map((ip) => normalizeIp(ip))
       .filter((ip): ip is string => Boolean(ip));
 
-    const isAllowed = candidateIps.some((ip) => normalizedAllowedIps.includes(ip));
+    const isAllowed = candidateIps.some((ip) =>
+      normalizedAllowedIps.includes(ip),
+    );
 
     if (!isAllowed) {
       this.logger.warn(

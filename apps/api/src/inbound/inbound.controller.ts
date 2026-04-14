@@ -10,11 +10,6 @@ import {
 import { InboundService } from './inbound.service';
 import { CreateInboundDto } from './dto/create-inbound.dto';
 import { UpdateInboundDto } from './dto/update-inbound.dto';
-import { Role } from '@/common/role/role.decorator';
-import {
-  ApiClientType,
-  ClientType,
-} from '@/client-type/client-type.decorator';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -25,6 +20,11 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import {
+  ApiClientType,
+  ClientType,
+  Role,
+} from '@zeroquest/nest-shared';
 
 @ApiTags('Inbound')
 @ApiCookieAuth('zeroquestAccess')

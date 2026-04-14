@@ -4,9 +4,7 @@ import {
   HttpCode, HttpStatus,
   Post,
 } from '@nestjs/common';
-import { Public } from '@/auth/auth.decorator';
 import { YookassaWebhookDto } from './dto/webhook-event.dto';
-import { AllowIp } from '@/common/ip/allow-ip.decorator';
 import { YookassaWebhookService } from './yookassa-webhook.service';
 import {
   ApiBody,
@@ -15,6 +13,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { AllowIp, Public } from '@zeroquest/nest-shared';
 
 @ApiTags('YooKassa')
 @Controller('yookassa')

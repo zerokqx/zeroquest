@@ -32,9 +32,8 @@ export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
 export const WalletHistoryType = {
-  DEPOSIT: 'DEPOSIT',
-  REFUND: 'REFUND',
-  SUBSCRIBTION: 'SUBSCRIBTION',
+  CREDIT: 'CREDIT',
+  DEBIT: 'DEBIT',
   BONUS: 'BONUS'
 } as const
 

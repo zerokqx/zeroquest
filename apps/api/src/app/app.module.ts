@@ -1,13 +1,8 @@
 import { Module } from '@nestjs/common';
 import configuration from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
-import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
-import {ZeroquestDbModule} from "@zeroquest/db"
 import { APP_GUARD } from '@nestjs/core';
-import { ClientTypeGuard } from '@/client-type/client-type.guard';
-import { AuthGuard } from '@/auth/auth.guard';
-import { RoleGuard } from '@/common/role/role.guard';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { env } from 'process';
 import { InboundModule } from '@/inbound/inbound.module';
@@ -19,17 +14,20 @@ import { PlanModule } from '@/plan/plan.module';
 import { ThreeXUiModule } from '@/three-x-ui/three-x-ui.module';
 import { SubscribeModule } from '@/subscribe/subscribe.module';
 import { ClientTypeModule } from '@/client-type/client-type.module';
+import { ZeroquestConfigModule } from '@zeroquest/config';
+import { ZeroquestDbModule } from '@zeroquest/db';
+import {
+  AuthGuard,
+  ClientTypeGuard,
+  RoleGuard,
+} from '@zeroquest/nest-shared';
 
 @Module({
   imports: [
     CacheModule.register({
       isGlobal: true,
     }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: ['.env.local', '.env', '.env.example'],
-      load: [configuration],
-    }),
+    ZeroquestConfigModule.forRoot([configuration]),
     ClientsModule.register([
       {
         name: 'SUBSCRIBE_SERVICE',
