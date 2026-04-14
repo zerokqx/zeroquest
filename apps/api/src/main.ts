@@ -24,7 +24,7 @@ async function bootstrap() {
     .build();
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new SniffInterceptor ())
+  app.useGlobalInterceptors(new SniffInterceptor());
   app.use(cookieParser());
   app.enableCors();
   const port = process.env.PORT || 3000;

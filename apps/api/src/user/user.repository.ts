@@ -1,6 +1,5 @@
-import { Prisma } from '@/generated/prisma/client';
-import { PrismaService } from '@/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
+import { Prisma, PrismaService } from '@zeroquest/db';
 
 @Injectable()
 export class UserRepository {

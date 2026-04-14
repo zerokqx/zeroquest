@@ -1,7 +1,6 @@
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
-import { Plan, Prisma } from '@/generated/prisma/client';
-import { PrismaService } from '@/prisma.service';
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Plan, Prisma, PrismaService } from '@zeroquest/db';
 
 @Injectable()
 export class PlanRepository {

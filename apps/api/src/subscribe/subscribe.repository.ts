@@ -1,10 +1,8 @@
-import { Prisma } from '@/generated/prisma/client';
-import { TransactionClient } from '@/generated/prisma/internal/prismaNamespace';
-import { PrismaService } from '@/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
+import { Prisma, PrismaService } from '@zeroquest/db';
 
 export interface Options {
-  tx?: TransactionClient;
+  tx?: Prisma.TransactionClient;
 }
 
 @Injectable()

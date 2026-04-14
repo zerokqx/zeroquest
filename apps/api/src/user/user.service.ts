@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { AuthServiceTypes } from '@zeroquest/types';
 import { PatchMeDto } from './dto/patch-me.dto';
-import { Prisma } from '@/generated/prisma/client';
 import { UserRepository } from './user.repository';
+import { Prisma } from '@zeroquest/db';
 
 @Injectable()
 export class UserService {
@@ -27,6 +27,7 @@ export class UserService {
       role: true,
       createdAt: true,
       updatedAt: true,
+      wallet: true,
       canComment: true,
     };
   }

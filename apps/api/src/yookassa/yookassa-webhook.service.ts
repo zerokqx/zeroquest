@@ -4,13 +4,13 @@ import {
   YookassaWebhookDto,
 } from './dto/webhook-event.dto';
 import { PaymentRepository } from '@/payment/payment.repository';
-import { PaymentStatus, Prisma } from '@/generated/prisma/client';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import {
   SUBSCRIBE_EVENTS,
   SubscribeNew,
 } from '@/subscribe/dto/subscribe-new.dto';
+import { PaymentStatus, Prisma } from '@zeroquest/db';
 
 type Payment = Prisma.PaymentGetPayload<{ include: { plan: true } }>;
 @Injectable()

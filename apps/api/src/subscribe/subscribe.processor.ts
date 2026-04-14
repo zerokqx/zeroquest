@@ -10,14 +10,14 @@ import {
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PaymentEventService } from '@/payment/payment-event.service';
 import { ThreeXUiService } from '@/three-x-ui/three-x-ui.service';
-import { PrismaService } from '@/prisma.service';
+import { PaymentRepository } from '@/payment/payment.repository';
+import { subscribe } from 'diagnostics_channel';
 import {
   PaymentAppliedStatus,
   PaymentStatus,
+  PrismaService,
   SubscribeStatus,
-} from '@/generated/prisma/enums';
-import { PaymentRepository } from '@/payment/payment.repository';
-import { subscribe } from 'diagnostics_channel';
+} from '@zeroquest/db';
 
 @Injectable()
 @Processor('subscribe')

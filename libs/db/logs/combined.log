@@ -1,0 +1,814 @@
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application..."}
+{"context":"InstanceLoader","level":"info","message":"ClientsModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"QueueModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized"}
+{"apiBaseUrl":"https://api.yookassa.ru/v3","authHeader":"Basic MTMyOTEzODp0ZXN0X1I1RC1ITW5jTUp0Y0IybWh1NGhUdHJBVGZtQU5MMV9DaHEweFkxdjVqem8=","context":"YookassaService","level":"info","paymentsUrl":"https://api.yookassa.ru/v3/payments","redirectTo":"http://localhost:4000/docs","shopId":"1329138","token":"test_R5D-HMncMJtcB2mhu4hTtrATfmANL1_Chq0xY1v5jzo"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"TokenModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ZeroquestDbModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"BullModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentPersistenceModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ThreeXUiModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PlanModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"ClientTypeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"InboundModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SessionModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"SubscribeModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"YookassaModule dependencies initialized"}
+{"context":"InstanceLoader","level":"info","message":"PaymentModule dependencies initialized"}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"Server","level":"info","message":"Connected to Redis. Subscribing to channels..."}
+{"context":"NestMicroservice","level":"info","message":"Nest microservice successfully started"}
+{"context":"RoutesResolver","level":"info","message":"PlanController {/api/plan}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/create, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/plan/internal/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/test, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/password, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/register, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SessionController {/api/session}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/current-user, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/session/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ClientTypeController {/api/client-type}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/client-type/exist, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"InboundController {/api/inbound}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/inbound/:id, DELETE} route"}
+{"context":"RoutesResolver","level":"info","message":"ThreeXUiController {/api/three-x-ui}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/three-x-ui, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/api/user}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/user/me, PATCH} route"}
+{"context":"RoutesResolver","level":"info","message":"PaymentController {/api/payment}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, POST} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/events, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/payment/:id, GET} route"}
+{"context":"RoutesResolver","level":"info","message":"YookassaController {/api/yookassa}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/yookassa/webhook, POST} route"}
+{"context":"RoutesResolver","level":"info","message":"SubscribeController {/api/subscribe}:"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, GET} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, PATCH} route"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/subscribe/:id, DELETE} route"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started"}
+{"level":"info","message":"🚀 Application is running on: http://localhost:4000/api"}

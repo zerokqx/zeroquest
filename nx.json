@@ -80,7 +80,11 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/api-e2e/**/*", "apps/telegram-bot-e2e/**/*"]
+      "exclude": [
+        "apps/api-e2e/**/*",
+        "apps/telegram-bot-e2e/**/*",
+        "apps/wallet-service-e2e/**/*"
+      ]
     }
   ],
   "targetDefaults": {

@@ -3,7 +3,7 @@ import configuration from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
-import { PrismaModule } from '@/prisma.module';
+import {ZeroquestDbModule} from "@zeroquest/db"
 import { APP_GUARD } from '@nestjs/core';
 import { ClientTypeGuard } from '@/client-type/client-type.guard';
 import { AuthGuard } from '@/auth/auth.guard';
@@ -49,7 +49,7 @@ import { ClientTypeModule } from '@/client-type/client-type.module';
     }),
     PlanModule,
     AuthModule,
-    PrismaModule,
+    ZeroquestDbModule,
     InboundModule,
     UserModule,
     QueueModule,

@@ -1,25 +1,17 @@
-    # build
-    FROM node:lts-alpine AS builder
+FROM node:lts-alpine
 
-    WORKDIR /usr/src/app
-    COPY package*.json ./
+ENV NODE_ENV=production
 
-    RUN npm install --only=development --silent
+WORKDIR /usr/src/app
 
-    COPY . .
+# This image expects the app to be built on the host first:
+#   bunx nx build api
+# Build it from the workspace root:
+#   docker build -f apps/api/Dockerfile .
 
-    RUN npx nx run api:build:production
+COPY node_modules ./node_modules
+COPY apps/api/dist ./build
 
-    # Production image
-    FROM node:lts-alpine
-    ENV NODE_ENV production
+EXPOSE 4000
 
-    WORKDIR /usr/src/app
-    COPY package*.json ./
-
-    RUN npm install -g pm2@latest
-    RUN npm install --only=production --silent
-
-    COPY --from=builder /usr/src/app/dist/apps/api ./build
-
-    ENTRYPOINT ["noode","build/main.js"]
+CMD ["node", "build/main.js"]

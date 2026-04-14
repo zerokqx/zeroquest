@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
-import { Prisma } from '@/generated/prisma/client';
 import { AuthServiceTypes } from '@zeroquest/types';
 import { SessionRepository } from './session.repository';
 import { ClientTypeRepository } from '@/client-type/client-type.repository';
+import { Prisma } from '@zeroquest/db';
 
 @Injectable()
 export class SessionService {

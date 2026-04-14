@@ -10,8 +10,8 @@ import type { AuthServiceTypes } from '@zeroquest/types';
 import { createHash } from 'crypto';
 import { TokenService } from '@/token/token.service';
 import { SessionService } from '@/session/session.service';
-import { UserRole } from '@/generated/prisma/enums';
 import { AuthRepository } from './auth.repository';
+import { UserRole } from '@zeroquest/db';
 
 @Injectable()
 export class AuthService {
@@ -105,6 +105,9 @@ export class AuthService {
     const result = await this.authRepository.transaction(async (tx) => {
       const user = await this.authRepository.createUser(
         {
+          wallet: {
+            create: {},
+          },
           login,
           passwordHash,
         },
@@ -174,7 +177,9 @@ export class AuthService {
       `Payload refresh токена подтверждён: login=${payload.login}, sessionId=${payload.sid}`,
     );
 
-    const session = await this.authRepository.findSessionForRefresh(payload.sid);
+    const session = await this.authRepository.findSessionForRefresh(
+      payload.sid,
+    );
 
     const isSessionValid =
       !!session &&
@@ -202,14 +207,15 @@ export class AuthService {
     const refreshTokenHash = await this.tokenService.hashToken(
       tokens.refreshToken,
     );
-    const updated = await this.authRepository.updateSessionRefreshDataIfJtiMatches(
-      session.id,
-      payload.jti,
-      {
-        refreshTokenJti: inputs.refreshTokenJti,
-        refreshTokenHash,
-      },
-    );
+    const updated =
+      await this.authRepository.updateSessionRefreshDataIfJtiMatches(
+        session.id,
+        payload.jti,
+        {
+          refreshTokenJti: inputs.refreshTokenJti,
+          refreshTokenHash,
+        },
+      );
     if (updated.count !== 1) {
       this.logger.warn(
         `Refresh не завершён: не удалось атомарно обновить сессию ${session.id}`,

@@ -9,10 +9,14 @@
         "@nestjs/common": "^11.0.0",
         "@nestjs/config": "^4.0.4",
         "@nestjs/core": "^11.0.0",
-        "@nestjs/mapped-types": "*",
+        "@nestjs/mapped-types": "^2.1.1",
         "@nestjs/platform-express": "^11.0.0",
+        "@nestjs/swagger": "^11.2.7",
         "axios": "^1.15.0",
         "bcryptjs": "^3.0.3",
+        "class-transformer": "^0.5.1",
+        "class-validator": "^0.15.1",
+        "dotenv": "^17.4.2",
         "pg": "^8.20.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
@@ -95,19 +99,15 @@
         "@nestjs/common": "^11.0.0",
         "@nestjs/core": "^11.0.0",
         "@nestjs/jwt": "^11.0.2",
-        "@nestjs/mapped-types": "^2.1.1",
         "@nestjs/microservices": "^11.1.18",
         "@nestjs/platform-express": "^11.0.0",
-        "@nestjs/swagger": "^11.2.7",
-        "@prisma/adapter-pg": "^7.7.0",
         "@zeroquest/converters": "workspace:*",
+        "@zeroquest/db": "workspace:*",
         "@zeroquest/types": "workspace:*",
         "argon2": "^0.44.0",
         "bcrypt": "^6.0.0",
         "bullmq": "^5.73.4",
         "cache-manager": "^7.2.8",
-        "class-transformer": "^0.5.1",
-        "class-validator": "^0.15.1",
         "cookie-parser": "^1.4.7",
         "dotenv": "^17.4.1",
         "express": "^5.2.1",
@@ -122,7 +122,6 @@
       },
       "devDependencies": {
         "@nestjs/testing": "^11.0.0",
-        "@prisma/client": "^7.7.0",
         "@types/bcrypt": "^6.0.0",
         "@types/bun": "latest",
         "@types/cookie-parser": "^1.4.10",
@@ -144,6 +143,25 @@
       "name": "@zeroquest/telegram-bot-e2e",
       "version": "0.0.1",
     },
+    "apps/wallet-service": {
+      "name": "@zeroquest/wallet-service",
+      "version": "0.0.1",
+      "dependencies": {
+        "@nestjs/common": "^11.0.0",
+        "@nestjs/core": "^11.0.0",
+        "@nestjs/platform-express": "^11.0.0",
+        "reflect-metadata": "^0.1.13",
+        "rxjs": "^7.8.0",
+        "tslib": "^2.3.0",
+      },
+      "devDependencies": {
+        "@nestjs/testing": "^11.0.0",
+      },
+    },
+    "apps/wallet-service-e2e": {
+      "name": "@zeroquest/wallet-service-e2e",
+      "version": "0.0.1",
+    },
     "apps/zeroquest": {
       "name": "@zeroquest/zeroquest",
       "version": "0.0.1",
@@ -152,11 +170,25 @@
       "name": "@zeroquest/zeroquest-e2e",
       "version": "0.0.1",
     },
+    "libs/config": {
+      "name": "@zeroquest/config",
+      "version": "0.0.1",
+    },
     "libs/converters": {
       "name": "@zeroquest/converters",
       "version": "0.0.1",
       "dependencies": {
         "tslib": "^2.3.0",
+      },
+    },
+    "libs/db": {
+      "name": "@zeroquest/db",
+      "version": "0.0.1",
+      "dependencies": {
+        "@prisma/adapter-pg": "^7.7.0",
+      },
+      "devDependencies": {
+        "@prisma/client": "^7.7.0",
       },
     },
     "libs/types": {
@@ -1456,13 +1488,21 @@
 
     "@zeroquest/api-e2e": ["@zeroquest/api-e2e@workspace:apps/api-e2e"],
 
+    "@zeroquest/config": ["@zeroquest/config@workspace:libs/config"],
+
     "@zeroquest/converters": ["@zeroquest/converters@workspace:libs/converters"],
+
+    "@zeroquest/db": ["@zeroquest/db@workspace:libs/db"],
 
     "@zeroquest/telegram-bot": ["@zeroquest/telegram-bot@workspace:apps/telegram-bot"],
 
     "@zeroquest/telegram-bot-e2e": ["@zeroquest/telegram-bot-e2e@workspace:apps/telegram-bot-e2e"],
 
     "@zeroquest/types": ["@zeroquest/types@workspace:libs/types"],
+
+    "@zeroquest/wallet-service": ["@zeroquest/wallet-service@workspace:apps/wallet-service"],
+
+    "@zeroquest/wallet-service-e2e": ["@zeroquest/wallet-service-e2e@workspace:apps/wallet-service-e2e"],
 
     "@zeroquest/zeroquest": ["@zeroquest/zeroquest@workspace:apps/zeroquest"],
 
@@ -1908,7 +1948,7 @@
 
     "dot-case": ["dot-case@3.0.4", "", { "dependencies": { "no-case": "^3.0.4", "tslib": "^2.0.3" } }, "sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w=="],
 
-    "dotenv": ["dotenv@17.4.1", "", {}, "sha512-k8DaKGP6r1G30Lx8V4+pCsLzKr8vLmV2paqEj1Y55GdAgJuIqpRp5FfajGF8KtwMxCz9qJc6wUIJnm053d/WCw=="],
+    "dotenv": ["dotenv@17.4.2", "", {}, "sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw=="],
 
     "dotenv-expand": ["dotenv-expand@11.0.7", "", { "dependencies": { "dotenv": "^16.4.5" } }, "sha512-zIHwmZPRshsCdpMDyVsqGmgyP0yT8GAgXUnkdAoJisxvf33k7yO6OuoKmcTGuXPWSsm8Oh88nZicRLA9Y0rUeA=="],
 
@@ -3691,6 +3731,8 @@
     "@module-federation/third-party-dts-extractor/fs-extra": ["fs-extra@9.1.0", "", { "dependencies": { "at-least-node": "^1.0.0", "graceful-fs": "^4.2.0", "jsonfile": "^6.0.1", "universalify": "^2.0.0" } }, "sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ=="],
 
     "@module-federation/third-party-dts-extractor/resolve": ["resolve@1.22.8", "", { "dependencies": { "is-core-module": "^2.13.0", "path-parse": "^1.0.7", "supports-preserve-symlinks-flag": "^1.0.0" }, "bin": { "resolve": "bin/resolve" } }, "sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw=="],
+
+    "@nestjs/config/dotenv": ["dotenv@17.4.1", "", {}, "sha512-k8DaKGP6r1G30Lx8V4+pCsLzKr8vLmV2paqEj1Y55GdAgJuIqpRp5FfajGF8KtwMxCz9qJc6wUIJnm053d/WCw=="],
 
     "@nestjs/config/dotenv-expand": ["dotenv-expand@12.0.3", "", { "dependencies": { "dotenv": "^16.4.5" } }, "sha512-uc47g4b+4k/M/SeaW1y4OApx+mtLWl92l5LMPP0GNXctZqELk+YGgOPIIC5elYmUH4OuoK3JLhuRUYegeySiFA=="],
 

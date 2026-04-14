@@ -1,6 +1,5 @@
-import { Prisma, UserRole } from '@/generated/prisma/client';
-import { PrismaService } from '@/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
+import { Prisma, PrismaService, UserRole } from '@zeroquest/db';
 
 @Injectable()
 export class AuthRepository {

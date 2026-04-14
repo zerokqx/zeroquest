@@ -4,8 +4,8 @@ import {
   IsInt,
   IsOptional,
 } from 'class-validator';
-import { PaymentAppliedStatus, PaymentStatus } from '@/generated/prisma/enums';
 import { ApiProperty } from '@nestjs/swagger';
+import { PaymentAppliedStatus, PaymentStatus } from '@zeroquest/db';
 
 export class UpdatePaymentDto {
 
