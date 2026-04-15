@@ -187,6 +187,7 @@ model Wallet {
   user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String          @unique
   walletHistories WalletHistory[]
+  @@map("wallet")
 }
 
 model WalletHistory {
@@ -197,4 +198,5 @@ model WalletHistory {
   createdAt DateTime          @default(now()) @map("created_at")
   walletId  String
   wallet    Wallet            @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  @@map("wallet_history")
 }

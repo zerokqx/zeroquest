@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
 import { SubscribeService } from './subscribe.service';
 import { SubscribeController } from './subscribe.controller';
-import { SubscribeProcessor } from './subscribe.processor';
-import { QueueModule } from '@/queue.module';
 import { SubscribeRepository } from './subscribe.repository';
-import { PaymentPersistenceModule } from '@/payment/payment-persistence.module';
 import { ThreeXUiModule } from '@/three-x-ui/three-x-ui.module';
+import { WalletModule } from '@/wallet/wallet.module';
 
 @Module({
-  imports: [QueueModule, PaymentPersistenceModule, ThreeXUiModule],
+  imports: [ThreeXUiModule, WalletModule],
   controllers: [SubscribeController],
-  providers: [SubscribeService, SubscribeProcessor, SubscribeRepository],
+  providers: [SubscribeService, SubscribeRepository],
   exports: [SubscribeService],
 })
 export class SubscribeModule {}

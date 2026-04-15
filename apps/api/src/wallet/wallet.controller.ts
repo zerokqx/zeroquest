@@ -11,11 +11,11 @@ export class WalletController {
 
   @MessagePattern(walletPaterns.credit)
   credit(@Payload() creditWalletDto: CreditWalletDto) {
-    return this.walletService.credit(creditWalletDto);
+    return this.walletService.creditWithQueue(creditWalletDto);
   }
 
   @MessagePattern(walletPaterns.debit)
   debit(@Payload() debitWalletDto: DebitWalletDto) {
-    return this.walletService.debit(debitWalletDto);
+    return this.walletService.debitWithQueue(debitWalletDto);
   }
 }

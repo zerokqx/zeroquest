@@ -4,21 +4,21 @@ import {
   YookassaWebhookDto,
 } from './dto/webhook-event.dto';
 import { PaymentRepository } from '@/payment/payment.repository';
-import { InjectQueue } from '@nestjs/bullmq';
-import { Queue } from 'bullmq';
-import {
-  SUBSCRIBE_EVENTS,
-  SubscribeNew,
-} from '@/subscribe/dto/subscribe-new.dto';
 import { PaymentStatus, Prisma } from '@zeroquest/db';
+import { walletPaterns } from '@zeroquest/types';
+import { toPenny } from '@zeroquest/converters';
+import { Logger } from '@nestjs/common';
+import { WalletService } from '@/wallet/wallet.service';
 
 type Payment = Prisma.PaymentGetPayload<{ include: { plan: true } }>;
 @Injectable()
 export class YookassaWebhookService {
+  private readonly logger = new Logger(YookassaWebhookService.name);
   constructor(
     private readonly paymentRepository: PaymentRepository,
-    @InjectQueue('subscribe') private readonly subscribeQueue: Queue,
+    private readonly walletService: WalletService,
   ) {}
+
   async handleWebhook(data: YookassaWebhookDto) {
     const payment = (await this.paymentRepository.findByProviderPaymentId(
       data.object.id,
@@ -28,7 +28,7 @@ export class YookassaWebhookService {
     if (!payment || payment.status === PaymentStatus.SUCCEEDED) return;
     switch (data.event) {
       case YOOKASSA_WEBHOOK_EVENT.PaymentSucceeded: {
-        return this.succesedEvent(data, payment);
+        return await this.succesedEvent(data);
       }
 
       default:
@@ -36,13 +36,12 @@ export class YookassaWebhookService {
     }
   }
 
-  async succesedEvent({ object }: YookassaWebhookDto, payment: Payment) {
+  async succesedEvent({ object }: YookassaWebhookDto) {
+    this.logger.debug(walletPaterns);
     const metadata = object.metadata;
-    await this.subscribeQueue.add(SUBSCRIBE_EVENTS.NEW, {
-      ...metadata,
-      paymentId: object.id,
-      inboundId: payment.plan.inboundId,
-      planId: Number(metadata.planId),
-    } satisfies SubscribeNew);
+    await this.walletService.creditWithQueue({
+      amount: toPenny(object.amount.value),
+      userId: metadata.userId,
+    });
   }
 }

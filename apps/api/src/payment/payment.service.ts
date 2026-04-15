@@ -82,11 +82,11 @@ export class PaymentService {
     return payment;
   }
 
-  findAll(payload: AuthServiceTypes.JwtPayload) {
+  async findAll(payload: AuthServiceTypes.JwtPayload) {
     return this.paymentRepository.findManyByUserId(payload.sub);
   }
 
-  findOne(id: number, payload: AuthServiceTypes.JwtPayload) {
+  async findOne(id: number, payload: AuthServiceTypes.JwtPayload) {
     return this.paymentRepository.findOneByIdAndUserId(id, payload.sub);
   }
 }

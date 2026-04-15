@@ -7,13 +7,6 @@
   "private": true,
   "nx": {
     "targets": {
-      "docker:all": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "docker compose -f ./compose.db.yaml -f ./compose.redis.yaml {args}",
-          "cwd": "apps/api"
-        }
-      },
       "ngrok:run": {
         "executor": "nx:run-commands",
         "options": {
@@ -22,65 +15,9 @@
           "envFile": ".env"
         }
       },
-      "docker:db": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "docker compose -f ./compose.db.yaml {args}",
-          "cwd": "apps/api"
-        }
-      },
-      "docker:redis": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "docker compose -f ./compose.redis.yaml {args}",
-          "cwd": "apps/api"
-        }
-      },
-      "prisma:generate": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "bunx prisma generate --schema ./apps/api/prisma/schema.prisma {args}"
-        }
-      },
-      "prisma:migrate:dev": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "bunx prisma migrate dev --schema ./apps/api/prisma/schema.prisma {args}"
-        }
-      },
-      "prisma:migrate:deploy": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "bunx prisma migrate deploy --schema ./apps/api/prisma/schema.prisma {args}"
-        }
-      },
-      "devenv:prisma:generate": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "devenv shell -- nx prisma:generate api {args}"
-        }
-      },
-      "devenv:prisma:migrate:dev": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "devenv shell -- nx prisma:migrate:dev api {args}"
-        }
-      },
-      "devenv:prisma:migrate:deploy": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "devenv shell -- nx prisma:migrate:deploy api {args}"
-        }
-      },
-      "docker:down:all": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "docker stop $(docker ps -q)",
-          "cwd": "apps/api"
-        }
-      },
       "build": {
         "executor": "nx:run-commands",
+        "defaultConfiguration": "development",
         "options": {
           "command": "webpack-cli build",
           "args": [
@@ -89,6 +26,11 @@
           "cwd": "apps/api"
         },
         "configurations": {
+          "production": {
+            "args": [
+              "--node-env=production"
+            ]
+          },
           "development": {
             "args": [
               "--node-env=development"
@@ -164,7 +106,6 @@
     "@zeroquest/types": "workspace:*",
     "@zeroquest/db": "workspace:*",
     "@zeroquest/nest-shared": "workspace:*",
-
     "@zeroquest/converters": "workspace:*",
     "argon2": "^0.44.0",
     "bcrypt": "^6.0.0",

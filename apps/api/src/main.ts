@@ -28,7 +28,10 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors();
   const port = Number(
-    process.env.API_PORT ?? process.env.BACKEND_PORT ?? process.env.PORT ?? 3000,
+    process.env.API_PORT ??
+      process.env.BACKEND_PORT ??
+      process.env.PORT ??
+      3000,
   );
   app.connectMicroservice({
     transport: Transport.REDIS,

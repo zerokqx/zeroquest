@@ -111,6 +111,10 @@ export type ThreeXUiAddClientInputSettings = {
   clients: ThreeXUiAddClientInput[];
 };
 
+export type ThreeXUiUpdateClientInput = Partial<
+  Omit<ThreeXUiAddClientInput, 'id' | 'email' | 'subId'>
+>;
+
 export class ThreeXUiAddClientRequestBody {
   @ApiProperty({
     description: 'ID inbound в 3x-ui',

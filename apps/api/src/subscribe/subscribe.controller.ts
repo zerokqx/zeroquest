@@ -8,29 +8,40 @@ import {
   Delete,
 } from '@nestjs/common';
 import { SubscribeService } from './subscribe.service';
-import { CreateSubscribeDto } from './dto/create-subscribe.dto';
 import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import {
   ApiBody,
   ApiCookieAuth,
-  ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthPayload, Role } from '@zeroquest/nest-shared';
+import { SubscribeBuyDto } from './dto/subscribe-buy.dto';
 
 @ApiTags('Subscribe')
 @ApiCookieAuth('zeroquestAccess')
 @Controller('subscribe')
 export class SubscribeController {
-  constructor(
-    private readonly subscribeService: SubscribeService,
-  ) {}
+  constructor(private readonly subscribeService: SubscribeService) {}
 
+  @Post('buy')
+  async buy(
+    @Body() body: SubscribeBuyDto,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+  ) {
+    return this.subscribeService.buy(body, payload);
+  }
 
+  @Post(':id/renew')
+  async renew(
+    @Param('id') id: string,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+  ) {
+    return this.subscribeService.renew(+id, payload);
+  }
 
   @Get()
   @ApiOperation({

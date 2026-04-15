@@ -1,17 +1,28 @@
-FROM node:lts-alpine
+# ----------- BUILD STAGE -----------
+FROM oven/bun:1 AS builder
 
-ENV NODE_ENV=production
+WORKDIR /repo
 
-WORKDIR /usr/src/app
+# сначала только зависимости (кэшируется)
+COPY package.json bun.lock ./
+RUN bun install --no-frozen-lockfile
 
-# This image expects the app to be built on the host first:
-#   bunx nx build api
-# Build it from the workspace root:
-#   docker build -f apps/api/Dockerfile .
+# потом весь код
+COPY . .
 
-COPY node_modules ./node_modules
-COPY apps/api/dist ./build
+# билдим api через nx
+RUN bun nx build api --no-tui
 
-EXPOSE 4000
+# ----------- RUNTIME STAGE -----------
+FROM oven/bun:1
 
-CMD ["node", "build/main.js"]
+WORKDIR /app
+
+# копируем только нужное
+COPY --from=builder /repo/dist/apps/api ./dist
+COPY --from=builder /repo/node_modules ./node_modules
+COPY --from=builder /repo/package.json ./package.json
+
+EXPOSE 3000
+
+CMD ["bun", "dist/main.js"]

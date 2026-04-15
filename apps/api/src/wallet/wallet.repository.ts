@@ -1,13 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService, User, Wallet, WalletHistoryType } from '@zeroquest/db';
 import { WALLET_RESPONSE_TYPE, type WalletServiceTypes } from '@zeroquest/types';
 
 @Injectable()
 export class WalletRepository {
+  private readonly logger = new Logger(WalletRepository.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async debitByUserId(userId: User['id'], amount: Wallet['balance']) {
+    this.logger.debug(`debitByUserId called: userId=${userId}, amount=${amount}`);
     if (amount <= 0) {
+      this.logger.warn(
+        `debitByUserId rejected invalid amount: userId=${userId}, amount=${amount}`,
+      );
       return {
         ok: false,
         type: WALLET_RESPONSE_TYPE.INCORRECT_VALUE,
@@ -26,7 +32,13 @@ export class WalletRepository {
             },
           },
         });
+        this.logger.debug(
+          `debitByUserId updateMany result: userId=${userId}, amount=${amount}, updatedCount=${updated.count}`,
+        );
         if (updated.count !== 1) {
+          this.logger.warn(
+            `debitByUserId not enough funds or wallet missing: userId=${userId}, amount=${amount}, updatedCount=${updated.count}`,
+          );
           return {
             ok: false,
             type: WALLET_RESPONSE_TYPE.NOT_ENOUGH_FUNDS,
@@ -48,12 +60,19 @@ export class WalletRepository {
             },
           },
         });
+        this.logger.log(
+          `debitByUserId success: userId=${userId}, amount=${amount}, balance=${wallet.balance}`,
+        );
         return {
           ok: true,
           type: WALLET_RESPONSE_TYPE.SUCCESS,
         } as WalletServiceTypes.WalletEventResponse;
       });
-    } catch {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(
+        `debitByUserId unexpected error: userId=${userId}, amount=${amount}, message=${message}`,
+      );
       return {
         ok: false,
         type: WALLET_RESPONSE_TYPE.UNEXPECTED_ERROR,
@@ -62,7 +81,11 @@ export class WalletRepository {
   }
 
   async creditByUserId(userId: User['id'], amount: Wallet['balance']) {
+    this.logger.debug(`creditByUserId called: userId=${userId}, amount=${amount}`);
     if (amount <= 0) {
+      this.logger.warn(
+        `creditByUserId rejected invalid amount: userId=${userId}, amount=${amount}`,
+      );
       return {
         ok: false,
         type: WALLET_RESPONSE_TYPE.INCORRECT_VALUE,
@@ -80,7 +103,13 @@ export class WalletRepository {
             },
           },
         });
+        this.logger.debug(
+          `creditByUserId updateMany result: userId=${userId}, amount=${amount}, updatedCount=${updated.count}`,
+        );
         if (updated.count !== 1) {
+          this.logger.warn(
+            `creditByUserId unexpected updatedCount: userId=${userId}, amount=${amount}, updatedCount=${updated.count}`,
+          );
           return {
             ok: false,
             type: WALLET_RESPONSE_TYPE.UNEXPECTED_ERROR,
@@ -102,12 +131,19 @@ export class WalletRepository {
             },
           },
         });
+        this.logger.log(
+          `creditByUserId success: userId=${userId}, amount=${amount}, balance=${wallet.balance}`,
+        );
         return {
           ok: true,
           type: WALLET_RESPONSE_TYPE.SUCCESS,
         } as WalletServiceTypes.WalletEventResponse;
       });
-    } catch {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(
+        `creditByUserId unexpected error: userId=${userId}, amount=${amount}, message=${message}`,
+      );
       return {
         ok: false,
         type: WALLET_RESPONSE_TYPE.UNEXPECTED_ERROR,

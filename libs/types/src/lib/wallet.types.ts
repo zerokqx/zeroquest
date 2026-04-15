@@ -3,14 +3,20 @@ export const walletPaterns = {
   credit: { cmd: 'update:credit' },
 } as const;
 
+export const walletPaternsForProcessor = {
+  DEBIT: 'wallet:debit',
+  CREDIT: 'wallet:credit',
+} as const;
 export const WALLET_RESPONSE_TYPE = {
   UNEXPECTED_ERROR: 'UNEXPECTED_ERROR',
   NOT_ENOUGH_FUNDS: 'NOT_ENOUGH_FUNDS',
   SUCCESS: 'SUCCESS',
-  INCORRECT_VALUE:"INCORRECT_VALUE"
+  INCORRECT_VALUE: 'INCORRECT_VALUE',
 } as const;
+export type WalletPaternsForProcessor =
+  (typeof walletPaternsForProcessor)[keyof typeof walletPaternsForProcessor];
 
-type DebitResponseType = keyof typeof WALLET_RESPONSE_TYPE;
+type WalletResponseType = keyof typeof WALLET_RESPONSE_TYPE;
 
 export interface WalletDebitEvent {
   userId: string;
@@ -24,5 +30,5 @@ export interface WalletCreditEvent {
 
 export interface WalletEventResponse {
   ok: boolean;
-  type: DebitResponseType;
+  type: WalletResponseType;
 }

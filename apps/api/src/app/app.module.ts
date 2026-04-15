@@ -3,8 +3,6 @@ import configuration from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from '../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { env } from 'process';
 import { InboundModule } from '@/inbound/inbound.module';
 import { UserModule } from '@/user/user.module';
 import { BullModule } from '@nestjs/bullmq';
@@ -16,11 +14,9 @@ import { SubscribeModule } from '@/subscribe/subscribe.module';
 import { ClientTypeModule } from '@/client-type/client-type.module';
 import { ZeroquestConfigModule } from '@zeroquest/config';
 import { ZeroquestDbModule } from '@zeroquest/db';
-import {
-  AuthGuard,
-  ClientTypeGuard,
-  RoleGuard,
-} from '@zeroquest/nest-shared';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { AuthGuard, ClientTypeGuard, RoleGuard } from '@zeroquest/nest-shared';
+import { WalletModule } from '@/wallet/wallet.module';
 
 @Module({
   imports: [
@@ -28,19 +24,16 @@ import {
       isGlobal: true,
     }),
     ZeroquestConfigModule.forRoot([configuration]),
-    ClientsModule.register([
-      {
-        name: 'SUBSCRIBE_SERVICE',
-        transport: Transport.REDIS,
-        options: {
-          host: 'localhost',
-          port: Number(env.REDIS_PORT),
-          wildcards: true,
-        },
-      },
-    ]),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        { ttl: 1000, limit: 5 },
+        { ttl: 60000, limit: 100 },
+        { ttl: 3600000, limit: 1000 },
+      ],
+    }),
     BullModule.forRoot({
       connection: {
+
         host: 'localhost',
         port: Number(process.env.REDIS_PORT),
       },
@@ -55,8 +48,13 @@ import {
     ThreeXUiModule,
     SubscribeModule,
     ClientTypeModule,
+    WalletModule,
   ],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     { provide: APP_GUARD, useClass: ClientTypeGuard },
     { provide: APP_GUARD, useClass: AuthGuard },
     { provide: APP_GUARD, useClass: RoleGuard },

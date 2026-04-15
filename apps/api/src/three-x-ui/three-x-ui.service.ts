@@ -18,6 +18,7 @@ import {
   ThreeXUiAddClientRequestBody,
   ThreeXUiAddClientResponse,
   ThreeXUiAddClientSettings,
+  ThreeXUiUpdateClientInput,
   ThreeXUiInbound,
   ThreeXUiGetInboundsResponse,
   ThreeXUiStreamSettings,
@@ -214,6 +215,24 @@ export class ThreeXUiService {
     const response = await this.threeXUiClient.post<ThreeXUiAddClientResponse>(
       '/inbounds/addClient',
       body,
+    );
+
+    return response.data;
+  }
+
+  async updateClient(
+    uuid: string,
+    client: ThreeXUiUpdateClientInput,
+  ): Promise<ThreeXUiAddClientResponse> {
+    const normalized = this.normalizeClient(client);
+    const safePayload: XuiClient = { ...normalized };
+    delete safePayload.id;
+    delete safePayload.email;
+    delete safePayload.subId;
+
+    const response = await this.threeXUiClient.post<ThreeXUiAddClientResponse>(
+      `/inbounds/updateClient/${uuid}`,
+      safePayload,
     );
 
     return response.data;

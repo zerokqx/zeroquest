@@ -6,7 +6,6 @@ export class MetadataDto {
   userId!: string;
 
   @IsNotEmpty()
-  @IsNumber()
   planId!: number;
 
   @IsString()

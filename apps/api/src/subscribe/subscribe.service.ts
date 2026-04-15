@@ -1,45 +1,83 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSubscribeDto } from './dto/create-subscribe.dto';
+import { Injectable, Logger } from '@nestjs/common';
 import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
 import { AuthServiceTypes } from '@zeroquest/types';
-import { Options, SubscribeRepository } from './subscribe.repository';
+import { SubscribeRepository } from './subscribe.repository';
+import { SubscribeBuyDto } from './dto/subscribe-buy.dto';
+import { WalletService } from '@/wallet/wallet.service';
+import { Prisma, PrismaService } from '@zeroquest/db';
+import { NotFoundException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
+import { ThreeXUiService } from '@/three-x-ui/three-x-ui.service';
+
+type PlanWithInbound = Prisma.PlanGetPayload<{ include: { inbound: true } }>;
 
 @Injectable()
 export class SubscribeService {
-  constructor(private readonly subscribeRepository: SubscribeRepository) {}
-  async create(
-    { providerPaymentId, planId, ...subscribeCreateDto }: CreateSubscribeDto,
-    payload: AuthServiceTypes.JwtPayload,
-    opts?: Options,
-  ) {
-    return this.subscribeRepository.create({
-      user: {
-        connect: {
-          id: payload.sub,
-        },
-      },
-      payments: {
-        connect: {
-          providerPaymentId,
-        },
-      },
-      plan: {
-        connect: {
-          id: planId,
-        },
-      },
+  private readonly logger = new Logger(SubscribeService.name);
 
-      status: 'ACTIVE',
-      ...subscribeCreateDto,
-    }, opts);
-  }
-
+  constructor(
+    private readonly subscribeRepository: SubscribeRepository,
+    private readonly walletService: WalletService,
+    private readonly prisma: PrismaService,
+    private readonly threeXUiService: ThreeXUiService,
+  ) {}
   async findAll(payload: AuthServiceTypes.JwtPayload) {
     return this.subscribeRepository.findManyByUserId(payload.sub);
   }
 
   async findOne(id: number, payload: AuthServiceTypes.JwtPayload) {
     return this.subscribeRepository.findOneByIdAndUserId(id, payload.sub);
+  }
+
+  async create(
+    plan: PlanWithInbound,
+    payload: AuthServiceTypes.JwtPayload,
+    deviceName: string,
+  ) {
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 30);
+
+    const name = `${payload.login} / ${deviceName}`;
+    const flow = 'xtls-rprx-vision';
+    const uuidForVlessClient = crypto.randomUUID();
+
+    await this.threeXUiService.addClient(plan.inbound.inboundId, {
+      clients: [
+        {
+          totalGb: plan.totalGb,
+          limitIp: 3,
+          id: uuidForVlessClient,
+          email: name,
+          enable: true,
+          flow,
+          expiryTime: expiresAt.getTime(),
+        },
+      ],
+    });
+
+    return this.prisma.subscribe.create({
+      data: {
+        vlessLink: await this.threeXUiService.buildVlessLinkByInboundId(
+          plan.inbound.inboundId,
+          { email: name, flow, id: uuidForVlessClient },
+        ),
+        plan: {
+          connect: {
+            id: plan.id,
+          },
+        },
+        nextPaymentDate: expiresAt,
+        user: {
+          connect: {
+            id: payload.sub,
+          },
+        },
+        vlessClientId: uuidForVlessClient,
+        name,
+        totalGb: plan.totalGb,
+        expiresAt,
+      },
+    });
   }
 
   async update(
@@ -57,5 +95,76 @@ export class SubscribeService {
     return this.subscribeRepository.deleteByIdAndUserId(id, payload.sub);
   }
 
-  createVlessLink() {}
+  async renew(id: string, payload: AuthServiceTypes.JwtPayload) {
+    const subscribe = await this.prisma.subscribe.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        plan: true,
+      },
+    });
+    if (!subscribe) throw new NotFoundException();
+
+    const debit = await this.walletService.debit({
+      userId: payload.sub,
+      amount: subscribe.plan.price,
+    });
+    if (!debit.ok) {
+      this.logger.warn(
+        `Renew failed on wallet debit: userId=${payload.sub}, subscribeId=${id}, amount=${subscribe.plan.price}, type=${debit.type}`,
+      );
+      throw new BadRequestException(`Wallet debit failed: ${debit.type}`);
+    }
+
+    const now = new Date();
+    const baseDate = subscribe.expiresAt > now ? subscribe.expiresAt : now;
+    const nextExpiresAt = new Date(baseDate);
+    nextExpiresAt.setDate(
+      nextExpiresAt.getDate() + subscribe.plan.duratationDays,
+    );
+
+    await this.threeXUiService.updateClient(subscribe.vlessClientId, {
+      totalGb: subscribe.totalGb,
+      expiryTime: nextExpiresAt.getTime(),
+      enable: true,
+    });
+
+    return this.prisma.subscribe.update({
+      where: {
+        id_userId: { id, userId: payload.sub },
+      },
+      data: {
+        nextPaymentDate: nextExpiresAt,
+        expiresAt: nextExpiresAt,
+      },
+    });
+  }
+
+  async buy(
+    { planId, deviceName }: SubscribeBuyDto,
+    payload: AuthServiceTypes.JwtPayload,
+  ) {
+    const plan = await this.prisma.plan.findUnique({
+      include: {
+        inbound: true,
+      },
+      where: { id: planId },
+    });
+    if (!plan) throw new NotFoundException();
+
+    const debit = await this.walletService.debit({
+      userId: payload.sub,
+      amount: plan.price,
+    });
+
+    if (!debit.ok) {
+      this.logger.warn(
+        `Buy failed on wallet debit: userId=${payload.sub}, planId=${planId}, amount=${plan.price}, type=${debit.type}`,
+      );
+      throw new BadRequestException(`Wallet debit failed: ${debit.type}`);
+    }
+
+    return this.create(plan, payload, deviceName);
+  }
 }
