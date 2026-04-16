@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
+import { GiveBonusDto } from './dto/give-bonus.dto';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import { PaymentEventService } from './payment-event.service';
 import { interval, map, merge } from 'rxjs';
@@ -25,15 +26,17 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { AuthPayload } from '@zeroquest/nest-shared';
+import { AuthPayload, Role } from '@zeroquest/nest-shared';
+import { WalletService } from '@/wallet/wallet.service';
 
 @ApiTags('Payment')
 @ApiCookieAuth('zeroquestAccess')
-@Controller('payment')
+@Controller('payments')
 export class PaymentController {
   private readonly logger = new Logger(PaymentController.name);
   constructor(
     private readonly paymentService: PaymentService,
+    private readonly walletService: WalletService,
     private paymentEventService: PaymentEventService,
   ) {}
 
@@ -58,6 +61,24 @@ export class PaymentController {
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
   ) {
     return this.paymentService.create(createPaymentDto, payload);
+  }
+
+  @Role('ADMIN')
+  @Post('bonuses')
+  @ApiOperation({
+    summary: 'Начислить бонус пользователю',
+    description:
+      'Админский роут. Начисляет бонус на баланс пользователя и пишет walletHistory с типом BONUS.',
+  })
+  @ApiBody({
+    type: GiveBonusDto,
+    description: 'Данные для начисления бонуса.',
+  })
+  @ApiOkResponse({
+    description: 'Бонус успешно начислен.',
+  })
+  async giveBonus(@Body() body: GiveBonusDto) {
+    return this.walletService.giveBonus(body);
   }
 
   @Get()

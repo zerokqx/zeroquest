@@ -51,10 +51,14 @@ export class UserService {
   }
 
   async patchMe(payload: AuthServiceTypes.JwtPayload, dto: PatchMeDto) {
-    return await this.userRepository.updateById(
+    const updatedUser = await this.userRepository.updateById(
       payload.sub,
       dto,
       this.userSelect(),
     );
+
+    await this.cacheManager.set(`user:me:${payload.sub}`, updatedUser, 10000);
+
+    return updatedUser;
   }
 }

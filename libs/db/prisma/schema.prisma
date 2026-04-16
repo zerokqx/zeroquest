@@ -148,6 +148,7 @@ model Subscribe {
   user            User            @relation(fields: [userId], references: [id])
   vlessClientId   String          @map("vless_client_id")
   userId          String          @map("user_id")
+  email           String          @default(uuid())
   nextPaymentDate DateTime        @map("next_payment_date")
   status          SubscribeStatus @default(PENDING)
   expiresAt       DateTime        @map("expires_at")

@@ -19,7 +19,13 @@ export class SubscribeRepository {
     return this.prisma.subscribe.findMany({ where });
   }
 
-  findById(id: Subscribe['id']) { return this.prisma.subscribe.findUnique({ where: { id } });
+  findById(id: Subscribe['id']) {
+    return this.prisma.subscribe.findUnique({
+      where: { id },
+      include: {
+        plan: true,
+      },
+    });
   }
 
   findManyByUserId(userId: User['id']) {
@@ -38,6 +44,10 @@ export class SubscribeRepository {
         id_userId: { id, userId },
       },
     });
+  }
+
+  async update(data: Prisma.SubscribeUpdateArgs) {
+    return this.prisma.subscribe.update(data);
   }
 
   async updateByIdAndUserId(
@@ -60,6 +70,23 @@ export class SubscribeRepository {
     return this.prisma.subscribe.delete({
       where: {
         id_userId: { id, userId },
+      },
+    });
+  }
+
+  async changeNextPaymentDate(id: Subscribe['id'], date: Date) {
+    return this.prisma.subscribe.update({
+      where: { id },
+      data: {
+        nextPaymentDate: date,
+      },
+    });
+  }
+  async changeStatus(id: Subscribe['id'], status: Subscribe['status']) {
+    return this.prisma.subscribe.update({
+      where: { id },
+      data: {
+        status,
       },
     });
   }

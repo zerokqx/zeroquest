@@ -42,6 +42,7 @@ export type SubscribeMinAggregateOutputType = {
   vlessLink: string | null
   vlessClientId: string | null
   userId: string | null
+  email: string | null
   nextPaymentDate: Date | null
   status: $Enums.SubscribeStatus | null
   expiresAt: Date | null
@@ -57,6 +58,7 @@ export type SubscribeMaxAggregateOutputType = {
   vlessLink: string | null
   vlessClientId: string | null
   userId: string | null
+  email: string | null
   nextPaymentDate: Date | null
   status: $Enums.SubscribeStatus | null
   expiresAt: Date | null
@@ -72,6 +74,7 @@ export type SubscribeCountAggregateOutputType = {
   vlessLink: number
   vlessClientId: number
   userId: number
+  email: number
   nextPaymentDate: number
   status: number
   expiresAt: number
@@ -99,6 +102,7 @@ export type SubscribeMinAggregateInputType = {
   vlessLink?: true
   vlessClientId?: true
   userId?: true
+  email?: true
   nextPaymentDate?: true
   status?: true
   expiresAt?: true
@@ -114,6 +118,7 @@ export type SubscribeMaxAggregateInputType = {
   vlessLink?: true
   vlessClientId?: true
   userId?: true
+  email?: true
   nextPaymentDate?: true
   status?: true
   expiresAt?: true
@@ -129,6 +134,7 @@ export type SubscribeCountAggregateInputType = {
   vlessLink?: true
   vlessClientId?: true
   userId?: true
+  email?: true
   nextPaymentDate?: true
   status?: true
   expiresAt?: true
@@ -231,6 +237,7 @@ export type SubscribeGroupByOutputType = {
   vlessLink: string
   vlessClientId: string
   userId: string
+  email: string
   nextPaymentDate: Date
   status: $Enums.SubscribeStatus
   expiresAt: Date
@@ -269,6 +276,7 @@ export type SubscribeWhereInput = {
   vlessLink?: Prisma.StringFilter<"Subscribe"> | string
   vlessClientId?: Prisma.StringFilter<"Subscribe"> | string
   userId?: Prisma.StringFilter<"Subscribe"> | string
+  email?: Prisma.StringFilter<"Subscribe"> | string
   nextPaymentDate?: Prisma.DateTimeFilter<"Subscribe"> | Date | string
   status?: Prisma.EnumSubscribeStatusFilter<"Subscribe"> | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFilter<"Subscribe"> | Date | string
@@ -286,6 +294,7 @@ export type SubscribeOrderByWithRelationInput = {
   vlessLink?: Prisma.SortOrder
   vlessClientId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   nextPaymentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -307,6 +316,7 @@ export type SubscribeWhereUniqueInput = Prisma.AtLeast<{
   vlessLink?: Prisma.StringFilter<"Subscribe"> | string
   vlessClientId?: Prisma.StringFilter<"Subscribe"> | string
   userId?: Prisma.StringFilter<"Subscribe"> | string
+  email?: Prisma.StringFilter<"Subscribe"> | string
   nextPaymentDate?: Prisma.DateTimeFilter<"Subscribe"> | Date | string
   status?: Prisma.EnumSubscribeStatusFilter<"Subscribe"> | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFilter<"Subscribe"> | Date | string
@@ -324,6 +334,7 @@ export type SubscribeOrderByWithAggregationInput = {
   vlessLink?: Prisma.SortOrder
   vlessClientId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   nextPaymentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -347,6 +358,7 @@ export type SubscribeScalarWhereWithAggregatesInput = {
   vlessLink?: Prisma.StringWithAggregatesFilter<"Subscribe"> | string
   vlessClientId?: Prisma.StringWithAggregatesFilter<"Subscribe"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Subscribe"> | string
+  email?: Prisma.StringWithAggregatesFilter<"Subscribe"> | string
   nextPaymentDate?: Prisma.DateTimeWithAggregatesFilter<"Subscribe"> | Date | string
   status?: Prisma.EnumSubscribeStatusWithAggregatesFilter<"Subscribe"> | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeWithAggregatesFilter<"Subscribe"> | Date | string
@@ -361,6 +373,7 @@ export type SubscribeCreateInput = {
   name: string
   vlessLink: string
   vlessClientId: string
+  email?: string
   nextPaymentDate: Date | string
   status?: $Enums.SubscribeStatus
   expiresAt: Date | string
@@ -377,6 +390,7 @@ export type SubscribeUncheckedCreateInput = {
   vlessLink: string
   vlessClientId: string
   userId: string
+  email?: string
   nextPaymentDate: Date | string
   status?: $Enums.SubscribeStatus
   expiresAt: Date | string
@@ -391,6 +405,7 @@ export type SubscribeUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -407,6 +422,7 @@ export type SubscribeUncheckedUpdateInput = {
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -422,6 +438,7 @@ export type SubscribeCreateManyInput = {
   vlessLink: string
   vlessClientId: string
   userId: string
+  email?: string
   nextPaymentDate: Date | string
   status?: $Enums.SubscribeStatus
   expiresAt: Date | string
@@ -436,6 +453,7 @@ export type SubscribeUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -450,6 +468,7 @@ export type SubscribeUncheckedUpdateManyInput = {
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -480,6 +499,7 @@ export type SubscribeCountOrderByAggregateInput = {
   vlessLink?: Prisma.SortOrder
   vlessClientId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   nextPaymentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -500,6 +520,7 @@ export type SubscribeMaxOrderByAggregateInput = {
   vlessLink?: Prisma.SortOrder
   vlessClientId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   nextPaymentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -515,6 +536,7 @@ export type SubscribeMinOrderByAggregateInput = {
   vlessLink?: Prisma.SortOrder
   vlessClientId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   nextPaymentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -622,6 +644,7 @@ export type SubscribeCreateWithoutPlanInput = {
   name: string
   vlessLink: string
   vlessClientId: string
+  email?: string
   nextPaymentDate: Date | string
   status?: $Enums.SubscribeStatus
   expiresAt: Date | string
@@ -637,6 +660,7 @@ export type SubscribeUncheckedCreateWithoutPlanInput = {
   vlessLink: string
   vlessClientId: string
   userId: string
+  email?: string
   nextPaymentDate: Date | string
   status?: $Enums.SubscribeStatus
   expiresAt: Date | string
@@ -680,6 +704,7 @@ export type SubscribeScalarWhereInput = {
   vlessLink?: Prisma.StringFilter<"Subscribe"> | string
   vlessClientId?: Prisma.StringFilter<"Subscribe"> | string
   userId?: Prisma.StringFilter<"Subscribe"> | string
+  email?: Prisma.StringFilter<"Subscribe"> | string
   nextPaymentDate?: Prisma.DateTimeFilter<"Subscribe"> | Date | string
   status?: Prisma.EnumSubscribeStatusFilter<"Subscribe"> | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFilter<"Subscribe"> | Date | string
@@ -694,6 +719,7 @@ export type SubscribeCreateWithoutUserInput = {
   name: string
   vlessLink: string
   vlessClientId: string
+  email?: string
   nextPaymentDate: Date | string
   status?: $Enums.SubscribeStatus
   expiresAt: Date | string
@@ -708,6 +734,7 @@ export type SubscribeUncheckedCreateWithoutUserInput = {
   name: string
   vlessLink: string
   vlessClientId: string
+  email?: string
   nextPaymentDate: Date | string
   status?: $Enums.SubscribeStatus
   expiresAt: Date | string
@@ -749,6 +776,7 @@ export type SubscribeCreateManyPlanInput = {
   vlessLink: string
   vlessClientId: string
   userId: string
+  email?: string
   nextPaymentDate: Date | string
   status?: $Enums.SubscribeStatus
   expiresAt: Date | string
@@ -762,6 +790,7 @@ export type SubscribeUpdateWithoutPlanInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -777,6 +806,7 @@ export type SubscribeUncheckedUpdateWithoutPlanInput = {
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -791,6 +821,7 @@ export type SubscribeUncheckedUpdateManyWithoutPlanInput = {
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -804,6 +835,7 @@ export type SubscribeCreateManyUserInput = {
   name: string
   vlessLink: string
   vlessClientId: string
+  email?: string
   nextPaymentDate: Date | string
   status?: $Enums.SubscribeStatus
   expiresAt: Date | string
@@ -818,6 +850,7 @@ export type SubscribeUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -832,6 +865,7 @@ export type SubscribeUncheckedUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -846,6 +880,7 @@ export type SubscribeUncheckedUpdateManyWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
   vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -863,6 +898,7 @@ export type SubscribeSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   vlessLink?: boolean
   vlessClientId?: boolean
   userId?: boolean
+  email?: boolean
   nextPaymentDate?: boolean
   status?: boolean
   expiresAt?: boolean
@@ -880,6 +916,7 @@ export type SubscribeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   vlessLink?: boolean
   vlessClientId?: boolean
   userId?: boolean
+  email?: boolean
   nextPaymentDate?: boolean
   status?: boolean
   expiresAt?: boolean
@@ -897,6 +934,7 @@ export type SubscribeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   vlessLink?: boolean
   vlessClientId?: boolean
   userId?: boolean
+  email?: boolean
   nextPaymentDate?: boolean
   status?: boolean
   expiresAt?: boolean
@@ -914,6 +952,7 @@ export type SubscribeSelectScalar = {
   vlessLink?: boolean
   vlessClientId?: boolean
   userId?: boolean
+  email?: boolean
   nextPaymentDate?: boolean
   status?: boolean
   expiresAt?: boolean
@@ -923,7 +962,7 @@ export type SubscribeSelectScalar = {
   totalGb?: boolean
 }
 
-export type SubscribeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "vlessLink" | "vlessClientId" | "userId" | "nextPaymentDate" | "status" | "expiresAt" | "createdAt" | "updatedAt" | "planId" | "totalGb", ExtArgs["result"]["subscribe"]>
+export type SubscribeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "vlessLink" | "vlessClientId" | "userId" | "email" | "nextPaymentDate" | "status" | "expiresAt" | "createdAt" | "updatedAt" | "planId" | "totalGb", ExtArgs["result"]["subscribe"]>
 export type SubscribeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
@@ -949,6 +988,7 @@ export type $SubscribePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     vlessLink: string
     vlessClientId: string
     userId: string
+    email: string
     nextPaymentDate: Date
     status: $Enums.SubscribeStatus
     expiresAt: Date
@@ -1386,6 +1426,7 @@ export interface SubscribeFieldRefs {
   readonly vlessLink: Prisma.FieldRef<"Subscribe", 'String'>
   readonly vlessClientId: Prisma.FieldRef<"Subscribe", 'String'>
   readonly userId: Prisma.FieldRef<"Subscribe", 'String'>
+  readonly email: Prisma.FieldRef<"Subscribe", 'String'>
   readonly nextPaymentDate: Prisma.FieldRef<"Subscribe", 'DateTime'>
   readonly status: Prisma.FieldRef<"Subscribe", 'SubscribeStatus'>
   readonly expiresAt: Prisma.FieldRef<"Subscribe", 'DateTime'>

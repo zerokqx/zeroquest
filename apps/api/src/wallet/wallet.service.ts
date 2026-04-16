@@ -50,4 +50,8 @@ export class WalletService {
   async unheldMoney({ userId, amount }: DebitWalletDto) {
     return this.walletReposiory.unheldMoney(userId, amount);
   }
+
+  async giveBonus({ userId, amount }: { userId: string; amount: number }) {
+    return this.walletReposiory.giveBonusByUserId(userId, amount);
+  }
 }

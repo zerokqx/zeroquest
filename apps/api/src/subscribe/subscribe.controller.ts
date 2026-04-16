@@ -20,14 +20,15 @@ import {
 } from '@nestjs/swagger';
 import { AuthPayload, Role } from '@zeroquest/nest-shared';
 import { SubscribeBuyDto } from './dto/subscribe-buy.dto';
+import { ResetSubscribeDto } from './dto/reset-subscribe.dto';
 
 @ApiTags('Subscribe')
 @ApiCookieAuth('zeroquestAccess')
-@Controller('subscribe')
+@Controller('subscriptions')
 export class SubscribeController {
   constructor(private readonly subscribeService: SubscribeService) {}
 
-  @Post('buy')
+  @Post()
   async buy(
     @Body() body: SubscribeBuyDto,
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
@@ -35,12 +36,15 @@ export class SubscribeController {
     return this.subscribeService.buy(body, payload);
   }
 
-  @Post(':id/renew')
-  async renew(
-    @Param('id') id: string,
+  @Post('reset')
+  async resetSubscribe(
+    @Body() body: ResetSubscribeDto,
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
   ) {
-    return this.subscribeService.renew(+id, payload);
+    return this.subscribeService.resetSubscribtion(
+      body.subscribeId,
+      payload.sub,
+    );
   }
 
   @Get()
@@ -121,6 +125,6 @@ export class SubscribeController {
 
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
   ) {
-    return this.subscribeService.remove(+id, payload);
+    // return this.subscribeService.remove(+id, payload);
   }
 }

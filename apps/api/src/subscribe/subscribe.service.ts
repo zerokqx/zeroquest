@@ -4,12 +4,19 @@ import { AuthServiceTypes } from '@zeroquest/types';
 import { SubscribeRepository } from './subscribe.repository';
 import { SubscribeBuyDto } from './dto/subscribe-buy.dto';
 import { WalletService } from '@/wallet/wallet.service';
-import { Prisma, PrismaService } from '@zeroquest/db';
+import {
+  Prisma,
+  PrismaService,
+  Subscribe,
+  SubscribeStatus,
+  User,
+} from '@zeroquest/db';
 import { NotFoundException } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 import { ThreeXUiService } from '@/three-x-ui/three-x-ui.service';
 import { toPenny } from '@zeroquest/converters';
-import { toPenny } from '@zeroquest/converters';
+import { SubscribeUpdateArgs } from 'node_modules/@zeroquest/db/src/generated/models';
 
 type PlanWithInbound = Prisma.PlanGetPayload<{ include: { inbound: true } }>;
 
@@ -27,7 +34,7 @@ export class SubscribeService {
     return this.subscribeRepository.findManyByUserId(payload.sub);
   }
 
-  async findOne(id: number, payload: AuthServiceTypes.JwtPayload) {
+  async findOne(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayload) {
     return this.subscribeRepository.findOneByIdAndUserId(id, payload.sub);
   }
 
@@ -42,6 +49,7 @@ export class SubscribeService {
     const name = `${payload.login} / ${deviceName}`;
     const flow = 'xtls-rprx-vision';
     const uuidForVlessClient = crypto.randomUUID();
+    const emailForVlessClient = crypto.randomUUID();
 
     await this.threeXUiService.addClient(plan.inbound.inboundId, {
       clients: [
@@ -49,7 +57,8 @@ export class SubscribeService {
           totalGb: plan.totalGb,
           limitIp: 3,
           id: uuidForVlessClient,
-          email: name,
+          email: emailForVlessClient,
+          comment: name,
           enable: true,
           flow,
           expiryTime: expiresAt.getTime(),
@@ -63,6 +72,8 @@ export class SubscribeService {
           plan.inbound.inboundId,
           { email: name, flow, id: uuidForVlessClient },
         ),
+        status: SubscribeStatus.ACTIVE,
+        email: emailForVlessClient,
         plan: {
           connect: {
             id: plan.id,
@@ -82,18 +93,10 @@ export class SubscribeService {
     });
   }
 
-  async update(
-    id: number,
-    payload: AuthServiceTypes.JwtPayload,
-    updateSubscribeDto: UpdateSubscribeDto,
-  ) {
-    return this.subscribeRepository.updateByIdAndUserId(
-      id,
-      payload.sub,
-      updateSubscribeDto,
-    );
+  async update(data: SubscribeUpdateArgs) {
+    return this.subscribeRepository.update(data);
   }
-  async remove(id: number, payload: AuthServiceTypes.JwtPayload) {
+  async remove(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayload) {
     return this.subscribeRepository.deleteByIdAndUserId(id, payload.sub);
   }
 
@@ -186,6 +189,90 @@ export class SubscribeService {
           amount,
         });
       }
+      throw error;
+    }
+  }
+
+  async resetSubscribtion(id: Subscribe['id'], userId: User['id']) {
+    this.logger.log(
+      `Запрошен сброс подписки: subscribeId=${id}, userId=${userId}`,
+    );
+
+    const { plan, email, vlessClientId } =
+      await this.prisma.subscribe.findUniqueOrThrow({
+        where: {
+          id_userId: { id, userId },
+        },
+        include: {
+          plan: {
+            include: { inbound: true },
+          },
+        },
+      });
+
+    this.logger.debug(
+      `Данные подписки загружены: subscribeId=${id}, userId=${userId}, planId=${plan.id}, inboundId=${plan.inbound.inboundId}, durationDays=${plan.duratationDays}, priceRub=${plan.price.toString()}`,
+    );
+
+    const amount = toPenny(plan.price.toString());
+    this.logger.debug(
+      `Начато списание для сброса подписки: subscribeId=${id}, userId=${userId}, amountKopek=${amount}`,
+    );
+
+    const debit = await this.walletService.debit({
+      userId,
+      amount,
+    });
+
+    if (!debit.ok) {
+      this.logger.warn(
+        `Списание для сброса подписки не выполнено: subscribeId=${id}, userId=${userId}, amountKopek=${amount}, walletType=${debit.type}`,
+      );
+      throw new BadRequestException(`Wallet debit failed: ${debit.type}`);
+    }
+    this.logger.log(
+      `Списание для сброса подписки выполнено: subscribeId=${id}, userId=${userId}, amountKopek=${amount}`,
+    );
+
+    const nextPaymentDate = new Date();
+    nextPaymentDate.setDate(nextPaymentDate.getDate() + plan.duratationDays);
+    this.logger.debug(
+      `Применяем изменения после сброса: subscribeId=${id}, userId=${userId}, vlessClientId=${vlessClientId}, email=${email}`,
+    );
+
+    try {
+      await Promise.all([
+        this.subscribeRepository.changeStatus(id, SubscribeStatus.ACTIVE),
+        this.subscribeRepository.changeNextPaymentDate(id, nextPaymentDate),
+        this.threeXUiService.resetClientTraffic(plan.inbound.inboundId, email),
+        this.threeXUiService.updateClient(vlessClientId, {
+          enable: true,
+          expiryTime: nextPaymentDate.getTime(),
+        }),
+      ]);
+      this.logger.log(
+        `Сброс подписки завершен: subscribeId=${id}, userId=${userId}`,
+      );
+    } catch (error) {
+      const rollback = await this.walletService.credit({ userId, amount });
+      const trace = error instanceof Error ? error.stack : undefined;
+      const message =
+        error instanceof Error ? error.message : 'Unknown reset error';
+      this.logger.error(
+        `Сброс подписки упал после списания: subscribeId=${id}, userId=${userId}, amountKopek=${amount}, error=${message}, rollbackOk=${rollback.ok}, rollbackType=${rollback.type}`,
+        trace,
+      );
+      if (!rollback.ok) {
+        this.logger.error(
+          `Откат списания не выполнен: subscribeId=${id}, userId=${userId}, amountKopek=${amount}, rollbackType=${rollback.type}`,
+        );
+        throw new InternalServerErrorException(
+          `Reset failed and rollback failed: ${rollback.type}`,
+        );
+      }
+      this.logger.warn(
+        `Откат списания выполнен: subscribeId=${id}, userId=${userId}, amountKopek=${amount}`,
+      );
       throw error;
     }
   }

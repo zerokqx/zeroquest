@@ -13,7 +13,7 @@ import { AuthPayload } from '@zeroquest/nest-shared';
 
 @ApiTags('User')
 @ApiCookieAuth('zeroquestAccess')
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

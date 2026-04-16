@@ -168,6 +168,7 @@ export const SubscribeScalarFieldEnum = {
   vlessLink: 'vlessLink',
   vlessClientId: 'vlessClientId',
   userId: 'userId',
+  email: 'email',
   nextPaymentDate: 'nextPaymentDate',
   status: 'status',
   expiresAt: 'expiresAt',

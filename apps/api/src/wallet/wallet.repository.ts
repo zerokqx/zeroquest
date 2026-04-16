@@ -263,4 +263,16 @@ export class WalletRepository {
       onUpdateMissLog: `creditByUserId unexpected updatedCount: userId=${userId}, amount=${amount}`,
     });
   }
+
+  async giveBonusByUserId(userId: User['id'], amount: Wallet['balance']) {
+    return this.changeBalanceByUserId({
+      method: 'creditByUserId',
+      userId,
+      amount,
+      historyType: WalletHistoryType.BONUS,
+      operation: 'increment',
+      onUpdateMissType: WALLET_RESPONSE_TYPE.UNEXPECTED_ERROR,
+      onUpdateMissLog: `giveBonusByUserId unexpected updatedCount: userId=${userId}, amount=${amount}`,
+    });
+  }
 }

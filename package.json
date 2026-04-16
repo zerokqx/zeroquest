@@ -3,7 +3,9 @@
   "type": "module",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "db:seed": "bun run --cwd libs/db seed"
+  },
   "private": true,
   "dependencies": {
     "3xui-api-client": "^2.1.1",

@@ -17,9 +17,12 @@ import { ZeroquestDbModule } from '@zeroquest/db';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthGuard, ClientTypeGuard, RoleGuard } from '@zeroquest/nest-shared';
 import { WalletModule } from '@/wallet/wallet.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { BillingModule } from '@/billing/billing.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     CacheModule.register({
       isGlobal: true,
     }),
@@ -33,7 +36,6 @@ import { WalletModule } from '@/wallet/wallet.module';
     }),
     BullModule.forRoot({
       connection: {
-
         host: 'localhost',
         port: Number(process.env.REDIS_PORT),
       },
@@ -49,6 +51,7 @@ import { WalletModule } from '@/wallet/wallet.module';
     SubscribeModule,
     ClientTypeModule,
     WalletModule,
+    BillingModule,
   ],
   providers: [
     {

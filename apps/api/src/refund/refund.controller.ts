@@ -21,7 +21,7 @@ import {
 
 @ApiTags('Refund')
 @ApiCookieAuth('zeroquestAccess')
-@Controller('refund')
+@Controller('refunds')
 export class RefundController {
   constructor(private readonly refundService: RefundService) {}
 
@@ -59,7 +59,7 @@ export class RefundController {
   }
 
   @Role('ADMIN')
-  @Patch(':id/approve')
+  @Patch(':id/status/approved')
   @ApiOperation({
     summary: 'Подтвердить возврат',
     description:
@@ -75,7 +75,7 @@ export class RefundController {
   }
 
   @Role('ADMIN')
-  @Patch(':id/reject')
+  @Patch(':id/status/rejected')
   @ApiOperation({
     summary: 'Отклонить возврат',
     description:

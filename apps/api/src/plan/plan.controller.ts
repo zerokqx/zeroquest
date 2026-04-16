@@ -23,11 +23,11 @@ import {
 import { Public, Role } from '@zeroquest/nest-shared';
 
 @ApiTags('Plan')
-@Controller('plan')
+@Controller('plans')
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
-  @Post('internal/create')
+  @Post()
   @Role('ADMIN')
   @ApiCookieAuth('zeroquestAccess')
   @ApiOperation({
@@ -83,7 +83,7 @@ export class PlanController {
   }
 
   @ApiCookieAuth('zeroquestAccess')
-  @Patch('internal/:id')
+  @Patch(':id')
   @Role('ADMIN')
   @ApiOperation({
     summary: 'Обновить план',
@@ -105,7 +105,7 @@ export class PlanController {
     return this.planService.update(+id, updatePlanDto);
   }
 
-  @Delete('internal/:id')
+  @Delete(':id')
   @Role('ADMIN')
   @ApiCookieAuth('zeroquestAccess')
   @ApiOperation({

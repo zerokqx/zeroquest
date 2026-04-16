@@ -21,7 +21,7 @@ import {
 
 @ApiTags('Review')
 @ApiCookieAuth('zeroquestAccess')
-@Controller('review')
+@Controller('reviews')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 

@@ -30,7 +30,7 @@ import {
 @ApiCookieAuth('zeroquestAccess')
 @Role('ADMIN')
 @ClientType('web')
-@Controller('inbound')
+@Controller('inbounds')
 export class InboundController {
   constructor(private readonly inboundService: InboundService) {}
 

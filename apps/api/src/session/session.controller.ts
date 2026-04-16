@@ -18,7 +18,7 @@ import {
 
 @ApiTags('Session')
 @ApiCookieAuth('zeroquestAccess')
-@Controller('session')
+@Controller('sessions')
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
@@ -34,7 +34,7 @@ export class SessionController {
     return this.sessionService.findAll(user.sub);
   }
 
-  @Get('current-user')
+  @Get('me')
   @ApiOperation({
     summary: 'Получить текущую сессию',
     description: 'Возвращает сессию, соответствующую текущему refresh-контексту.',

@@ -238,6 +238,28 @@ export class ThreeXUiService {
     return response.data;
   }
 
+  async resetClientTraffic(
+    inboundId: number,
+    email: string,
+  ): Promise<ThreeXUiAddClientResponse> {
+    const response = await this.threeXUiClient.post<ThreeXUiAddClientResponse>(
+      `/inbounds/${inboundId}/resetClientTraffic/${encodeURIComponent(email)}`,
+    );
+
+    return response.data;
+  }
+
+  async deleteClient(
+    inboundId: number,
+    uuid: string,
+  ): Promise<ThreeXUiAddClientResponse> {
+    const response = await this.threeXUiClient.post<ThreeXUiAddClientResponse>(
+      `/inbounds/${inboundId}/delClient/${encodeURIComponent(uuid)}`,
+    );
+
+    return response.data;
+  }
+
   private normalizeAddClientSettings(
     settings: ThreeXUiAddClientInputSettings,
   ): ThreeXUiAddClientSettings {
