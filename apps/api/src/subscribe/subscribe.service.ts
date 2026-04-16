@@ -8,6 +8,8 @@ import { Prisma, PrismaService } from '@zeroquest/db';
 import { NotFoundException } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common';
 import { ThreeXUiService } from '@/three-x-ui/three-x-ui.service';
+import { toPenny } from '@zeroquest/converters';
+import { toPenny } from '@zeroquest/converters';
 
 type PlanWithInbound = Prisma.PlanGetPayload<{ include: { inbound: true } }>;
 
@@ -152,19 +154,39 @@ export class SubscribeService {
       where: { id: planId },
     });
     if (!plan) throw new NotFoundException();
+    const amount = toPenny(plan.price.toString());
 
-    const debit = await this.walletService.debit({
+    await this.walletService.heldMoney({
       userId: payload.sub,
-      amount: plan.price,
+      amount,
     });
 
-    if (!debit.ok) {
-      this.logger.warn(
-        `Buy failed on wallet debit: userId=${payload.sub}, planId=${planId}, amount=${plan.price}, type=${debit.type}`,
-      );
-      throw new BadRequestException(`Wallet debit failed: ${debit.type}`);
-    }
+    let subscribeId: string | null = null;
+    try {
+      const subscribe = await this.create(plan, payload, deviceName);
+      subscribeId = subscribe.id;
 
-    return this.create(plan, payload, deviceName);
+      const debit = await this.walletService.debitFromHeld({
+        userId: payload.sub,
+        amount,
+      });
+
+      if (!debit.ok) {
+        this.logger.warn(
+          `Buy failed on wallet held debit: userId=${payload.sub}, planId=${planId}, amount=${amount}, type=${debit.type}`,
+        );
+        throw new BadRequestException(`Wallet debit failed: ${debit.type}`);
+      }
+
+      return subscribe;
+    } catch (error) {
+      if (!subscribeId) {
+        await this.walletService.unheldMoney({
+          userId: payload.sub,
+          amount,
+        });
+      }
+      throw error;
+    }
   }
 }

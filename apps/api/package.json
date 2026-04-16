@@ -102,6 +102,7 @@
     "@bull-board/nestjs": "^6.21.0",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/cache-manager": "^3.1.0",
+    "@nestjs/mapped-types": "*",
     "@zeroquest/config": "workspace:*",
     "@zeroquest/types": "workspace:*",
     "@zeroquest/db": "workspace:*",

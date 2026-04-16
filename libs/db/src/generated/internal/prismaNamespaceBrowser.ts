@@ -104,8 +104,8 @@ export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeo
 
 export const RefundScalarFieldEnum = {
   id: 'id',
-  paymentId: 'paymentId',
-  subscribeId: 'subscribeId'
+  status: 'status',
+  paymentId: 'paymentId'
 } as const
 
 export type RefundScalarFieldEnum = (typeof RefundScalarFieldEnum)[keyof typeof RefundScalarFieldEnum]
@@ -197,6 +197,7 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const WalletScalarFieldEnum = {
   id: 'id',
+  held: 'held',
   balance: 'balance',
   userId: 'userId'
 } as const

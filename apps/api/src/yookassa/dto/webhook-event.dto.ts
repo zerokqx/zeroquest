@@ -1,13 +1,4 @@
-import {
-  IsBoolean,
-  IsIn,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { MetadataDto } from './metadata.dto';
-import { AmountDto } from './create-payment.dto';
+import { IsIn } from 'class-validator';
 
 export const YOOKASSA_WEBHOOK_EVENT = {
   PaymentWaitingForCapture: 'payment.waiting_for_capture',
@@ -23,98 +14,7 @@ export const YOOKASSA_WEBHOOK_EVENT = {
 export type YookassaWebhookEvent =
   (typeof YOOKASSA_WEBHOOK_EVENT)[keyof typeof YOOKASSA_WEBHOOK_EVENT];
 
-export class RecipientDto {
-  @IsString()
-  account_id!: string;
-
-  @IsString()
-  gateway_id!: string;
-}
-
-export class PaymentMethodDto {
-  @IsString()
-  type!: string;
-
-  @IsString()
-  id!: string;
-
-  @IsBoolean()
-  saved!: boolean;
-
-  @IsString()
-  status!: string;
-
-  @IsString()
-  title!: string;
-
-  @IsOptional()
-  @IsString()
-  account_number?: string; // иногда может не быть
-}
-
-export class ObjectDto {
-  @IsString()
-  id!: string;
-
-  @IsString()
-  status!: string;
-
-  @ValidateNested()
-  @Type(() => AmountDto)
-  amount!: AmountDto;
-
-  @ValidateNested()
-  @Type(() => AmountDto)
-  income_amount!: AmountDto;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @ValidateNested()
-  @Type(() => RecipientDto)
-  recipient!: RecipientDto;
-
-  @ValidateNested()
-  @Type(() => PaymentMethodDto)
-  payment_method!: PaymentMethodDto;
-
-  @IsOptional()
-  @IsString()
-  captured_at?: string;
-
-  @IsString()
-  created_at!: string;
-
-  @IsBoolean()
-  test!: boolean;
-
-  @ValidateNested()
-  @Type(() => AmountDto)
-  refunded_amount!: AmountDto;
-
-  @IsBoolean()
-  paid!: boolean;
-
-  @IsBoolean()
-  refundable!: boolean;
-
-
-
-  @ValidateNested()
-  @Type(()=> MetadataDto)
-  @IsOptional()
-  metadata!: MetadataDto;
-}
-
-export class YookassaWebhookDto {
-  @IsString()
-  type!: string;
-
+export class YookassaWebhookBaseDto {
   @IsIn(Object.values(YOOKASSA_WEBHOOK_EVENT))
   event!: YookassaWebhookEvent;
-
-  @ValidateNested()
-  @Type(() => ObjectDto)
-  object!: ObjectDto;
 }

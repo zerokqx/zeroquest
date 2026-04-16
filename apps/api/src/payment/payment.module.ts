@@ -3,10 +3,9 @@ import { PaymentService } from './payment.service';
 import { PaymentController } from './payment.controller';
 import { YookassaModule } from '@/yookassa/yookassa.module';
 import { PaymentPersistenceModule } from './payment-persistence.module';
-import { PlanModule } from '@/plan/plan.module';
 
 @Module({
-  imports: [YookassaModule, PaymentPersistenceModule, PlanModule],
+  imports: [YookassaModule, PaymentPersistenceModule],
   controllers: [PaymentController],
   providers: [PaymentService],
 })

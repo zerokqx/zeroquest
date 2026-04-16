@@ -30,18 +30,18 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum RefundStatus {
+  PENDING
+  APPROVE
+  REJECTED
+}
+
 enum WalletHistoryType {
   CREDIT
   DEBIT
   BONUS
+  REFUND
 }
-
-// enum PaymentAppliedStatus {
-//   PROCESSING
-//   PENDING
-//   FAILED
-//   SUCCEEDED
-// }
 
 enum SubscribeStatus {
   STOPPED
@@ -76,11 +76,11 @@ model Session {
 }
 
 model Refund {
-  id          Int       @id @default(autoincrement())
-  payment     Payment   @relation(fields: [paymentId], references: [id])
-  paymentId   Int       @unique @map("payment_id")
-  subscribe   Subscribe @relation(fields: [subscribeId], references: [id])
-  subscribeId String    @map("subscribe_id")
+  id     Int          @id @default(autoincrement())
+  status RefundStatus @default(PENDING)
+
+  payment   Payment @relation(fields: [paymentId], references: [id])
+  paymentId Int     @unique @map("payment_id")
 
   @@map("refunds")
 }
@@ -155,7 +155,6 @@ model Subscribe {
   updatedAt       DateTime        @updatedAt @map("updated_at")
   plan            Plan            @relation(fields: [planId], references: [id])
   planId          Int             @map("plan_id")
-  refund          Refund[]
   totalGb         Int             @map("total_gb")
 
   @@unique([id, userId])
@@ -175,7 +174,7 @@ model User {
   payments     Payment[]
   sessions     Session[]
   review       Review?
-  canComment   Boolean     @default(false) @map("can_comment")
+  canComment   Boolean     @default(true) @map("can_comment")
   wallet       Wallet?
 
   @@map("users")
@@ -183,10 +182,12 @@ model User {
 
 model Wallet {
   id              String          @id @default(cuid())
+  held            Int             @default(0)
   balance         Int             @default(0)
   user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String          @unique
   walletHistories WalletHistory[]
+
   @@map("wallet")
 }
 
@@ -198,5 +199,6 @@ model WalletHistory {
   createdAt DateTime          @default(now()) @map("created_at")
   walletId  String
   wallet    Wallet            @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
   @@map("wallet_history")
 }

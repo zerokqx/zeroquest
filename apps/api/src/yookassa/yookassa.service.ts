@@ -1,21 +1,20 @@
 import { EnvironmentVariables } from '@/config/configuration';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios, { AxiosInstance } from 'axios';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CreatePaymentResponseDto } from './dto/create-payment-response.dto';
+import { RefundPaymentDto } from './dto/refund-payment.dto';
+import { RefundPaymentResponseDto } from './dto/refund-payment-response.dto';
 
 @Injectable()
 export class YookassaService {
   private yookassaEnvironment: EnvironmentVariables['yookassa'];
   private yookassaClient!: AxiosInstance;
-  private readonly logger = new Logger(YookassaService.name)
   constructor(private readonly config: ConfigService<EnvironmentVariables>) {
-    this.yookassaEnvironment = this.config.get<EnvironmentVariables['yookassa']>(
-      'yookassa',
-      { infer: true },
-    );
-    this.logger.log(this.yookassaEnvironment)
+    this.yookassaEnvironment = this.config.get<
+      EnvironmentVariables['yookassa']
+    >('yookassa', { infer: true });
 
     this.yookassaClient = axios.create({
       baseURL: this.yookassaEnvironment.apiBaseUrl,
@@ -38,5 +37,12 @@ export class YookassaService {
       'payments/',
       body,
     );
+  }
+
+  async refundPayment({ amount, paymentId }: RefundPaymentDto) {
+    return this.yookassaClient.post<RefundPaymentResponseDto>('refunds/', {
+      amount,
+      payment_id: paymentId,
+    });
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Prisma, PrismaService } from '@zeroquest/db';
+import { Prisma, PrismaService, Subscribe, User } from '@zeroquest/db';
 
 export interface Options {
   tx?: Prisma.TransactionClient;
@@ -19,18 +19,17 @@ export class SubscribeRepository {
     return this.prisma.subscribe.findMany({ where });
   }
 
-  findById(id: number) {
-    return this.prisma.subscribe.findUnique({ where: { id } });
+  findById(id: Subscribe['id']) { return this.prisma.subscribe.findUnique({ where: { id } });
   }
 
-  findManyByUserId(userId: string) {
+  findManyByUserId(userId: User['id']) {
     this.logger.debug(
       `Запрошен список подписок пользователя: userId=${userId}`,
     );
     return this.findMany({ userId });
   }
 
-  findOneByIdAndUserId(id: number, userId: string) {
+  findOneByIdAndUserId(id: Subscribe['id'], userId: User['id']) {
     this.logger.debug(
       `Запрошена подписка: subscribeId=${id}, userId=${userId}`,
     );
@@ -42,8 +41,8 @@ export class SubscribeRepository {
   }
 
   async updateByIdAndUserId(
-    id: number,
-    userId: string,
+    id: Subscribe['id'],
+    userId: User['id'],
     data: Prisma.SubscribeUpdateInput,
     opts?: Options,
   ) {
@@ -56,7 +55,7 @@ export class SubscribeRepository {
     });
   }
 
-  async deleteByIdAndUserId(id: number, userId: string) {
+  async deleteByIdAndUserId(id: Subscribe['id'], userId: User['id']) {
     this.logger.log(`Удаление подписки: subscribeId=${id}, userId=${userId}`);
     return this.prisma.subscribe.delete({
       where: {

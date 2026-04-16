@@ -1,17 +1,14 @@
-import { IsIn, IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class MetadataDto {
   @IsString()
   @IsNotEmpty()
   userId!: string;
 
-  @IsNotEmpty()
-  planId!: number;
-
   @IsString()
   clientType!: string;
 
+  @IsOptional()
   @IsString()
-  name!: string;
-
+  name?: string;
 }

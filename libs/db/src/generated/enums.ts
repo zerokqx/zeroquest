@@ -31,10 +31,20 @@ export const PaymentStatus = {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
+export const RefundStatus = {
+  PENDING: 'PENDING',
+  APPROVE: 'APPROVE',
+  REJECTED: 'REJECTED'
+} as const
+
+export type RefundStatus = (typeof RefundStatus)[keyof typeof RefundStatus]
+
+
 export const WalletHistoryType = {
   CREDIT: 'CREDIT',
   DEBIT: 'DEBIT',
-  BONUS: 'BONUS'
+  BONUS: 'BONUS',
+  REFUND: 'REFUND'
 } as const
 
 export type WalletHistoryType = (typeof WalletHistoryType)[keyof typeof WalletHistoryType]

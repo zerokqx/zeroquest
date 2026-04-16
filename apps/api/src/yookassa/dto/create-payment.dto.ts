@@ -8,15 +8,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { MetadataDto } from './metadata.dto';
-
-export class AmountDto {
-  @ApiProperty()
-  @IsString()
-  value!: string;
-  @ApiProperty()
-  @IsString()
-  currency!: string;
-}
+import { AmountDto } from './yookassa-common.dto';
 
 export class Confirmation {
   @ApiProperty()

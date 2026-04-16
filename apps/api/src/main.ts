@@ -23,7 +23,10 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   app.setGlobalPrefix(globalPrefix);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    transform:true,
+    whitelist:true,
+  }));
   app.useGlobalInterceptors(new SniffInterceptor());
   app.use(cookieParser());
   app.enableCors();

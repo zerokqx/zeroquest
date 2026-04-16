@@ -278,7 +278,6 @@ export type SubscribeWhereInput = {
   totalGb?: Prisma.IntFilter<"Subscribe"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   plan?: Prisma.XOR<Prisma.PlanScalarRelationFilter, Prisma.PlanWhereInput>
-  refund?: Prisma.RefundListRelationFilter
 }
 
 export type SubscribeOrderByWithRelationInput = {
@@ -296,7 +295,6 @@ export type SubscribeOrderByWithRelationInput = {
   totalGb?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   plan?: Prisma.PlanOrderByWithRelationInput
-  refund?: Prisma.RefundOrderByRelationAggregateInput
 }
 
 export type SubscribeWhereUniqueInput = Prisma.AtLeast<{
@@ -318,7 +316,6 @@ export type SubscribeWhereUniqueInput = Prisma.AtLeast<{
   totalGb?: Prisma.IntFilter<"Subscribe"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   plan?: Prisma.XOR<Prisma.PlanScalarRelationFilter, Prisma.PlanWhereInput>
-  refund?: Prisma.RefundListRelationFilter
 }, "id" | "id_userId">
 
 export type SubscribeOrderByWithAggregationInput = {
@@ -372,7 +369,6 @@ export type SubscribeCreateInput = {
   totalGb: number
   user: Prisma.UserCreateNestedOneWithoutSubscribesInput
   plan: Prisma.PlanCreateNestedOneWithoutSubscribesInput
-  refund?: Prisma.RefundCreateNestedManyWithoutSubscribeInput
 }
 
 export type SubscribeUncheckedCreateInput = {
@@ -388,7 +384,6 @@ export type SubscribeUncheckedCreateInput = {
   updatedAt?: Date | string
   planId: number
   totalGb: number
-  refund?: Prisma.RefundUncheckedCreateNestedManyWithoutSubscribeInput
 }
 
 export type SubscribeUpdateInput = {
@@ -404,7 +399,6 @@ export type SubscribeUpdateInput = {
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutSubscribesNestedInput
   plan?: Prisma.PlanUpdateOneRequiredWithoutSubscribesNestedInput
-  refund?: Prisma.RefundUpdateManyWithoutSubscribeNestedInput
 }
 
 export type SubscribeUncheckedUpdateInput = {
@@ -420,7 +414,6 @@ export type SubscribeUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
-  refund?: Prisma.RefundUncheckedUpdateManyWithoutSubscribeNestedInput
 }
 
 export type SubscribeCreateManyInput = {
@@ -464,11 +457,6 @@ export type SubscribeUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
-}
-
-export type SubscribeScalarRelationFilter = {
-  is?: Prisma.SubscribeWhereInput
-  isNot?: Prisma.SubscribeWhereInput
 }
 
 export type SubscribeListRelationFilter = {
@@ -539,20 +527,6 @@ export type SubscribeMinOrderByAggregateInput = {
 export type SubscribeSumOrderByAggregateInput = {
   planId?: Prisma.SortOrder
   totalGb?: Prisma.SortOrder
-}
-
-export type SubscribeCreateNestedOneWithoutRefundInput = {
-  create?: Prisma.XOR<Prisma.SubscribeCreateWithoutRefundInput, Prisma.SubscribeUncheckedCreateWithoutRefundInput>
-  connectOrCreate?: Prisma.SubscribeCreateOrConnectWithoutRefundInput
-  connect?: Prisma.SubscribeWhereUniqueInput
-}
-
-export type SubscribeUpdateOneRequiredWithoutRefundNestedInput = {
-  create?: Prisma.XOR<Prisma.SubscribeCreateWithoutRefundInput, Prisma.SubscribeUncheckedCreateWithoutRefundInput>
-  connectOrCreate?: Prisma.SubscribeCreateOrConnectWithoutRefundInput
-  upsert?: Prisma.SubscribeUpsertWithoutRefundInput
-  connect?: Prisma.SubscribeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SubscribeUpdateToOneWithWhereWithoutRefundInput, Prisma.SubscribeUpdateWithoutRefundInput>, Prisma.SubscribeUncheckedUpdateWithoutRefundInput>
 }
 
 export type SubscribeCreateNestedManyWithoutPlanInput = {
@@ -643,82 +617,6 @@ export type SubscribeUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.SubscribeScalarWhereInput | Prisma.SubscribeScalarWhereInput[]
 }
 
-export type SubscribeCreateWithoutRefundInput = {
-  id?: string
-  name: string
-  vlessLink: string
-  vlessClientId: string
-  nextPaymentDate: Date | string
-  status?: $Enums.SubscribeStatus
-  expiresAt: Date | string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  totalGb: number
-  user: Prisma.UserCreateNestedOneWithoutSubscribesInput
-  plan: Prisma.PlanCreateNestedOneWithoutSubscribesInput
-}
-
-export type SubscribeUncheckedCreateWithoutRefundInput = {
-  id?: string
-  name: string
-  vlessLink: string
-  vlessClientId: string
-  userId: string
-  nextPaymentDate: Date | string
-  status?: $Enums.SubscribeStatus
-  expiresAt: Date | string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  planId: number
-  totalGb: number
-}
-
-export type SubscribeCreateOrConnectWithoutRefundInput = {
-  where: Prisma.SubscribeWhereUniqueInput
-  create: Prisma.XOR<Prisma.SubscribeCreateWithoutRefundInput, Prisma.SubscribeUncheckedCreateWithoutRefundInput>
-}
-
-export type SubscribeUpsertWithoutRefundInput = {
-  update: Prisma.XOR<Prisma.SubscribeUpdateWithoutRefundInput, Prisma.SubscribeUncheckedUpdateWithoutRefundInput>
-  create: Prisma.XOR<Prisma.SubscribeCreateWithoutRefundInput, Prisma.SubscribeUncheckedCreateWithoutRefundInput>
-  where?: Prisma.SubscribeWhereInput
-}
-
-export type SubscribeUpdateToOneWithWhereWithoutRefundInput = {
-  where?: Prisma.SubscribeWhereInput
-  data: Prisma.XOR<Prisma.SubscribeUpdateWithoutRefundInput, Prisma.SubscribeUncheckedUpdateWithoutRefundInput>
-}
-
-export type SubscribeUpdateWithoutRefundInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
-  vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
-  nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
-  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  totalGb?: Prisma.IntFieldUpdateOperationsInput | number
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscribesNestedInput
-  plan?: Prisma.PlanUpdateOneRequiredWithoutSubscribesNestedInput
-}
-
-export type SubscribeUncheckedUpdateWithoutRefundInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  vlessLink?: Prisma.StringFieldUpdateOperationsInput | string
-  vlessClientId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  nextPaymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.EnumSubscribeStatusFieldUpdateOperationsInput | $Enums.SubscribeStatus
-  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  planId?: Prisma.IntFieldUpdateOperationsInput | number
-  totalGb?: Prisma.IntFieldUpdateOperationsInput | number
-}
-
 export type SubscribeCreateWithoutPlanInput = {
   id?: string
   name: string
@@ -731,7 +629,6 @@ export type SubscribeCreateWithoutPlanInput = {
   updatedAt?: Date | string
   totalGb: number
   user: Prisma.UserCreateNestedOneWithoutSubscribesInput
-  refund?: Prisma.RefundCreateNestedManyWithoutSubscribeInput
 }
 
 export type SubscribeUncheckedCreateWithoutPlanInput = {
@@ -746,7 +643,6 @@ export type SubscribeUncheckedCreateWithoutPlanInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   totalGb: number
-  refund?: Prisma.RefundUncheckedCreateNestedManyWithoutSubscribeInput
 }
 
 export type SubscribeCreateOrConnectWithoutPlanInput = {
@@ -805,7 +701,6 @@ export type SubscribeCreateWithoutUserInput = {
   updatedAt?: Date | string
   totalGb: number
   plan: Prisma.PlanCreateNestedOneWithoutSubscribesInput
-  refund?: Prisma.RefundCreateNestedManyWithoutSubscribeInput
 }
 
 export type SubscribeUncheckedCreateWithoutUserInput = {
@@ -820,7 +715,6 @@ export type SubscribeUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   planId: number
   totalGb: number
-  refund?: Prisma.RefundUncheckedCreateNestedManyWithoutSubscribeInput
 }
 
 export type SubscribeCreateOrConnectWithoutUserInput = {
@@ -875,7 +769,6 @@ export type SubscribeUpdateWithoutPlanInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutSubscribesNestedInput
-  refund?: Prisma.RefundUpdateManyWithoutSubscribeNestedInput
 }
 
 export type SubscribeUncheckedUpdateWithoutPlanInput = {
@@ -890,7 +783,6 @@ export type SubscribeUncheckedUpdateWithoutPlanInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
-  refund?: Prisma.RefundUncheckedUpdateManyWithoutSubscribeNestedInput
 }
 
 export type SubscribeUncheckedUpdateManyWithoutPlanInput = {
@@ -933,7 +825,6 @@ export type SubscribeUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
   plan?: Prisma.PlanUpdateOneRequiredWithoutSubscribesNestedInput
-  refund?: Prisma.RefundUpdateManyWithoutSubscribeNestedInput
 }
 
 export type SubscribeUncheckedUpdateWithoutUserInput = {
@@ -948,7 +839,6 @@ export type SubscribeUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
-  refund?: Prisma.RefundUncheckedUpdateManyWithoutSubscribeNestedInput
 }
 
 export type SubscribeUncheckedUpdateManyWithoutUserInput = {
@@ -966,35 +856,6 @@ export type SubscribeUncheckedUpdateManyWithoutUserInput = {
 }
 
 
-/**
- * Count Type SubscribeCountOutputType
- */
-
-export type SubscribeCountOutputType = {
-  refund: number
-}
-
-export type SubscribeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  refund?: boolean | SubscribeCountOutputTypeCountRefundArgs
-}
-
-/**
- * SubscribeCountOutputType without action
- */
-export type SubscribeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the SubscribeCountOutputType
-   */
-  select?: Prisma.SubscribeCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * SubscribeCountOutputType without action
- */
-export type SubscribeCountOutputTypeCountRefundArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.RefundWhereInput
-}
-
 
 export type SubscribeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1011,8 +872,6 @@ export type SubscribeSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   totalGb?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
-  refund?: boolean | Prisma.Subscribe$refundArgs<ExtArgs>
-  _count?: boolean | Prisma.SubscribeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscribe"]>
 
 export type SubscribeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1068,8 +927,6 @@ export type SubscribeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type SubscribeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
-  refund?: boolean | Prisma.Subscribe$refundArgs<ExtArgs>
-  _count?: boolean | Prisma.SubscribeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubscribeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1085,7 +942,6 @@ export type $SubscribePayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     plan: Prisma.$PlanPayload<ExtArgs>
-    refund: Prisma.$RefundPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1496,7 +1352,6 @@ export interface Prisma__SubscribeClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   plan<T extends Prisma.PlanDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlanDefaultArgs<ExtArgs>>): Prisma.Prisma__PlanClient<runtime.Types.Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  refund<T extends Prisma.Subscribe$refundArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subscribe$refundArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1936,30 +1791,6 @@ export type SubscribeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many Subscribes to delete.
    */
   limit?: number
-}
-
-/**
- * Subscribe.refund
- */
-export type Subscribe$refundArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Refund
-   */
-  select?: Prisma.RefundSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Refund
-   */
-  omit?: Prisma.RefundOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.RefundInclude<ExtArgs> | null
-  where?: Prisma.RefundWhereInput
-  orderBy?: Prisma.RefundOrderByWithRelationInput | Prisma.RefundOrderByWithRelationInput[]
-  cursor?: Prisma.RefundWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.RefundScalarFieldEnum | Prisma.RefundScalarFieldEnum[]
 }
 
 /**

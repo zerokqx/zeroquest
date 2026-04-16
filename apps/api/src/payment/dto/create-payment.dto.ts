@@ -1,21 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, Matches } from 'class-validator';
 
 export class CreatePaymentDto {
-
-  // @ApiProperty()
-  // @IsNumber()
-  // value!: number;
-  //
-  // @ApiProperty()
-  // @IsString()
-  // currency!: string;
-
-  @ApiProperty()
-  @IsNumber()
-  planId!: number;
-
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Сумма пополнения в рублях строкой.',
+    example: '500.00',
+  })
   @IsString()
-  name!: string
+  @IsNotEmpty()
+  @Matches(/^\d+(\.\d{1,2})?$/, {
+    message: 'amount must be a valid money string, e.g. 500 or 500.00',
+  })
+  amount!: string;
 }

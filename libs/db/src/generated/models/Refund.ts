@@ -38,20 +38,20 @@ export type RefundSumAggregateOutputType = {
 
 export type RefundMinAggregateOutputType = {
   id: number | null
+  status: $Enums.RefundStatus | null
   paymentId: number | null
-  subscribeId: string | null
 }
 
 export type RefundMaxAggregateOutputType = {
   id: number | null
+  status: $Enums.RefundStatus | null
   paymentId: number | null
-  subscribeId: string | null
 }
 
 export type RefundCountAggregateOutputType = {
   id: number
+  status: number
   paymentId: number
-  subscribeId: number
   _all: number
 }
 
@@ -68,20 +68,20 @@ export type RefundSumAggregateInputType = {
 
 export type RefundMinAggregateInputType = {
   id?: true
+  status?: true
   paymentId?: true
-  subscribeId?: true
 }
 
 export type RefundMaxAggregateInputType = {
   id?: true
+  status?: true
   paymentId?: true
-  subscribeId?: true
 }
 
 export type RefundCountAggregateInputType = {
   id?: true
+  status?: true
   paymentId?: true
-  subscribeId?: true
   _all?: true
 }
 
@@ -173,8 +173,8 @@ export type RefundGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type RefundGroupByOutputType = {
   id: number
+  status: $Enums.RefundStatus
   paymentId: number
-  subscribeId: string
   _count: RefundCountAggregateOutputType | null
   _avg: RefundAvgAggregateOutputType | null
   _sum: RefundSumAggregateOutputType | null
@@ -202,18 +202,16 @@ export type RefundWhereInput = {
   OR?: Prisma.RefundWhereInput[]
   NOT?: Prisma.RefundWhereInput | Prisma.RefundWhereInput[]
   id?: Prisma.IntFilter<"Refund"> | number
+  status?: Prisma.EnumRefundStatusFilter<"Refund"> | $Enums.RefundStatus
   paymentId?: Prisma.IntFilter<"Refund"> | number
-  subscribeId?: Prisma.StringFilter<"Refund"> | string
   payment?: Prisma.XOR<Prisma.PaymentScalarRelationFilter, Prisma.PaymentWhereInput>
-  subscribe?: Prisma.XOR<Prisma.SubscribeScalarRelationFilter, Prisma.SubscribeWhereInput>
 }
 
 export type RefundOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
-  subscribeId?: Prisma.SortOrder
   payment?: Prisma.PaymentOrderByWithRelationInput
-  subscribe?: Prisma.SubscribeOrderByWithRelationInput
 }
 
 export type RefundWhereUniqueInput = Prisma.AtLeast<{
@@ -222,15 +220,14 @@ export type RefundWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.RefundWhereInput | Prisma.RefundWhereInput[]
   OR?: Prisma.RefundWhereInput[]
   NOT?: Prisma.RefundWhereInput | Prisma.RefundWhereInput[]
-  subscribeId?: Prisma.StringFilter<"Refund"> | string
+  status?: Prisma.EnumRefundStatusFilter<"Refund"> | $Enums.RefundStatus
   payment?: Prisma.XOR<Prisma.PaymentScalarRelationFilter, Prisma.PaymentWhereInput>
-  subscribe?: Prisma.XOR<Prisma.SubscribeScalarRelationFilter, Prisma.SubscribeWhereInput>
 }, "id" | "paymentId">
 
 export type RefundOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
-  subscribeId?: Prisma.SortOrder
   _count?: Prisma.RefundCountOrderByAggregateInput
   _avg?: Prisma.RefundAvgOrderByAggregateInput
   _max?: Prisma.RefundMaxOrderByAggregateInput
@@ -243,52 +240,52 @@ export type RefundScalarWhereWithAggregatesInput = {
   OR?: Prisma.RefundScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RefundScalarWhereWithAggregatesInput | Prisma.RefundScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Refund"> | number
+  status?: Prisma.EnumRefundStatusWithAggregatesFilter<"Refund"> | $Enums.RefundStatus
   paymentId?: Prisma.IntWithAggregatesFilter<"Refund"> | number
-  subscribeId?: Prisma.StringWithAggregatesFilter<"Refund"> | string
 }
 
 export type RefundCreateInput = {
+  status?: $Enums.RefundStatus
   payment: Prisma.PaymentCreateNestedOneWithoutRefundInput
-  subscribe: Prisma.SubscribeCreateNestedOneWithoutRefundInput
 }
 
 export type RefundUncheckedCreateInput = {
   id?: number
+  status?: $Enums.RefundStatus
   paymentId: number
-  subscribeId: string
 }
 
 export type RefundUpdateInput = {
+  status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
   payment?: Prisma.PaymentUpdateOneRequiredWithoutRefundNestedInput
-  subscribe?: Prisma.SubscribeUpdateOneRequiredWithoutRefundNestedInput
 }
 
 export type RefundUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
   paymentId?: Prisma.IntFieldUpdateOperationsInput | number
-  subscribeId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type RefundCreateManyInput = {
   id?: number
+  status?: $Enums.RefundStatus
   paymentId: number
-  subscribeId: string
 }
 
 export type RefundUpdateManyMutationInput = {
-
+  status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
 }
 
 export type RefundUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
   paymentId?: Prisma.IntFieldUpdateOperationsInput | number
-  subscribeId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type RefundCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
-  subscribeId?: Prisma.SortOrder
 }
 
 export type RefundAvgOrderByAggregateInput = {
@@ -298,14 +295,14 @@ export type RefundAvgOrderByAggregateInput = {
 
 export type RefundMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
-  subscribeId?: Prisma.SortOrder
 }
 
 export type RefundMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
-  subscribeId?: Prisma.SortOrder
 }
 
 export type RefundSumOrderByAggregateInput = {
@@ -318,14 +315,8 @@ export type RefundNullableScalarRelationFilter = {
   isNot?: Prisma.RefundWhereInput | null
 }
 
-export type RefundListRelationFilter = {
-  every?: Prisma.RefundWhereInput
-  some?: Prisma.RefundWhereInput
-  none?: Prisma.RefundWhereInput
-}
-
-export type RefundOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type EnumRefundStatusFieldUpdateOperationsInput = {
+  set?: $Enums.RefundStatus
 }
 
 export type RefundCreateNestedOneWithoutPaymentInput = {
@@ -360,55 +351,13 @@ export type RefundUncheckedUpdateOneWithoutPaymentNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RefundUpdateToOneWithWhereWithoutPaymentInput, Prisma.RefundUpdateWithoutPaymentInput>, Prisma.RefundUncheckedUpdateWithoutPaymentInput>
 }
 
-export type RefundCreateNestedManyWithoutSubscribeInput = {
-  create?: Prisma.XOR<Prisma.RefundCreateWithoutSubscribeInput, Prisma.RefundUncheckedCreateWithoutSubscribeInput> | Prisma.RefundCreateWithoutSubscribeInput[] | Prisma.RefundUncheckedCreateWithoutSubscribeInput[]
-  connectOrCreate?: Prisma.RefundCreateOrConnectWithoutSubscribeInput | Prisma.RefundCreateOrConnectWithoutSubscribeInput[]
-  createMany?: Prisma.RefundCreateManySubscribeInputEnvelope
-  connect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-}
-
-export type RefundUncheckedCreateNestedManyWithoutSubscribeInput = {
-  create?: Prisma.XOR<Prisma.RefundCreateWithoutSubscribeInput, Prisma.RefundUncheckedCreateWithoutSubscribeInput> | Prisma.RefundCreateWithoutSubscribeInput[] | Prisma.RefundUncheckedCreateWithoutSubscribeInput[]
-  connectOrCreate?: Prisma.RefundCreateOrConnectWithoutSubscribeInput | Prisma.RefundCreateOrConnectWithoutSubscribeInput[]
-  createMany?: Prisma.RefundCreateManySubscribeInputEnvelope
-  connect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-}
-
-export type RefundUpdateManyWithoutSubscribeNestedInput = {
-  create?: Prisma.XOR<Prisma.RefundCreateWithoutSubscribeInput, Prisma.RefundUncheckedCreateWithoutSubscribeInput> | Prisma.RefundCreateWithoutSubscribeInput[] | Prisma.RefundUncheckedCreateWithoutSubscribeInput[]
-  connectOrCreate?: Prisma.RefundCreateOrConnectWithoutSubscribeInput | Prisma.RefundCreateOrConnectWithoutSubscribeInput[]
-  upsert?: Prisma.RefundUpsertWithWhereUniqueWithoutSubscribeInput | Prisma.RefundUpsertWithWhereUniqueWithoutSubscribeInput[]
-  createMany?: Prisma.RefundCreateManySubscribeInputEnvelope
-  set?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  disconnect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  delete?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  connect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  update?: Prisma.RefundUpdateWithWhereUniqueWithoutSubscribeInput | Prisma.RefundUpdateWithWhereUniqueWithoutSubscribeInput[]
-  updateMany?: Prisma.RefundUpdateManyWithWhereWithoutSubscribeInput | Prisma.RefundUpdateManyWithWhereWithoutSubscribeInput[]
-  deleteMany?: Prisma.RefundScalarWhereInput | Prisma.RefundScalarWhereInput[]
-}
-
-export type RefundUncheckedUpdateManyWithoutSubscribeNestedInput = {
-  create?: Prisma.XOR<Prisma.RefundCreateWithoutSubscribeInput, Prisma.RefundUncheckedCreateWithoutSubscribeInput> | Prisma.RefundCreateWithoutSubscribeInput[] | Prisma.RefundUncheckedCreateWithoutSubscribeInput[]
-  connectOrCreate?: Prisma.RefundCreateOrConnectWithoutSubscribeInput | Prisma.RefundCreateOrConnectWithoutSubscribeInput[]
-  upsert?: Prisma.RefundUpsertWithWhereUniqueWithoutSubscribeInput | Prisma.RefundUpsertWithWhereUniqueWithoutSubscribeInput[]
-  createMany?: Prisma.RefundCreateManySubscribeInputEnvelope
-  set?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  disconnect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  delete?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  connect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  update?: Prisma.RefundUpdateWithWhereUniqueWithoutSubscribeInput | Prisma.RefundUpdateWithWhereUniqueWithoutSubscribeInput[]
-  updateMany?: Prisma.RefundUpdateManyWithWhereWithoutSubscribeInput | Prisma.RefundUpdateManyWithWhereWithoutSubscribeInput[]
-  deleteMany?: Prisma.RefundScalarWhereInput | Prisma.RefundScalarWhereInput[]
-}
-
 export type RefundCreateWithoutPaymentInput = {
-  subscribe: Prisma.SubscribeCreateNestedOneWithoutRefundInput
+  status?: $Enums.RefundStatus
 }
 
 export type RefundUncheckedCreateWithoutPaymentInput = {
   id?: number
-  subscribeId: string
+  status?: $Enums.RefundStatus
 }
 
 export type RefundCreateOrConnectWithoutPaymentInput = {
@@ -428,133 +377,63 @@ export type RefundUpdateToOneWithWhereWithoutPaymentInput = {
 }
 
 export type RefundUpdateWithoutPaymentInput = {
-  subscribe?: Prisma.SubscribeUpdateOneRequiredWithoutRefundNestedInput
+  status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
 }
 
 export type RefundUncheckedUpdateWithoutPaymentInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  subscribeId?: Prisma.StringFieldUpdateOperationsInput | string
-}
-
-export type RefundCreateWithoutSubscribeInput = {
-  payment: Prisma.PaymentCreateNestedOneWithoutRefundInput
-}
-
-export type RefundUncheckedCreateWithoutSubscribeInput = {
-  id?: number
-  paymentId: number
-}
-
-export type RefundCreateOrConnectWithoutSubscribeInput = {
-  where: Prisma.RefundWhereUniqueInput
-  create: Prisma.XOR<Prisma.RefundCreateWithoutSubscribeInput, Prisma.RefundUncheckedCreateWithoutSubscribeInput>
-}
-
-export type RefundCreateManySubscribeInputEnvelope = {
-  data: Prisma.RefundCreateManySubscribeInput | Prisma.RefundCreateManySubscribeInput[]
-  skipDuplicates?: boolean
-}
-
-export type RefundUpsertWithWhereUniqueWithoutSubscribeInput = {
-  where: Prisma.RefundWhereUniqueInput
-  update: Prisma.XOR<Prisma.RefundUpdateWithoutSubscribeInput, Prisma.RefundUncheckedUpdateWithoutSubscribeInput>
-  create: Prisma.XOR<Prisma.RefundCreateWithoutSubscribeInput, Prisma.RefundUncheckedCreateWithoutSubscribeInput>
-}
-
-export type RefundUpdateWithWhereUniqueWithoutSubscribeInput = {
-  where: Prisma.RefundWhereUniqueInput
-  data: Prisma.XOR<Prisma.RefundUpdateWithoutSubscribeInput, Prisma.RefundUncheckedUpdateWithoutSubscribeInput>
-}
-
-export type RefundUpdateManyWithWhereWithoutSubscribeInput = {
-  where: Prisma.RefundScalarWhereInput
-  data: Prisma.XOR<Prisma.RefundUpdateManyMutationInput, Prisma.RefundUncheckedUpdateManyWithoutSubscribeInput>
-}
-
-export type RefundScalarWhereInput = {
-  AND?: Prisma.RefundScalarWhereInput | Prisma.RefundScalarWhereInput[]
-  OR?: Prisma.RefundScalarWhereInput[]
-  NOT?: Prisma.RefundScalarWhereInput | Prisma.RefundScalarWhereInput[]
-  id?: Prisma.IntFilter<"Refund"> | number
-  paymentId?: Prisma.IntFilter<"Refund"> | number
-  subscribeId?: Prisma.StringFilter<"Refund"> | string
-}
-
-export type RefundCreateManySubscribeInput = {
-  id?: number
-  paymentId: number
-}
-
-export type RefundUpdateWithoutSubscribeInput = {
-  payment?: Prisma.PaymentUpdateOneRequiredWithoutRefundNestedInput
-}
-
-export type RefundUncheckedUpdateWithoutSubscribeInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  paymentId?: Prisma.IntFieldUpdateOperationsInput | number
-}
-
-export type RefundUncheckedUpdateManyWithoutSubscribeInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  paymentId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
 }
 
 
 
 export type RefundSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  status?: boolean
   paymentId?: boolean
-  subscribeId?: boolean
   payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
-  subscribe?: boolean | Prisma.SubscribeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["refund"]>
 
 export type RefundSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  status?: boolean
   paymentId?: boolean
-  subscribeId?: boolean
   payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
-  subscribe?: boolean | Prisma.SubscribeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["refund"]>
 
 export type RefundSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  status?: boolean
   paymentId?: boolean
-  subscribeId?: boolean
   payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
-  subscribe?: boolean | Prisma.SubscribeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["refund"]>
 
 export type RefundSelectScalar = {
   id?: boolean
+  status?: boolean
   paymentId?: boolean
-  subscribeId?: boolean
 }
 
-export type RefundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "paymentId" | "subscribeId", ExtArgs["result"]["refund"]>
+export type RefundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "paymentId", ExtArgs["result"]["refund"]>
 export type RefundInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
-  subscribe?: boolean | Prisma.SubscribeDefaultArgs<ExtArgs>
 }
 export type RefundIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
-  subscribe?: boolean | Prisma.SubscribeDefaultArgs<ExtArgs>
 }
 export type RefundIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
-  subscribe?: boolean | Prisma.SubscribeDefaultArgs<ExtArgs>
 }
 
 export type $RefundPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Refund"
   objects: {
     payment: Prisma.$PaymentPayload<ExtArgs>
-    subscribe: Prisma.$SubscribePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    status: $Enums.RefundStatus
     paymentId: number
-    subscribeId: string
   }, ExtArgs["result"]["refund"]>
   composites: {}
 }
@@ -950,7 +829,6 @@ readonly fields: RefundFieldRefs;
 export interface Prisma__RefundClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   payment<T extends Prisma.PaymentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentDefaultArgs<ExtArgs>>): Prisma.Prisma__PaymentClient<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  subscribe<T extends Prisma.SubscribeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscribeDefaultArgs<ExtArgs>>): Prisma.Prisma__SubscribeClient<runtime.Types.Result.GetResult<Prisma.$SubscribePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -981,8 +859,8 @@ export interface Prisma__RefundClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface RefundFieldRefs {
   readonly id: Prisma.FieldRef<"Refund", 'Int'>
+  readonly status: Prisma.FieldRef<"Refund", 'RefundStatus'>
   readonly paymentId: Prisma.FieldRef<"Refund", 'Int'>
-  readonly subscribeId: Prisma.FieldRef<"Refund", 'String'>
 }
     
 

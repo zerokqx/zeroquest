@@ -4,7 +4,7 @@ import {
   HttpCode, HttpStatus,
   Post,
 } from '@nestjs/common';
-import { YookassaWebhookDto } from './dto/webhook-event.dto';
+import { YookassaWebhookBaseDto } from './dto/webhook-event.dto';
 import { YookassaWebhookService } from './yookassa-webhook.service';
 import {
   ApiBody,
@@ -32,7 +32,7 @@ export class YookassaController {
       'Принимает webhook от YooKassa и запускает локальную обработку платежного события.',
   })
   @ApiBody({
-    type: YookassaWebhookDto,
+    type: YookassaWebhookBaseDto,
     description: 'Webhook payload от YooKassa.',
   })
   @ApiOkResponse({
@@ -41,7 +41,7 @@ export class YookassaController {
   @ApiForbiddenResponse({
     description: 'IP-адрес отправителя не входит в allowlist.',
   })
-  async webhook(@Body() body: YookassaWebhookDto) {
+  async webhook(@Body() body: YookassaWebhookBaseDto & Record<string, unknown>) {
     await this.yookassaWebhookService.handleWebhook(body);
   }
 }

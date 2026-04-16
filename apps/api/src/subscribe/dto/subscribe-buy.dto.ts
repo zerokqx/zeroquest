@@ -1,14 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Plan } from '@zeroquest/db';
 import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class SubscribeBuyDto {
-  @ApiProperty()
+  @ApiProperty({ type: Number, example: 1 })
   @IsInt()
   @IsNotEmpty()
-  planId!: Plan['id'];
+  planId!: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, example: 'iPhone 15 Pro' })
   @IsNotEmpty()
   @IsString()
   deviceName!: string;

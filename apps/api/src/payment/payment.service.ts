@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { toPenny } from '@zeroquest/converters';
 import { YookassaService } from '@/yookassa/yookassa.service';
@@ -6,7 +6,6 @@ import { AuthServiceTypes } from '@zeroquest/types';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '@/config/configuration';
 import { PaymentRepository } from './payment.repository';
-import { PlanRepository } from '@/plan/plan.repository';
 
 @Injectable()
 export class PaymentService {
@@ -15,7 +14,6 @@ export class PaymentService {
     private readonly yookassaService: YookassaService,
     private readonly config: ConfigService<EnvironmentVariables>,
     private readonly paymentRepository: PaymentRepository,
-    private readonly planRepository: PlanRepository,
   ) {}
 
   async create(
@@ -23,30 +21,20 @@ export class PaymentService {
     payload: AuthServiceTypes.JwtPayload,
   ) {
     this.logger.log(
-      `Создание платежа начато: userId=${payload.sub}, planId=${createPaymentDto.planId}, clientType=${payload.clientType}`,
+      `Создание платежа на пополнение начато: userId=${payload.sub}, amount=${createPaymentDto.amount}, clientType=${payload.clientType}`,
     );
-
-    const plan = await this.planRepository.findById(createPaymentDto.planId);
-    if (!plan) {
-      this.logger.warn(
-        `Создание платежа отклонено: план не найден, userId=${payload.sub}, planId=${createPaymentDto.planId}`,
-      );
-      throw new NotFoundException();
-    }
 
     const { data } = await this.yookassaService.createPayment({
       capture: true,
       metadata: {
         clientType: payload.clientType,
         userId: payload.sub,
-        planId: createPaymentDto.planId,
-        name: createPaymentDto.name,
       },
       amount: {
         currency: 'RUB',
-        value: plan?.price.toString(),
+        value: createPaymentDto.amount,
       },
-      description: plan?.name,
+      description: `Пополнение баланса на ${createPaymentDto.amount} RUB`,
       confirmation: {
         return_url:
           this.config.get('yookassa', { infer: true })?.redirectTo ?? '',
@@ -55,18 +43,13 @@ export class PaymentService {
     });
 
     this.logger.log(
-      `Платёж создан у провайдера: providerPaymentId=${data.id}, userId=${payload.sub}, planId=${createPaymentDto.planId}, status=${data.status}`,
+      `Платёж создан у провайдера: providerPaymentId=${data.id}, userId=${payload.sub}, amount=${data.amount.value}, status=${data.status}`,
     );
 
     const payment = await this.paymentRepository.create({
       user: {
         connect: {
           id: payload.sub,
-        },
-      },
-      plan: {
-        connect: {
-          id: createPaymentDto.planId,
         },
       },
       description: data.description,
@@ -76,7 +59,7 @@ export class PaymentService {
     });
 
     this.logger.log(
-      `Платёж сохранён в БД: paymentId=${payment.id}, providerPaymentId=${payment.providerPaymentId}, userId=${payload.sub}, planId=${createPaymentDto.planId}`,
+      `Платёж сохранён в БД: paymentId=${payment.id}, providerPaymentId=${payment.providerPaymentId}, userId=${payload.sub}, valueMinor=${payment.value}`,
     );
 
     return payment;

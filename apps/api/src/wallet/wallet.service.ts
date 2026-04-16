@@ -16,6 +16,7 @@ export class WalletService {
     private readonly walletReposiory: WalletRepository,
     @InjectQueue('wallet') private readonly walletQueue: Queue,
   ) {}
+
   async creditWithQueue(data: CreditWalletDto) {
     return this.walletQueue.add(
       walletPaternsForProcessor.CREDIT,
@@ -36,5 +37,17 @@ export class WalletService {
 
   async debit({ userId, amount }: DebitWalletDto) {
     return this.walletReposiory.debitByUserId(userId, amount);
+  }
+
+  async debitFromHeld({ userId, amount }: DebitWalletDto) {
+    return this.walletReposiory.debitFromHeldByUserId(userId, amount);
+  }
+
+  async heldMoney({ userId, amount }: DebitWalletDto) {
+    return this.walletReposiory.heldMoney(userId, amount);
+  }
+
+  async unheldMoney({ userId, amount }: DebitWalletDto) {
+    return this.walletReposiory.unheldMoney(userId, amount);
   }
 }
