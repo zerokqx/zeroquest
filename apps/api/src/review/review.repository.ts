@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, PrismaService } from '@zeroquest/db';
+import { ReviewEntity } from './entities/review.entity';
 
 @Injectable()
 export class ReviewRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
+  findAll(): Promise<ReviewEntity[]> {
     return this.prisma.review.findMany({
       include: {
         user: {
@@ -19,7 +20,7 @@ export class ReviewRepository {
     });
   }
 
-  findById(id: number) {
+  findById(id: number): Promise<ReviewEntity | null> {
     return this.prisma.review.findUnique({
       where: { id },
       include: {
@@ -33,26 +34,16 @@ export class ReviewRepository {
     });
   }
 
-  findByUserId(userId: string) {
+  findByUserId(userId: string): Promise<ReviewEntity | null> {
     return this.prisma.review.findUnique({
       where: { userId },
-    });
-  }
-
-  findUserById(userId: string) {
-    return this.prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        canComment: true,
-      },
     });
   }
 
   async createForUser(
     userId: string,
     data: Omit<Prisma.ReviewCreateInput, 'user'>,
-  ) {
+  ): Promise<ReviewEntity> {
     return this.prisma.$transaction(async (tx) => {
       const review = await tx.review.create({
         data: {
@@ -72,7 +63,7 @@ export class ReviewRepository {
     });
   }
 
-  async deleteByUserId(userId: string) {
+  async deleteByUserId(userId: string): Promise<ReviewEntity|null> {
     return this.prisma.$transaction(async (tx) => {
       const deletedReview = await tx.review.delete({
         where: { userId },

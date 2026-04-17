@@ -21,6 +21,7 @@ import {
 import { AuthPayload, Role } from '@zeroquest/nest-shared';
 import { SubscribeBuyDto } from './dto/subscribe-buy.dto';
 import { ResetSubscribeDto } from './dto/reset-subscribe.dto';
+import { SubscribeEntity } from './entities/subscribe.entity';
 
 @ApiTags('Subscribe')
 @ApiCookieAuth('zeroquestAccess')
@@ -53,6 +54,8 @@ export class SubscribeController {
     description: 'Возвращает список подписок текущего пользователя.',
   })
   @ApiOkResponse({
+    isArray: true,
+    type: SubscribeEntity,
     description: 'Список подписок успешно получен.',
   })
   findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
@@ -70,6 +73,7 @@ export class SubscribeController {
     description: 'Идентификатор подписки.',
   })
   @ApiOkResponse({
+    type: SubscribeEntity,
     description: 'Подписка успешно найдена.',
   })
   findOne(
@@ -96,15 +100,17 @@ export class SubscribeController {
     description: 'Поля подписки для обновления.',
   })
   @ApiOkResponse({
+    type: SubscribeEntity,
     description: 'Подписка успешно обновлена.',
   })
   update(
     @Param('id') id: string,
     @Body() updateSubscribeDto: UpdateSubscribeDto,
-
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
   ) {
-    return this.subscribeService.update(+id, payload, updateSubscribeDto);
+    return this.subscribeService.update({
+      where: { id },
+      data: updateSubscribeDto,
+    });
   }
 
   @Delete(':id')

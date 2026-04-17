@@ -1,10 +1,19 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react';
+import { fileURLToPath, URL } from 'node:url';
 
+const APP = './src/app';
 export default defineConfig(() => ({
+
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/apps/zeroquest',
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
   server: {
     port: 4200,
     host: 'localhost',
@@ -13,7 +22,15 @@ export default defineConfig(() => ({
     port: 4300,
     host: 'localhost',
   },
-  plugins: [react()],
+  plugins: [
+    tanstackRouter({
+      target: 'react',
+      generatedRouteTree: APP + '/route-tree.gen.ts',
+      autoCodeSplitting: true,
+      routesDirectory: APP + '/routes',
+    }),
+    react(),
+  ],
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [],

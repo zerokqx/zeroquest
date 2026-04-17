@@ -15,6 +15,7 @@ import {
   AuthToken,
   ClientType,
 } from '@zeroquest/nest-shared';
+import { SessionEntity } from './entities/session.entity';
 
 @ApiTags('Session')
 @ApiCookieAuth('zeroquestAccess')
@@ -28,6 +29,8 @@ export class SessionController {
     description: 'Возвращает список сессий текущего пользователя.',
   })
   @ApiOkResponse({
+    isArray: true,
+    type: SessionEntity,
     description: 'Список сессий успешно получен.',
   })
   findAll(@AuthPayload() user: AuthServiceTypes.JwtPayload) {
@@ -37,9 +40,11 @@ export class SessionController {
   @Get('me')
   @ApiOperation({
     summary: 'Получить текущую сессию',
-    description: 'Возвращает сессию, соответствующую текущему refresh-контексту.',
+    description:
+      'Возвращает сессию, соответствующую текущему refresh-контексту.',
   })
   @ApiOkResponse({
+    type: SessionEntity,
     description: 'Текущая сессия успешно получена.',
   })
   async currentUserSession(
@@ -51,7 +56,8 @@ export class SessionController {
   @Get(':id')
   @ApiOperation({
     summary: 'Получить сессию по id',
-    description: 'Возвращает одну сессию текущего пользователя по идентификатору.',
+    description:
+      'Возвращает одну сессию текущего пользователя по идентификатору.',
   })
   @ApiParam({
     name: 'id',
@@ -59,6 +65,7 @@ export class SessionController {
     description: 'Идентификатор сессии.',
   })
   @ApiOkResponse({
+    type: SessionEntity,
     description: 'Сессия успешно найдена.',
   })
   async findOne(
@@ -84,10 +91,12 @@ export class SessionController {
     description: 'Идентификатор сессии.',
   })
   @ApiOkResponse({
+    type: SessionEntity,
     description: 'Сессия успешно удалена.',
   })
   @ApiUnauthorizedResponse({
-    description: 'Refresh токен отсутствует, недействителен или операция запрещена.',
+    description:
+      'Refresh токен отсутствует, недействителен или операция запрещена.',
   })
   async remove(
     @Param('id') id: string,

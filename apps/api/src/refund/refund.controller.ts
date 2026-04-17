@@ -12,12 +12,14 @@ import { RefundService } from './refund.service';
 import { CreateRefundDto } from './dto/create-refund.dto';
 import { AuthPayload, Role } from '@zeroquest/nest-shared';
 import {
+  ApiBody,
   ApiCookieAuth,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { RefundEntity } from './entities/refund.entity';
 
 @ApiTags('Refund')
 @ApiCookieAuth('zeroquestAccess')
@@ -26,9 +28,9 @@ export class RefundController {
   constructor(private readonly refundService: RefundService) {}
 
   @Post()
-  @ApiParam({
+  @ApiBody({
     type: CreateRefundDto,
-    name: 'Создать заявку на возврат средств',
+    description: 'Создать заявку на возврат средств',
   })
   @ApiOperation({
     summary: 'Создать заявку на возврат',
@@ -36,6 +38,7 @@ export class RefundController {
       'Создаёт локальную заявку на возврат в БД. Внешний запрос в YooKassa не отправляется.',
   })
   @ApiOkResponse({
+    type: RefundEntity,
     description: 'Заявка на возврат успешно создана.',
   })
   create(
@@ -52,6 +55,8 @@ export class RefundController {
     description: 'Админский эндпоинт. Возвращает все заявки на возврат из БД.',
   })
   @ApiOkResponse({
+    type: RefundEntity,
+    isArray:true,
     description: 'Список заявок на возврат успешно получен.',
   })
   findAll() {

@@ -1,7 +1,10 @@
-import { OmitType, PartialType } from '@nestjs/swagger';
-import { CreateSubscribeDto } from './create-subscribe.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
 
-export class UpdateSubscribeDto extends OmitType(
-  PartialType(CreateSubscribeDto),
-  ['link', 'planId', 'providerPaymentId'],
-) {}
+export class UpdateSubscribeDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+}

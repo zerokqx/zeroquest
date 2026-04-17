@@ -28,6 +28,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthPayload, Role } from '@zeroquest/nest-shared';
 import { WalletService } from '@/wallet/wallet.service';
+import { PaymentEntity } from './entities/payment.entity';
 
 @ApiTags('Payment')
 @ApiCookieAuth('zeroquestAccess')
@@ -51,6 +52,7 @@ export class PaymentController {
     description: 'Данные для создания платежа.',
   })
   @ApiOkResponse({
+    type: PaymentEntity,
     description: 'Платёж успешно создан.',
   })
   @ApiUnauthorizedResponse({
@@ -87,6 +89,8 @@ export class PaymentController {
     description: 'Возвращает платежи текущего пользователя.',
   })
   @ApiOkResponse({
+    type: PaymentEntity,
+    isArray: true,
     description: 'Список платежей успешно получен.',
   })
   async findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
@@ -141,6 +145,7 @@ export class PaymentController {
     description: 'Идентификатор платежа.',
   })
   @ApiOkResponse({
+    type: PaymentEntity,
     description: 'Платёж успешно найден.',
   })
   findOne(

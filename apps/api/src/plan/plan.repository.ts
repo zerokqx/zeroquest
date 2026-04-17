@@ -27,7 +27,11 @@ export class PlanRepository {
       return cached;
     }
 
-    const plans = await this.prisma.plan.findMany();
+    const plans = await this.prisma.plan.findMany({
+      omit: {
+        inboundId: true,
+      },
+    });
     await this.cacheManager.set(this.planListCacheKey, plans, this.cacheTtlMs);
     return plans;
   }

@@ -21,6 +21,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Public, Role } from '@zeroquest/nest-shared';
+import { PlanEntity } from './entities/plan.entity';
 
 @ApiTags('Plan')
 @Controller('plans')
@@ -40,6 +41,7 @@ export class PlanController {
   })
   @ApiOkResponse({
     description: 'План успешно создан.',
+    type: PlanEntity,
   })
   @ApiBadRequestResponse({
     description: 'Некорректные данные для создания плана.',
@@ -59,6 +61,8 @@ export class PlanController {
   })
   @ApiOkResponse({
     description: 'Список планов успешно получен.',
+    type: PlanEntity,
+    isArray: true,
   })
   async findAll() {
     return this.planService.findAll();
@@ -77,6 +81,7 @@ export class PlanController {
   })
   @ApiOkResponse({
     description: 'План успешно найден.',
+    type: PlanEntity,
   })
   async findOne(@Param('id') id: string) {
     return this.planService.findOne(+id);
@@ -100,6 +105,7 @@ export class PlanController {
   })
   @ApiOkResponse({
     description: 'План успешно обновлён.',
+    type: PlanEntity,
   })
   async update(@Param('id') id: string, @Body() updatePlanDto: UpdatePlanDto) {
     return this.planService.update(+id, updatePlanDto);
@@ -119,6 +125,7 @@ export class PlanController {
   })
   @ApiOkResponse({
     description: 'План успешно удалён.',
+    type: PlanEntity,
   })
   async remove(@Param('id') id: string) {
     return this.planService.remove(+id);

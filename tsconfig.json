@@ -34,12 +34,6 @@
       "path": "./libs/config"
     },
     {
-      "path": "./apps/wallet-service-e2e"
-    },
-    {
-      "path": "./apps/wallet-service"
-    },
-    {
       "path": "./libs/nest-shared"
     }
   ]

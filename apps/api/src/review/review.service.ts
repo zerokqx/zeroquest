@@ -8,13 +8,18 @@ import {
 } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewRepository } from './review.repository';
+import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class ReviewService {
-  constructor(private readonly reviewRepository: ReviewRepository) {}
+  constructor(
+    private readonly reviewRepository: ReviewRepository,
+
+    private readonly userService: UserService,
+  ) {}
 
   async create(body: CreateReviewDto, payload: AuthServiceTypes.JwtPayload) {
-    const user = await this.reviewRepository.findUserById(payload.sub);
+    const user = await this.userService.findById(payload.sub);
 
     if (!user) {
       throw new NotFoundException('Пользователь не найден.');
@@ -24,7 +29,9 @@ export class ReviewService {
       throw new ForbiddenException('Пользователь не может оставить отзыв.');
     }
 
-    const existingReview = await this.reviewRepository.findByUserId(payload.sub);
+    const existingReview = await this.reviewRepository.findByUserId(
+      payload.sub,
+    );
     if (existingReview) {
       throw new ConflictException(
         'Пользователь может оставить только один отзыв.',

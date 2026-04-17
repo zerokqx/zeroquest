@@ -18,6 +18,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { ReviewEntity } from './entities/review.entity';
 
 @ApiTags('Review')
 @ApiCookieAuth('zeroquestAccess')
@@ -47,6 +48,8 @@ export class ReviewController {
     description: 'Возвращает список всех отзывов.',
   })
   @ApiOkResponse({
+    type: ReviewController,
+    isArray:true,
     description: 'Список отзывов успешно получен.',
   })
   findAll() {
@@ -64,6 +67,7 @@ export class ReviewController {
     description: 'Идентификатор отзыва.',
   })
   @ApiOkResponse({
+    type: ReviewController,
     description: 'Отзыв успешно найден.',
   })
   findOne(@Param('id', ParseIntPipe) id: number) {
@@ -77,6 +81,7 @@ export class ReviewController {
       'Удаляет отзыв текущего пользователя. После удаления canComment автоматически становится true.',
   })
   @ApiOkResponse({
+    type: ReviewEntity,
     description: 'Отзыв успешно удалён.',
   })
   removeMyReview(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {

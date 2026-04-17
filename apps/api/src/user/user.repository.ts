@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Prisma, PrismaService } from '@zeroquest/db';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserRepository {
@@ -9,8 +10,8 @@ export class UserRepository {
 
   findById<T extends Prisma.UserSelect>(
     id: string,
-    select: T,
-  ) {
+    select?: T,
+  ): Promise<UserEntity | null> {
     this.logger.debug(`Запрошен пользователь: userId=${id}`);
     return this.prisma.user.findUnique({
       where: { id },
@@ -21,8 +22,8 @@ export class UserRepository {
   updateById<T extends Prisma.UserSelect>(
     id: string,
     data: Prisma.UserUpdateInput,
-    select: T,
-  ) {
+    select?: T,
+  ): Promise<UserEntity> {
     this.logger.log(`Обновление пользователя: userId=${id}`);
     return this.prisma.user.update({
       where: { id },

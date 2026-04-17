@@ -18,10 +18,16 @@ async function bootstrap() {
     logger,
   });
   const globalPrefix = 'api';
-  const config = new DocumentBuilder()
-    .setTitle('Zeroquest API')
-    .setVersion('1.0')
-    .build();
+  const isProduction = process.env.NODE_ENV === 'production';
+  const swaggerEnabled = process.env.SWAGGER_ENABLED === 'true';
+  const corsOrigins = (
+    process.env.CORS_ORIGINS ??
+    'http://localhost:4200,http://127.0.0.1:4200,http://localhost:80,http://127.0.0.1:80'
+  )
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe({
     transform:true,
@@ -29,7 +35,17 @@ async function bootstrap() {
   }));
   app.useGlobalInterceptors(new SniffInterceptor());
   app.use(cookieParser());
-  app.enableCors();
+  app.enableCors({
+    origin: corsOrigins,
+    credentials: true,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'x-client-type',
+      'X-Requested-With',
+    ],
+  });
   const port = Number(
     process.env.API_PORT ??
       process.env.BACKEND_PORT ??
@@ -45,9 +61,14 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
-  SwaggerModule.setup('docs', app, () =>
-    SwaggerModule.createDocument(app, config),
-  );
+  if (!isProduction && swaggerEnabled) {
+    const config = new DocumentBuilder()
+      .setTitle('Zeroquest API')
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, document);
+  }
   await app.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,

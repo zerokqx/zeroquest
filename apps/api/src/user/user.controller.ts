@@ -10,6 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { PatchMeDto } from './dto/patch-me.dto';
 import { AuthPayload } from '@zeroquest/nest-shared';
+import { UserEntity } from './entities/user.entity';
 
 @ApiTags('User')
 @ApiCookieAuth('zeroquestAccess')
@@ -23,6 +24,7 @@ export class UserController {
     description: 'Возвращает профиль текущего пользователя.',
   })
   @ApiOkResponse({
+    type: UserEntity,
     description: 'Профиль успешно получен.',
   })
   async me(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
@@ -39,6 +41,7 @@ export class UserController {
     description: 'Поля профиля для обновления.',
   })
   @ApiOkResponse({
+    type: UserEntity,
     description: 'Профиль успешно обновлён.',
   })
   async mePatch(
