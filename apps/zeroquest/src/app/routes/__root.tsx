@@ -1,5 +1,5 @@
 import { AppShell, AppShellMain } from '@mantine/core';
-import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 const RootLayout = () => (
@@ -13,6 +13,6 @@ const RootLayout = () => (
   </>
 );
 
-export const Route = createRootRouteWithContext<{ isAuth: boolean }>()({
+export const Route = createRootRoute({
   component: RootLayout,
 });

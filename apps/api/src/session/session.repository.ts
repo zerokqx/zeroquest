@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Prisma, PrismaService } from '@zeroquest/db';
+import { Prisma, PrismaService, Session } from '@zeroquest/db';
 import { SessionEntity } from './entities/session.entity';
 
 @Injectable()
@@ -25,11 +25,11 @@ export class SessionRepository {
     });
   }
 
-  findById(id: string): Promise<SessionEntity | null> {
+  findById(id: string): Promise<Session | null> {
     return this.prisma.session.findUnique({ where: { id } });
   }
 
-  deleteById(id: string): Promise<SessionEntity | null> {
+  deleteById(id: string): Promise<Session | null> {
     return this.prisma.session.delete({ where: { id } });
   }
 

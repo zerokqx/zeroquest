@@ -228,4 +228,8 @@ export class AuthService {
     );
     return tokens;
   }
+
+  async logout({ sid, sub }: AuthServiceTypes.JwtPayload) {
+    this.sessionService.removeByRefreshHash(sid, sub);
+  }
 }

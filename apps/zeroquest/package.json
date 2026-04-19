@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@colorfy-software/zfy": "^1.0.0",
     "@mantine/core": "^9.0.2",
     "@mantine/hooks": "^9.0.2",
     "@mantine/modals": "^9.0.2",

@@ -1,3 +1,4 @@
+import { setIsAuth } from '@/entites/user/model';
 import { Button, Center, Modal, Stack, Text, Title, useModalsStack } from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
@@ -17,6 +18,7 @@ export const AuthModalStack = () => {
       queryKey: getUserControllerMeQueryKey(),
       exact: true,
     });
+    setIsAuth(true);
     stack.closeAll();
     await navigate({ to: '/' });
   };

@@ -9,13 +9,14 @@ import { UpdateSessionDto } from './dto/update-session.dto';
 import { AuthServiceTypes } from '@zeroquest/types';
 import { SessionRepository } from './session.repository';
 import { ClientTypeRepository } from '@/client-type/client-type.repository';
-import { Prisma } from '@zeroquest/db';
+import { Prisma, PrismaService } from '@zeroquest/db';
 
 @Injectable()
 export class SessionService {
   private readonly logger = new Logger(SessionService.name);
   constructor(
     private readonly sessionRepository: SessionRepository,
+    private readonly prisma: PrismaService,
 
     private readonly clientTypeRepository: ClientTypeRepository,
   ) {}
@@ -94,5 +95,13 @@ export class SessionService {
   }
   async findSessionByRefresh(userId: string, sid: string) {
     return this.sessionRepository.findOneByIdAndUserId(sid, userId);
+  }
+
+  async removeByRefreshHash(sid: string, userId: string) {
+    return this.prisma.session.delete({
+      where: {
+        id_userId: { id: sid, userId },
+      },
+    });
   }
 }

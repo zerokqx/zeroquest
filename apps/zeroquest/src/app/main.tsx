@@ -1,7 +1,6 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import '@mantine/core/styles.css';
-import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter } from '@tanstack/react-router';
 
@@ -10,13 +9,11 @@ import { routeTree } from './route-tree.gen';
 import { MantineProvider } from '@mantine/core';
 import { theme } from './mantine/theme';
 import { InnerApp } from './inner-app';
+import { LucideProvider } from 'lucide-react';
 
 // Create a new router instance
 export const router = createRouter({
   routeTree,
-  context: {
-    isAuth: false,
-  },
 });
 
 // Register the router instance for type safety
@@ -34,7 +31,9 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <MantineProvider theme={theme} defaultColorScheme="light">
         <QueryClientProvider client={queryClient}>
-          <InnerApp />
+          <LucideProvider strokeWidth={3} size={16}>
+            <InnerApp />
+          </LucideProvider>
         </QueryClientProvider>
       </MantineProvider>
     </StrictMode>,

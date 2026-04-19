@@ -34,6 +34,7 @@ import {
   ClientType,
   Public,
 } from '@zeroquest/nest-shared';
+import { resolve } from 'dns';
 
 type RequestWithClientType = {
   clientType: string;
@@ -45,6 +46,21 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   private readonly logger = new Logger(AuthController.name);
+  private setCookie(
+    res: Response,
+    tokens: { accessToken: string; refreshToken: string },
+  ) {
+    res.cookie(
+      'zeroquestAccess' as keyof AuthServiceTypes.AuthCookie,
+      tokens.accessToken,
+      { httpOnly: true },
+    );
+    res.cookie(
+      'zeroquestRefresh' as keyof AuthServiceTypes.AuthCookie,
+      tokens.refreshToken,
+      { httpOnly: true },
+    );
+  }
 
   @Get('test')
   @ApiClientType()
@@ -105,16 +121,7 @@ export class AuthController {
       req.clientType,
     );
 
-    res.cookie(
-      'zeroquestAccess' as keyof AuthServiceTypes.AuthCookie,
-      tokens.accessToken,
-      { httpOnly: false },
-    );
-    res.cookie(
-      'zeroquestRefresh' as keyof AuthServiceTypes.AuthCookie,
-      tokens.refreshToken,
-      { httpOnly: true },
-    );
+    this.setCookie(res, tokens);
 
     return { message: 'Успешный вход' };
   }
@@ -165,16 +172,7 @@ export class AuthController {
       req.clientType,
     );
 
-    res.cookie(
-      'zeroquestAccess' as keyof AuthServiceTypes.AuthCookie,
-      tokens.accessToken,
-      { httpOnly: true },
-    );
-    res.cookie(
-      'zeroquestRefresh' as keyof AuthServiceTypes.AuthCookie,
-      tokens.refreshToken,
-      { httpOnly: true },
-    );
+    this.setCookie(res, tokens);
 
     return { message: 'Пользователь успешно зарегистрирован' };
   }
@@ -221,16 +219,7 @@ export class AuthController {
       payload,
     );
 
-    res.cookie(
-      'zeroquestAccess' as keyof AuthServiceTypes.AuthCookie,
-      tokens.accessToken,
-      { httpOnly: false },
-    );
-    res.cookie(
-      'zeroquestRefresh' as keyof AuthServiceTypes.AuthCookie,
-      tokens.refreshToken,
-      { httpOnly: true },
-    );
+    this.setCookie(res, tokens);
 
     this.logger.log(
       `Токены обновлены: login=${payload.login}, sessionId=${payload.sid}`,
@@ -249,5 +238,24 @@ export class AuthController {
   })
   status() {
     return true;
+  }
+
+  @Post('logout')
+  @ApiOkResponse({
+    description: 'Logout успешен',
+  })
+  @ApiOperation({
+    summary: 'Logout сессии и удаление Cookie с клиента',
+  })
+  @ClientType('web')
+  @ApiClientType()
+  @ApiUserAgent()
+  async logout(
+    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    await this.authService.logout(payload);
+    res.clearCookie('zeroquestAccess', { httpOnly: true });
+    res.clearCookie('zeroquestRefresh', { httpOnly: true });
   }
 }

@@ -29,7 +29,6 @@ import { BillingModule } from '@/billing/billing.module';
     ZeroquestConfigModule.forRoot([configuration]),
     ThrottlerModule.forRoot({
       throttlers: [
-        { ttl: 1000, limit: 5 },
         { ttl: 60000, limit: 100 },
         { ttl: 3600000, limit: 1000 },
       ],
