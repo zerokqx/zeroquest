@@ -24,7 +24,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  CreateReviewDto
+  CreateReviewDto,
+  ReviewController,
+  ReviewEntity
 } from '../base-api.schemas';
 
 import { customInstance } from '../../../axios-client';
@@ -113,7 +115,7 @@ export const reviewControllerFindAll = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<ReviewController[]>(
       {url: `/api/reviews`, method: 'GET', signal
     },
       options);
@@ -206,7 +208,7 @@ export const reviewControllerFindOne = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<ReviewController>(
       {url: `/api/reviews/${id}`, method: 'GET', signal
     },
       options);
@@ -299,7 +301,7 @@ export const reviewControllerRemoveMyReview = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<ReviewEntity>(
       {url: `/api/reviews/me`, method: 'DELETE', signal
     },
       options);

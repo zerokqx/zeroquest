@@ -108,7 +108,7 @@ export class AuthController {
     res.cookie(
       'zeroquestAccess' as keyof AuthServiceTypes.AuthCookie,
       tokens.accessToken,
-      { httpOnly: true },
+      { httpOnly: false },
     );
     res.cookie(
       'zeroquestRefresh' as keyof AuthServiceTypes.AuthCookie,
@@ -224,7 +224,7 @@ export class AuthController {
     res.cookie(
       'zeroquestAccess' as keyof AuthServiceTypes.AuthCookie,
       tokens.accessToken,
-      { httpOnly: true },
+      { httpOnly: false },
     );
     res.cookie(
       'zeroquestRefresh' as keyof AuthServiceTypes.AuthCookie,
@@ -236,5 +236,18 @@ export class AuthController {
       `Токены обновлены: login=${payload.login}, sessionId=${payload.sid}`,
     );
     return { message: 'Токены успешно обновлены' };
+  }
+
+  @Get()
+  @ApiUserAgent()
+  @ApiOperation({
+    summary: 'Проверка валидности Access токена',
+  })
+  @ClientType('web')
+  @ApiOkResponse({
+    description: 'Пользователь авторизован',
+  })
+  status() {
+    return true;
   }
 }

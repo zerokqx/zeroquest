@@ -28,6 +28,7 @@ export type AggregatePlan = {
 
 export type PlanAvgAggregateOutputType = {
   id: number | null
+  discountedPercent: runtime.Decimal | null
   price: number | null
   totalGb: number | null
   inboundId: number | null
@@ -36,6 +37,7 @@ export type PlanAvgAggregateOutputType = {
 
 export type PlanSumAggregateOutputType = {
   id: number | null
+  discountedPercent: runtime.Decimal | null
   price: number | null
   totalGb: number | null
   inboundId: number | null
@@ -45,6 +47,9 @@ export type PlanSumAggregateOutputType = {
 export type PlanMinAggregateOutputType = {
   id: number | null
   name: string | null
+  isSpecial: boolean | null
+  discountedPercent: runtime.Decimal | null
+  features: string | null
   price: number | null
   description: string | null
   totalGb: number | null
@@ -55,6 +60,9 @@ export type PlanMinAggregateOutputType = {
 export type PlanMaxAggregateOutputType = {
   id: number | null
   name: string | null
+  isSpecial: boolean | null
+  discountedPercent: runtime.Decimal | null
+  features: string | null
   price: number | null
   description: string | null
   totalGb: number | null
@@ -65,6 +73,9 @@ export type PlanMaxAggregateOutputType = {
 export type PlanCountAggregateOutputType = {
   id: number
   name: number
+  isSpecial: number
+  discountedPercent: number
+  features: number
   price: number
   description: number
   totalGb: number
@@ -76,6 +87,7 @@ export type PlanCountAggregateOutputType = {
 
 export type PlanAvgAggregateInputType = {
   id?: true
+  discountedPercent?: true
   price?: true
   totalGb?: true
   inboundId?: true
@@ -84,6 +96,7 @@ export type PlanAvgAggregateInputType = {
 
 export type PlanSumAggregateInputType = {
   id?: true
+  discountedPercent?: true
   price?: true
   totalGb?: true
   inboundId?: true
@@ -93,6 +106,9 @@ export type PlanSumAggregateInputType = {
 export type PlanMinAggregateInputType = {
   id?: true
   name?: true
+  isSpecial?: true
+  discountedPercent?: true
+  features?: true
   price?: true
   description?: true
   totalGb?: true
@@ -103,6 +119,9 @@ export type PlanMinAggregateInputType = {
 export type PlanMaxAggregateInputType = {
   id?: true
   name?: true
+  isSpecial?: true
+  discountedPercent?: true
+  features?: true
   price?: true
   description?: true
   totalGb?: true
@@ -113,6 +132,9 @@ export type PlanMaxAggregateInputType = {
 export type PlanCountAggregateInputType = {
   id?: true
   name?: true
+  isSpecial?: true
+  discountedPercent?: true
+  features?: true
   price?: true
   description?: true
   totalGb?: true
@@ -210,6 +232,9 @@ export type PlanGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type PlanGroupByOutputType = {
   id: number
   name: string
+  isSpecial: boolean
+  discountedPercent: runtime.Decimal
+  features: string | null
   price: number
   description: string | null
   totalGb: number
@@ -243,6 +268,9 @@ export type PlanWhereInput = {
   NOT?: Prisma.PlanWhereInput | Prisma.PlanWhereInput[]
   id?: Prisma.IntFilter<"Plan"> | number
   name?: Prisma.StringFilter<"Plan"> | string
+  isSpecial?: Prisma.BoolFilter<"Plan"> | boolean
+  discountedPercent?: Prisma.DecimalFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.StringNullableFilter<"Plan"> | string | null
   price?: Prisma.IntFilter<"Plan"> | number
   description?: Prisma.StringNullableFilter<"Plan"> | string | null
   totalGb?: Prisma.IntFilter<"Plan"> | number
@@ -256,6 +284,9 @@ export type PlanWhereInput = {
 export type PlanOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  isSpecial?: Prisma.SortOrder
+  discountedPercent?: Prisma.SortOrder
+  features?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   totalGb?: Prisma.SortOrder
@@ -272,6 +303,9 @@ export type PlanWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PlanWhereInput | Prisma.PlanWhereInput[]
   OR?: Prisma.PlanWhereInput[]
   NOT?: Prisma.PlanWhereInput | Prisma.PlanWhereInput[]
+  isSpecial?: Prisma.BoolFilter<"Plan"> | boolean
+  discountedPercent?: Prisma.DecimalFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.StringNullableFilter<"Plan"> | string | null
   price?: Prisma.IntFilter<"Plan"> | number
   description?: Prisma.StringNullableFilter<"Plan"> | string | null
   totalGb?: Prisma.IntFilter<"Plan"> | number
@@ -285,6 +319,9 @@ export type PlanWhereUniqueInput = Prisma.AtLeast<{
 export type PlanOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  isSpecial?: Prisma.SortOrder
+  discountedPercent?: Prisma.SortOrder
+  features?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   totalGb?: Prisma.SortOrder
@@ -303,6 +340,9 @@ export type PlanScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PlanScalarWhereWithAggregatesInput | Prisma.PlanScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Plan"> | number
   name?: Prisma.StringWithAggregatesFilter<"Plan"> | string
+  isSpecial?: Prisma.BoolWithAggregatesFilter<"Plan"> | boolean
+  discountedPercent?: Prisma.DecimalWithAggregatesFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.StringNullableWithAggregatesFilter<"Plan"> | string | null
   price?: Prisma.IntWithAggregatesFilter<"Plan"> | number
   description?: Prisma.StringNullableWithAggregatesFilter<"Plan"> | string | null
   totalGb?: Prisma.IntWithAggregatesFilter<"Plan"> | number
@@ -312,6 +352,9 @@ export type PlanScalarWhereWithAggregatesInput = {
 
 export type PlanCreateInput = {
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -324,6 +367,9 @@ export type PlanCreateInput = {
 export type PlanUncheckedCreateInput = {
   id?: number
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -335,6 +381,9 @@ export type PlanUncheckedCreateInput = {
 
 export type PlanUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -347,6 +396,9 @@ export type PlanUpdateInput = {
 export type PlanUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -359,6 +411,9 @@ export type PlanUncheckedUpdateInput = {
 export type PlanCreateManyInput = {
   id?: number
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -368,6 +423,9 @@ export type PlanCreateManyInput = {
 
 export type PlanUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -377,6 +435,9 @@ export type PlanUpdateManyMutationInput = {
 export type PlanUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -397,6 +458,9 @@ export type PlanOrderByRelationAggregateInput = {
 export type PlanCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  isSpecial?: Prisma.SortOrder
+  discountedPercent?: Prisma.SortOrder
+  features?: Prisma.SortOrder
   price?: Prisma.SortOrder
   description?: Prisma.SortOrder
   totalGb?: Prisma.SortOrder
@@ -406,6 +470,7 @@ export type PlanCountOrderByAggregateInput = {
 
 export type PlanAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  discountedPercent?: Prisma.SortOrder
   price?: Prisma.SortOrder
   totalGb?: Prisma.SortOrder
   inboundId?: Prisma.SortOrder
@@ -415,6 +480,9 @@ export type PlanAvgOrderByAggregateInput = {
 export type PlanMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  isSpecial?: Prisma.SortOrder
+  discountedPercent?: Prisma.SortOrder
+  features?: Prisma.SortOrder
   price?: Prisma.SortOrder
   description?: Prisma.SortOrder
   totalGb?: Prisma.SortOrder
@@ -425,6 +493,9 @@ export type PlanMaxOrderByAggregateInput = {
 export type PlanMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  isSpecial?: Prisma.SortOrder
+  discountedPercent?: Prisma.SortOrder
+  features?: Prisma.SortOrder
   price?: Prisma.SortOrder
   description?: Prisma.SortOrder
   totalGb?: Prisma.SortOrder
@@ -434,6 +505,7 @@ export type PlanMinOrderByAggregateInput = {
 
 export type PlanSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  discountedPercent?: Prisma.SortOrder
   price?: Prisma.SortOrder
   totalGb?: Prisma.SortOrder
   inboundId?: Prisma.SortOrder
@@ -492,6 +564,14 @@ export type PlanUncheckedUpdateManyWithoutInboundNestedInput = {
   deleteMany?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
 }
 
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
@@ -528,6 +608,9 @@ export type PlanUpdateOneRequiredWithoutSubscribesNestedInput = {
 
 export type PlanCreateWithoutInboundInput = {
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -539,6 +622,9 @@ export type PlanCreateWithoutInboundInput = {
 export type PlanUncheckedCreateWithoutInboundInput = {
   id?: number
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -579,6 +665,9 @@ export type PlanScalarWhereInput = {
   NOT?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
   id?: Prisma.IntFilter<"Plan"> | number
   name?: Prisma.StringFilter<"Plan"> | string
+  isSpecial?: Prisma.BoolFilter<"Plan"> | boolean
+  discountedPercent?: Prisma.DecimalFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.StringNullableFilter<"Plan"> | string | null
   price?: Prisma.IntFilter<"Plan"> | number
   description?: Prisma.StringNullableFilter<"Plan"> | string | null
   totalGb?: Prisma.IntFilter<"Plan"> | number
@@ -588,6 +677,9 @@ export type PlanScalarWhereInput = {
 
 export type PlanCreateWithoutPaymentsInput = {
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -599,6 +691,9 @@ export type PlanCreateWithoutPaymentsInput = {
 export type PlanUncheckedCreateWithoutPaymentsInput = {
   id?: number
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -625,6 +720,9 @@ export type PlanUpdateToOneWithWhereWithoutPaymentsInput = {
 
 export type PlanUpdateWithoutPaymentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -636,6 +734,9 @@ export type PlanUpdateWithoutPaymentsInput = {
 export type PlanUncheckedUpdateWithoutPaymentsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -646,6 +747,9 @@ export type PlanUncheckedUpdateWithoutPaymentsInput = {
 
 export type PlanCreateWithoutSubscribesInput = {
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -657,6 +761,9 @@ export type PlanCreateWithoutSubscribesInput = {
 export type PlanUncheckedCreateWithoutSubscribesInput = {
   id?: number
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -683,6 +790,9 @@ export type PlanUpdateToOneWithWhereWithoutSubscribesInput = {
 
 export type PlanUpdateWithoutSubscribesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -694,6 +804,9 @@ export type PlanUpdateWithoutSubscribesInput = {
 export type PlanUncheckedUpdateWithoutSubscribesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -705,6 +818,9 @@ export type PlanUncheckedUpdateWithoutSubscribesInput = {
 export type PlanCreateManyInboundInput = {
   id?: number
   name: string
+  isSpecial?: boolean
+  discountedPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: string | null
   price: number
   description?: string | null
   totalGb?: number
@@ -713,6 +829,9 @@ export type PlanCreateManyInboundInput = {
 
 export type PlanUpdateWithoutInboundInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -724,6 +843,9 @@ export type PlanUpdateWithoutInboundInput = {
 export type PlanUncheckedUpdateWithoutInboundInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -735,6 +857,9 @@ export type PlanUncheckedUpdateWithoutInboundInput = {
 export type PlanUncheckedUpdateManyWithoutInboundInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  isSpecial?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  discountedPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalGb?: Prisma.IntFieldUpdateOperationsInput | number
@@ -784,6 +909,9 @@ export type PlanCountOutputTypeCountSubscribesArgs<ExtArgs extends runtime.Types
 export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  isSpecial?: boolean
+  discountedPercent?: boolean
+  features?: boolean
   price?: boolean
   description?: boolean
   totalGb?: boolean
@@ -798,6 +926,9 @@ export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type PlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  isSpecial?: boolean
+  discountedPercent?: boolean
+  features?: boolean
   price?: boolean
   description?: boolean
   totalGb?: boolean
@@ -809,6 +940,9 @@ export type PlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type PlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  isSpecial?: boolean
+  discountedPercent?: boolean
+  features?: boolean
   price?: boolean
   description?: boolean
   totalGb?: boolean
@@ -820,6 +954,9 @@ export type PlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type PlanSelectScalar = {
   id?: boolean
   name?: boolean
+  isSpecial?: boolean
+  discountedPercent?: boolean
+  features?: boolean
   price?: boolean
   description?: boolean
   totalGb?: boolean
@@ -827,7 +964,7 @@ export type PlanSelectScalar = {
   duratationDays?: boolean
 }
 
-export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "price" | "description" | "totalGb" | "inboundId" | "duratationDays", ExtArgs["result"]["plan"]>
+export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "isSpecial" | "discountedPercent" | "features" | "price" | "description" | "totalGb" | "inboundId" | "duratationDays", ExtArgs["result"]["plan"]>
 export type PlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   payments?: boolean | Prisma.Plan$paymentsArgs<ExtArgs>
   subscribes?: boolean | Prisma.Plan$subscribesArgs<ExtArgs>
@@ -851,6 +988,9 @@ export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
+    isSpecial: boolean
+    discountedPercent: runtime.Decimal
+    features: string | null
     price: number
     description: string | null
     totalGb: number
@@ -1284,6 +1424,9 @@ export interface Prisma__PlanClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface PlanFieldRefs {
   readonly id: Prisma.FieldRef<"Plan", 'Int'>
   readonly name: Prisma.FieldRef<"Plan", 'String'>
+  readonly isSpecial: Prisma.FieldRef<"Plan", 'Boolean'>
+  readonly discountedPercent: Prisma.FieldRef<"Plan", 'Decimal'>
+  readonly features: Prisma.FieldRef<"Plan", 'String'>
   readonly price: Prisma.FieldRef<"Plan", 'Int'>
   readonly description: Prisma.FieldRef<"Plan", 'String'>
   readonly totalGb: Prisma.FieldRef<"Plan", 'Int'>

@@ -29,10 +29,12 @@ async function bootstrap() {
     .filter(Boolean);
 
   app.setGlobalPrefix(globalPrefix);
-  app.useGlobalPipes(new ValidationPipe({
-    transform:true,
-    whitelist:true,
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+    }),
+  );
   app.useGlobalInterceptors(new SniffInterceptor());
   app.use(cookieParser());
   app.enableCors({
@@ -52,20 +54,21 @@ async function bootstrap() {
       process.env.PORT ??
       3000,
   );
-  app.connectMicroservice({
-    transport: Transport.REDIS,
-    options: {
-      host: 'localhost',
-      port: Number(env.REDIS_PORT),
-    },
-  });
+  // app.connectMicroservice({
+  //   transport: Transport.REDIS,
+  //   options: {
+  //     host: 'localhost',
+  //     port: Number(env.REDIS_PORT),
+  //   },
+  // });
 
-  await app.startAllMicroservices();
+  // await app.startAllMicroservices();
   if (!isProduction && swaggerEnabled) {
     const config = new DocumentBuilder()
       .setTitle('Zeroquest API')
       .setVersion('1.0')
       .build();
+
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);
   }

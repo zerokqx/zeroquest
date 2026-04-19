@@ -124,6 +124,9 @@ export type InboundScalarFieldEnum = (typeof InboundScalarFieldEnum)[keyof typeo
 export const PlanScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  isSpecial: 'isSpecial',
+  discountedPercent: 'discountedPercent',
+  features: 'features',
   price: 'price',
   description: 'description',
   totalGb: 'totalGb',

@@ -23,6 +23,10 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
+import type {
+  SessionEntity
+} from '../base-api.schemas';
+
 import { customInstance } from '../../../axios-client';
 import type { ErrorType } from '../../../axios-client';
 
@@ -45,7 +49,7 @@ export const sessionControllerFindAll = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<SessionEntity[]>(
       {url: `/api/sessions`, method: 'GET', signal
     },
       options);
@@ -138,7 +142,7 @@ export const sessionControllerCurrentUserSession = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<SessionEntity>(
       {url: `/api/sessions/me`, method: 'GET', signal
     },
       options);
@@ -231,7 +235,7 @@ export const sessionControllerFindOne = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<SessionEntity>(
       {url: `/api/sessions/${id}`, method: 'GET', signal
     },
       options);
@@ -324,7 +328,7 @@ export const sessionControllerRemove = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<SessionEntity>(
       {url: `/api/sessions/${id}`, method: 'DELETE', signal
     },
       options);

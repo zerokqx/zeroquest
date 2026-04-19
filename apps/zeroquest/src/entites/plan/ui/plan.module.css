@@ -1,0 +1,5 @@
+
+.plan[data-is-special='false'] {
+  transform: scale(0.95);
+}
+

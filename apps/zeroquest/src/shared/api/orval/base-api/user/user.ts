@@ -24,7 +24,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  PatchMeDto
+  PatchMeDto,
+  UserEntity
 } from '../base-api.schemas';
 
 import { customInstance } from '../../../axios-client';
@@ -49,7 +50,7 @@ export const userControllerMe = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<UserEntity>(
       {url: `/api/users/me`, method: 'GET', signal
     },
       options);
@@ -142,7 +143,7 @@ export const userControllerMePatch = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<UserEntity>(
       {url: `/api/users/me`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: patchMeDto, signal

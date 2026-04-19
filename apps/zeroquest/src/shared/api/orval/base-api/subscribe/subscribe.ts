@@ -26,6 +26,7 @@ import type {
 import type {
   ResetSubscribeDto,
   SubscribeBuyDto,
+  SubscribeEntity,
   UpdateSubscribeDto
 } from '../base-api.schemas';
 
@@ -108,7 +109,7 @@ export const subscribeControllerFindAll = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<SubscribeEntity[]>(
       {url: `/api/subscriptions`, method: 'GET', signal
     },
       options);
@@ -258,7 +259,7 @@ export const subscribeControllerFindOne = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<SubscribeEntity>(
       {url: `/api/subscriptions/${id}`, method: 'GET', signal
     },
       options);
@@ -352,7 +353,7 @@ export const subscribeControllerUpdate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<SubscribeEntity>(
       {url: `/api/subscriptions/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateSubscribeDto, signal

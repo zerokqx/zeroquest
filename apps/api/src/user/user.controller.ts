@@ -11,6 +11,7 @@ import {
 import { PatchMeDto } from './dto/patch-me.dto';
 import { AuthPayload } from '@zeroquest/nest-shared';
 import { UserEntity } from './entities/user.entity';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @ApiTags('User')
 @ApiCookieAuth('zeroquestAccess')
@@ -18,6 +19,7 @@ import { UserEntity } from './entities/user.entity';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @SkipThrottle()
   @Get('me')
   @ApiOperation({
     summary: 'Получить мой профиль',

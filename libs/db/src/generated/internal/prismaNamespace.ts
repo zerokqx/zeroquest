@@ -1311,6 +1311,9 @@ export type InboundScalarFieldEnum = (typeof InboundScalarFieldEnum)[keyof typeo
 export const PlanScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  isSpecial: 'isSpecial',
+  discountedPercent: 'discountedPercent',
+  features: 'features',
   price: 'price',
   description: 'description',
   totalGb: 'totalGb',
@@ -1495,6 +1498,20 @@ export type ListEnumRefundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 

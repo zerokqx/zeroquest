@@ -25,7 +25,8 @@ import type {
 
 import type {
   CreatePaymentDto,
-  GiveBonusDto
+  GiveBonusDto,
+  PaymentEntity
 } from '../base-api.schemas';
 
 import { customInstance } from '../../../axios-client';
@@ -50,7 +51,7 @@ export const paymentControllerCreate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<PaymentEntity>(
       {url: `/api/payments`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createPaymentDto, signal
@@ -114,7 +115,7 @@ export const paymentControllerFindAll = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<PaymentEntity[]>(
       {url: `/api/payments`, method: 'GET', signal
     },
       options);
@@ -364,7 +365,7 @@ export const paymentControllerFindOne = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<PaymentEntity>(
       {url: `/api/payments/${id}`, method: 'GET', signal
     },
       options);

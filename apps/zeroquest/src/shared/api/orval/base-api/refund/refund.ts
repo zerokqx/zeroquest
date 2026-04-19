@@ -24,7 +24,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  CreateRefundDto
+  CreateRefundDto,
+  RefundEntity
 } from '../base-api.schemas';
 
 import { customInstance } from '../../../axios-client';
@@ -49,7 +50,7 @@ export const refundControllerCreate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<RefundEntity>(
       {url: `/api/refunds`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createRefundDto, signal
@@ -113,7 +114,7 @@ export const refundControllerFindAll = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<RefundEntity[]>(
       {url: `/api/refunds`, method: 'GET', signal
     },
       options);

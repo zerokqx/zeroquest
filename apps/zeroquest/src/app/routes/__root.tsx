@@ -1,12 +1,18 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
+import { AppShell, AppShellMain } from '@mantine/core';
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 const RootLayout = () => (
   <>
-    <hr />
-    <Outlet />
+    <AppShell>
+      <AppShellMain p={'xs'}>
+        <Outlet />
+      </AppShellMain>
+    </AppShell>
     <TanStackRouterDevtools />
   </>
 );
 
-export const Route = createRootRoute({ component: RootLayout });
+export const Route = createRootRouteWithContext<{ isAuth: boolean }>()({
+  component: RootLayout,
+});

@@ -96,16 +96,19 @@ model Inbound {
 }
 
 model Plan {
-  id             Int         @id @default(autoincrement())
-  name           String      @unique
-  price          Int
-  description    String?
-  totalGb        Int         @default(30)
-  payments       Payment[]
-  subscribes     Subscribe[]
-  inbound        Inbound     @relation(fields: [inboundId], references: [id])
-  inboundId      Int         @map("inbound_id")
-  duratationDays Int         @map("durataton_days")
+  id                Int         @id @default(autoincrement())
+  name              String      @unique
+  isSpecial         Boolean     @default(false) @map("is_special")
+  discountedPercent Decimal     @default(0.0) @map("discounted_percent") @db.Decimal(5, 2)
+  features          String?
+  price             Int
+  description       String?
+  totalGb           Int         @default(30)
+  payments          Payment[]
+  subscribes        Subscribe[]
+  inbound           Inbound     @relation(fields: [inboundId], references: [id])
+  inboundId         Int         @map("inbound_id")
+  duratationDays    Int         @map("durataton_days")
 
   @@map("plans")
 }

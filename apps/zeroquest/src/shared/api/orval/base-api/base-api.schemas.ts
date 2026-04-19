@@ -12,19 +12,22 @@ export interface CreatePlanDto {
   duratationDays: number;
 }
 
-/**
- * @nullable
- */
-export type PlanEntityDescription = { [key: string]: unknown } | null;
+export interface S { [key: string]: unknown }
 
 export interface PlanEntity {
+  discountedPercent: S;
+  /** @nullable */
+  features: string | null;
+  isSpecial: boolean;
+  isDiscounted: boolean;
+  /** @nullable */
+  pluses: string | null;
   id: number;
   name: string;
   price: number;
   /** @nullable */
-  description?: PlanEntityDescription;
+  description?: string | null;
   totalGb: number;
-  inboundId: number;
   duratationDays: number;
 }
 
@@ -44,6 +47,12 @@ export interface LoginDto {
 export interface RegisterDto {
   login: string;
   password: string;
+}
+
+export interface SessionEntity {
+  id: string;
+  userAgentHash: string;
+  clientTypeId: number;
 }
 
 export interface ClientTypeExistDto {
@@ -87,10 +96,46 @@ export interface XuiClient {
   reset: number;
 }
 
+export type UserEntityRole = typeof UserEntityRole[keyof typeof UserEntityRole];
+
+
+export const UserEntityRole = {
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+} as const;
+
+export interface UserEntity {
+  id: string;
+  login: string;
+  /** @nullable */
+  telegramId: number | null;
+  passwordHash: string;
+  isBanned: boolean;
+  role: UserEntityRole;
+  createdAt: string;
+  updatedAt: string;
+  canComment: boolean;
+}
+
 export interface PatchMeDto { [key: string]: unknown }
 
 export interface CreateRefundDto {
   /** Локальный идентификатор платежа в таблице payments. */
+  paymentId: number;
+}
+
+export type RefundEntityStatus = typeof RefundEntityStatus[keyof typeof RefundEntityStatus];
+
+
+export const RefundEntityStatus = {
+  PENDING: 'PENDING',
+  APPROVE: 'APPROVE',
+  REJECTED: 'REJECTED',
+} as const;
+
+export interface RefundEntity {
+  id: number;
+  status: RefundEntityStatus;
   paymentId: number;
 }
 
@@ -111,9 +156,49 @@ export interface CreateReviewDto {
   rating: number;
 }
 
+export interface ReviewController { [key: string]: unknown }
+
+export interface ReviewEntity {
+  id: number;
+  userId: string;
+  content: string;
+  rating: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CreatePaymentDto {
   /** Сумма пополнения в рублях строкой. */
   amount: string;
+}
+
+export type PaymentEntityStatus = typeof PaymentEntityStatus[keyof typeof PaymentEntityStatus];
+
+
+export const PaymentEntityStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  WAITING_FOR_CONFIRMATION: 'WAITING_FOR_CONFIRMATION',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED',
+  CANCELED: 'CANCELED',
+  REFUND_PENDING: 'REFUND_PENDING',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+export interface PaymentEntity {
+  id: number;
+  providerPaymentId: string;
+  status: PaymentEntityStatus;
+  currency: string;
+  value: number;
+  createdAt: string;
+  /** @nullable */
+  description: string | null;
+  userId: string;
+  confirmationUrl: string;
+  /** @nullable */
+  planId: string | null;
 }
 
 export interface GiveBonusDto {
@@ -132,5 +217,32 @@ export interface ResetSubscribeDto {
   subscribeId: string;
 }
 
-export interface UpdateSubscribeDto { [key: string]: unknown }
+export type SubscribeEntityStatus = typeof SubscribeEntityStatus[keyof typeof SubscribeEntityStatus];
+
+
+export const SubscribeEntityStatus = {
+  STOPPED: 'STOPPED',
+  ACTIVE: 'ACTIVE',
+  PENDING: 'PENDING',
+} as const;
+
+export interface SubscribeEntity {
+  userId: string;
+  email: string;
+  name: string;
+  id: string;
+  vlessLink: string;
+  vlessClientId: string;
+  nextPaymentDate: string;
+  status: SubscribeEntityStatus;
+  expiresAt: string;
+  createdAt: string;
+  updatedAt: string;
+  planId: number;
+  totalGb: number;
+}
+
+export interface UpdateSubscribeDto {
+  name: string;
+}
 

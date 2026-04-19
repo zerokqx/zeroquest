@@ -159,8 +159,7 @@ export class SubscribeService {
     if (!plan) throw new NotFoundException();
     const amount = toPenny(plan.price.toString());
 
-    await this.walletService.heldMoney({
-      userId: payload.sub,
+    await this.walletService.heldMoney({ userId: payload.sub,
       amount,
     });
 
