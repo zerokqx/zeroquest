@@ -1,3 +1,4 @@
+import { WalletEntity } from '@/wallet/entities/wallet.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { User, UserRole } from '@zeroquest/db';
 
@@ -8,7 +9,7 @@ export class UserEntity implements User {
   @ApiProperty()
   login!: string;
 
-  @ApiProperty({type: Number, nullable: true,})
+  @ApiProperty({ type: Number, nullable: true })
   telegramId!: number | null;
 
   @ApiProperty()
@@ -17,8 +18,7 @@ export class UserEntity implements User {
   @ApiProperty()
   isBanned!: boolean;
 
-
-  @ApiProperty({enum : UserRole})
+  @ApiProperty({ enum: UserRole })
   role!: UserRole | null;
 
   @ApiProperty()
@@ -29,4 +29,7 @@ export class UserEntity implements User {
 
   @ApiProperty()
   canComment!: boolean;
+
+  @ApiProperty({ type: WalletEntity })
+  wallet!: WalletEntity;
 }

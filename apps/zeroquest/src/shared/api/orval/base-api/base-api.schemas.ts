@@ -96,6 +96,13 @@ export interface XuiClient {
   reset: number;
 }
 
+export interface WalletEntity {
+  id: string;
+  held: number;
+  balance: number;
+  userId: string;
+}
+
 export type UserEntityRole = typeof UserEntityRole[keyof typeof UserEntityRole];
 
 
@@ -115,6 +122,7 @@ export interface UserEntity {
   createdAt: string;
   updatedAt: string;
   canComment: boolean;
+  wallet: WalletEntity;
 }
 
 export interface PatchMeDto { [key: string]: unknown }

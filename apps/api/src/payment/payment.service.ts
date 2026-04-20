@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { toPenny } from '@zeroquest/converters';
 import { YookassaService } from '@/yookassa/yookassa.service';
@@ -20,6 +20,7 @@ export class PaymentService {
     createPaymentDto: CreatePaymentDto,
     payload: AuthServiceTypes.JwtPayload,
   ) {
+
     this.logger.log(
       `Создание платежа на пополнение начато: userId=${payload.sub}, amount=${createPaymentDto.amount}, clientType=${payload.clientType}`,
     );

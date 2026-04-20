@@ -155,6 +155,7 @@
         "@tanstack/react-router": "^1.168.22",
         "@tanstack/react-router-devtools": "^1.166.13",
         "@types/lodash": "^4.17.24",
+        "@zeroquest/converters": "*",
         "axios": "^1.15.0",
         "lodash": "^4.18.1",
         "lucide-react": "^1.8.0",
@@ -163,7 +164,6 @@
       },
       "devDependencies": {
         "@tanstack/router-plugin": "^1.167.22",
-        "@zeroquest/db": "*",
         "orval": "^8.8.0",
         "postcss": "^8.5.10",
         "postcss-preset-mantine": "^1.18.0",

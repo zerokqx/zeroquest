@@ -1,4 +1,4 @@
-import { Subscribe } from '@/entites/subscribe'
+import { CreditBalanceForm } from '@/features/credit-balance'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authorized/dashboard')({
@@ -7,6 +7,6 @@ export const Route = createFileRoute('/_authorized/dashboard')({
 
 function RouteComponent() {
   return (
-  <p>dawd</p>
+  <CreditBalanceForm/>
   )
 }

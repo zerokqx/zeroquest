@@ -4,9 +4,8 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "jsx": "react-jsx",
-    "lib": ["dom"],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "types": [
-      "node",
       "@nx/react/typings/cssmodule.d.ts",
       "@nx/react/typings/image.d.ts",
       "vite/client"
@@ -39,7 +38,7 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
-      "path": "../../libs/db/tsconfig.lib.json"
+      "path": "../../libs/converters/tsconfig.lib.json"
     }
   ]
 }
