@@ -1,43 +1,28 @@
 import { useLogout } from '@/features/logout';
-import { fromPenny } from '@zeroquest/converters';
 import { useGetMyProfile } from '@/entites/user';
 import { getUserControllerMeQueryKey } from '@/shared/api/orval/base-api/user/user';
-import {
-  Avatar,
-  Burger,
-  Card,
-  Group,
-  Menu,
-  Modal,
-  Stack,
-  Text,
-} from '@mantine/core';
+import { Avatar, Burger, Card, Group, Menu, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from '@tanstack/react-router';
-import { DollarSign, LogOut, Wallet } from 'lucide-react';
-import { CreditBalanceForm } from '@/features/credit-balance';
+import { useMatchRoute, useNavigate, useRouter } from '@tanstack/react-router';
+import { Home, LogOut, ShoppingBag } from 'lucide-react';
 
 export const AppHeader = () => {
-  const { data } = useGetMyProfile();
-  const [
-    openedPaymentModal,
-    { close: closePaymentModal, toggle: togglePaymentModal },
-  ] = useDisclosure(false);
   const { data: user } = useGetMyProfile();
   const { logout } = useLogout();
   const queryClient = useQueryClient();
   const [opened, { toggle, close, open }] = useDisclosure(false);
+  const navigate = useNavigate();
   const router = useRouter();
+  const matchRouter = useMatchRoute();
+  const isDashboard = matchRouter({
+    to: '/dashboard',
+    fuzzy: true,
+  });
 
-  if (!data) return;
-  const balance = fromPenny(data.wallet.balance);
+  if (!user) return null;
   return (
-    <>
-      <Modal opened={openedPaymentModal} onClose={closePaymentModal}>
-        <CreditBalanceForm />
-      </Modal>
-      <Card
+    <Card
         withBorder
         radius={0}
         p="sm"
@@ -74,16 +59,22 @@ export const AppHeader = () => {
               />
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Label>Аккаунт</Menu.Label>
-              <Menu.Item leftSection={<DollarSign size={14} />} disabled>
-                Баланс: {balance} ₽
-              </Menu.Item>
-              <Menu.Divider />
               <Menu.Item
-                leftSection={<Wallet size={14} />}
-                onClick={togglePaymentModal}
+                leftSection={<Home size={14} />}
+                disabled={!!isDashboard}
+                onClick={() => {
+                  navigate({ to: '/dashboard' });
+                }}
               >
-                Пополнить баланс
+                Дом
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<ShoppingBag size={14} />}
+                onClick={() => {
+                  navigate({ to: '/magazine' });
+                }}
+              >
+                Магазин
               </Menu.Item>
               <Menu.Item
                 color="red"
@@ -104,6 +95,5 @@ export const AppHeader = () => {
           </Menu>
         </Group>
       </Card>
-    </>
   );
 };

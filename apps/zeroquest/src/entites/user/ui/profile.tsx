@@ -18,11 +18,11 @@ import {
   Fingerprint,
   MessageSquare,
   RefreshCw,
-  Shield,
   UserCircle2,
 } from 'lucide-react';
 import { useGetMyProfile } from '../api';
 import styles from './profile.module.css';
+import { ErrorCatSvg } from '@/shared/ui/svg-cat/error-cat';
 
 const formatDate = (value: string): string => {
   const date = new Date(value);
@@ -33,23 +33,16 @@ const formatDate = (value: string): string => {
   }).format(date);
 };
 
-const maskHash = (hash: string): string => {
-  if (!hash) return 'Не задан';
-  if (hash.length <= 12) return hash;
-  return `${hash.slice(0, 6)}...${hash.slice(-6)}`;
-};
-
+const MyCard = Card.withProps({
+  radius: 'xl',
+  withBorder: true,
+});
 export const Profile = () => {
-  const {
-    data: profile,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetMyProfile();
+  const { data: profile, isLoading, isError, refetch } = useGetMyProfile();
 
   if (isLoading) {
     return (
-      <Card withBorder radius="xl" p="xl" className={styles.card}>
+      <MyCard>
         <Stack gap="lg">
           <Group>
             <Skeleton h={56} circle />
@@ -62,15 +55,20 @@ export const Profile = () => {
           <Skeleton h={56} radius="md" />
           <Skeleton h={56} radius="md" />
         </Stack>
-      </Card>
+      </MyCard>
     );
   }
 
   if (isError) {
     return (
       <Alert color="red" title="Не удалось загрузить профиль" radius="md">
-        <Group justify="space-between" align="center">
+        <Stack gap="sm">
           <Text size="sm">Проверьте соединение или попробуйте снова.</Text>
+          <Group justify="center">
+            <div style={{ width: 180, opacity: 0.9 }}>
+              <ErrorCatSvg />
+            </div>
+          </Group>
           <Button
             size="xs"
             variant="light"
@@ -79,7 +77,7 @@ export const Profile = () => {
           >
             Повторить
           </Button>
-        </Group>
+        </Stack>
       </Alert>
     );
   }
@@ -93,7 +91,7 @@ export const Profile = () => {
   }
 
   return (
-    <Card withBorder radius="xl" p="xl" className={styles.card}>
+    <MyCard>
       <Stack gap="lg">
         <div className={styles.header}>
           <Group justify="space-between" align="center" wrap="nowrap">
@@ -130,8 +128,8 @@ export const Profile = () => {
           </Group>
         </div>
 
-        <Group grow>
-          <Card withBorder radius="md" p="md" className={styles.infoTile}>
+        <Group>
+          <MyCard>
             <Group gap="sm" wrap="nowrap">
               <ThemeIcon variant="light" color="blue">
                 <Fingerprint size={16} />
@@ -145,31 +143,18 @@ export const Profile = () => {
                 </Text>
               </Stack>
             </Group>
-          </Card>
-
-          <Card withBorder radius="md" p="md" className={styles.infoTile}>
-            <Group gap="sm" wrap="nowrap">
-              <ThemeIcon variant="light" color="orange">
-                <Shield size={16} />
-              </ThemeIcon>
-              <Stack gap={0}>
-                <Text size="xs" c="dimmed">
-                  Hash пароля
-                </Text>
-                <Text fw={600} size="sm" className={styles.mono}>
-                  {maskHash(profile.passwordHash)}
-                </Text>
-              </Stack>
-            </Group>
-          </Card>
+          </MyCard>
         </Group>
 
         <Divider />
 
         <Group grow>
-          <Card withBorder radius="md" p="md" className={styles.statusTile}>
+          <MyCard>
             <Group wrap="nowrap" gap="sm">
-              <ThemeIcon variant="light" color={profile.canComment ? 'teal' : 'gray'}>
+              <ThemeIcon
+                variant="light"
+                color={profile.canComment ? 'teal' : 'gray'}
+              >
                 <MessageSquare size={16} />
               </ThemeIcon>
               <Stack gap={0}>
@@ -181,11 +166,14 @@ export const Profile = () => {
                 </Text>
               </Stack>
             </Group>
-          </Card>
+          </MyCard>
 
-          <Card withBorder radius="md" p="md" className={styles.statusTile}>
+          <MyCard>
             <Group wrap="nowrap" gap="sm">
-              <ThemeIcon variant="light" color={profile.isBanned ? 'red' : 'green'}>
+              <ThemeIcon
+                variant="light"
+                color={profile.isBanned ? 'red' : 'green'}
+              >
                 <Ban size={16} />
               </ThemeIcon>
               <Stack gap={0}>
@@ -197,11 +185,11 @@ export const Profile = () => {
                 </Text>
               </Stack>
             </Group>
-          </Card>
+          </MyCard>
         </Group>
 
         <Group grow>
-          <Card withBorder radius="md" p="md" className={styles.statusTile}>
+          <MyCard >
             <Group wrap="nowrap" gap="sm">
               <ThemeIcon variant="light" color="grape">
                 <CalendarClock size={16} />
@@ -213,9 +201,9 @@ export const Profile = () => {
                 <Text fw={600}>{formatDate(profile.createdAt)}</Text>
               </Stack>
             </Group>
-          </Card>
+          </MyCard>
 
-          <Card withBorder radius="md" p="md" className={styles.statusTile}>
+          <MyCard>
             <Group wrap="nowrap" gap="sm">
               <ThemeIcon variant="light" color="indigo">
                 <CalendarClock size={16} />
@@ -227,15 +215,18 @@ export const Profile = () => {
                 <Text fw={600}>{formatDate(profile.updatedAt)}</Text>
               </Stack>
             </Group>
-          </Card>
+          </MyCard>
         </Group>
 
         {profile.telegramId !== null && (
           <Text size="sm" c="dimmed">
-            Telegram ID: <Text span fw={700}>{profile.telegramId}</Text>
+            Telegram ID:{' '}
+            <Text span fw={700}>
+              {profile.telegramId}
+            </Text>
           </Text>
         )}
       </Stack>
-    </Card>
+    </MyCard>
   );
 };

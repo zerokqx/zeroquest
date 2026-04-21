@@ -2,6 +2,7 @@ import {
   Alert,
   Anchor,
   Button,
+  Checkbox,
   Group,
   Modal,
   ModalProps,
@@ -27,8 +28,15 @@ export const SignInModal = ({
   onOpenSignUp,
   onSuccess,
 }: SignInModalProps) => {
-  const { register, errors, submitError, isPending, handleSubmit, onSubmit } =
-    useSignInForm({ onSuccess });
+  const {
+    register,
+    errors,
+    submitError,
+    isPending,
+    isPolicyLoading,
+    handleSubmit,
+    onSubmit,
+  } = useSignInForm({ onSuccess });
   const isMobile = useMediaQuery('(max-width: 48em)');
 
   return (
@@ -63,7 +71,26 @@ export const SignInModal = ({
               {...register('password', { required: 'Введите пароль' })}
               required
             />
-            <Button type="submit" loading={isPending} fullWidth>
+            <Checkbox
+              error={errors.privacyAccepted?.message}
+              {...register('privacyAccepted', {
+                required: 'Нужно принять Политику конфиденциальности',
+              })}
+              label={
+                <Text size="sm">
+                  Я принимаю{' '}
+                  <Anchor href="/policy?type=PRIVACY" target="_blank">
+                    Политику конфиденциальности
+                  </Anchor>
+                </Text>
+              }
+            />
+            <Button
+              type="submit"
+              loading={isPending || isPolicyLoading}
+              disabled={isPolicyLoading}
+              fullWidth
+            >
               Войти
             </Button>
           </Stack>

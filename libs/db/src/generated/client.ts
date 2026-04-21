@@ -94,3 +94,13 @@ export type Wallet = Prisma.WalletModel
  * 
  */
 export type WalletHistory = Prisma.WalletHistoryModel
+/**
+ * Model LegalDocument
+ * 
+ */
+export type LegalDocument = Prisma.LegalDocumentModel
+/**
+ * Model LegalAcceptances
+ * 
+ */
+export type LegalAcceptances = Prisma.LegalAcceptancesModel

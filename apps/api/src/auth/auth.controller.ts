@@ -24,7 +24,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { type Response } from 'express';
+import { type Response, type Request } from 'express';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import {
   ApiClientType,
@@ -38,7 +38,7 @@ import { resolve } from 'dns';
 
 type RequestWithClientType = {
   clientType: string;
-};
+} & Request;
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -115,8 +115,7 @@ export class AuthController {
       `Запрос на вход по паролю: login=${body.login}, clientType=${req.clientType}`,
     );
     const tokens = await this.authService.password(
-      body.login,
-      body.password,
+      body,
       userAgent,
       req.clientType,
     );

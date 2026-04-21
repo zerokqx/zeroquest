@@ -61,7 +61,9 @@ export const ModelName = {
   Subscribe: 'Subscribe',
   User: 'User',
   Wallet: 'Wallet',
-  WalletHistory: 'WalletHistory'
+  WalletHistory: 'WalletHistory',
+  LegalDocument: 'LegalDocument',
+  LegalAcceptances: 'LegalAcceptances'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -219,6 +221,24 @@ export const WalletHistoryScalarFieldEnum = {
 } as const
 
 export type WalletHistoryScalarFieldEnum = (typeof WalletHistoryScalarFieldEnum)[keyof typeof WalletHistoryScalarFieldEnum]
+
+
+export const LegalDocumentScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  version: 'version',
+  content: 'content'
+} as const
+
+export type LegalDocumentScalarFieldEnum = (typeof LegalDocumentScalarFieldEnum)[keyof typeof LegalDocumentScalarFieldEnum]
+
+
+export const LegalAcceptancesScalarFieldEnum = {
+  userId: 'userId',
+  legalDocumentId: 'legalDocumentId'
+} as const
+
+export type LegalAcceptancesScalarFieldEnum = (typeof LegalAcceptancesScalarFieldEnum)[keyof typeof LegalAcceptancesScalarFieldEnum]
 
 
 export const SortOrder = {

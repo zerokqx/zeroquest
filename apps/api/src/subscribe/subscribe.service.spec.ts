@@ -27,6 +27,10 @@ describe('SubscribeService', () => {
     updateClient: jest.fn(),
   };
 
+  const policyService = {
+    acceptRequiredPolicies: jest.fn(),
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
     service = new SubscribeService(
@@ -34,6 +38,7 @@ describe('SubscribeService', () => {
       walletService as never,
       prisma as never,
       threeXUiService as never,
+      policyService as never,
     );
     prisma.subscribe.findUniqueOrThrow.mockResolvedValue({
       email: 'client@mail.test',

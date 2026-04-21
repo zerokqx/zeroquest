@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const LegalDocumentType = {
+  PRIVACY: 'PRIVACY',
+  PUBLIC: 'PUBLIC',
+  TERMS: 'TERMS'
+} as const
+
+export type LegalDocumentType = (typeof LegalDocumentType)[keyof typeof LegalDocumentType]
+
+
 export const UserRole = {
   USER: 'USER',
   ADMIN: 'ADMIN'

@@ -6,14 +6,13 @@ import {
   Button,
   Group,
   List,
-  rem,
   Stack,
   Text,
   ThemeIcon,
   Title,
 } from '@mantine/core';
 import { PlanEntity } from '@/shared/api/orval/base-api/base-api.schemas';
-import { Check, ShoppingCart } from 'lucide-react';
+import { Check, Database, Infinity as InfinityIcon, ShoppingCart } from 'lucide-react';
 import { MouseEvent } from 'react';
 
 interface PlanProps {
@@ -23,20 +22,20 @@ interface PlanProps {
 
 export const Plan = ({ data, onButtonClck }: PlanProps) => {
   const isSpecial = data.isSpecial;
+  const isUnlimitedTraffic = data.totalGb === 0;
   const percentDiscounted = toPercent(data.discountedPercent as unknown);
   const discountedPrice = getDiscountedPrice(data.price, percentDiscounted);
   return (
     <Stack
       className={styles.plan}
       data-is-special={isSpecial.toString()}
-      miw={rem(260)}
+      miw={0}
       bdrs={'lg'}
       p={'0'}
       style={{
-        flex: '1 1 320px',
         overflow: 'clip',
       }}
-      bd={`${isSpecial ? '2px' : '1px'} solid ${isSpecial ? 'violet' : 'gray'}`}
+      bd={`${isSpecial ? '2px' : '1px'} solid ${isSpecial ? 'violet' : 'gray.4'}`}
     >
       {isSpecial && (
         <Group bg={'violet'} justify="center">
@@ -68,6 +67,23 @@ export const Plan = ({ data, onButtonClck }: PlanProps) => {
             </Text>
           </Text>
         </Stack>
+        <Group gap={8} wrap="nowrap">
+          {isUnlimitedTraffic ? (
+            <>
+              <ThemeIcon size={22} radius="xl" variant="light" color="blue">
+                <InfinityIcon size={14} />
+              </ThemeIcon>
+              <Text size="sm">Безлимитный трафик</Text>
+            </>
+          ) : (
+            <>
+              <ThemeIcon size={22} radius="xl" variant="light" color="grape">
+                <Database size={14} />
+              </ThemeIcon>
+              <Text size="sm">{data.totalGb} ГБ трафика</Text>
+            </>
+          )}
+        </Group>
         <Button
           bdrs={'xl'}
           leftSection={isSpecial && <ShoppingCart />}
@@ -83,6 +99,7 @@ export const Plan = ({ data, onButtonClck }: PlanProps) => {
         <List m={0} p={0}>
           {data.features?.split(',').map((pluse) => (
             <List.Item
+              key={pluse}
               icon={
                 <ThemeIcon color="green" variant="transparent">
                   <Check />

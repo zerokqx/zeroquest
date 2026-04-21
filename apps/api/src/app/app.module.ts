@@ -19,6 +19,7 @@ import { AuthGuard, ClientTypeGuard, RoleGuard } from '@zeroquest/nest-shared';
 import { WalletModule } from '@/wallet/wallet.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BillingModule } from '@/billing/billing.module';
+import { PolicyModule } from '@/policy/policy.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { BillingModule } from '@/billing/billing.module';
     ClientTypeModule,
     WalletModule,
     BillingModule,
+    PolicyModule,
   ],
   providers: [
     {

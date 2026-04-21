@@ -11,7 +11,9 @@ import { createHash } from 'crypto';
 import { TokenService } from '@/token/token.service';
 import { SessionService } from '@/session/session.service';
 import { AuthRepository } from './auth.repository';
-import { UserRole } from '@zeroquest/db';
+import { LegalDocumentType, UserRole } from '@zeroquest/db';
+import { LoginDto } from './dto/login.dto';
+import { PolicyService } from '@/policy/policy.service';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +22,7 @@ export class AuthService {
     private readonly authRepository: AuthRepository,
     private readonly tokenService: TokenService,
     private readonly sessionService: SessionService,
+    private readonly policyService: PolicyService,
   ) {}
 
   sha256(data: string) {
@@ -35,8 +38,7 @@ export class AuthService {
   }
 
   async password(
-    login: string,
-    password: string,
+    { login, password, policy }: LoginDto,
     userAgent: string | undefined,
     clientType: string,
   ) {
@@ -72,6 +74,16 @@ export class AuthService {
           },
           { tx },
         );
+
+        await this.policyService.acceptRequiredPolicies(
+          user.id,
+          policy,
+          [LegalDocumentType.PRIVACY],
+          {
+            tx,
+          },
+        );
+
         this.logger.log(
           `Пользователь успешно вошёл: login=${login}, sessionId=${session.id}, clientType=${clientType}`,
         );

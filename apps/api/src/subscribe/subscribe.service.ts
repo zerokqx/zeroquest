@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
 import { AuthServiceTypes } from '@zeroquest/types';
 import { SubscribeRepository } from './subscribe.repository';
 import { SubscribeBuyDto } from './dto/subscribe-buy.dto';
 import { WalletService } from '@/wallet/wallet.service';
+import { PolicyService } from '@/policy/policy.service';
 import {
+  LegalDocumentType,
   Prisma,
   PrismaService,
   Subscribe,
@@ -13,6 +14,7 @@ import {
 } from '@zeroquest/db';
 import { NotFoundException } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 import { InternalServerErrorException } from '@nestjs/common';
 import { ThreeXUiService } from '@/three-x-ui/three-x-ui.service';
 import { toPenny } from '@zeroquest/converters';
@@ -23,12 +25,15 @@ type PlanWithInbound = Prisma.PlanGetPayload<{ include: { inbound: true } }>;
 @Injectable()
 export class SubscribeService {
   private readonly logger = new Logger(SubscribeService.name);
+  private readonly duplicateSubscribeNameMessage =
+    'Подписка с таким названием уже существует. Укажите другое название устройства.';
 
   constructor(
     private readonly subscribeRepository: SubscribeRepository,
     private readonly walletService: WalletService,
     private readonly prisma: PrismaService,
     private readonly threeXUiService: ThreeXUiService,
+    private readonly policyService: PolicyService,
   ) {}
   async findAll(payload: AuthServiceTypes.JwtPayload) {
     return this.subscribeRepository.findManyByUserId(payload.sub);
@@ -66,31 +71,57 @@ export class SubscribeService {
       ],
     });
 
-    return this.prisma.subscribe.create({
-      data: {
-        vlessLink: await this.threeXUiService.buildVlessLinkByInboundId(
-          plan.inbound.inboundId,
-          { email: name, flow, id: uuidForVlessClient },
-        ),
-        status: SubscribeStatus.ACTIVE,
-        email: emailForVlessClient,
-        plan: {
-          connect: {
-            id: plan.id,
+    try {
+      return await this.prisma.subscribe.create({
+        data: {
+          vlessLink: await this.threeXUiService.buildVlessLinkByInboundId(
+            plan.inbound.inboundId,
+            { email: name, flow, id: uuidForVlessClient },
+          ),
+          status: SubscribeStatus.ACTIVE,
+          email: emailForVlessClient,
+          plan: {
+            connect: {
+              id: plan.id,
+            },
           },
-        },
-        nextPaymentDate: expiresAt,
-        user: {
-          connect: {
-            id: payload.sub,
+          nextPaymentDate: expiresAt,
+          user: {
+            connect: {
+              id: payload.sub,
+            },
           },
+          vlessClientId: uuidForVlessClient,
+          name,
+          totalGb: plan.totalGb,
+          expiresAt,
         },
-        vlessClientId: uuidForVlessClient,
-        name,
-        totalGb: plan.totalGb,
-        expiresAt,
-      },
-    });
+      });
+    } catch (error) {
+      if (this.isSubscribeNameConflict(error)) {
+        this.logger.warn(
+          `Create subscribe conflict: userId=${payload.sub}, name="${name}"`,
+        );
+        throw new ConflictException(this.duplicateSubscribeNameMessage);
+      }
+      throw error;
+    }
+  }
+
+  private isSubscribeNameConflict(error: unknown) {
+    if (
+      !(error instanceof Prisma.PrismaClientKnownRequestError) ||
+      error.code !== 'P2002'
+    ) {
+      return false;
+    }
+
+    const target = error.meta?.target;
+    if (Array.isArray(target)) {
+      return target.includes('name');
+    }
+
+    return typeof target === 'string' && target.includes('name');
   }
 
   async update(data: SubscribeUpdateArgs) {
@@ -147,7 +178,7 @@ export class SubscribeService {
   }
 
   async buy(
-    { planId, deviceName }: SubscribeBuyDto,
+    { planId, deviceName, policy }: SubscribeBuyDto,
     payload: AuthServiceTypes.JwtPayload,
   ) {
     const plan = await this.prisma.plan.findUnique({
@@ -157,11 +188,14 @@ export class SubscribeService {
       where: { id: planId },
     });
     if (!plan) throw new NotFoundException();
+
+    await this.policyService.acceptRequiredPolicies(payload.sub, policy, [
+      LegalDocumentType.TERMS,
+    ]);
+
     const amount = toPenny(plan.price.toString());
 
-    await this.walletService.heldMoney({ userId: payload.sub,
-      amount,
-    });
+    await this.walletService.heldMoney({ userId: payload.sub, amount });
 
     let subscribeId: string | null = null;
     try {

@@ -289,6 +289,23 @@ export type EnumWalletHistoryTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumWalletHistoryTypeFilter<$PrismaModel>
 }
 
+export type EnumLegalDocumentTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LegalDocumentType | Prisma.EnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LegalDocumentType[] | Prisma.ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LegalDocumentType[] | Prisma.ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLegalDocumentTypeFilter<$PrismaModel> | $Enums.LegalDocumentType
+}
+
+export type EnumLegalDocumentTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LegalDocumentType | Prisma.EnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LegalDocumentType[] | Prisma.ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LegalDocumentType[] | Prisma.ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLegalDocumentTypeWithAggregatesFilter<$PrismaModel> | $Enums.LegalDocumentType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLegalDocumentTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLegalDocumentTypeFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -575,6 +592,23 @@ export type NestedEnumWalletHistoryTypeWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumWalletHistoryTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumWalletHistoryTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumLegalDocumentTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LegalDocumentType | Prisma.EnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LegalDocumentType[] | Prisma.ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LegalDocumentType[] | Prisma.ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLegalDocumentTypeFilter<$PrismaModel> | $Enums.LegalDocumentType
+}
+
+export type NestedEnumLegalDocumentTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LegalDocumentType | Prisma.EnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LegalDocumentType[] | Prisma.ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LegalDocumentType[] | Prisma.ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLegalDocumentTypeWithAggregatesFilter<$PrismaModel> | $Enums.LegalDocumentType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLegalDocumentTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLegalDocumentTypeFilter<$PrismaModel>
 }
 
 

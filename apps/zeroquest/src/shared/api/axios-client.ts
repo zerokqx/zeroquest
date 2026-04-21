@@ -21,11 +21,6 @@ type RetryableConfig = InternalAxiosRequestConfig & {
 
 let refreshPromise: Promise<AxiosResponse> | null = null;
 
-const isAuthCheckRequest = (url?: string): boolean => {
-  if (!url) return false;
-  return url.includes('/api/users/me');
-};
-
 const isAuthEndpoint = (url?: string): boolean => {
   if (!url) return false;
   return url.includes('/api/auth/');
@@ -64,8 +59,8 @@ AXIOS_INSTANCE.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // auth endpoints и проверка /me не должны запускать refresh
-    if (isAuthEndpoint(originalRequest.url) || isAuthCheckRequest(originalRequest.url)) {
+    // auth endpoints не должны запускать refresh
+    if (isAuthEndpoint(originalRequest.url)) {
       return Promise.reject(error);
     }
 

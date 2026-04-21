@@ -308,11 +308,11 @@ export type SubscribeOrderByWithRelationInput = {
 
 export type SubscribeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  name?: string
   id_userId?: Prisma.SubscribeIdUserIdCompoundUniqueInput
   AND?: Prisma.SubscribeWhereInput | Prisma.SubscribeWhereInput[]
   OR?: Prisma.SubscribeWhereInput[]
   NOT?: Prisma.SubscribeWhereInput | Prisma.SubscribeWhereInput[]
-  name?: Prisma.StringFilter<"Subscribe"> | string
   vlessLink?: Prisma.StringFilter<"Subscribe"> | string
   vlessClientId?: Prisma.StringFilter<"Subscribe"> | string
   userId?: Prisma.StringFilter<"Subscribe"> | string
@@ -326,7 +326,7 @@ export type SubscribeWhereUniqueInput = Prisma.AtLeast<{
   totalGb?: Prisma.IntFilter<"Subscribe"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   plan?: Prisma.XOR<Prisma.PlanScalarRelationFilter, Prisma.PlanWhereInput>
-}, "id" | "id_userId">
+}, "id" | "name" | "id_userId">
 
 export type SubscribeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

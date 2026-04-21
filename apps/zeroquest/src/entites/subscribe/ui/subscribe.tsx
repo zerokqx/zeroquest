@@ -17,9 +17,13 @@ import {
   CalendarClock,
   Copy,
   Database,
+  Eye,
+  EyeClosed,
+  Infinity as InfinityIcon,
   ShieldCheck,
   ShieldX,
 } from 'lucide-react';
+import { useState } from 'react';
 
 interface SubscribeProps {
   data: SubscribeEntity;
@@ -28,7 +32,9 @@ interface SubscribeProps {
 export const Subscribe = ({ data }: SubscribeProps) => {
   const expiresAt = formatDate(data.expiresAt);
   const daysLeft = getDaysLeft(data.expiresAt);
+  const [visible, setVisible] = useState(false);
   const isStopped = data.status === 'STOPPED';
+  const isUnlimitedTraffic = data.totalGb === 0;
 
   return (
     <Card withBorder radius="xl" p="lg">
@@ -66,13 +72,19 @@ export const Subscribe = ({ data }: SubscribeProps) => {
           <Card withBorder radius="md" p="sm">
             <Group wrap="nowrap" gap="sm">
               <ThemeIcon variant="light" color="grape">
-                <Database size={16} />
+                {isUnlimitedTraffic ? (
+                  <InfinityIcon size={16} />
+                ) : (
+                  <Database size={16} />
+                )}
               </ThemeIcon>
               <Stack gap={0}>
                 <Text size="xs" c="dimmed">
                   Трафик
                 </Text>
-                <Text fw={600}>{data.totalGb} GB</Text>
+                <Text fw={600}>
+                  {isUnlimitedTraffic ? '∞ GB' : `${data.totalGb} GB`}
+                </Text>
                 <Text size="xs" c="dimmed">
                   План: #{data.planId}
                 </Text>
@@ -87,6 +99,16 @@ export const Subscribe = ({ data }: SubscribeProps) => {
               VLESS-ссылка
             </Text>
             <Group>
+              <ActionIcon
+                color="blue"
+                bdrs={'xl'}
+                variant="light"
+                onClick={() => {
+                  setVisible((prev) => !prev);
+                }}
+              >
+                {visible ? <Eye /> : <EyeClosed />}
+              </ActionIcon>
               <CopyButton value={data.vlessLink}>
                 {(data) => {
                   return (
@@ -115,6 +137,7 @@ export const Subscribe = ({ data }: SubscribeProps) => {
             ff="monospace"
             size="xs"
             style={{
+              filter: `blur(${visible ? '0' : '4'}px)`,
               overflow: 'auto',
             }}
           >
