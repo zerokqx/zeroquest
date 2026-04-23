@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuthControllerPassword } from '@/shared/api/orval/base-api/auth/auth';
-import { PolicyType } from '@/shared/api/orval/base-api/base-api.schemas';
+import { PolicyEntityType } from '@/shared/api/orval/base-api/base-api.schemas';
 import { getAuthErrorMessage } from '@/features/auth/shared/get-auth-error-message';
 import { useGetActualPolicy } from '@/entites/policy/api/get-actual-policy';
 
@@ -18,7 +18,7 @@ interface SignInFormValues {
 export const useSignInForm = ({ onSuccess }: UseSignInFormParams = {}) => {
   const [submitError, setSubmitError] = useState('');
   const { data: actualPrivacyPolicy, isLoading: isPolicyLoading } = useGetActualPolicy(
-    PolicyType.PRIVACY,
+    PolicyEntityType.PRIVACY,
   );
   const {
     register,
@@ -50,7 +50,7 @@ export const useSignInForm = ({ onSuccess }: UseSignInFormParams = {}) => {
           password: values.password,
           policy: [
             {
-              type: PolicyType.PRIVACY,
+              type: PolicyEntityType.PRIVACY,
               version: policyVersion,
             },
           ],

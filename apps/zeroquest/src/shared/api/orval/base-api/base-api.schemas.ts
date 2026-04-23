@@ -12,9 +12,7 @@ export interface CreatePlanDto {
   duratationDays: number;
 }
 
-export interface S {
-  [key: string]: unknown;
-}
+export interface S { [key: string]: unknown }
 
 export interface PlanEntity {
   discountedPercent: S;
@@ -41,23 +39,24 @@ export interface UpdatePlanDto {
   duratationDays?: number;
 }
 
-export type PolicyType = (typeof PolicyType)[keyof typeof PolicyType];
+export type AcceptedPolicyDtoType = typeof AcceptedPolicyDtoType[keyof typeof AcceptedPolicyDtoType];
 
-export const PolicyType = {
+
+export const AcceptedPolicyDtoType = {
   PRIVACY: 'PRIVACY',
   PUBLIC: 'PUBLIC',
   TERMS: 'TERMS',
 } as const;
 
-export interface Policy {
+export interface AcceptedPolicyDto {
   version: string;
-  type: PolicyType;
+  type: AcceptedPolicyDtoType;
 }
 
 export interface LoginDto {
   login: string;
   password: string;
-  policy: Policy[];
+  policy: AcceptedPolicyDto[];
 }
 
 export interface RegisterDto {
@@ -75,8 +74,8 @@ export interface ClientTypeExistDto {
   clientTypeName: string;
 }
 
-export type PolicyEntityType =
-  (typeof PolicyEntityType)[keyof typeof PolicyEntityType];
+export type PolicyEntityType = typeof PolicyEntityType[keyof typeof PolicyEntityType];
+
 
 export const PolicyEntityType = {
   PRIVACY: 'PRIVACY',
@@ -135,8 +134,8 @@ export interface WalletEntity {
   userId: string;
 }
 
-export type UserEntityRole =
-  (typeof UserEntityRole)[keyof typeof UserEntityRole];
+export type UserEntityRole = typeof UserEntityRole[keyof typeof UserEntityRole];
+
 
 export const UserEntityRole = {
   USER: 'USER',
@@ -157,17 +156,15 @@ export interface UserEntity {
   wallet: WalletEntity;
 }
 
-export interface PatchMeDto {
-  [key: string]: unknown;
-}
+export interface PatchMeDto { [key: string]: unknown }
 
 export interface CreateRefundDto {
   /** Локальный идентификатор платежа в таблице payments. */
   paymentId: number;
 }
 
-export type RefundEntityStatus =
-  (typeof RefundEntityStatus)[keyof typeof RefundEntityStatus];
+export type RefundEntityStatus = typeof RefundEntityStatus[keyof typeof RefundEntityStatus];
+
 
 export const RefundEntityStatus = {
   PENDING: 'PENDING',
@@ -181,31 +178,26 @@ export interface RefundEntity {
   paymentId: number;
 }
 
-export interface YookassaWebhookBaseDto {
-  [key: string]: unknown;
-}
+export interface YookassaWebhookBaseDto { [key: string]: unknown }
 
-export interface CreditWalletDto {
-  [key: string]: unknown;
-}
+export interface CreditWalletDto { [key: string]: unknown }
 
-export interface DebitWalletDto {
-  [key: string]: unknown;
-}
+export interface DebitWalletDto { [key: string]: unknown }
 
 export interface CreateReviewDto {
   /** Текст отзыва. */
   content: string;
   /**
-   * Оценка от 1 до 5.
-   * @minimum 1
-   * @maximum 5
-   */
+     * Оценка от 1 до 5.
+     * @minimum 1
+     * @maximum 5
+     */
   rating: number;
 }
 
-export interface ReviewController {
-  [key: string]: unknown;
+export interface ReviewUserEntity {
+  id: string;
+  login: string;
 }
 
 export interface ReviewEntity {
@@ -215,6 +207,7 @@ export interface ReviewEntity {
   rating: number;
   createdAt: string;
   updatedAt: string;
+  user: ReviewUserEntity;
 }
 
 export interface CreatePaymentDto {
@@ -222,8 +215,8 @@ export interface CreatePaymentDto {
   amount: string;
 }
 
-export type PaymentEntityStatus =
-  (typeof PaymentEntityStatus)[keyof typeof PaymentEntityStatus];
+export type PaymentEntityStatus = typeof PaymentEntityStatus[keyof typeof PaymentEntityStatus];
+
 
 export const PaymentEntityStatus = {
   PENDING: 'PENDING',
@@ -261,15 +254,15 @@ export interface GiveBonusDto {
 export interface SubscribeBuyDto {
   planId: number;
   deviceName: string;
-  policy: Policy[];
+  policy: AcceptedPolicyDto[];
 }
 
 export interface ResetSubscribeDto {
   subscribeId: string;
 }
 
-export type SubscribeEntityStatus =
-  (typeof SubscribeEntityStatus)[keyof typeof SubscribeEntityStatus];
+export type SubscribeEntityStatus = typeof SubscribeEntityStatus[keyof typeof SubscribeEntityStatus];
+
 
 export const SubscribeEntityStatus = {
   STOPPED: 'STOPPED',
@@ -298,17 +291,18 @@ export interface UpdateSubscribeDto {
 }
 
 export type PolicyControllerGetActualParams = {
-  /**
-   * Тип юридического документа.
-   */
-  type?: PolicyControllerGetActualType;
+/**
+ * Тип юридического документа.
+ */
+type?: PolicyControllerGetActualType;
 };
 
-export type PolicyControllerGetActualType =
-  (typeof PolicyControllerGetActualType)[keyof typeof PolicyControllerGetActualType];
+export type PolicyControllerGetActualType = typeof PolicyControllerGetActualType[keyof typeof PolicyControllerGetActualType];
+
 
 export const PolicyControllerGetActualType = {
   PRIVACY: 'PRIVACY',
   PUBLIC: 'PUBLIC',
   TERMS: 'TERMS',
 } as const;
+

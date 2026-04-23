@@ -1,3 +1,11 @@
+import '@fontsource/open-sans/400.css';
+import '@fontsource/open-sans/600.css';
+import '@fontsource/open-sans/700.css';
+import '@fontsource/open-sans';
+
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/600.css';
+
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import '@mantine/core/styles.css';

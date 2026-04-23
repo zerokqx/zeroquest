@@ -2,20 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, PrismaService } from '@zeroquest/db';
 import { ReviewEntity } from './entities/review.entity';
 
+const reviewWithUserSelect = {
+  id: true,
+  userId: true,
+  content: true,
+  rating: true,
+  createdAt: true,
+  updatedAt: true,
+  user: {
+    select: {
+      id: true,
+      login: true,
+    },
+  },
+} satisfies Prisma.ReviewSelect;
+
 @Injectable()
 export class ReviewRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   findAll(): Promise<ReviewEntity[]> {
     return this.prisma.review.findMany({
-      include: {
-        user: {
-          select: {
-            id: true,
-            login: true,
-          },
-        },
-      },
+      select: reviewWithUserSelect,
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -23,20 +31,14 @@ export class ReviewRepository {
   findById(id: number): Promise<ReviewEntity | null> {
     return this.prisma.review.findUnique({
       where: { id },
-      include: {
-        user: {
-          select: {
-            id: true,
-            login: true,
-          },
-        },
-      },
+      select: reviewWithUserSelect,
     });
   }
 
-  findByUserId(userId: string): Promise<ReviewEntity | null> {
+  findByUserId(userId: string): Promise<{ id: number } | null> {
     return this.prisma.review.findUnique({
       where: { userId },
+      select: { id: true },
     });
   }
 
@@ -52,6 +54,7 @@ export class ReviewRepository {
             connect: { id: userId },
           },
         },
+        select: reviewWithUserSelect,
       });
 
       await tx.user.update({
@@ -63,10 +66,11 @@ export class ReviewRepository {
     });
   }
 
-  async deleteByUserId(userId: string): Promise<ReviewEntity|null> {
+  async deleteByUserId(userId: string): Promise<ReviewEntity> {
     return this.prisma.$transaction(async (tx) => {
       const deletedReview = await tx.review.delete({
         where: { userId },
+        select: reviewWithUserSelect,
       });
 
       await tx.user.update({

@@ -13,6 +13,7 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { AuthPayload } from '@zeroquest/nest-shared';
 import {
   ApiCookieAuth,
+  ApiBody,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -27,12 +28,15 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
+  @ApiBody({ type: CreateReviewDto })
   @ApiOperation({
+
     summary: 'Создать отзыв',
     description:
       'Создаёт отзыв текущего пользователя. После создания canComment автоматически становится false.',
   })
   @ApiOkResponse({
+    type: ReviewEntity,
     description: 'Отзыв успешно создан.',
   })
   create(
@@ -48,8 +52,8 @@ export class ReviewController {
     description: 'Возвращает список всех отзывов.',
   })
   @ApiOkResponse({
-    type: ReviewController,
-    isArray:true,
+    type: ReviewEntity,
+    isArray: true,
     description: 'Список отзывов успешно получен.',
   })
   findAll() {
@@ -67,7 +71,7 @@ export class ReviewController {
     description: 'Идентификатор отзыва.',
   })
   @ApiOkResponse({
-    type: ReviewController,
+    type: ReviewEntity,
     description: 'Отзыв успешно найден.',
   })
   findOne(@Param('id', ParseIntPipe) id: number) {

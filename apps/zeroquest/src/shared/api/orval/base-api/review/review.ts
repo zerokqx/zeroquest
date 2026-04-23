@@ -25,7 +25,6 @@ import type {
 
 import type {
   CreateReviewDto,
-  ReviewController,
   ReviewEntity
 } from '../base-api.schemas';
 
@@ -51,7 +50,7 @@ export const reviewControllerCreate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<ReviewEntity>(
       {url: `/api/reviews`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createReviewDto, signal
@@ -115,7 +114,7 @@ export const reviewControllerFindAll = (
 ) => {
 
 
-      return customInstance<ReviewController[]>(
+      return customInstance<ReviewEntity[]>(
       {url: `/api/reviews`, method: 'GET', signal
     },
       options);
@@ -208,7 +207,7 @@ export const reviewControllerFindOne = (
 ) => {
 
 
-      return customInstance<ReviewController>(
+      return customInstance<ReviewEntity>(
       {url: `/api/reviews/${id}`, method: 'GET', signal
     },
       options);

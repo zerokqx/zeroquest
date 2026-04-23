@@ -1,9 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { ReviewList } from '@/widgets/review/ui';
+import { Stack } from '@mantine/core';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authorized/review')({
-  component: RouteComponent,
-})
+  component: ReviewList,
+});
 
 function RouteComponent() {
-  return <div>Hello "/_authorized/review"!</div>
+  return <Stack></Stack>;
 }

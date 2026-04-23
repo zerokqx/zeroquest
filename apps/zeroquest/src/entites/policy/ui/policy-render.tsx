@@ -1,10 +1,10 @@
-import { PolicyType } from '@/shared/api/orval/base-api/base-api.schemas';
+import { PolicyEntityType } from '@/shared/api/orval/base-api/base-api.schemas';
 import { useGetActualPolicy } from '../api';
 import { Alert, Center, Group, Loader, Stack, Text, Title } from '@mantine/core';
 import { Ban } from 'lucide-react';
 import { ErrorCatSvg } from '@/shared/ui/svg-cat/error-cat';
 interface PolicyRenderProps {
-  type: PolicyType;
+  type: PolicyEntityType;
 }
 export const PolicyRender = ({ type }: PolicyRenderProps) => {
   const { data: policy, isLoading, isError } = useGetActualPolicy(type);

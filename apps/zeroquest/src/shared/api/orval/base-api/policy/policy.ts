@@ -37,7 +37,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Возвращает актуальную версию документа по типу или null, если документ отсутствует. Если type не передан, используется POLICY.
+ * Возвращает актуальную версию документа по типу или null, если документ отсутствует. Если type не передан, используется PRIVACY.
  * @summary Получить актуальный юридический документ
  */
 export const policyControllerGetActual = (

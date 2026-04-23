@@ -4,7 +4,7 @@ import { useGetMyProfile } from '@/entites/user';
 import { NextBalanceCard } from '@/entites/wallet/ui/next-balance-card';
 import {
   PlanEntity,
-  PolicyType,
+  PolicyEntityType,
 } from '@/shared/api/orval/base-api/base-api.schemas';
 import { toPenny } from '@zeroquest/converters';
 import {
@@ -45,7 +45,7 @@ export const BuyForm = ({ planId }: BuyFormProps) => {
   const { data: plan, isLoading } = useGetPlan(planId);
   const { data: profile, isLoading: isProfileLoading } = useGetMyProfile();
   const { data: actualTermsPolicy, isLoading: isTermsPolicyLoading } =
-    useGetActualPolicy(PolicyType.TERMS);
+    useGetActualPolicy(PolicyEntityType.TERMS);
 
   const amountToSubtract = toPenny(String(plan?.price ?? 0));
   const formattedPrice = new Intl.NumberFormat('ru-RU', {
@@ -97,7 +97,7 @@ export const BuyForm = ({ planId }: BuyFormProps) => {
           planId: plan.id,
           policy: [
             {
-              type: PolicyType.TERMS,
+              type: PolicyEntityType.TERMS,
               version: termsVersion,
             },
           ],
