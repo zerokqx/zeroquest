@@ -14,6 +14,10 @@
   },
   "dependencies": {
     "@nestjs/swagger": "^11.2.7",
-    "@zeroquest/types": "workspace:*"
+    "@zeroquest/types": "workspace:*",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
   }
 }

@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../src/generated/client';
+import { LegalDocumentType, PrismaClient } from '../src/generated/client';
 
 const databaseUrl =
   process.env.DATABASE_URL ??
@@ -77,8 +77,41 @@ async function main() {
     });
   }
 
+  const legalDocuments: Array<{
+    type: LegalDocumentType;
+    content: string;
+  }> = [
+    {
+      type: LegalDocumentType.PRIVACY,
+      content: 'Seed privacy policy',
+    },
+    {
+      type: LegalDocumentType.PUBLIC,
+      content: 'Seed public offer policy',
+    },
+    {
+      type: LegalDocumentType.TERMS,
+      content: 'Seed terms of service',
+    },
+  ];
+
+  for (const doc of legalDocuments) {
+    const exists = await prisma.legalDocument.findFirst({
+      where: { type: doc.type },
+      select: { id: true },
+    });
+
+    if (!exists)
+      await prisma.legalDocument.create({
+        data: {
+          type: doc.type,
+          content: doc.content,
+        },
+      });
+  }
+
   console.log(
-    `Seed done: clientType=${clientType.name}, inboundId=${inbound.inboundId}, plans=${plans.length}`,
+    `Seed done: clientType=${clientType.name}, inboundId=${inbound.inboundId}, plans=${plans.length}, legalDocuments=${legalDocuments.length}`,
   );
 }
 

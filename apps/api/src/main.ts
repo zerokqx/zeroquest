@@ -3,9 +3,13 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger, ValidationPipe } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Transport } from '@nestjs/microservices';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { env } from 'process';
 import cookieParser from 'cookie-parser';
@@ -45,6 +49,7 @@ async function bootstrap() {
       'Content-Type',
       'Authorization',
       'x-client-type',
+      'x-csrf-token',
       'X-Requested-With',
     ],
   });
@@ -72,6 +77,7 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);
   }
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   await app.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,

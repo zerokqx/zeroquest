@@ -23,8 +23,8 @@ import {
   ShieldCheck,
   ShieldX,
 } from 'lucide-react';
-import { useState } from 'react';
-
+import { customAlphabet } from 'nanoid';
+import { useMemo, useRef, useState } from 'react';
 interface SubscribeProps {
   data: SubscribeEntity;
 }
@@ -34,6 +34,7 @@ export const Subscribe = ({ data }: SubscribeProps) => {
   const daysLeft = getDaysLeft(data.expiresAt);
   const [visible, setVisible] = useState(false);
   const isStopped = data.status === 'STOPPED';
+  const masked = data.vlessLink.replace(/[^\n]/g, '•');
   const isUnlimitedTraffic = data.totalGb === 0;
 
   return (
@@ -138,10 +139,14 @@ export const Subscribe = ({ data }: SubscribeProps) => {
             size="xs"
             style={{
               filter: `blur(${visible ? '0' : '4'}px)`,
+              whiteSpace: 'pre-wrap',
               overflow: 'auto',
+              overflowWrap: 'anywhere',
+              wordBreak: 'break-all',
+              userSelect: visible ? 'auto' : 'none',
             }}
           >
-            {data.vlessLink}
+            {visible ? data.vlessLink : masked}
           </Text>
         </Card>
       </Stack>

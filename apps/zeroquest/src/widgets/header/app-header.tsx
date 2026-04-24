@@ -6,6 +6,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import { Home, LogOut, ShoppingBag, UserStar } from 'lucide-react';
+import { Logotype } from '@/shared/ui/logotype';
 
 export const AppHeader = () => {
   const { data: user } = useGetMyProfile();
@@ -20,27 +21,29 @@ export const AppHeader = () => {
     <Card
       withBorder
       radius={0}
-      p="sm"
+      p='xs'
       style={{
         marginTop: 'calc(-1 * var(--mantine-spacing-xs))',
         marginInline: 'calc(-1 * var(--mantine-spacing-xs))',
       }}
     >
       <Group justify="space-between" align="center" wrap="wrap">
-        <Group
-          onClick={() => {
-            navigate({ to: '/' });
-          }}
-          gap="sm"
-          wrap="nowrap"
-        >
-          <Avatar name={user?.login ?? 'User'} radius="xl" color="violet" />
-          <Stack gap={0}>
-            <Text fw={600}>{user?.login ?? 'Пользователь'}</Text>
-            <Text size="xs" c="dimmed">
-              Личный кабинет
-            </Text>
-          </Stack>
+        <Group justify="center" gap={'xs'}>
+          <Logotype onClick={()=>{
+            navigate({to:"/"})
+          }} />
+          <Group
+            gap="sm"
+            wrap="nowrap"
+          >
+            <Avatar name={user?.login ?? 'User'} radius="xl" color="violet" />
+            <Stack gap={0}>
+              <Text fw={600}>{user?.login ?? 'Пользователь'}</Text>
+              <Text size="xs" c="dimmed">
+                Личный кабинет
+              </Text>
+            </Stack>
+          </Group>
         </Group>
 
         <Menu

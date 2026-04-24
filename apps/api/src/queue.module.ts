@@ -1,17 +1,9 @@
 // src/queue/queue.module.ts
 import { Module } from '@nestjs/common';
-import { BullModule } from '@nestjs/bullmq';
-import { RefundModule } from './refund/refund.module';
-import { ReviewModule } from './review/review.module';
+import { RefundModule } from './domains/billing/refund/refund.module';
+import { ReviewModule } from './domains/content/review/review.module';
 
 @Module({
-  imports: [
-    BullModule.registerQueue({
-      name: 'subscribe',
-    }),
-    RefundModule,
-    ReviewModule,
-  ],
-  exports: [BullModule],
+  imports: [RefundModule, ReviewModule],
 })
 export class QueueModule {}

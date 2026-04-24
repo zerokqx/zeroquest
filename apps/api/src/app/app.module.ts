@@ -1,25 +1,26 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import configuration from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
-import { AuthModule } from '../auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { InboundModule } from '@/inbound/inbound.module';
-import { UserModule } from '@/user/user.module';
+import { AuthModule } from '../domains/access/auth/auth.module';
+import { APP_GUARD, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
+import { InboundModule } from '@/domains/network/inbound/inbound.module';
+import { UserModule } from '@/domains/access/user/user.module';
 import { BullModule } from '@nestjs/bullmq';
 import { QueueModule } from '@/queue.module';
-import { PaymentModule } from '@/payment/payment.module';
-import { PlanModule } from '@/plan/plan.module';
-import { ThreeXUiModule } from '@/three-x-ui/three-x-ui.module';
-import { SubscribeModule } from '@/subscribe/subscribe.module';
-import { ClientTypeModule } from '@/client-type/client-type.module';
+import { PaymentModule } from '@/domains/billing/payment/payment.module';
+import { PlanModule } from '@/domains/billing/plan/plan.module';
+import { ThreeXUiModule } from '@/domains/network/three-x-ui/three-x-ui.module';
+import { SubscribeModule } from '@/domains/billing/subscribe/subscribe.module';
+import { ClientTypeModule } from '@/domains/access/client-type/client-type.module';
 import { ZeroquestConfigModule } from '@zeroquest/config';
 import { ZeroquestDbModule } from '@zeroquest/db';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthGuard, ClientTypeGuard, RoleGuard } from '@zeroquest/nest-shared';
-import { WalletModule } from '@/wallet/wallet.module';
+import { WalletModule } from '@/domains/billing/wallet/wallet.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { BillingModule } from '@/billing/billing.module';
-import { PolicyModule } from '@/policy/policy.module';
+import { BillingModule } from '@/domains/billing/billing/billing.module';
+import { PolicyModule } from '@/domains/content/policy/policy.module';
+import { CsrfGuard } from '@/domains/access/auth/csrf.guard';
 
 @Module({
   imports: [
@@ -55,6 +56,10 @@ import { PolicyModule } from '@/policy/policy.module';
     PolicyModule,
   ],
   providers: [
+    {
+    provide: APP_GUARD,
+    useClass: CsrfGuard
+    },
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

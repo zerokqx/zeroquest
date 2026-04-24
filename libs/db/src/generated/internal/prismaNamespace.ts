@@ -1530,7 +1530,8 @@ export const UserScalarFieldEnum = {
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  canComment: 'canComment'
+  canComment: 'canComment',
+  walletId: 'walletId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -1539,8 +1540,7 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const WalletScalarFieldEnum = {
   id: 'id',
   held: 'held',
-  balance: 'balance',
-  userId: 'userId'
+  balance: 'balance'
 } as const
 
 export type WalletScalarFieldEnum = (typeof WalletScalarFieldEnum)[keyof typeof WalletScalarFieldEnum]

@@ -185,7 +185,8 @@ model User {
   sessions         Session[]
   review           Review?
   canComment       Boolean            @default(true) @map("can_comment")
-  wallet           Wallet?
+  wallet           Wallet             @relation(fields: [walletId], references: [id])
+  walletId         String             @unique @map("wallet_id")
   legalAcceptances LegalAcceptances[]
 
   @@map("users")
@@ -195,8 +196,7 @@ model Wallet {
   id              String          @id @default(cuid())
   held            Int             @default(0)
   balance         Int             @default(0)
-  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String          @unique
+  user            User?
   walletHistories WalletHistory[]
 
   @@map("wallet")
@@ -208,7 +208,7 @@ model WalletHistory {
   balance   Int
   type      WalletHistoryType
   createdAt DateTime          @default(now()) @map("created_at")
-  walletId  String
+  walletId  String @map("wallet_id")
   wallet    Wallet            @relation(fields: [walletId], references: [id], onDelete: Cascade)
 
   @@map("wallet_history")
@@ -217,7 +217,7 @@ model WalletHistory {
 model LegalDocument {
   id               Int                @id @default(autoincrement())
   type             LegalDocumentType
-  version          DateTime @default(now())
+  version          DateTime           @default(now())
   content          String
   legalAcceptances LegalAcceptances[]
 

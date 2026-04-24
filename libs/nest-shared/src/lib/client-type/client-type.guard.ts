@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
 
 import { CLIENT_TYPE_KEY } from './client-type.decorator';
+import { env } from 'process';
 
 const extractClientTypeFromRequest = (request: Request): string | undefined => {
   const clientType = request.headers['x-client-type'];
@@ -39,6 +40,13 @@ export class ClientTypeGuard implements CanActivate {
     const clientType = extractClientTypeFromRequest(request);
     this.logger.debug(`Получен заголовок x-client-type: ${clientType}`);
 
+    const mode = env.NODE_ENV;
+    if (
+      typeof mode === 'string' &&
+      mode === 'development' &&
+      clientType === 'swager'
+    )
+      return true;
     if (!clientType) {
       this.logger.warn('Запрос отклонён: отсутствует заголовок x-client-type');
       throw new BadRequestException('Client type is not defined');

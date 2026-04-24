@@ -8,40 +8,57 @@ import {
   ActionIcon,
   Anchor,
   Badge,
-  Card,
   CopyButton,
   Divider,
   Group,
   Modal,
+  Paper,
   rem,
   Stack,
   Text,
+  ThemeIcon,
+  UnstyledButton,
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { CalendarClock, Copy, ExternalLink, ReceiptText } from 'lucide-react';
+import {
+  Check,
+  Clock3,
+  Copy,
+  CreditCard,
+  ExternalLink,
+  ReceiptText,
+  X,
+} from 'lucide-react';
 
 interface PaymentProps {
   data: PaymentEntity;
 }
 
-const STATUS_META: Record<
-  PaymentEntityStatus,
-  { label: string; color: string }
-> = {
-  PENDING: { label: 'Ожидает оплаты', color: 'yellow' },
-  PROCESSING: { label: 'В обработке', color: 'blue' },
+type PaymentStatusTone = 'success' | 'warning' | 'danger';
+
+type PaymentStatusMeta = {
+  label: string;
+  color: string;
+  tone: PaymentStatusTone;
+};
+
+const STATUS_META: Record<PaymentEntityStatus, PaymentStatusMeta> = {
+  PENDING: { label: 'Ожидает оплаты', color: 'yellow', tone: 'warning' },
+  PROCESSING: { label: 'В обработке', color: 'yellow', tone: 'warning' },
   WAITING_FOR_CONFIRMATION: {
-    label: 'Ожидает подтверждения',
-    color: 'cyan',
+    label: 'В обработке',
+    color: 'yellow',
+    tone: 'warning',
   },
-  SUCCEEDED: { label: 'Успешно', color: 'green' },
-  FAILED: { label: 'Ошибка', color: 'red' },
-  CANCELED: { label: 'Отменен', color: 'gray' },
+  SUCCEEDED: { label: 'Завершен', color: 'green', tone: 'success' },
+  FAILED: { label: 'Отклонено', color: 'red', tone: 'danger' },
+  CANCELED: { label: 'Отклонено', color: 'red', tone: 'danger' },
   REFUND_PENDING: {
     label: 'Возврат в обработке',
     color: 'orange',
+    tone: 'warning',
   },
-  REFUNDED: { label: 'Возвращен', color: 'teal' },
+  REFUNDED: { label: 'Возвращен', color: 'teal', tone: 'success' },
 };
 
 const formatAmount = (value: string, currency: string) =>
@@ -51,43 +68,164 @@ const formatAmount = (value: string, currency: string) =>
     maximumFractionDigits: 2,
   }).format(Number(value));
 
+const STATUS_TONE_STYLES = {
+  success: {
+    bg: 'var(--mantine-color-green-1)',
+    text: 'var(--mantine-color-green-8)',
+    Icon: Check,
+  },
+  warning: {
+    bg: 'var(--mantine-color-yellow-1)',
+    text: 'var(--mantine-color-yellow-8)',
+    Icon: Clock3,
+  },
+  danger: {
+    bg: 'var(--mantine-color-red-1)',
+    text: 'var(--mantine-color-red-8)',
+    Icon: X,
+  },
+} as const satisfies Record<
+  PaymentStatusTone,
+  { bg: string; text: string; Icon: typeof Check }
+>;
+
+const formatCardDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const datePart = new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
+  const timePart = new Intl.DateTimeFormat('ru-RU', {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+
+  return `${datePart}, ${timePart}`;
+};
+
+const getPaymentTitle = (data: PaymentEntity) => {
+  const description = data.description?.trim();
+  if (description) return description;
+  if (data.planId) return 'Оплата подписки';
+
+  return 'Пополнение баланса';
+};
+
 export const Payment = ({ data }: PaymentProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 48em)');
+  const isCompact = useMediaQuery('(max-width: 40em)');
   const statusMeta = STATUS_META[data.status];
+  const statusToneStyle = STATUS_TONE_STYLES[statusMeta.tone];
+  const StatusIcon = statusToneStyle.Icon;
   const createdAt = formatDate(data.createdAt);
+  const cardDate = formatCardDate(data.createdAt);
   const amount = formatAmount(fromPenny(data.value), data.currency);
+  const paymentTitle = getPaymentTitle(data);
 
   return (
     <>
-      <Card
-        miw={rem(340)}
-        withBorder
-        radius="xl"
-        p="sm"
+      <UnstyledButton
         onClick={open}
-        style={{ cursor: 'pointer', flexShrink: 0 }}
+        style={{ width: '100%', display: 'block', cursor: 'pointer' }}
       >
-        <Group justify="space-between" wrap="nowrap">
-          <Group gap="sm" wrap="nowrap">
-            <Text fw={700} size="sm">
-              {amount}
-            </Text>
-            <Badge variant="light" color={statusMeta.color}>
-              {statusMeta.label}
-            </Badge>
-          </Group>
+        <Paper withBorder radius="md" p="md">
+          {isCompact ? (
+            <Stack gap="sm">
+              <Group gap="sm" align="flex-start" wrap="nowrap">
+                <ThemeIcon
+                  variant="light"
+                  radius="xl"
+                  size={rem(40)}
+                  style={{ flexShrink: 0 }}
+                >
+                  <CreditCard size={16} />
+                </ThemeIcon>
 
-          <Group gap="xs" wrap="nowrap">
-            <Group gap={4} wrap="nowrap">
-              <CalendarClock size={12} />
-              <Text size="xs" c="dimmed">
-                {createdAt}
-              </Text>
+                <Stack gap={4} style={{ minWidth: 0 }}>
+                  <Text fw={600} size="md" lineClamp={1}>
+                    {paymentTitle}
+                  </Text>
+                  <Text size="sm" c="dimmed" lineClamp={1}>
+                    {cardDate}
+                  </Text>
+                </Stack>
+              </Group>
+
+              <Group justify="space-between" align="flex-end" wrap="nowrap">
+                <Text fw={600} size="xl">
+                  {amount}
+                </Text>
+                <Badge
+                  radius="xl"
+                  leftSection={<StatusIcon size={12} />}
+                  styles={{
+                    root: {
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      backgroundColor: statusToneStyle.bg,
+                      color: statusToneStyle.text,
+                      border: 0,
+                    },
+                    section: {
+                      color: statusToneStyle.text,
+                    },
+                  }}
+                >
+                  {statusMeta.label}
+                </Badge>
+              </Group>
+            </Stack>
+          ) : (
+            <Group justify="space-between" align="center" wrap="nowrap">
+              <Group gap="sm" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
+                <ThemeIcon
+                  variant="light"
+                  radius="xl"
+                  size={rem(40)}
+                  style={{ flexShrink: 0 }}
+                >
+                  <CreditCard size={16} />
+                </ThemeIcon>
+
+                <Stack gap={4} style={{ minWidth: 0 }}>
+                  <Text fw={600} size="lg" lineClamp={1}>
+                    {paymentTitle}
+                  </Text>
+                  <Text size="md" c="dimmed" lineClamp={1}>
+                    {cardDate}
+                  </Text>
+                </Stack>
+              </Group>
+
+              <Stack gap={8} align="flex-end" style={{ flexShrink: 0 }}>
+                <Text fw={600} size="xl">
+                  {amount}
+                </Text>
+                <Badge
+                  radius="xl"
+                  leftSection={<StatusIcon size={12} />}
+                  styles={{
+                    root: {
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      backgroundColor: statusToneStyle.bg,
+                      color: statusToneStyle.text,
+                      border: 0,
+                    },
+                    section: {
+                      color: statusToneStyle.text,
+                    },
+                  }}
+                >
+                  {statusMeta.label}
+                </Badge>
+              </Stack>
             </Group>
-          </Group>
-        </Group>
-      </Card>
+          )}
+        </Paper>
+      </UnstyledButton>
 
       <Modal
         opened={opened}

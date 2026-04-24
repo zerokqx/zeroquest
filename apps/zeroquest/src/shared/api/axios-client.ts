@@ -6,6 +6,8 @@ import Axios, {
 } from 'axios';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4000';
+const CSRF_COOKIE_NAME = 'zeroquestCsrf';
+const CSRF_HEADER_NAME = 'x-csrf-token';
 
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: BASE_URL,
@@ -20,25 +22,55 @@ type RetryableConfig = InternalAxiosRequestConfig & {
 };
 
 let refreshPromise: Promise<AxiosResponse> | null = null;
+let csrfPromise: Promise<void> | null = null;
 
 const isAuthEndpoint = (url?: string): boolean => {
   if (!url) return false;
   return url.includes('/api/auth/');
 };
 
-const refresh = async (): Promise<AxiosResponse> => {
-  return Axios.post(
-    `${BASE_URL}/api/auth/refresh`,
-    {},
-    {
-      baseURL: BASE_URL,
-      withCredentials: true,
-      headers: {
-        'x-client-type': 'web',
-      },
-    },
-  );
+const readCookie = (name: string): string | null => {
+  if (typeof document === 'undefined') return null;
+
+  const pair = document.cookie
+    .split('; ')
+    .find((item) => item.startsWith(`${name}=`));
+
+  if (!pair) return null;
+
+  const value = pair.slice(name.length + 1);
+  return decodeURIComponent(value);
 };
+
+const getCsrfFromCookie = (): string | null => readCookie(CSRF_COOKIE_NAME);
+
+const ensureCsrf = async (): Promise<void> => {
+  if (getCsrfFromCookie()) return;
+
+  csrfPromise ??= AXIOS_INSTANCE.get('/api/auth/csrf')
+    .then(() => undefined)
+    .finally(() => {
+      csrfPromise = null;
+    });
+
+  await csrfPromise;
+};
+
+const refresh = async (): Promise<AxiosResponse> =>
+  AXIOS_INSTANCE.post('/api/auth/refresh', {});
+
+const installCsrfHeaderInterceptor = () => {
+  AXIOS_INSTANCE.interceptors.request.use((config) => {
+    const csrfToken = getCsrfFromCookie();
+    if (!csrfToken) return config;
+
+    config.headers ??= {};
+    (config.headers as Record<string, string>)[CSRF_HEADER_NAME] = csrfToken;
+    return config;
+  });
+};
+
+installCsrfHeaderInterceptor();
 
 AXIOS_INSTANCE.interceptors.response.use(
   (response) => response,
@@ -67,6 +99,8 @@ AXIOS_INSTANCE.interceptors.response.use(
     originalRequest._retry = true;
 
     try {
+      await ensureCsrf();
+
       refreshPromise ??= refresh().finally(() => {
         refreshPromise = null;
       });
@@ -85,10 +119,10 @@ export const customInstance = async <T>(
   options?: AxiosRequestConfig,
 ): Promise<T> => {
   const { data } = await AXIOS_INSTANCE({
-        ...config,
-        ...options,
-    });
-    return data;
+    ...config,
+    ...options,
+  });
+  return data;
 };
 
 export type ErrorType<Error> = AxiosError<Error>;
