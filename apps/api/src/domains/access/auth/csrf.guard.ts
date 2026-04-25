@@ -10,14 +10,12 @@ import { CSRF_PUBLIC_KEY } from './csrf.decorator';
 
 const getCSRFHeader = (res: Request) => {
   const csrf = res.headers['x-csrf-token'];
-  console.log(csrf)
   if (typeof csrf === 'string') return csrf;
   throw new ForbiddenException('Not found CSRF Token Header');
 };
 
 const getCSRFCookie = (res: Request) => {
   const csrf = res.cookies['zeroquestCsrf'];
-  console.log(csrf)
   if (typeof csrf === 'string') return csrf;
   throw new ForbiddenException('Not found CSRF Token Cookie');
 };
@@ -40,7 +38,6 @@ export class CsrfGuard implements CanActivate {
       return true;
     }
 
-    // 2) исключения по URL
     const path = req.path;
     if (path === '/auth/csrf' || path.startsWith('/yookassa/webhook')) {
       return true;

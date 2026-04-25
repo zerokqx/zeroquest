@@ -15,7 +15,6 @@ import { env } from 'process';
 import cookieParser from 'cookie-parser';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { logger } from './logger.config';
-import { SniffInterceptor } from '@zeroquest/nest-shared';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -39,7 +38,6 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  app.useGlobalInterceptors(new SniffInterceptor());
   app.use(cookieParser());
   app.enableCors({
     origin: corsOrigins,

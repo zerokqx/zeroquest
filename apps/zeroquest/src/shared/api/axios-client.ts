@@ -18,7 +18,8 @@ export const AXIOS_INSTANCE = Axios.create({
 });
 
 type RetryableConfig = InternalAxiosRequestConfig & {
-  _retry?: boolean;
+  _refreshRetry?: boolean;
+  _csrfRetry?: boolean;
 };
 
 let refreshPromise: Promise<AxiosResponse> | null = null;
@@ -82,12 +83,28 @@ AXIOS_INSTANCE.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (status !== 401) {
+    if (status !== 401 && status !== 403) {
       return Promise.reject(error);
     }
 
+    if (status === 403) {
+      // чтобы не зациклиться
+      if (originalRequest._csrfRetry) {
+        return Promise.reject(error);
+      }
+
+      originalRequest._csrfRetry = true;
+
+      try {
+        await ensureCsrf();
+        return AXIOS_INSTANCE(originalRequest);
+      } catch (csrfError) {
+        return Promise.reject(csrfError);
+      }
+    }
+
     // чтобы не зациклиться
-    if (originalRequest._retry) {
+    if (originalRequest._refreshRetry) {
       return Promise.reject(error);
     }
 
@@ -96,11 +113,9 @@ AXIOS_INSTANCE.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    originalRequest._retry = true;
+    originalRequest._refreshRetry = true;
 
     try {
-      await ensureCsrf();
-
       refreshPromise ??= refresh().finally(() => {
         refreshPromise = null;
       });

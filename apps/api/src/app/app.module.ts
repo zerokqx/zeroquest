@@ -57,8 +57,8 @@ import { CsrfGuard } from '@/domains/access/auth/csrf.guard';
   ],
   providers: [
     {
-    provide: APP_GUARD,
-    useClass: CsrfGuard
+      provide: APP_GUARD,
+      useClass: CsrfGuard,
     },
     {
       provide: APP_GUARD,
