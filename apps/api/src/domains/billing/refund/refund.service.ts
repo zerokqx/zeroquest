@@ -73,7 +73,7 @@ export class RefundService {
     return this.refundRepository.findAll();
   }
 
-  async approve(id: number) {
+  async approve(id: number, idempotenceKey?: string) {
     const refund = await this.prisma.refund.findUnique({
       where: {
         id,
@@ -97,13 +97,16 @@ export class RefundService {
       return refund;
     }
 
-    const providerResponse = await this.yookassaService.refundPayment({
-      paymentId: refund.payment.providerPaymentId,
-      amount: {
-        currency: refund.payment.currency,
-        value: fromPenny(refund.payment.value),
+    const providerResponse = await this.yookassaService.refundPayment(
+      {
+        paymentId: refund.payment.providerPaymentId,
+        amount: {
+          currency: refund.payment.currency,
+          value: fromPenny(refund.payment.value),
+        },
       },
-    });
+      idempotenceKey,
+    );
 
     const updatedRefund = await this.refundRepository.updateStatusById(
       id,

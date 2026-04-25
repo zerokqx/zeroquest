@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Logger,
   Param,
   ParseIntPipe,
@@ -18,6 +19,7 @@ import { PaymentEventService } from './payment-event.service';
 import { interval, map, merge } from 'rxjs';
 import {
   ApiBody,
+  ApiHeader,
   ApiCookieAuth,
   ApiOkResponse,
   ApiOperation,
@@ -29,6 +31,10 @@ import {
 import { AuthPayload, Role } from '@zeroquest/nest-shared';
 import { WalletService } from '@/domains/billing/wallet/wallet.service';
 import { PaymentEntity } from './entities/payment.entity';
+import {
+  IDEMPOTENCE_KEY_HEADER,
+  IDEMPOTENCE_KEY_HEADER_DESCRIPTION,
+} from './dto/create-payment.dto';
 
 @ApiTags('Payment')
 @ApiCookieAuth('zeroquestAccess')
@@ -51,6 +57,11 @@ export class PaymentController {
     type: CreatePaymentDto,
     description: 'Данные для создания платежа.',
   })
+  @ApiHeader({
+    name: IDEMPOTENCE_KEY_HEADER,
+    required: false,
+    description: IDEMPOTENCE_KEY_HEADER_DESCRIPTION,
+  })
   @ApiOkResponse({
     type: PaymentEntity,
     description: 'Платёж успешно создан.',
@@ -61,8 +72,9 @@ export class PaymentController {
   async create(
     @Body() createPaymentDto: CreatePaymentDto,
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @Headers(IDEMPOTENCE_KEY_HEADER) idempotenceKey?: string,
   ) {
-    return this.paymentService.create(createPaymentDto, payload);
+    return this.paymentService.create(createPaymentDto, payload, idempotenceKey);
   }
 
   @Role('ADMIN')

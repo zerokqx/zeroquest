@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { toPenny } from '@zeroquest/converters';
 import { YookassaService } from '@/domains/billing/yookassa/yookassa.service';
@@ -19,29 +19,34 @@ export class PaymentService {
   async create(
     createPaymentDto: CreatePaymentDto,
     payload: AuthServiceTypes.JwtPayload,
+    idempotenceKey?: string,
   ) {
-
     this.logger.log(
       `Создание платежа на пополнение начато: userId=${payload.sub}, amount=${createPaymentDto.amount}, clientType=${payload.clientType}`,
     );
 
-    const { data } = await this.yookassaService.createPayment({
-      capture: true,
-      metadata: {
-        clientType: payload.clientType,
-        userId: payload.sub,
+    const resolvedIdempotenceKey = idempotenceKey?.trim() || crypto.randomUUID();
+    const { data } = await this.yookassaService.createPayment(
+      {
+        capture: true,
+        metadata: {
+          clientType: payload.clientType,
+          userId: payload.sub,
+        },
+        amount: {
+          currency: 'RUB',
+          value: createPaymentDto.amount,
+        },
+
+        description: `Пополнение баланса на ${createPaymentDto.amount} RUB`,
+        confirmation: {
+          return_url:
+            this.config.get('yookassa', { infer: true })?.redirectTo ?? '',
+          type: 'redirect',
+        },
       },
-      amount: {
-        currency: 'RUB',
-        value: createPaymentDto.amount,
-      },
-      description: `Пополнение баланса на ${createPaymentDto.amount} RUB`,
-      confirmation: {
-        return_url:
-          this.config.get('yookassa', { infer: true })?.redirectTo ?? '',
-        type: 'redirect',
-      },
-    });
+      resolvedIdempotenceKey,
+    );
 
     this.logger.log(
       `Платёж создан у провайдера: providerPaymentId=${data.id}, userId=${payload.sub}, amount=${data.amount.value}, status=${data.status}`,
@@ -53,6 +58,7 @@ export class PaymentService {
           id: payload.sub,
         },
       },
+      idempotenceKey: resolvedIdempotenceKey,
       description: data.description,
       confirmationUrl: data.confirmation.confirmation_url,
       value: toPenny(data.amount.value),

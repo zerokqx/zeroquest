@@ -1,4 +1,6 @@
+import { EnvironmentVariables } from '@/config/configuration';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import { randomBytes } from 'crypto';
 import type { CookieOptions, Request, Response } from 'express';
@@ -15,8 +17,11 @@ export class CookieJwtManager {
   private readonly refreshCookieName: keyof AuthServiceTypes.AuthCookie =
     'zeroquestRefresh';
 
+  constructor(private readonly config: ConfigService<EnvironmentVariables>) {}
   baseOptions(): CookieOptions {
-    return { httpOnly: true };
+    const isProd = this.config.get('isProd', { infer: true });
+
+    return { httpOnly: true, secure: !!isProd, sameSite: 'lax' };
   }
   setAuthCookies(res: Response, tokens: JwtTokenPair): void {
     res.cookie(this.accessCookieName, tokens.accessToken, this.baseOptions());

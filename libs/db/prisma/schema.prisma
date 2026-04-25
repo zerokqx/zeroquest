@@ -137,6 +137,7 @@ model Payment {
   status            PaymentStatus @default(PENDING)
   currency          String        @default("RUB")
   value             Int
+  idempotenceKey    String        @unique @map("idempotence_key")
   createdAt         DateTime      @default(now()) @map("created_at")
   description       String?
   user              User          @relation(fields: [userId], references: [id])
@@ -208,7 +209,7 @@ model WalletHistory {
   balance   Int
   type      WalletHistoryType
   createdAt DateTime          @default(now()) @map("created_at")
-  walletId  String @map("wallet_id")
+  walletId  String            @map("wallet_id")
   wallet    Wallet            @relation(fields: [walletId], references: [id], onDelete: Cascade)
 
   @@map("wallet_history")

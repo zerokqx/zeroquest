@@ -6,6 +6,7 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CreatePaymentResponseDto } from './dto/create-payment-response.dto';
 import { RefundPaymentDto } from './dto/refund-payment.dto';
 import { RefundPaymentResponseDto } from './dto/refund-payment-response.dto';
+import { IDEMPOTENCE_KEY_HEADER } from '@/domains/billing/payment/dto/create-payment.dto';
 
 @Injectable()
 export class YookassaService {
@@ -26,23 +27,41 @@ export class YookassaService {
         password: this.yookassaEnvironment.token,
       },
     });
-    this.yookassaClient.interceptors.request.use((config) => {
-      config.headers['Idempotence-Key'] = `key-${Date.now()}`;
-      return config;
-    });
   }
 
-  async createPayment(body: CreatePaymentDto) {
+  private resolveIdempotenceKey(idempotenceKey?: string) {
+    return idempotenceKey?.trim() || crypto.randomUUID();
+  }
+
+  async createPayment(body: CreatePaymentDto, idempotenceKey?: string) {
     return this.yookassaClient.post<CreatePaymentResponseDto>(
       'payments/',
       body,
+      {
+        headers: {
+          [IDEMPOTENCE_KEY_HEADER]:
+            this.resolveIdempotenceKey(idempotenceKey),
+        },
+      },
     );
   }
 
-  async refundPayment({ amount, paymentId }: RefundPaymentDto) {
-    return this.yookassaClient.post<RefundPaymentResponseDto>('refunds/', {
-      amount,
-      payment_id: paymentId,
-    });
+  async refundPayment(
+    { amount, paymentId }: RefundPaymentDto,
+    idempotenceKey?: string,
+  ) {
+    return this.yookassaClient.post<RefundPaymentResponseDto>(
+      'refunds/',
+      {
+        amount,
+        payment_id: paymentId,
+      },
+      {
+        headers: {
+          [IDEMPOTENCE_KEY_HEADER]:
+            this.resolveIdempotenceKey(idempotenceKey),
+        },
+      },
+    );
   }
 }

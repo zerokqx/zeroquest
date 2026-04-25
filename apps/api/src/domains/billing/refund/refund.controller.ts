@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   ParseIntPipe,
   Patch,
@@ -13,6 +14,7 @@ import { CreateRefundDto } from './dto/create-refund.dto';
 import { AuthPayload, Role } from '@zeroquest/nest-shared';
 import {
   ApiBody,
+  ApiHeader,
   ApiCookieAuth,
   ApiOkResponse,
   ApiOperation,
@@ -20,6 +22,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { RefundEntity } from './entities/refund.entity';
+import {
+  IDEMPOTENCE_KEY_HEADER,
+  IDEMPOTENCE_KEY_HEADER_DESCRIPTION,
+} from '@/domains/billing/payment/dto/create-payment.dto';
 
 @ApiTags('Refund')
 @ApiCookieAuth('zeroquestAccess')
@@ -75,8 +81,16 @@ export class RefundController {
     type: Number,
     description: 'Идентификатор заявки на возврат.',
   })
-  approve(@Param('id', ParseIntPipe) id: number) {
-    return this.refundService.approve(id);
+  @ApiHeader({
+    name: IDEMPOTENCE_KEY_HEADER,
+    required: false,
+    description: IDEMPOTENCE_KEY_HEADER_DESCRIPTION,
+  })
+  approve(
+    @Param('id', ParseIntPipe) id: number,
+    @Headers(IDEMPOTENCE_KEY_HEADER) idempotenceKey?: string,
+  ) {
+    return this.refundService.approve(id, idempotenceKey);
   }
 
   @Role('ADMIN')

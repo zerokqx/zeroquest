@@ -157,6 +157,7 @@ export const PaymentScalarFieldEnum = {
   status: 'status',
   currency: 'currency',
   value: 'value',
+  idempotenceKey: 'idempotenceKey',
   createdAt: 'createdAt',
   description: 'description',
   userId: 'userId',
