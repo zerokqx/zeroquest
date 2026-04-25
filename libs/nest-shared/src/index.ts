@@ -1,6 +1,5 @@
 export * from './lib/nest-shared.module';
 export * from './lib/auth/auth.decorator';
-export * from './lib/auth/auth.guard';
 export * from './lib/client-type/client-type.decorator';
 export * from './lib/client-type/client-type.guard';
 export * from './lib/cookie/cookie.decorator';

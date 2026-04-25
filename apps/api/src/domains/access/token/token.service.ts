@@ -6,7 +6,9 @@ import { hash, verify } from 'argon2';
 
 @Injectable()
 export class TokenService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+  ) {}
 
   async createTokenPair(payload: CreateTokenPairDto): Promise<
     [
@@ -23,16 +25,18 @@ export class TokenService {
       ...payload,
       type: 'access',
       jti: accessTokenJti,
-
     } satisfies AuthServiceTypes.JwtPayload);
 
-    const refreshToken = await this.jwtService.signAsync({
-      ...payload,
-      type: 'refresh',
-      jti: refreshTokenJti,
-    } satisfies AuthServiceTypes.JwtPayload, {
-        expiresIn:'30d'
-      });
+    const refreshToken = await this.jwtService.signAsync(
+      {
+        ...payload,
+        type: 'refresh',
+        jti: refreshTokenJti,
+      } satisfies AuthServiceTypes.JwtPayload,
+      {
+        expiresIn: '30d',
+      },
+    );
     return [
       { accessToken, refreshToken },
       { refreshTokenJti, accessTokenJti },
@@ -41,7 +45,7 @@ export class TokenService {
 
   async verify(token: string): Promise<AuthServiceTypes.JwtPayload> {
     try {
-      return (await this.jwtService.verifyAsync(
+      return (await this.jwtService.verifyAsync<AuthServiceTypes.JwtPayload>(
         token,
       )) satisfies AuthServiceTypes.JwtPayload;
     } catch {

@@ -15,12 +15,13 @@ import { ClientTypeModule } from '@/domains/access/client-type/client-type.modul
 import { ZeroquestConfigModule } from '@zeroquest/config';
 import { ZeroquestDbModule } from '@zeroquest/db';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { AuthGuard, ClientTypeGuard, RoleGuard } from '@zeroquest/nest-shared';
+import { ClientTypeGuard, RoleGuard } from '@zeroquest/nest-shared';
 import { WalletModule } from '@/domains/billing/wallet/wallet.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BillingModule } from '@/domains/billing/billing/billing.module';
 import { PolicyModule } from '@/domains/content/policy/policy.module';
 import { CsrfGuard } from '@/domains/access/auth/csrf.guard';
+import { AuthGuard } from '@/domains/access/auth/auth.guard';
 
 @Module({
   imports: [

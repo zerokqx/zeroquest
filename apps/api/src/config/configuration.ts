@@ -1,4 +1,3 @@
-
 type NodeEnv = 'production' | 'development' | 'test';
 
 const config = () => ({
@@ -21,7 +20,8 @@ const config = () => ({
   },
 
   jwt: {
-    expires: (process.env.JWT_EXPIRES_TIME ?? '30m')  ,
+    expires: process.env.JWT_EXPIRES_TIME ?? '30m',
+    secret: process.env.JWT_SECRET,
   },
   threeXUi: {
     protocol: process.env.THREE_X_UI_PROTOCOL ?? 'https',

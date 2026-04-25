@@ -11,5 +11,6 @@ import { CookieJwtManager } from './cookie-manager.service';
   imports: [TokenModule, SessionModule, PolicyModule],
   controllers: [AuthController],
   providers: [AuthService, AuthRepository, CookieJwtManager],
+  exports: [TokenModule],
 })
 export class AuthModule {}

@@ -5,15 +5,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
 import type { AuthServiceTypes } from '@zeroquest/types';
-
 import {
   AUTH_TOKEN_TYPE_KEY,
   type AuthTokenType,
   IS_PUBLIC_KEY,
-} from './auth.decorator';
+} from '@zeroquest/nest-shared';
+import { TokenService } from '../token/token.service';
 
 type AuthenticatedRequest = Request & {
   user?: AuthServiceTypes.JwtPayload;
@@ -31,7 +30,7 @@ function extractTokenFromCookie(
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly jwtService: JwtService,
+    private readonly tokenService: TokenService,
     private readonly reflector: Reflector,
   ) {}
 
@@ -60,7 +59,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload =
-        await this.jwtService.verifyAsync<AuthServiceTypes.JwtPayload>(token);
+        await this.tokenService.verify(token);
       if (payload.type !== tokenType) {
         throw new UnauthorizedException();
       }
