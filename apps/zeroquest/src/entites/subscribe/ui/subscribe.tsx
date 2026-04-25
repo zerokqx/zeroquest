@@ -1,11 +1,11 @@
 import { SubscribeEntity } from '@/shared/api/orval/base-api/base-api.schemas';
+import { subscribeControllerGetLink } from '@/shared/api/orval/base-api/subscribe/subscribe';
 import { formatDate } from '@/shared/lib/format-date';
 import { getDaysLeft } from '@/shared/lib/get-days-left';
 import {
   ActionIcon,
   Badge,
   Card,
-  CopyButton,
   Group,
   SimpleGrid,
   Stack,
@@ -23,8 +23,8 @@ import {
   ShieldCheck,
   ShieldX,
 } from 'lucide-react';
-import { customAlphabet } from 'nanoid';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
 interface SubscribeProps {
   data: SubscribeEntity;
 }
@@ -33,9 +33,65 @@ export const Subscribe = ({ data }: SubscribeProps) => {
   const expiresAt = formatDate(data.expiresAt);
   const daysLeft = getDaysLeft(data.expiresAt);
   const [visible, setVisible] = useState(false);
+  const [subscribeLink, setSubscribeLink] = useState<string | null>(null);
+  const [isLinkLoading, setIsLinkLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const isStopped = data.status === 'STOPPED';
-  const masked = data.vlessLink.replace(/[^\n]/g, '•');
   const isUnlimitedTraffic = data.totalGb === 0;
+
+  const masked = useMemo(() => {
+    const maskLength = Math.max(16, Math.min(data.lenght, 96));
+    return '•'.repeat(maskLength);
+  }, [data.lenght]);
+
+  const ensureLinkLoaded = async (): Promise<string | null> => {
+    if (subscribeLink) return subscribeLink;
+
+    setIsLinkLoading(true);
+    try {
+      const loaded = await subscribeControllerGetLink(data.id);
+      setSubscribeLink(loaded);
+      return loaded;
+    } catch {
+      setSubscribeLink(null);
+      return null;
+    } finally {
+      setIsLinkLoading(false);
+    }
+  };
+
+  const toggleVisibility = async () => {
+    if (visible) {
+      setVisible(false);
+      setSubscribeLink(null);
+      return;
+    }
+
+    const loaded = await ensureLinkLoaded();
+    if (loaded) setVisible(true);
+  };
+
+  const copyLink = async () => {
+    const loaded = await ensureLinkLoaded();
+    if (!loaded || typeof navigator === 'undefined' || !navigator.clipboard) {
+      return;
+    }
+
+    await navigator.clipboard.writeText(loaded);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1500);
+  };
+
+  useEffect(() => {
+    if (!visible) return;
+
+    const timer = window.setTimeout(() => {
+      setVisible(false);
+      setSubscribeLink(null);
+    }, 20000);
+
+    return () => window.clearTimeout(timer);
+  }, [visible]);
 
   return (
     <Card withBorder radius="xl" p="lg">
@@ -102,28 +158,22 @@ export const Subscribe = ({ data }: SubscribeProps) => {
             <Group>
               <ActionIcon
                 color="blue"
-                bdrs={'xl'}
+                bdrs="xl"
                 variant="light"
-                onClick={() => {
-                  setVisible((prev) => !prev);
-                }}
+                onClick={toggleVisibility}
+                loading={isLinkLoading}
               >
-                {visible ? <Eye /> : <EyeClosed />}
+                {visible ? <EyeClosed /> : <Eye />}
               </ActionIcon>
-              <CopyButton value={data.vlessLink}>
-                {(data) => {
-                  return (
-                    <ActionIcon
-                      bdrs={'xl'}
-                      onClick={data.copy}
-                      color={data.copied ? 'blue' : undefined}
-                      variant={data.copied ? 'transparent' : 'light'}
-                    >
-                      <Copy />
-                    </ActionIcon>
-                  );
-                }}
-              </CopyButton>
+              <ActionIcon
+                bdrs="xl"
+                onClick={copyLink}
+                color={copied ? 'blue' : undefined}
+                variant={copied ? 'transparent' : 'light'}
+                loading={isLinkLoading}
+              >
+                <Copy />
+              </ActionIcon>
 
               <ThemeIcon
                 radius="xl"
@@ -146,7 +196,10 @@ export const Subscribe = ({ data }: SubscribeProps) => {
               userSelect: visible ? 'auto' : 'none',
             }}
           >
-            {visible ? data.vlessLink : masked}
+            {visible ? subscribeLink ?? 'Ссылка недоступна' : masked}
+          </Text>
+          <Text size="xs" c="dimmed" mt={6}>
+            Ссылка загружается по запросу и скрывается через 20 секунд.
           </Text>
         </Card>
       </Stack>

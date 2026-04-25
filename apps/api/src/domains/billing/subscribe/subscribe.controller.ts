@@ -22,6 +22,7 @@ import { AuthPayload, Role } from '@zeroquest/nest-shared';
 import { SubscribeBuyDto } from './dto/subscribe-buy.dto';
 import { ResetSubscribeDto } from './dto/reset-subscribe.dto';
 import { SubscribeEntity } from './entities/subscribe.entity';
+import { Subscribe } from '@zeroquest/db';
 
 @ApiTags('Subscribe')
 @ApiCookieAuth('zeroquestAccess')
@@ -29,6 +30,19 @@ import { SubscribeEntity } from './entities/subscribe.entity';
 export class SubscribeController {
   constructor(private readonly subscribeService: SubscribeService) {}
 
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'Идентификатор подписки.',
+  })
+  @ApiOkResponse({ type: String })
+  @Get('link/:id')
+  getLink(
+    @Param('id') id: Subscribe['id'],
+    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+  ) {
+    return this.subscribeService.getLink(id, payload);
+  }
   @Post()
   async buy(
     @Body() body: SubscribeBuyDto,
@@ -58,8 +72,9 @@ export class SubscribeController {
     type: SubscribeEntity,
     description: 'Список подписок успешно получен.',
   })
-  findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
-    return this.subscribeService.findAll(payload);
+  async findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
+    const data = await this.subscribeService.findAll(payload);
+    return data.map((subscribe) => new SubscribeEntity(subscribe));
   }
 
   @Get(':id')
@@ -81,7 +96,7 @@ export class SubscribeController {
 
     @AuthPayload() payload: AuthServiceTypes.JwtPayload,
   ) {
-    return this.subscribeService.findOne(+id, payload);
+    return this.subscribeService.findOne(id, payload);
   }
 
   @Role('ADMIN')
@@ -127,10 +142,12 @@ export class SubscribeController {
     description: 'Подписка успешно удалена.',
   })
   remove(
-    @Param('id') id: string,
+    @Param('id') _id: string,
 
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() _payload: AuthServiceTypes.JwtPayload,
   ) {
+    void _id;
+    void _payload;
     // return this.subscribeService.remove(+id, payload);
   }
 }

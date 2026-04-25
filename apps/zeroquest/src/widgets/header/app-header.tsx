@@ -21,30 +21,18 @@ export const AppHeader = () => {
     <Card
       withBorder
       radius={0}
-      p='xs'
+      p="xs"
       style={{
         marginTop: 'calc(-1 * var(--mantine-spacing-xs))',
         marginInline: 'calc(-1 * var(--mantine-spacing-xs))',
       }}
     >
       <Group justify="space-between" align="center" wrap="wrap">
-        <Group justify="center" gap={'xs'}>
-          <Logotype onClick={()=>{
-            navigate({to:"/"})
-          }} />
-          <Group
-            gap="sm"
-            wrap="nowrap"
-          >
-            <Avatar name={user?.login ?? 'User'} radius="xl" color="violet" />
-            <Stack gap={0}>
-              <Text fw={600}>{user?.login ?? 'Пользователь'}</Text>
-              <Text size="xs" c="dimmed">
-                Личный кабинет
-              </Text>
-            </Stack>
-          </Group>
-        </Group>
+        <Logotype
+          onClick={() => {
+            navigate({ to: '/' });
+          }}
+        />
 
         <Menu
           shadow="md"

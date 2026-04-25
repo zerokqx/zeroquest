@@ -12,6 +12,7 @@ import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { PaymentSucceededWebhookDto } from './dto/webhook-payment-succeeded.dto';
 import { RefundSucceededWebhookDto } from './dto/webhook-refund-succeeded.dto';
+
 @Injectable()
 export class YookassaWebhookService {
   private readonly logger = new Logger(YookassaWebhookService.name);
@@ -23,7 +24,10 @@ export class YookassaWebhookService {
   async handleWebhook(data: YookassaWebhookBaseDto & Record<string, unknown>) {
     switch (data.event) {
       case YOOKASSA_WEBHOOK_EVENT.PaymentSucceeded: {
-        const payload = this.parseEventPayload(PaymentSucceededWebhookDto, data);
+        const payload = this.parseEventPayload(
+          PaymentSucceededWebhookDto,
+          data,
+        );
         return await this.succesedEvent(payload);
       }
       case YOOKASSA_WEBHOOK_EVENT.RefundSucceeded: {
@@ -59,13 +63,17 @@ export class YookassaWebhookService {
 
     if (!payment || payment.status === PaymentStatus.SUCCEEDED) return;
 
-    const metadata = object.metadata;
+    if (payment.value !== toPenny(object.amount.value)) {
+      throw new BadRequestException('Payment amount mismatch');
+    }
+
     await this.paymentRepository.updateByProviderPaymentId(object.id, {
       status: PaymentStatus.SUCCEEDED,
     });
+
     await this.walletService.creditWithQueue({
       amount: toPenny(object.amount.value),
-      userId: metadata.userId,
+      userId: payment.userId,
     });
   }
 

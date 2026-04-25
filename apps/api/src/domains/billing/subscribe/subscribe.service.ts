@@ -309,4 +309,13 @@ export class SubscribeService {
       throw error;
     }
   }
+
+  async getLink(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayload) {
+    const data = await this.subscribeRepository.findOneByIdAndUserId(
+      id,
+      payload.sub,
+    );
+    if (!data) throw new NotFoundException('Subscribe not found');
+    return data.vlessLink;
+  }
 }

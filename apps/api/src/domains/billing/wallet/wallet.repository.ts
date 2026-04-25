@@ -17,6 +17,25 @@ export class WalletRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
+  private walletWhereByUserId(userId: User['id']): Prisma.WalletWhereInput {
+    return {
+      user: {
+        is: {
+          id: userId,
+        },
+      },
+    };
+  }
+
+  private findWalletByUserIdOrThrow(
+    client: PrismaService | Prisma.TransactionClient,
+    userId: User['id'],
+  ) {
+    return client.wallet.findFirstOrThrow({
+      where: this.walletWhereByUserId(userId),
+    });
+  }
+
   private invalidAmountResponse(
     method: string,
     userId: string,
@@ -76,7 +95,7 @@ export class WalletRepository {
     try {
       return await this.prisma.$transaction(async (tx) => {
         const where: Prisma.WalletWhereInput = {
-          userId,
+          ...this.walletWhereByUserId(userId),
           ...(operation === 'decrement' ? { balance: { gte: amount } } : {}),
         };
         const updated = await tx.wallet.updateMany({
@@ -98,9 +117,7 @@ export class WalletRepository {
           } satisfies WalletServiceTypes.WalletEventResponse;
         }
 
-        const wallet = await tx.wallet.findUniqueOrThrow({
-          where: { userId },
-        });
+        const wallet = await this.findWalletByUserIdOrThrow(tx, userId);
         await tx.walletHistory.create({
           data: {
             amount,
@@ -133,39 +150,39 @@ export class WalletRepository {
     } satisfies WalletServiceTypes.WalletEventResponse);
   }
   async canHeldMany(userId: User['id'], amount: Wallet['balance']) {
-    const wallet = await this.prisma.wallet.findUniqueOrThrow({
-      where: { userId },
-    });
+    const wallet = await this.findWalletByUserIdOrThrow(this.prisma, userId);
     return wallet.balance >= amount;
   }
   async availabelBalance(userId: User['id']) {
-    const wallet = await this.prisma.wallet.findUniqueOrThrow({
-      where: { userId },
-    });
+    const wallet = await this.findWalletByUserIdOrThrow(this.prisma, userId);
     return wallet.balance - wallet.held;
   }
   async unheldMoney(userId: User['id'], amount: Wallet['held']) {
-    return this.prisma.wallet.update({
-      where: {
-        userId,
-      },
-      data: {
-        held: {
-          decrement: amount,
+    return this.prisma.$transaction(async (tx) => {
+      await tx.wallet.updateMany({
+        where: this.walletWhereByUserId(userId),
+        data: {
+          held: {
+            decrement: amount,
+          },
         },
-      },
+      });
+      return this.findWalletByUserIdOrThrow(tx, userId);
     });
   }
   async heldMoney(userId: User['id'], amount: Wallet['held']) {
     const balance = await this.canHeldMany(userId, amount);
     if (!balance) this.notEnoughFunds();
-    return this.prisma.wallet.update({
-      where: { userId },
-      data: {
-        held: {
-          increment: amount,
+    return this.prisma.$transaction(async (tx) => {
+      await tx.wallet.updateMany({
+        where: this.walletWhereByUserId(userId),
+        data: {
+          held: {
+            increment: amount,
+          },
         },
-      },
+      });
+      return this.findWalletByUserIdOrThrow(tx, userId);
     });
   }
 
@@ -180,7 +197,7 @@ export class WalletRepository {
       return await this.prisma.$transaction(async (tx) => {
         const updated = await tx.wallet.updateMany({
           where: {
-            userId,
+            ...this.walletWhereByUserId(userId),
             held: { gte: amount },
             balance: { gte: amount },
           },
@@ -204,9 +221,7 @@ export class WalletRepository {
           } as WalletServiceTypes.WalletEventResponse;
         }
 
-        const wallet = await tx.wallet.findUniqueOrThrow({
-          where: { userId },
-        });
+        const wallet = await this.findWalletByUserIdOrThrow(tx, userId);
         await tx.walletHistory.create({
           data: {
             amount,

@@ -42,6 +42,92 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
+export const subscribeControllerGetLink = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<string>(
+      {url: `/api/subscriptions/link/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getSubscribeControllerGetLinkQueryKey = (id: string,) => {
+    return [
+    `/api/subscriptions/link/${id}`
+    ] as const;
+    }
+
+
+export const getSubscribeControllerGetLinkQueryOptions = <TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getSubscribeControllerGetLinkQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof subscribeControllerGetLink>>> = ({ signal }) => subscribeControllerGetLink(id, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type SubscribeControllerGetLinkQueryResult = NonNullable<Awaited<ReturnType<typeof subscribeControllerGetLink>>>
+export type SubscribeControllerGetLinkQueryError = ErrorType<unknown>
+
+
+export function useSubscribeControllerGetLink<TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof subscribeControllerGetLink>>,
+          TError,
+          Awaited<ReturnType<typeof subscribeControllerGetLink>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSubscribeControllerGetLink<TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof subscribeControllerGetLink>>,
+          TError,
+          Awaited<ReturnType<typeof subscribeControllerGetLink>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSubscribeControllerGetLink<TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useSubscribeControllerGetLink<TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getSubscribeControllerGetLinkQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
 export const subscribeControllerBuy = (
     subscribeBuyDto: BodyType<SubscribeBuyDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal

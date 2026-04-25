@@ -17,7 +17,7 @@ export const ReviewList = () => {
       ) : (
         <Stack>
           <Alert color={'red'} icon={<StopCircle />}>
-            Вы не можете оставить более 2-х отзывов
+            Вы не можете оставить более 1 отзыва
           </Alert>
           <Group>
             <RemoveReview />

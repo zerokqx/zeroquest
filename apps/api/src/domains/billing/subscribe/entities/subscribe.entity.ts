@@ -1,5 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Subscribe, SubscribeStatus } from '@zeroquest/db';
+import { Exclude } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
 export class SubscribeEntity implements Subscribe {
   @ApiProperty()
@@ -12,8 +14,12 @@ export class SubscribeEntity implements Subscribe {
   @ApiProperty()
   id!: string;
 
-  @ApiProperty()
+  @Exclude()
+  @ApiHideProperty()
   vlessLink!: string;
+
+  @ApiProperty()
+  lenght!: number;
 
   @ApiProperty()
   vlessClientId!: string;
@@ -38,4 +44,9 @@ export class SubscribeEntity implements Subscribe {
 
   @ApiProperty()
   totalGb!: number;
+
+  constructor(partial: Partial<Subscribe>) {
+    Object.assign(this, partial);
+    this.lenght = this.vlessLink.length;
+  }
 }

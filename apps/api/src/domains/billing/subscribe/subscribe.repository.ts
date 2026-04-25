@@ -1,7 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Prisma, PrismaService, Subscribe, User } from '@zeroquest/db';
-import { SubscribeEntity } from './entities/subscribe.entity';
-import { SubscribeOmit } from 'node_modules/@zeroquest/db/src/generated/models';
 
 export interface Options {
   tx?: Prisma.TransactionClient;
@@ -17,13 +15,13 @@ export class SubscribeRepository {
     return (opts?.tx ?? this.prisma).subscribe.create({ data });
   }
 
-  findMany(where: Prisma.SubscribeWhereInput): Promise<SubscribeEntity[]> {
+  findMany(where: Prisma.SubscribeWhereInput){
     return this.prisma.subscribe.findMany({
       where,
     });
   }
 
-  findById(id: Subscribe['id']): Promise<SubscribeEntity | null> {
+  findById(id: Subscribe['id']){
     return this.prisma.subscribe.findUnique({
       where: { id },
       include: {
@@ -32,7 +30,7 @@ export class SubscribeRepository {
     });
   }
 
-  findManyByUserId(userId: User['id']): Promise<SubscribeEntity[]> {
+  findManyByUserId(userId: User['id'])  {
     this.logger.debug(
       `Запрошен список подписок пользователя: userId=${userId}`,
     );
@@ -42,7 +40,7 @@ export class SubscribeRepository {
   findOneByIdAndUserId(
     id: Subscribe['id'],
     userId: User['id'],
-  ): Promise<SubscribeEntity | null> {
+  ) {
     this.logger.debug(
       `Запрошена подписка: subscribeId=${id}, userId=${userId}`,
     );
@@ -53,7 +51,7 @@ export class SubscribeRepository {
     });
   }
 
-  async update(data: Prisma.SubscribeUpdateArgs): Promise<SubscribeEntity> {
+  async update(data: Prisma.SubscribeUpdateArgs)  {
     return this.prisma.subscribe.update(data);
   }
 
@@ -62,7 +60,7 @@ export class SubscribeRepository {
     userId: User['id'],
     data: Prisma.SubscribeUpdateInput,
     opts?: Options,
-  ): Promise<SubscribeEntity> {
+  ) {
     this.logger.log(`Обновление подписки: subscribeId=${id}, userId=${userId}`);
     return (opts?.tx ?? this.prisma).subscribe.update({
       where: {
@@ -75,7 +73,7 @@ export class SubscribeRepository {
   async deleteByIdAndUserId(
     id: Subscribe['id'],
     userId: User['id'],
-  ): Promise<SubscribeEntity | null> {
+  ) {
     this.logger.log(`Удаление подписки: subscribeId=${id}, userId=${userId}`);
     return this.prisma.subscribe.delete({
       where: {
@@ -87,7 +85,7 @@ export class SubscribeRepository {
   async changeNextPaymentDate(
     id: Subscribe['id'],
     date: Date,
-  ): Promise<SubscribeEntity> {
+  )  {
     return this.prisma.subscribe.update({
       where: { id },
       data: {
@@ -98,12 +96,11 @@ export class SubscribeRepository {
   async changeStatus(
     id: Subscribe['id'],
     status: Subscribe['status'],
-  ): Promise<SubscribeEntity> {
+  )  {
     return this.prisma.subscribe.update({
       where: { id },
       data: {
         status,
-      },
-    });
+      }, });
   }
 }

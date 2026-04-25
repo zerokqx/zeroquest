@@ -65,6 +65,7 @@ export interface RegisterDto {
 }
 
 export interface SessionEntity {
+  userId: string;
   id: string;
   userAgentHash: string;
   clientTypeId: number;
@@ -147,13 +148,12 @@ export interface UserEntity {
   login: string;
   /** @nullable */
   telegramId: number | null;
-  passwordHash: string;
   isBanned: boolean;
   role: UserEntityRole;
   createdAt: string;
   updatedAt: string;
   canComment: boolean;
-  wallet: WalletEntity;
+  wallet?: WalletEntity | null;
 }
 
 export interface PatchMeDto { [key: string]: unknown }
@@ -177,8 +177,6 @@ export interface RefundEntity {
   status: RefundEntityStatus;
   paymentId: number;
 }
-
-export interface YookassaWebhookBaseDto { [key: string]: unknown }
 
 export interface CreditWalletDto { [key: string]: unknown }
 
@@ -275,7 +273,7 @@ export interface SubscribeEntity {
   email: string;
   name: string;
   id: string;
-  vlessLink: string;
+  lenght: number;
   vlessClientId: string;
   nextPaymentDate: string;
   status: SubscribeEntityStatus;
