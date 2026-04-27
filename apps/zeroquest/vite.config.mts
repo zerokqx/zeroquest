@@ -6,7 +6,6 @@ import { fileURLToPath, URL } from 'node:url';
 
 const APP = './src/app';
 export default defineConfig(() => ({
-
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/apps/zeroquest',
   resolve: {
@@ -16,11 +15,18 @@ export default defineConfig(() => ({
   },
   server: {
     port: 4200,
-    host: '0.0.0.0',
+
+    host: '127.0.0.1',
+    proxy: {
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+      },
+    },
   },
   preview: {
     port: 4300,
-    host: 'localhost',
+    host: '127.0.0.1',
   },
   plugins: [
     tanstackRouter({

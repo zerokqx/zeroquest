@@ -1,14 +1,21 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { CreateTokenPairDto } from './dto/create-token-pair.dto';
 import { AuthServiceTypes } from '@zeroquest/types';
 import { hash, verify } from 'argon2';
+import { EnvironmentVariables } from '@/config/configuration';
 
 @Injectable()
 export class TokenService {
+  private readonly jwtEnvironment: EnvironmentVariables['jwt'];
+
   constructor(
     private readonly jwtService: JwtService,
-  ) {}
+    private readonly config: ConfigService<EnvironmentVariables>,
+  ) {
+    this.jwtEnvironment = this.config.getOrThrow('jwt', { infer: true });
+  }
 
   async createTokenPair(payload: CreateTokenPairDto): Promise<
     [
@@ -21,11 +28,16 @@ export class TokenService {
   > {
     const accessTokenJti = crypto.randomUUID();
     const refreshTokenJti = crypto.randomUUID();
-    const accessToken = await this.jwtService.signAsync({
-      ...payload,
-      type: 'access',
-      jti: accessTokenJti,
-    } satisfies AuthServiceTypes.JwtPayload);
+    const accessToken = await this.jwtService.signAsync(
+      {
+        ...payload,
+        type: 'access',
+        jti: accessTokenJti,
+      } satisfies AuthServiceTypes.JwtPayload,
+      {
+        expiresIn: `${this.jwtEnvironment.accessExpireTimeMs}ms`,
+      },
+    );
 
     const refreshToken = await this.jwtService.signAsync(
       {
@@ -34,7 +46,7 @@ export class TokenService {
         jti: refreshTokenJti,
       } satisfies AuthServiceTypes.JwtPayload,
       {
-        expiresIn: '30d',
+        expiresIn: `${this.jwtEnvironment.refreshExpireTimeMs}ms`,
       },
     );
     return [

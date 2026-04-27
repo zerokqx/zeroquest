@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import axios, { AxiosInstance } from 'axios';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CreatePaymentResponseDto } from './dto/create-payment-response.dto';
+import { GetPaymentResponseDto } from './dto/get-payment-response.dto';
 import { RefundPaymentDto } from './dto/refund-payment.dto';
 import { RefundPaymentResponseDto } from './dto/refund-payment-response.dto';
 import { IDEMPOTENCE_KEY_HEADER } from '@/domains/billing/payment/dto/create-payment.dto';
@@ -43,6 +44,12 @@ export class YookassaService {
             this.resolveIdempotenceKey(idempotenceKey),
         },
       },
+    );
+  }
+
+  async getPayment(paymentId: string) {
+    return this.yookassaClient.get<GetPaymentResponseDto>(
+      `payments/${paymentId}`,
     );
   }
 

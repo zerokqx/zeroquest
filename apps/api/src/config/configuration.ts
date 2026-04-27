@@ -1,27 +1,46 @@
-type NodeEnv = 'production' | 'development' | 'test';
+const DEFAULT_CORS_ORIGINS =
+  'http://localhost:4200,http://127.0.0.1:4200,http://localhost:80,http://127.0.0.1:80';
+const DEFAULT_JWT_ACCESS_EXPIRE_TIME_MS = 30 * 60 * 1000;
+const DEFAULT_JWT_REFRESH_EXPIRE_TIME_MS = 30 * 24 * 60 * 60 * 1000;
+
+const toCorsOrigins = (value: string) =>
+  value
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+const toPositiveInt = (value: string | undefined, fallback: number) => {
+  const parsed = Number.parseInt(value ?? '', 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
 
 const config = () => ({
+  app: {
+    globalPrefix: 'api',
+    isProduction: process.env.NODE_ENV === 'production',
+    swaggerEnabled: process.env.SWAGGER_ENABLED === 'true',
+    corsOrigins: toCorsOrigins(process.env.CORS_ORIGINS ?? DEFAULT_CORS_ORIGINS),
+  },
+
   backend: {
     port: parseInt(process.env.BACKEND_PORT ?? '3000', 10),
     host: process.env.BACKEND_HOST ?? '127.0.0.1',
   },
-
-  postgres: {
-    port: parseInt(process.env.POSTGRES_PORT ?? '5432', 10),
-    db: process.env.POSTGRES_DB || 'postgres',
-    user: process.env.POSTGRES_USER || 'admin',
-    password: process.env.POSTGRES_PASSWORD || 'strong_password_here',
-    url: `postgresql://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@localhost:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`,
-  },
-
   redis: {
+    host: process.env.REDIS_HOST ?? '127.0.0.1',
     port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
-    url: `redis://localhost:${process.env.REDIS_PORT}`,
   },
 
   jwt: {
-    expires: process.env.JWT_EXPIRES_TIME ?? '30m',
     secret: process.env.JWT_SECRET,
+    accessExpireTimeMs: toPositiveInt(
+      process.env.JWT_ACCESS_EXPIRE_TIME_MS,
+      DEFAULT_JWT_ACCESS_EXPIRE_TIME_MS,
+    ),
+    refreshExpireTimeMs: toPositiveInt(
+      process.env.JWT_REFRESH_EXPIRE_TIME_MS,
+      DEFAULT_JWT_REFRESH_EXPIRE_TIME_MS,
+    ),
   },
   threeXUi: {
     protocol: process.env.THREE_X_UI_PROTOCOL ?? 'https',
@@ -50,20 +69,7 @@ const config = () => ({
     get apiBaseUrl() {
       return 'https://api.yookassa.ru/v3';
     },
-    get paymentsUrl() {
-      return `${this.apiBaseUrl}/payments`;
-    },
-    get authHeader() {
-      return `Basic ${Buffer.from(`${this.shopId}:${this.token}`).toString('base64')}`;
-    },
   },
-  pgadmin: {
-    port: parseInt(process.env.PGADMIN_PORT ?? '5050', 10),
-    email: process.env.PGADMIN_DEFAULT_EMAIL || 'admin@admin.com',
-    password: process.env.PGADMIN_DEFAULT_PASSWORD || 'strong_password_here',
-  },
-  nodeEnv: process.env.NODE_ENV as NodeEnv,
-  isProd: process.env.NODE_ENV === 'production',
 });
 
 export type EnvironmentVariables = ReturnType<typeof config>;

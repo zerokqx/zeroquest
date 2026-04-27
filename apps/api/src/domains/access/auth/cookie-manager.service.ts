@@ -2,6 +2,7 @@ import { EnvironmentVariables } from '@/config/configuration';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { AuthServiceTypes } from '@zeroquest/types';
+import { log } from 'console';
 import { randomBytes } from 'crypto';
 import type { CookieOptions, Request, Response } from 'express';
 
@@ -16,16 +17,55 @@ export class CookieJwtManager {
     'zeroquestAccess';
   private readonly refreshCookieName: keyof AuthServiceTypes.AuthCookie =
     'zeroquestRefresh';
+  private readonly csrfCookieName: string = 'zeroquestCsrf';
+  private isProd: boolean;
+  private readonly accessCookieMaxAge: number;
+  private readonly refreshCookieMaxAge: number;
 
-  constructor(private readonly config: ConfigService<EnvironmentVariables>) {}
+  constructor(private readonly config: ConfigService<EnvironmentVariables>) {
+    const app = this.config.getOrThrow('app', { infer: true });
+    const jwt = this.config.getOrThrow('jwt', { infer: true });
+
+    this.isProd = app.isProduction;
+    this.accessCookieMaxAge = jwt.accessExpireTimeMs;
+    this.refreshCookieMaxAge = jwt.refreshExpireTimeMs;
+  }
+
   baseOptions(): CookieOptions {
-    const isProd = this.config.get('isProd', { infer: true });
-
-    return { httpOnly: true, secure: !!isProd, sameSite: 'lax' };
+    log(this.isProd)
+    return {
+      httpOnly: true,
+      secure: this.isProd,
+      sameSite: this.isProd ? 'none' : 'lax',
+      path: '/',
+    };
+  }
+  private accessCookie(): CookieOptions {
+    return {
+      ...this.baseOptions(),
+      maxAge: this.accessCookieMaxAge,
+    };
+  }
+  private refreshCookie(): CookieOptions {
+    return {
+      ...this.baseOptions(),
+      maxAge: this.refreshCookieMaxAge,
+    };
+  }
+  private csrfCookie(): CookieOptions {
+    return {
+      ...this.baseOptions(),
+      httpOnly: false,
+      maxAge: 1000 * 60 * 60,
+    };
   }
   setAuthCookies(res: Response, tokens: JwtTokenPair): void {
-    res.cookie(this.accessCookieName, tokens.accessToken, this.baseOptions());
-    res.cookie(this.refreshCookieName, tokens.refreshToken, this.baseOptions());
+    res.cookie(this.accessCookieName, tokens.accessToken, this.accessCookie());
+    res.cookie(
+      this.refreshCookieName,
+      tokens.refreshToken,
+      this.refreshCookie(),
+    );
   }
 
   readAuthCookies(req: Request): Partial<AuthServiceTypes.AuthCookie> {
@@ -40,18 +80,12 @@ export class CookieJwtManager {
   }
 
   setCsrf(res: Response) {
-    const isProduction = process.env.NODE_ENV === 'production';
     const token = randomBytes(32).toString('hex');
-    res.cookie('zeroquestCsrf', token, {
-      httpOnly: false,
-      secure: isProduction,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 1000 * 60 * 60,
-    });
+    res.cookie(this.csrfCookieName, token, this.csrfCookie());
   }
   clearAuthCookies(res: Response): void {
-    res.clearCookie(this.accessCookieName, this.baseOptions());
-    res.clearCookie(this.refreshCookieName, this.baseOptions());
+    res.clearCookie(this.accessCookieName, this.accessCookie());
+    res.clearCookie(this.refreshCookieName, this.refreshCookie());
+    res.clearCookie(this.csrfCookieName, this.csrfCookie());
   }
 }

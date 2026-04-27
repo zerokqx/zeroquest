@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { YookassaWebhookBaseDto } from './dto/webhook-event.dto';
 import { YookassaWebhookService } from './yookassa-webhook.service';
 import {
@@ -16,9 +9,17 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { AllowIp, AllowIpGuard, Public } from '@zeroquest/nest-shared';
+import { AllowIp, Public } from '@zeroquest/nest-shared';
 import { env } from 'process';
 import { CsrfPublic } from '@/domains/access/auth/csrf.decorator';
+
+const YOOKASSA_ALLOWED_IPS = (
+  env.YOOKASSA_WEBHOOK_ALLOWED_IPS ??
+  '185.71.76.0/27,185.71.77.0/27,77.75.153.0/25,77.75.156.11,77.75.156.35,77.75.154.128/25,2a02:5180::/32'
+)
+  .split(',')
+  .map((ip) => ip.trim())
+  .filter(Boolean);
 
 @CsrfPublic()
 @ApiExcludeController()
@@ -31,8 +32,7 @@ export class YookassaController {
 
   @Public()
   @Post('webhook')
-  @AllowIp(['77.75.153.78', '77.75.154.206 '])
-  @UseGuards(AllowIpGuard)
+  @AllowIp(YOOKASSA_ALLOWED_IPS)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Webhook YooKassa',

@@ -1,5 +1,5 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
-import configuration from '../config/configuration';
+import configuration, { EnvironmentVariables } from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from '../domains/access/auth/auth.module';
 import { APP_GUARD, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
@@ -22,6 +22,7 @@ import { BillingModule } from '@/domains/billing/billing/billing.module';
 import { PolicyModule } from '@/domains/content/policy/policy.module';
 import { CsrfGuard } from '@/domains/access/auth/csrf.guard';
 import { AuthGuard } from '@/domains/access/auth/auth.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -36,10 +37,16 @@ import { AuthGuard } from '@/domains/access/auth/auth.guard';
         { ttl: 3600000, limit: 1000 },
       ],
     }),
-    BullModule.forRoot({
-      connection: {
-        host: 'localhost',
-        port: Number(process.env.REDIS_PORT),
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<EnvironmentVariables>) => {
+        const redis = config.get('redis', { infer: true });
+        return {
+          connection: {
+            host: redis?.host ?? '127.0.0.1',
+            port: redis?.port ?? 6379,
+          },
+        };
       },
     }),
     PlanModule,

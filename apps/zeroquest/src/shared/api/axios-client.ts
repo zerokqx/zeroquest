@@ -2,11 +2,24 @@ import Axios, {
   AxiosRequestConfig,
   AxiosError,
   AxiosResponse,
+  AxiosHeaders,
   InternalAxiosRequestConfig,
 } from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4000';
-const CSRF_COOKIE_NAME = 'zeroquestCsrf';
+const resolveDevBackendPort = (): string => {
+  const fromEnv =
+    import.meta.env.VITE_BACKEND_PORT ?? import.meta.env.VITE_API_PORT;
+  return fromEnv && fromEnv.trim().length > 0 ? fromEnv : '4000';
+};
+
+const resolveDevBackendHost = (): string => {
+  const fromEnv = import.meta.env.VITE_BACKEND_HOST;
+  return fromEnv && fromEnv.trim().length > 0 ? fromEnv : 'localhost';
+};
+
+const BASE_URL = ''
+
+  const CSRF_COOKIE_NAME = 'zeroquestCsrf';
 const CSRF_HEADER_NAME = 'x-csrf-token';
 
 export const AXIOS_INSTANCE = Axios.create({
@@ -65,8 +78,11 @@ const installCsrfHeaderInterceptor = () => {
     const csrfToken = getCsrfFromCookie();
     if (!csrfToken) return config;
 
-    config.headers ??= {};
-    (config.headers as Record<string, string>)[CSRF_HEADER_NAME] = csrfToken;
+    if (!config.headers) {
+      config.headers = new AxiosHeaders();
+    }
+
+    config.headers.set(CSRF_HEADER_NAME, csrfToken);
     return config;
   });
 };

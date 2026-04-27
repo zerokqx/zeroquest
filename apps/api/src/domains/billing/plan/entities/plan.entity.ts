@@ -1,12 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Decimal } from '@prisma/client/runtime/client';
-import { PlanGetPayload } from 'node_modules/@zeroquest/db/src/generated/models';
+import { Prisma } from 'node_modules/@zeroquest/db';
 
 export class PlanEntity
-  implements PlanGetPayload<{ omit: { inboundId: true } }>
+  implements Prisma.PlanGetPayload<{ omit: { inboundId: true } }>
 {
-  @ApiProperty({ type: Decimal })
-  discountedPercent!: Decimal;
+  @ApiProperty({ type: Prisma.Decimal })
+  discountedPercent!: Prisma.Decimal;
 
   @ApiProperty({ type: String, nullable: true })
   features!: string | null;

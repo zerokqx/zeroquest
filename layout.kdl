@@ -1,0 +1,22 @@
+layout {
+  pane split_direction="vertical" {
+
+    // ВЕРХ: ngrok + фронт
+    pane split_direction="horizontal" {
+      pane {
+        command "nx"
+        args "ngrok:run" "api"
+      }
+      pane {
+        command "nx"
+        args "serve" "zeroquest" "--no-tui"
+      }
+    }
+
+    // НИЗ: backend на всю ширину
+    pane {
+      command "nx"
+      args "serve" "api" "--no-tui"
+    }
+  }
+}

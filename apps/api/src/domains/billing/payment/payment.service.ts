@@ -79,4 +79,8 @@ export class PaymentService {
   async findOne(id: number, payload: AuthServiceTypes.JwtPayload) {
     return this.paymentRepository.findOneByIdAndUserId(id, payload.sub);
   }
+
+
+
+  
 }

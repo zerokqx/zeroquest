@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService, SubscribeStatus } from '@zeroquest/db';
 import { toPenny } from '@zeroquest/converters';
 import { ThreeXUiService } from '@/domains/network/three-x-ui/three-x-ui.service';
@@ -15,7 +15,7 @@ export class BillingService {
     private readonly walletService: WalletService,
   ) {}
 
-  @Cron('0 0 * * *')
+  @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT)
   async debitMoneyForSubscribtion() {
     const date = new Date();
     this.logger.verbose(
@@ -138,4 +138,7 @@ export class BillingService {
       `Крон биллинга завершен: processed=${subscribes.length}`,
     );
   }
+
+
+
 }

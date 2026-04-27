@@ -16,8 +16,11 @@
     prisma-engines
     openssl
     ngrok
+    tmux
 
+    zellij
     stdenv.cc.cc.lib
+    jdk21
     gcc
 
   ];
@@ -38,6 +41,12 @@
     PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines}/lib/libquery_engine.node";
     PRISMA_FMT_BINARY = "${pkgs.prisma-engines}/bin/prisma-fmt";
   };
+
+  scripts.run-full.exec = "nx run-many -t serve -p api zeroquest";
+  scripts.run-full-with-ngrok.exec = "nx run-many -t serve -p api zeroquest && nx ngrok:run api";
+scripts.zellij-start-app.exec = ''
+  zellij --new-session-with-layout ./layout.kdl --session zeroquest
+'';
 
   enterShell = ''
     hello         # Run scripts directly
