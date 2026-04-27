@@ -9,6 +9,7 @@ export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/apps/zeroquest',
   resolve: {
+    conditions: ['@zeroquest/source'],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },

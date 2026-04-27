@@ -14,6 +14,23 @@ const toPositiveInt = (value: string | undefined, fallback: number) => {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
+const getRequiredEnv = (name: string) => {
+  const value = process.env[name]?.trim();
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
+};
+
+const getRequiredPositiveIntEnv = (name: string) => {
+  const value = getRequiredEnv(name);
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    throw new Error(`Environment variable ${name} must be a positive integer`);
+  }
+  return parsed;
+};
+
 const config = () => ({
   app: {
     globalPrefix: 'api',
@@ -27,8 +44,8 @@ const config = () => ({
     host: process.env.BACKEND_HOST ?? '127.0.0.1',
   },
   redis: {
-    host: process.env.REDIS_HOST ?? '127.0.0.1',
-    port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
+    host: getRequiredEnv('REDIS_HOST'),
+    port: getRequiredPositiveIntEnv('REDIS_PORT'),
   },
 
   jwt: {

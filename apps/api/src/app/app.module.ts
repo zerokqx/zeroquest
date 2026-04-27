@@ -41,10 +41,14 @@ import { ConfigService } from '@nestjs/config';
       inject: [ConfigService],
       useFactory: (config: ConfigService<EnvironmentVariables>) => {
         const redis = config.get('redis', { infer: true });
+        if (!redis?.host || !redis.port) {
+          throw new Error('REDIS_HOST and REDIS_PORT must be set');
+        }
+
         return {
           connection: {
-            host: redis?.host ?? '127.0.0.1',
-            port: redis?.port ?? 6379,
+            host: redis.host,
+            port: redis.port,
           },
         };
       },

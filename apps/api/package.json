@@ -97,6 +97,20 @@
           }
         }
       },
+      "docker:build": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "docker compose build api",
+          "cwd": "{workspaceRoot}"
+        }
+      },
+      "docker:run": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "docker compose up -d --build api",
+          "cwd": "{workspaceRoot}"
+        }
+      },
       "test": {
         "options": {
           "passWithNoTests": true
@@ -105,34 +119,11 @@
     }
   },
   "dependencies": {
-    "@bull-board/api": "^6.21.0",
-    "@bull-board/nestjs": "^6.21.0",
-    "@nestjs/bullmq": "^11.0.4",
-    "@nestjs/cache-manager": "^3.1.0",
-    "@nestjs/mapped-types": "*",
-    "@nestjs/schedule": "^6.1.3",
     "@zeroquest/config": "workspace:*",
     "@zeroquest/converters": "workspace:*",
     "@zeroquest/db": "workspace:*",
     "@zeroquest/nest-shared": "workspace:*",
-    "@zeroquest/types": "workspace:*",
-    "argon2": "^0.44.0",
-    "bcrypt": "^6.0.0",
-    "bullmq": "^5.73.4",
-    "cache-manager": "^7.2.8",
-    "dotenv": "^17.4.1",
-    "express": "^5.2.1",
-    "express-formidable": "^1.2.0",
-    "express-session": "^1.19.0",
-    "ioredis": "^5.10.1",
-    "nest-winston": "^1.10.2",
-    "winston": "^3.19.0"
-  },
-  "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.31.1",
-    "@types/bcrypt": "^6.0.0",
-    "@types/bun": "latest",
-    "@types/express": "^5.0.6"
+    "@zeroquest/types": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "^5"

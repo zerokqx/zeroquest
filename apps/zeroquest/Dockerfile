@@ -4,24 +4,19 @@ WORKDIR /repo
 
 COPY . .
 
-RUN bun install --no-frozen-lockfile
-RUN bun nx build zeroquest --no-tui
+RUN bun install --frozen-lockfile --ignore-scripts
+RUN bun --cwd apps/zeroquest vite build
 
-FROM nginx:alpine
+FROM oven/bun:1 AS runner
 
-RUN printf '%s\n' \
-  'server {' \
-  '  listen 80;' \
-  '  server_name _;' \
-  '  root /usr/share/nginx/html;' \
-  '  index index.html;' \
-  '  location / {' \
-  '    try_files $uri $uri/ /index.html;' \
-  '  }' \
-  '}' > /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-COPY --from=builder /repo/apps/zeroquest/dist /usr/share/nginx/html
+COPY --from=builder /repo/apps/zeroquest/dist ./dist
+COPY apps/zeroquest/server.ts ./server.ts
 
-EXPOSE 80
+EXPOSE 4200
 
-CMD ["nginx", "-g", "daemon off;"]
+ENV HOST=0.0.0.0
+ENV PORT=4200
+
+CMD ["bun", "run", "server.ts"]
