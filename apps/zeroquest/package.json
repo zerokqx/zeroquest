@@ -1,5 +1,19 @@
 {
   "name": "@zeroquest/zeroquest",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+  "nx": {
+    "targets": {
+      "orval:run": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bunx orval",
+          "cwd": "apps/zeroquest"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@mantine/modals": "^9.1.1"
+  }
 }

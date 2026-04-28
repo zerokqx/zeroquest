@@ -8,13 +8,8 @@ import {
   useQuery
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  QueryClient,
   QueryFunction,
   QueryKey,
-  UndefinedInitialDataOptions,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
@@ -63,7 +58,7 @@ export const getPolicyControllerGetActualQueryKey = (params?: PolicyControllerGe
     }
 
 
-export const getPolicyControllerGetActualQueryOptions = <TData = Awaited<ReturnType<typeof policyControllerGetActual>>, TError = ErrorType<unknown>>(params?: PolicyControllerGetActualParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof policyControllerGetActual>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getPolicyControllerGetActualQueryOptions = <TData = Awaited<ReturnType<typeof policyControllerGetActual>>, TError = ErrorType<unknown>>(params?: PolicyControllerGetActualParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof policyControllerGetActual>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -78,49 +73,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof policyControllerGetActual>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof policyControllerGetActual>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type PolicyControllerGetActualQueryResult = NonNullable<Awaited<ReturnType<typeof policyControllerGetActual>>>
 export type PolicyControllerGetActualQueryError = ErrorType<unknown>
 
 
-export function usePolicyControllerGetActual<TData = Awaited<ReturnType<typeof policyControllerGetActual>>, TError = ErrorType<unknown>>(
- params: undefined |  PolicyControllerGetActualParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof policyControllerGetActual>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof policyControllerGetActual>>,
-          TError,
-          Awaited<ReturnType<typeof policyControllerGetActual>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePolicyControllerGetActual<TData = Awaited<ReturnType<typeof policyControllerGetActual>>, TError = ErrorType<unknown>>(
- params?: PolicyControllerGetActualParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof policyControllerGetActual>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof policyControllerGetActual>>,
-          TError,
-          Awaited<ReturnType<typeof policyControllerGetActual>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePolicyControllerGetActual<TData = Awaited<ReturnType<typeof policyControllerGetActual>>, TError = ErrorType<unknown>>(
- params?: PolicyControllerGetActualParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof policyControllerGetActual>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить актуальный юридический документ
  */
 
 export function usePolicyControllerGetActual<TData = Awaited<ReturnType<typeof policyControllerGetActual>>, TError = ErrorType<unknown>>(
- params?: PolicyControllerGetActualParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof policyControllerGetActual>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+ params?: PolicyControllerGetActualParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof policyControllerGetActual>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getPolicyControllerGetActualQueryOptions(params,options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }

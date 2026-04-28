@@ -84,7 +84,7 @@ export class SubscribeController {
   })
   @ApiParam({
     name: 'id',
-    type: Number,
+    type: String,
     description: 'Идентификатор подписки.',
   })
   @ApiOkResponse({
@@ -107,7 +107,7 @@ export class SubscribeController {
   })
   @ApiParam({
     name: 'id',
-    type: Number,
+    type: String,
     description: 'Идентификатор подписки.',
   })
   @ApiBody({
@@ -135,19 +135,16 @@ export class SubscribeController {
   })
   @ApiParam({
     name: 'id',
-    type: Number,
+    type: String,
     description: 'Идентификатор подписки.',
   })
   @ApiOkResponse({
     description: 'Подписка успешно удалена.',
   })
   remove(
-    @Param('id') _id: string,
-
-    @AuthPayload() _payload: AuthServiceTypes.JwtPayload,
+    @Param('id') id: string,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
   ) {
-    void _id;
-    void _payload;
-    // return this.subscribeService.remove(+id, payload);
+    return this.subscribeService.remove(id, payload);
   }
 }

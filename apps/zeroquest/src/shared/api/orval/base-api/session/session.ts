@@ -9,14 +9,9 @@ import {
   useQuery
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
-  QueryClient,
   QueryFunction,
   QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
@@ -65,7 +60,7 @@ export const getSessionControllerFindAllQueryKey = () => {
     }
 
 
-export const getSessionControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof sessionControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getSessionControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof sessionControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -80,49 +75,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindAll>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type SessionControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof sessionControllerFindAll>>>
 export type SessionControllerFindAllQueryError = ErrorType<unknown>
 
 
-export function useSessionControllerFindAll<TData = Awaited<ReturnType<typeof sessionControllerFindAll>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindAll>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof sessionControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof sessionControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSessionControllerFindAll<TData = Awaited<ReturnType<typeof sessionControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindAll>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof sessionControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof sessionControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSessionControllerFindAll<TData = Awaited<ReturnType<typeof sessionControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить мои сессии
  */
 
 export function useSessionControllerFindAll<TData = Awaited<ReturnType<typeof sessionControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getSessionControllerFindAllQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -158,7 +129,7 @@ export const getSessionControllerCurrentUserSessionQueryKey = () => {
     }
 
 
-export const getSessionControllerCurrentUserSessionQueryOptions = <TData = Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getSessionControllerCurrentUserSessionQueryOptions = <TData = Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -173,49 +144,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type SessionControllerCurrentUserSessionQueryResult = NonNullable<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>>
 export type SessionControllerCurrentUserSessionQueryError = ErrorType<unknown>
 
 
-export function useSessionControllerCurrentUserSession<TData = Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>,
-          TError,
-          Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSessionControllerCurrentUserSession<TData = Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>,
-          TError,
-          Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSessionControllerCurrentUserSession<TData = Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить текущую сессию
  */
 
 export function useSessionControllerCurrentUserSession<TData = Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sessionControllerCurrentUserSession>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getSessionControllerCurrentUserSessionQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -251,7 +198,7 @@ export const getSessionControllerFindOneQueryKey = (id: string,) => {
     }
 
 
-export const getSessionControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof sessionControllerFindOne>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getSessionControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof sessionControllerFindOne>>, TError = ErrorType<unknown>>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -266,49 +213,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindOne>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindOne>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type SessionControllerFindOneQueryResult = NonNullable<Awaited<ReturnType<typeof sessionControllerFindOne>>>
 export type SessionControllerFindOneQueryError = ErrorType<unknown>
 
 
-export function useSessionControllerFindOne<TData = Awaited<ReturnType<typeof sessionControllerFindOne>>, TError = ErrorType<unknown>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindOne>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof sessionControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof sessionControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSessionControllerFindOne<TData = Awaited<ReturnType<typeof sessionControllerFindOne>>, TError = ErrorType<unknown>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindOne>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof sessionControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof sessionControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSessionControllerFindOne<TData = Awaited<ReturnType<typeof sessionControllerFindOne>>, TError = ErrorType<unknown>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить сессию по id
  */
 
 export function useSessionControllerFindOne<TData = Awaited<ReturnType<typeof sessionControllerFindOne>>, TError = ErrorType<unknown>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sessionControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getSessionControllerFindOneQueryOptions(id,options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -372,11 +295,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useSessionControllerRemove = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sessionControllerRemove>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof sessionControllerRemove>>,
         TError,
         {id: string},
         TContext
       > => {
-      return useMutation(getSessionControllerRemoveMutationOptions(options), queryClient);
+      return useMutation(getSessionControllerRemoveMutationOptions(options));
     }

@@ -4,7 +4,8 @@ WORKDIR /repo
 
 COPY . .
 
-RUN bun install --frozen-lockfile --ignore-scripts
+RUN bun install --frozen-lockfile --ignore-scripts --production
+ENV NX_DAEMON=false
 RUN bun nx build api --no-tui
 
 EXPOSE 4000

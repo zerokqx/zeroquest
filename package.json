@@ -4,7 +4,34 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "db:migrate:deploy": "cd libs/db && bunx prisma migrate deploy",
+    "db:migrate:dev": "cd libs/db && bunx prisma migrate dev",
     "db:seed": "bun run --cwd libs/db seed"
+  },
+  "nx": {
+    "targets": {
+      "db-migrate-deploy": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bunx prisma migrate deploy",
+          "cwd": "libs/db"
+        }
+      },
+      "db-migrate-dev": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bunx prisma migrate dev {args}",
+          "cwd": "libs/db"
+        }
+      },
+      "db-seed": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bun run seed",
+          "cwd": "libs/db"
+        }
+      }
+    }
   },
   "private": true,
   "dependencies": {

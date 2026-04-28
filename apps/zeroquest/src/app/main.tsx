@@ -15,6 +15,7 @@ import { createRouter } from '@tanstack/react-router';
 // Import the generated route tree
 import { routeTree } from './route-tree.gen';
 import { MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { theme } from './mantine/theme';
 import { InnerApp } from './inner-app';
 import { LucideProvider } from 'lucide-react';
@@ -38,11 +39,13 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <MantineProvider theme={theme} defaultColorScheme="light">
-        <QueryClientProvider client={queryClient}>
-          <LucideProvider strokeWidth={3} size={16}>
-            <InnerApp />
-          </LucideProvider>
-        </QueryClientProvider>
+        <ModalsProvider>
+          <QueryClientProvider client={queryClient}>
+            <LucideProvider strokeWidth={3} size={16}>
+              <InnerApp />
+            </LucideProvider>
+          </QueryClientProvider>
+        </ModalsProvider>
       </MantineProvider>
     </StrictMode>,
   );

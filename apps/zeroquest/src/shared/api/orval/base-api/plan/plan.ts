@@ -9,14 +9,9 @@ import {
   useQuery
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
-  QueryClient,
   QueryFunction,
   QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
@@ -97,13 +92,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const usePlanControllerCreate = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof planControllerCreate>>, TError,{data: BodyType<CreatePlanDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof planControllerCreate>>,
         TError,
         {data: BodyType<CreatePlanDto>},
         TContext
       > => {
-      return useMutation(getPlanControllerCreateMutationOptions(options), queryClient);
+      return useMutation(getPlanControllerCreateMutationOptions(options));
     }
     /**
  * Возвращает публичный список тарифных планов.
@@ -131,7 +126,7 @@ export const getPlanControllerFindAllQueryKey = () => {
     }
 
 
-export const getPlanControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof planControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getPlanControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof planControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof planControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -146,49 +141,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof planControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof planControllerFindAll>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type PlanControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof planControllerFindAll>>>
 export type PlanControllerFindAllQueryError = ErrorType<unknown>
 
 
-export function usePlanControllerFindAll<TData = Awaited<ReturnType<typeof planControllerFindAll>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindAll>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof planControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof planControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePlanControllerFindAll<TData = Awaited<ReturnType<typeof planControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindAll>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof planControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof planControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePlanControllerFindAll<TData = Awaited<ReturnType<typeof planControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить список планов
  */
 
 export function usePlanControllerFindAll<TData = Awaited<ReturnType<typeof planControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof planControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getPlanControllerFindAllQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -224,7 +195,7 @@ export const getPlanControllerFindOneQueryKey = (id: number,) => {
     }
 
 
-export const getPlanControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof planControllerFindOne>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getPlanControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof planControllerFindOne>>, TError = ErrorType<unknown>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof planControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -239,49 +210,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof planControllerFindOne>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof planControllerFindOne>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type PlanControllerFindOneQueryResult = NonNullable<Awaited<ReturnType<typeof planControllerFindOne>>>
 export type PlanControllerFindOneQueryError = ErrorType<unknown>
 
 
-export function usePlanControllerFindOne<TData = Awaited<ReturnType<typeof planControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindOne>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof planControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof planControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePlanControllerFindOne<TData = Awaited<ReturnType<typeof planControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindOne>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof planControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof planControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePlanControllerFindOne<TData = Awaited<ReturnType<typeof planControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить план по id
  */
 
 export function usePlanControllerFindOne<TData = Awaited<ReturnType<typeof planControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof planControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof planControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getPlanControllerFindOneQueryOptions(id,options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -348,13 +295,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const usePlanControllerUpdate = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof planControllerUpdate>>, TError,{id: number;data: BodyType<UpdatePlanDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof planControllerUpdate>>,
         TError,
         {id: number;data: BodyType<UpdatePlanDto>},
         TContext
       > => {
-      return useMutation(getPlanControllerUpdateMutationOptions(options), queryClient);
+      return useMutation(getPlanControllerUpdateMutationOptions(options));
     }
     /**
  * Удаляет тарифный план. Доступно только ADMIN.
@@ -410,11 +357,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const usePlanControllerRemove = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof planControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof planControllerRemove>>,
         TError,
         {id: number},
         TContext
       > => {
-      return useMutation(getPlanControllerRemoveMutationOptions(options), queryClient);
+      return useMutation(getPlanControllerRemoveMutationOptions(options));
     }

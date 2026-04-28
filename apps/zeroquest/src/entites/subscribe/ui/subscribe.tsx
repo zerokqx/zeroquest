@@ -2,6 +2,7 @@ import { SubscribeEntity } from '@/shared/api/orval/base-api/base-api.schemas';
 import { subscribeControllerGetLink } from '@/shared/api/orval/base-api/subscribe/subscribe';
 import { formatDate } from '@/shared/lib/format-date';
 import { getDaysLeft } from '@/shared/lib/get-days-left';
+import { useRemoveSubscribe } from '../api';
 import {
   ActionIcon,
   Badge,
@@ -13,6 +14,7 @@ import {
   ThemeIcon,
   Title,
 } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import {
   CalendarClock,
   Copy,
@@ -22,6 +24,7 @@ import {
   Infinity as InfinityIcon,
   ShieldCheck,
   ShieldX,
+  Trash2,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -36,6 +39,8 @@ export const Subscribe = ({ data }: SubscribeProps) => {
   const [subscribeLink, setSubscribeLink] = useState<string | null>(null);
   const [isLinkLoading, setIsLinkLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const { mutateAsync: removeSubscribe, isPending: isRemovePending } =
+    useRemoveSubscribe();
   const isStopped = data.status === 'STOPPED';
   const isUnlimitedTraffic = data.totalGb === 0;
 
@@ -82,6 +87,42 @@ export const Subscribe = ({ data }: SubscribeProps) => {
     window.setTimeout(() => setCopied(false), 1500);
   };
 
+  const requestRemove = async () => {
+    console.log('[subscribe.remove] request:start', { id: data.id });
+    try {
+      await removeSubscribe(data.id);
+      console.log('[subscribe.remove] request:success', { id: data.id });
+    } catch (error) {
+      console.error('[subscribe.remove] request:error', {
+        id: data.id,
+        error,
+      });
+    } finally {
+      console.log('[subscribe.remove] request:finish', { id: data.id });
+    }
+  };
+
+  const remove = () => {
+    console.log('[subscribe.remove] click', { id: data.id });
+    modals.openConfirmModal({
+      title: 'Удаление подписки',
+      centered: true,
+      labels: { confirm: 'Удалить', cancel: 'Отмена' },
+      confirmProps: { color: 'red' },
+      children: (
+        <Text size="sm">
+          {`Удалить подписку "${data.name}"? Это действие необратимо.`}
+        </Text>
+      ),
+      onCancel: () => {
+        console.log('[subscribe.remove] canceled by user', { id: data.id });
+      },
+      onConfirm: () => {
+        void requestRemove();
+      },
+    });
+  };
+
   useEffect(() => {
     if (!visible) return;
 
@@ -103,9 +144,21 @@ export const Subscribe = ({ data }: SubscribeProps) => {
             </Text>
             <Title order={4}>{data.name}</Title>
           </Stack>
-          <Badge variant="light" color={isStopped ? 'red' : 'green'}>
-            {isStopped ? 'Остановлена' : 'Активна'}
-          </Badge>
+          <Group gap="xs">
+            <Badge variant="light" color={isStopped ? 'red' : 'green'}>
+              {isStopped ? 'Остановлена' : 'Активна'}
+            </Badge>
+            <ActionIcon
+              color="red"
+              variant="light"
+              bdrs="xl"
+              onClick={remove}
+              loading={isRemovePending}
+              aria-label="Удалить подписку"
+            >
+              <Trash2 size={16} />
+            </ActionIcon>
+          </Group>
         </Group>
 
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
@@ -196,7 +249,7 @@ export const Subscribe = ({ data }: SubscribeProps) => {
               userSelect: visible ? 'auto' : 'none',
             }}
           >
-            {visible ? subscribeLink ?? 'Ссылка недоступна' : masked}
+            {visible ? (subscribeLink ?? 'Ссылка недоступна') : masked}
           </Text>
           <Text size="xs" c="dimmed" mt={6}>
             Ссылка загружается по запросу и скрывается через 20 секунд.

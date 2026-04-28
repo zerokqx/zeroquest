@@ -9,14 +9,9 @@ import {
   useQuery
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
-  QueryClient,
   QueryFunction,
   QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
@@ -96,13 +91,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useInboundControllerCreate = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inboundControllerCreate>>, TError,{data: BodyType<CreateInboundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof inboundControllerCreate>>,
         TError,
         {data: BodyType<CreateInboundDto>},
         TContext
       > => {
-      return useMutation(getInboundControllerCreateMutationOptions(options), queryClient);
+      return useMutation(getInboundControllerCreateMutationOptions(options));
     }
     /**
  * Возвращает список всех inbound-конфигураций.
@@ -130,7 +125,7 @@ export const getInboundControllerFindAllQueryKey = () => {
     }
 
 
-export const getInboundControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof inboundControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getInboundControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof inboundControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -145,49 +140,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindAll>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type InboundControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof inboundControllerFindAll>>>
 export type InboundControllerFindAllQueryError = ErrorType<unknown>
 
 
-export function useInboundControllerFindAll<TData = Awaited<ReturnType<typeof inboundControllerFindAll>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindAll>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof inboundControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof inboundControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useInboundControllerFindAll<TData = Awaited<ReturnType<typeof inboundControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindAll>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof inboundControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof inboundControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useInboundControllerFindAll<TData = Awaited<ReturnType<typeof inboundControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить список inbound
  */
 
 export function useInboundControllerFindAll<TData = Awaited<ReturnType<typeof inboundControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getInboundControllerFindAllQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -223,7 +194,7 @@ export const getInboundControllerFindOneQueryKey = (id: number,) => {
     }
 
 
-export const getInboundControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof inboundControllerFindOne>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getInboundControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof inboundControllerFindOne>>, TError = ErrorType<unknown>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -238,49 +209,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindOne>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindOne>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type InboundControllerFindOneQueryResult = NonNullable<Awaited<ReturnType<typeof inboundControllerFindOne>>>
 export type InboundControllerFindOneQueryError = ErrorType<unknown>
 
 
-export function useInboundControllerFindOne<TData = Awaited<ReturnType<typeof inboundControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindOne>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof inboundControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof inboundControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useInboundControllerFindOne<TData = Awaited<ReturnType<typeof inboundControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindOne>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof inboundControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof inboundControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useInboundControllerFindOne<TData = Awaited<ReturnType<typeof inboundControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить inbound по id
  */
 
 export function useInboundControllerFindOne<TData = Awaited<ReturnType<typeof inboundControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof inboundControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getInboundControllerFindOneQueryOptions(id,options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -347,13 +294,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useInboundControllerUpdate = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inboundControllerUpdate>>, TError,{id: number;data: BodyType<UpdateInboundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof inboundControllerUpdate>>,
         TError,
         {id: number;data: BodyType<UpdateInboundDto>},
         TContext
       > => {
-      return useMutation(getInboundControllerUpdateMutationOptions(options), queryClient);
+      return useMutation(getInboundControllerUpdateMutationOptions(options));
     }
     /**
  * Удаляет inbound-конфигурацию по id.
@@ -409,11 +356,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useInboundControllerRemove = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inboundControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof inboundControllerRemove>>,
         TError,
         {id: number},
         TContext
       > => {
-      return useMutation(getInboundControllerRemoveMutationOptions(options), queryClient);
+      return useMutation(getInboundControllerRemoveMutationOptions(options));
     }

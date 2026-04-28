@@ -128,7 +128,47 @@ export class SubscribeService {
     return this.subscribeRepository.update(data);
   }
   async remove(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayload) {
-    return this.subscribeRepository.deleteByIdAndUserId(id, payload.sub);
+    this.logger.log(
+      `Запрошено удаление подписки: subscribeId=${id}, userId=${payload.sub}`,
+    );
+    try {
+      const subscribe = await this.prisma.subscribe.findUniqueOrThrow({
+        where: { id_userId: { id, userId: payload.sub } },
+        include: { plan: { include: { inbound: true } } },
+      });
+      this.logger.debug(
+        `Подписка загружена для удаления: subscribeId=${id}, userId=${payload.sub}, inboundId=${subscribe.plan.inbound.inboundId}, vlessClientId=${subscribe.vlessClientId}`,
+      );
+
+      this.logger.debug(
+        `Начато удаление клиента в 3x-ui: subscribeId=${id}, userId=${payload.sub}`,
+      );
+      await this.threeXUiService.deleteClient(
+        subscribe.plan.inbound.inboundId,
+        subscribe.vlessClientId,
+      );
+      this.logger.debug(
+        `Клиент удален в 3x-ui: subscribeId=${id}, userId=${payload.sub}`,
+      );
+
+      await this.prisma.subscribe.delete({
+        where: { id_userId: { id, userId: payload.sub } },
+      });
+      this.logger.debug(
+        `Подписка удалена из БД: subscribeId=${id}, userId=${payload.sub}`,
+      );
+
+      this.logger.log(
+        `Удаление подписки завершено: subscribeId=${id}, userId=${payload.sub}`,
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown remove error';
+      this.logger.error(
+        `Ошибка удаления подписки: subscribeId=${id}, userId=${payload.sub}, error=${message}`,
+      );
+      throw error;
+    }
   }
 
   async renew(id: string, payload: AuthServiceTypes.JwtPayload) {

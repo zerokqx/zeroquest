@@ -12,10 +12,10 @@ export interface CreatePlanDto {
   duratationDays: number;
 }
 
-export interface S { [key: string]: unknown }
+export interface Decimal2 { [key: string]: unknown }
 
 export interface PlanEntity {
-  discountedPercent: S;
+  discountedPercent: Decimal2;
   /** @nullable */
   features: string | null;
   isSpecial: boolean;

@@ -9,14 +9,9 @@ import {
   useQuery
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
-  QueryClient,
   QueryFunction,
   QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
@@ -96,13 +91,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useRefundControllerCreate = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refundControllerCreate>>, TError,{data: BodyType<CreateRefundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof refundControllerCreate>>,
         TError,
         {data: BodyType<CreateRefundDto>},
         TContext
       > => {
-      return useMutation(getRefundControllerCreateMutationOptions(options), queryClient);
+      return useMutation(getRefundControllerCreateMutationOptions(options));
     }
     /**
  * Админский эндпоинт. Возвращает все заявки на возврат из БД.
@@ -130,7 +125,7 @@ export const getRefundControllerFindAllQueryKey = () => {
     }
 
 
-export const getRefundControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof refundControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof refundControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getRefundControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof refundControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof refundControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -145,49 +140,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof refundControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof refundControllerFindAll>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type RefundControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof refundControllerFindAll>>>
 export type RefundControllerFindAllQueryError = ErrorType<unknown>
 
 
-export function useRefundControllerFindAll<TData = Awaited<ReturnType<typeof refundControllerFindAll>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof refundControllerFindAll>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof refundControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof refundControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRefundControllerFindAll<TData = Awaited<ReturnType<typeof refundControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof refundControllerFindAll>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof refundControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof refundControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRefundControllerFindAll<TData = Awaited<ReturnType<typeof refundControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof refundControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить все заявки на возврат
  */
 
 export function useRefundControllerFindAll<TData = Awaited<ReturnType<typeof refundControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof refundControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof refundControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getRefundControllerFindAllQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -251,13 +222,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useRefundControllerApprove = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refundControllerApprove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof refundControllerApprove>>,
         TError,
         {id: number},
         TContext
       > => {
-      return useMutation(getRefundControllerApproveMutationOptions(options), queryClient);
+      return useMutation(getRefundControllerApproveMutationOptions(options));
     }
     /**
  * Админский эндпоинт. Меняет статус заявки на возврат на REJECTED.
@@ -313,11 +284,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useRefundControllerReject = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refundControllerReject>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof refundControllerReject>>,
         TError,
         {id: number},
         TContext
       > => {
-      return useMutation(getRefundControllerRejectMutationOptions(options), queryClient);
+      return useMutation(getRefundControllerRejectMutationOptions(options));
     }

@@ -4,8 +4,9 @@ WORKDIR /repo
 
 COPY . .
 
-RUN bun install --frozen-lockfile --ignore-scripts
+RUN bun install --frozen-lockfile --ignore-scripts --production
 RUN bun --cwd apps/zeroquest vite build
+
 
 FROM oven/bun:1 AS runner
 

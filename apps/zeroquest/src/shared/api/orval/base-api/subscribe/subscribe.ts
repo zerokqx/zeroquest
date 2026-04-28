@@ -9,14 +9,9 @@ import {
   useQuery
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
-  QueryClient,
   QueryFunction,
   QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
@@ -64,7 +59,7 @@ export const getSubscribeControllerGetLinkQueryKey = (id: string,) => {
     }
 
 
-export const getSubscribeControllerGetLinkQueryOptions = <TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getSubscribeControllerGetLinkQueryOptions = <TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -79,46 +74,22 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type SubscribeControllerGetLinkQueryResult = NonNullable<Awaited<ReturnType<typeof subscribeControllerGetLink>>>
 export type SubscribeControllerGetLinkQueryError = ErrorType<unknown>
 
 
-export function useSubscribeControllerGetLink<TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof subscribeControllerGetLink>>,
-          TError,
-          Awaited<ReturnType<typeof subscribeControllerGetLink>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSubscribeControllerGetLink<TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof subscribeControllerGetLink>>,
-          TError,
-          Awaited<ReturnType<typeof subscribeControllerGetLink>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSubscribeControllerGetLink<TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useSubscribeControllerGetLink<TData = Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError = ErrorType<unknown>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerGetLink>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getSubscribeControllerGetLinkQueryOptions(id,options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -177,13 +148,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export const useSubscribeControllerBuy = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerBuy>>, TError,{data: BodyType<SubscribeBuyDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof subscribeControllerBuy>>,
         TError,
         {data: BodyType<SubscribeBuyDto>},
         TContext
       > => {
-      return useMutation(getSubscribeControllerBuyMutationOptions(options), queryClient);
+      return useMutation(getSubscribeControllerBuyMutationOptions(options));
     }
     /**
  * Возвращает список подписок текущего пользователя.
@@ -211,7 +182,7 @@ export const getSubscribeControllerFindAllQueryKey = () => {
     }
 
 
-export const getSubscribeControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getSubscribeControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -226,49 +197,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type SubscribeControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof subscribeControllerFindAll>>>
 export type SubscribeControllerFindAllQueryError = ErrorType<unknown>
 
 
-export function useSubscribeControllerFindAll<TData = Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof subscribeControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof subscribeControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSubscribeControllerFindAll<TData = Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof subscribeControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof subscribeControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSubscribeControllerFindAll<TData = Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить мои подписки
  */
 
 export function useSubscribeControllerFindAll<TData = Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getSubscribeControllerFindAllQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -327,20 +274,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export const useSubscribeControllerResetSubscribe = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerResetSubscribe>>, TError,{data: BodyType<ResetSubscribeDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof subscribeControllerResetSubscribe>>,
         TError,
         {data: BodyType<ResetSubscribeDto>},
         TContext
       > => {
-      return useMutation(getSubscribeControllerResetSubscribeMutationOptions(options), queryClient);
+      return useMutation(getSubscribeControllerResetSubscribeMutationOptions(options));
     }
     /**
  * Возвращает одну подписку текущего пользователя.
  * @summary Получить подписку по id
  */
 export const subscribeControllerFindOne = (
-    id: number,
+    id: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
@@ -354,14 +301,14 @@ export const subscribeControllerFindOne = (
 
 
 
-export const getSubscribeControllerFindOneQueryKey = (id: number,) => {
+export const getSubscribeControllerFindOneQueryKey = (id: string,) => {
     return [
     `/api/subscriptions/${id}`
     ] as const;
     }
 
 
-export const getSubscribeControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getSubscribeControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError = ErrorType<unknown>>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -376,49 +323,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type SubscribeControllerFindOneQueryResult = NonNullable<Awaited<ReturnType<typeof subscribeControllerFindOne>>>
 export type SubscribeControllerFindOneQueryError = ErrorType<unknown>
 
 
-export function useSubscribeControllerFindOne<TData = Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof subscribeControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof subscribeControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSubscribeControllerFindOne<TData = Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof subscribeControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof subscribeControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSubscribeControllerFindOne<TData = Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить подписку по id
  */
 
 export function useSubscribeControllerFindOne<TData = Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof subscribeControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getSubscribeControllerFindOneQueryOptions(id,options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -433,7 +356,7 @@ export function useSubscribeControllerFindOne<TData = Awaited<ReturnType<typeof 
  * @summary Обновить подписку
  */
 export const subscribeControllerUpdate = (
-    id: number,
+    id: string,
     updateSubscribeDto: BodyType<UpdateSubscribeDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
@@ -450,8 +373,8 @@ export const subscribeControllerUpdate = (
 
 
 export const getSubscribeControllerUpdateMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerUpdate>>, TError,{id: number;data: BodyType<UpdateSubscribeDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerUpdate>>, TError,{id: number;data: BodyType<UpdateSubscribeDto>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerUpdate>>, TError,{id: string;data: BodyType<UpdateSubscribeDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerUpdate>>, TError,{id: string;data: BodyType<UpdateSubscribeDto>}, TContext> => {
 
 const mutationKey = ['subscribeControllerUpdate'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -463,7 +386,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof subscribeControllerUpdate>>, {id: number;data: BodyType<UpdateSubscribeDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof subscribeControllerUpdate>>, {id: string;data: BodyType<UpdateSubscribeDto>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  subscribeControllerUpdate(id,data,requestOptions)
@@ -484,21 +407,21 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  * @summary Обновить подписку
  */
 export const useSubscribeControllerUpdate = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerUpdate>>, TError,{id: number;data: BodyType<UpdateSubscribeDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerUpdate>>, TError,{id: string;data: BodyType<UpdateSubscribeDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ ): UseMutationResult<
         Awaited<ReturnType<typeof subscribeControllerUpdate>>,
         TError,
-        {id: number;data: BodyType<UpdateSubscribeDto>},
+        {id: string;data: BodyType<UpdateSubscribeDto>},
         TContext
       > => {
-      return useMutation(getSubscribeControllerUpdateMutationOptions(options), queryClient);
+      return useMutation(getSubscribeControllerUpdateMutationOptions(options));
     }
     /**
  * Удаляет подписку текущего пользователя.
  * @summary Удалить подписку
  */
 export const subscribeControllerRemove = (
-    id: number,
+    id: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
@@ -512,8 +435,8 @@ export const subscribeControllerRemove = (
 
 
 export const getSubscribeControllerRemoveMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerRemove>>, TError,{id: number}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerRemove>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerRemove>>, TError,{id: string}, TContext> => {
 
 const mutationKey = ['subscribeControllerRemove'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -525,7 +448,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof subscribeControllerRemove>>, {id: number}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof subscribeControllerRemove>>, {id: string}> = (props) => {
           const {id} = props ?? {};
 
           return  subscribeControllerRemove(id,requestOptions)
@@ -546,12 +469,12 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  * @summary Удалить подписку
  */
 export const useSubscribeControllerRemove = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeControllerRemove>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ ): UseMutationResult<
         Awaited<ReturnType<typeof subscribeControllerRemove>>,
         TError,
-        {id: number},
+        {id: string},
         TContext
       > => {
-      return useMutation(getSubscribeControllerRemoveMutationOptions(options), queryClient);
+      return useMutation(getSubscribeControllerRemoveMutationOptions(options));
     }

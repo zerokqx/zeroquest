@@ -9,14 +9,9 @@ import {
   useQuery
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
-  QueryClient,
   QueryFunction,
   QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
@@ -65,7 +60,7 @@ export const getThreeXUiControllerGetInboundsQueryKey = () => {
     }
 
 
-export const getThreeXUiControllerGetInboundsQueryOptions = <TData = Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getThreeXUiControllerGetInboundsQueryOptions = <TData = Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -80,49 +75,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type ThreeXUiControllerGetInboundsQueryResult = NonNullable<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>>
 export type ThreeXUiControllerGetInboundsQueryError = ErrorType<void>
 
 
-export function useThreeXUiControllerGetInbounds<TData = Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>,
-          TError,
-          Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useThreeXUiControllerGetInbounds<TData = Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>,
-          TError,
-          Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useThreeXUiControllerGetInbounds<TData = Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить inbound из 3x-ui
  */
 
 export function useThreeXUiControllerGetInbounds<TData = Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof threeXUiControllerGetInbounds>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getThreeXUiControllerGetInboundsQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -189,13 +160,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useThreeXUiControllerAddClient = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof threeXUiControllerAddClient>>, TError,{inboundId: number;data: BodyType<XuiClient>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof threeXUiControllerAddClient>>,
         TError,
         {inboundId: number;data: BodyType<XuiClient>},
         TContext
       > => {
-      return useMutation(getThreeXUiControllerAddClientMutationOptions(options), queryClient);
+      return useMutation(getThreeXUiControllerAddClientMutationOptions(options));
     }
     /**
  * ТОЛЬКО ДЛЯ ADMIN
@@ -252,13 +223,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useThreeXUiControllerResetClientTraffic = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof threeXUiControllerResetClientTraffic>>, TError,{inboundId: number;email: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof threeXUiControllerResetClientTraffic>>,
         TError,
         {inboundId: number;email: string},
         TContext
       > => {
-      return useMutation(getThreeXUiControllerResetClientTrafficMutationOptions(options), queryClient);
+      return useMutation(getThreeXUiControllerResetClientTrafficMutationOptions(options));
     }
     /**
  * ТОЛЬКО ДЛЯ ADMIN
@@ -315,11 +286,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useThreeXUiControllerDeleteClient = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof threeXUiControllerDeleteClient>>, TError,{inboundId: number;uuid: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof threeXUiControllerDeleteClient>>,
         TError,
         {inboundId: number;uuid: string},
         TContext
       > => {
-      return useMutation(getThreeXUiControllerDeleteClientMutationOptions(options), queryClient);
+      return useMutation(getThreeXUiControllerDeleteClientMutationOptions(options));
     }

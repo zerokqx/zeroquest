@@ -9,14 +9,9 @@ import {
   useQuery
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
-  QueryClient,
   QueryFunction,
   QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
@@ -97,13 +92,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const usePaymentControllerCreate = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paymentControllerCreate>>, TError,{data: BodyType<CreatePaymentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof paymentControllerCreate>>,
         TError,
         {data: BodyType<CreatePaymentDto>},
         TContext
       > => {
-      return useMutation(getPaymentControllerCreateMutationOptions(options), queryClient);
+      return useMutation(getPaymentControllerCreateMutationOptions(options));
     }
     /**
  * Возвращает платежи текущего пользователя.
@@ -131,7 +126,7 @@ export const getPaymentControllerFindAllQueryKey = () => {
     }
 
 
-export const getPaymentControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof paymentControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getPaymentControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof paymentControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -146,49 +141,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindAll>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type PaymentControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof paymentControllerFindAll>>>
 export type PaymentControllerFindAllQueryError = ErrorType<unknown>
 
 
-export function usePaymentControllerFindAll<TData = Awaited<ReturnType<typeof paymentControllerFindAll>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindAll>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof paymentControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof paymentControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePaymentControllerFindAll<TData = Awaited<ReturnType<typeof paymentControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindAll>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof paymentControllerFindAll>>,
-          TError,
-          Awaited<ReturnType<typeof paymentControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePaymentControllerFindAll<TData = Awaited<ReturnType<typeof paymentControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить список моих платежей
  */
 
 export function usePaymentControllerFindAll<TData = Awaited<ReturnType<typeof paymentControllerFindAll>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindAll>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getPaymentControllerFindAllQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -254,13 +225,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const usePaymentControllerGiveBonus = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paymentControllerGiveBonus>>, TError,{data: BodyType<GiveBonusDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof paymentControllerGiveBonus>>,
         TError,
         {data: BodyType<GiveBonusDto>},
         TContext
       > => {
-      return useMutation(getPaymentControllerGiveBonusMutationOptions(options), queryClient);
+      return useMutation(getPaymentControllerGiveBonusMutationOptions(options));
     }
     /**
  * Открывает text/event-stream соединение с heartbeat и пользовательскими событиями по платежам.
@@ -288,7 +259,7 @@ export const getPaymentControllerEventsQueryKey = () => {
     }
 
 
-export const getPaymentControllerEventsQueryOptions = <TData = Awaited<ReturnType<typeof paymentControllerEvents>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerEvents>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getPaymentControllerEventsQueryOptions = <TData = Awaited<ReturnType<typeof paymentControllerEvents>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof paymentControllerEvents>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -303,49 +274,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paymentControllerEvents>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paymentControllerEvents>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type PaymentControllerEventsQueryResult = NonNullable<Awaited<ReturnType<typeof paymentControllerEvents>>>
 export type PaymentControllerEventsQueryError = ErrorType<unknown>
 
 
-export function usePaymentControllerEvents<TData = Awaited<ReturnType<typeof paymentControllerEvents>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerEvents>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof paymentControllerEvents>>,
-          TError,
-          Awaited<ReturnType<typeof paymentControllerEvents>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePaymentControllerEvents<TData = Awaited<ReturnType<typeof paymentControllerEvents>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerEvents>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof paymentControllerEvents>>,
-          TError,
-          Awaited<ReturnType<typeof paymentControllerEvents>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePaymentControllerEvents<TData = Awaited<ReturnType<typeof paymentControllerEvents>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerEvents>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary SSE-стрим событий платежей
  */
 
 export function usePaymentControllerEvents<TData = Awaited<ReturnType<typeof paymentControllerEvents>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerEvents>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof paymentControllerEvents>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getPaymentControllerEventsQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -381,7 +328,7 @@ export const getPaymentControllerFindOneQueryKey = (id: number,) => {
     }
 
 
-export const getPaymentControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof paymentControllerFindOne>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getPaymentControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof paymentControllerFindOne>>, TError = ErrorType<unknown>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -396,49 +343,25 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
 
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindOne>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindOne>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type PaymentControllerFindOneQueryResult = NonNullable<Awaited<ReturnType<typeof paymentControllerFindOne>>>
 export type PaymentControllerFindOneQueryError = ErrorType<unknown>
 
 
-export function usePaymentControllerFindOne<TData = Awaited<ReturnType<typeof paymentControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindOne>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof paymentControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof paymentControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePaymentControllerFindOne<TData = Awaited<ReturnType<typeof paymentControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindOne>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof paymentControllerFindOne>>,
-          TError,
-          Awaited<ReturnType<typeof paymentControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePaymentControllerFindOne<TData = Awaited<ReturnType<typeof paymentControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Получить платёж по id
  */
 
 export function usePaymentControllerFindOne<TData = Awaited<ReturnType<typeof paymentControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof paymentControllerFindOne>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getPaymentControllerFindOneQueryOptions(id,options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }

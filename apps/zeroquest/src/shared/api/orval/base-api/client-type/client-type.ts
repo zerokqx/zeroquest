@@ -9,7 +9,6 @@ import {
 } from '@tanstack/react-query';
 import type {
   MutationFunction,
-  QueryClient,
   UseMutationOptions,
   UseMutationResult
 } from '@tanstack/react-query';
@@ -86,11 +85,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  */
 export const useClientTypeControllerExists = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof clientTypeControllerExists>>, TError,{data: BodyType<ClientTypeExistDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
+ ): UseMutationResult<
         Awaited<ReturnType<typeof clientTypeControllerExists>>,
         TError,
         {data: BodyType<ClientTypeExistDto>},
         TContext
       > => {
-      return useMutation(getClientTypeControllerExistsMutationOptions(options), queryClient);
+      return useMutation(getClientTypeControllerExistsMutationOptions(options));
     }
