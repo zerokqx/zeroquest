@@ -1,84 +1,54 @@
 # ZeroQuest Monorepo
 
-ZeroQuest — монорепозиторий на `Nx` для headless-магазина и сервисов вокруг `3x-ui`.
+ZeroQuest — продуктовый монорепозиторий VPN-магазина: backend API, frontend-кабинет, Telegram-бот, e2e-проекты и shared-библиотеки.
+
+Главная цель этого репозитория: быстро и предсказуемо развивать VPN-продукт как единый инженерный контур, где бизнес-логика, интерфейсы и инфраструктурные команды живут в одном месте и собираются через `Nx`.
+
+## Что именно умеет платформа
+
+- продажа и управление VPN-подписками;
+- платежный контур (YooKassa) и lifecycle платежей;
+- интеграция с `3x-ui` для управления VPN-клиентами;
+- личный кабинет пользователя (`zeroquest` frontend);
+- Telegram-канал взаимодействия (`telegram-bot`);
+- единый граф задач, сборок и тестов через `Nx`.
 
 ## Технологический стек
 
-- `Nx` — orchestration/build graph для apps/libs
-- `NestJS` — backend-сервисы (`api`, `wallet-service`)
-- `React + Vite` — фронтенд (`zeroquest`)
-- `TanStack Router + React Query` — роутинг и серверный state на фронтенде
-- `Mantine` — UI-компоненты фронтенда
-- `Prisma` — доступ к БД
-- `Redis` — transport/queues/cache
-- `PostgreSQL` — основная БД
-- `Bun` — package manager/runtime для workspace-команд
+- `Nx` — orchestration, task graph, caching, affected-runs;
+- `Bun` — пакетный менеджер и runtime команд;
+- `NestJS` — backend и доменные сервисы;
+- `React + Vite + Mantine` — frontend;
+- `TanStack Router + React Query` — роутинг и server-state;
+- `Prisma + PostgreSQL` — доступ к данным;
+- `Redis` — инфраструктурные сценарии (очереди/кэш);
+- `Playwright / Jest / Vitest` — e2e и unit/integration тесты.
 
-## Структура проекта
+## Карта репозитория
 
-### Apps (`./apps`)
+### Apps
 
-- `api` — основной backend API (HTTP + интеграции + доменная логика)
-- `wallet-service` — отдельный сервис кошелька
-- `zeroquest` — frontend-приложение
-- `telegram-bot` — интерфейс магазина через Telegram
-- `*-e2e` — e2e-проекты для соответствующих приложений
+| Путь | Проект | Роль |
+| --- | --- | --- |
+| `apps/api` | `@zeroquest/api` | Основной backend API и интеграции (`YooKassa`, `3x-ui`). |
+| `apps/zeroquest` | `@zeroquest/zeroquest` | Frontend (личный кабинет, магазин, история платежей). |
+| `apps/telegram-bot` | `@zeroquest/telegram-bot` | Telegram-интерфейс продукта. |
+| `apps/api-e2e` | `@zeroquest/api-e2e` | e2e/интеграционные тесты API. |
+| `apps/zeroquest-e2e` | `@zeroquest/zeroquest-e2e` | Playwright e2e frontend. |
+| `apps/telegram-bot-e2e` | `@zeroquest/telegram-bot-e2e` | e2e/интеграционные тесты бота. |
+| `apps/api/src/generated/yookassa` | `yookassa-client` | Сгенерированный OpenAPI SDK YooKassa. |
 
-### Libs (`./libs`)
+### Libs
 
-- `config` — централизованная конфигурация Nest (`forRoot`, `forFeature`)
-- `db` — Prisma schema/client и DB-модуль
-- `types` — общие типы и контракты между приложениями
-- `converters` — общие конвертеры/мапперы
-- `nest-shared` — общие Nest-guard/decorator/interceptor утилиты
+| Путь | Проект | Роль |
+| --- | --- | --- |
+| `libs/config` | `@zeroquest/config` | Централизованная конфигурация и env-обвязка. |
+| `libs/db` | `@zeroquest/db` | Prisma schema/client + seed. |
+| `libs/types` | `@zeroquest/types` | Общие доменные и транспортные типы. |
+| `libs/converters` | `@zeroquest/converters` | Утилиты преобразования данных. |
+| `libs/nest-shared` | `@zeroquest/nest-shared` | Общие NestJS-помощники и abstractions. |
 
-## Что добавлено в текущей версии
-
-### Backend
-
-- Добавлен `policy` слой в `apps/api/src/policy`:
-  - получение актуального документа `GET /api/policy/actual?type=...`
-  - валидация и фиксация юридических акцептов в `legal_acceptances`
-  - проверка обязательных типов документов перед критичными операциями
-- Login (`/api/auth/password`) теперь требует акцепт `PRIVACY`.
-- Покупка подписки (`/api/subscriptions`) теперь требует акцепт `TERMS`.
-- Для покупки подписки добавлена более понятная обработка конфликта уникального имени устройства.
-
-### Frontend (`apps/zeroquest`)
-
-- Добавлены страницы/маршруты:
-  - `/dashboard`
-  - `/magazine`
-  - `/payment-history`
-  - `/policy?type=PRIVACY|PUBLIC|TERMS`
-  - кастомная 404-страница
-- Добавлены доменные UI-модули:
-  - `entites/wallet` (`WalletCard`, `NextBalanceCard`)
-  - `entites/payment` + `widgets/payment`
-  - `features/buy-subscribe`
-- `WalletCard`:
-  - показывает доступный/общий/замороженный баланс
-  - содержит кнопку `Пополнить баланс` с модалкой `CreditBalanceForm`
-  - содержит кнопку перехода в `История платежей`
-- `NextBalanceCard` поддерживает режимы операций:
-  - `debit` (по умолчанию) — вычитает сумму
-  - `credit` — прибавляет сумму
-  - отрицательный результат подсвечивается красным
-- В форме покупки подписки:
-  - отображаются ошибки бэкенда
-  - покупка блокируется при недостатке средств
-  - отправляется акцепт актуального `TERMS`
-
-## Юридические документы и policy flow
-
-- Исходники документов лежат в `./policy`:
-  - `PRIVACY_POLICY.md`
-  - `PUBLIC_OFFER.md`
-  - `TERMS_OF_SERVICE.md`
-- Frontend получает актуальные версии через `GET /api/policy/actual`.
-- При входе и покупке фронтенд отправляет массив `policy` (тип + версия документа), а backend валидирует существование таких версий и сохраняет акцепт.
-
-## Быстрый старт
+## Быстрый старт (локальная разработка)
 
 ### 1. Установка зависимостей
 
@@ -88,95 +58,279 @@ bun install
 
 ### 2. Конфигурация окружения
 
-Конфиг централизован в корне:
+Репозиторий использует корневые env-файлы:
 
-- `/.env` — базовые значения
-- `/.env.local` — локальные override (имеет приоритет над `.env`)
+- `/.env`
+- `/.env.local` (локальный override)
 
-Загрузка env делается из `@zeroquest/config` через абсолютные пути к корню workspace.
+Минимально проверь, что заполнены подключения к БД/Redis и ключи внешних интеграций (`YooKassa`, `3x-ui`).
 
-### 3. Поднять инфраструктуру (DB/Redis)
+### 3. Поднять инфраструктуру
 
 ```bash
 docker compose up -d postgres redis
 ```
 
-или через таргеты `api`:
+### 4. Миграции и seed
 
 ```bash
-bunx nx docker:db api -- up -d
-bunx nx docker:redis api -- up -d
+# разработка миграций
+bunx nx db-migrate-dev
+
+# прод-применение миграций
+bunx nx db-migrate-deploy
+
+# сиды
+bunx nx db-seed
 ```
 
-### 4. Генерация Prisma клиента (при необходимости)
+### 5. Запуск приложений
 
 ```bash
-bunx nx prisma:generate api
-```
-
-### 4.1 Миграции Prisma (локальная разработка)
-
-```bash
-# применить новые миграции
-bunx prisma migrate dev --schema libs/db/prisma/schema.prisma
-
-# посмотреть состояние миграций
-bunx prisma migrate status --schema libs/db/prisma/schema.prisma
-```
-
-### 5. Запуск сервисов
-
-```bash
-# API
+# backend API
 bunx nx serve api
 
-# Wallet service
-bunx nx serve wallet-service
-
-# Frontend
+# frontend
 bunx nx serve zeroquest
+
+# telegram bot
+bunx nx serve telegram-bot
 ```
 
-## Полезные команды
+### 6. Генерация клиентов API
 
 ```bash
-# Сборка конкретного приложения
-bunx nx build api
-bunx nx build wallet-service
+# backend: перегенерация YooKassa SDK
+bunx nx yookassa:openapi api
 
-# Запуск e2e
-bunx nx e2e api-e2e
-bunx nx e2e wallet-service-e2e
-
-# Остановить backend-контейнеры через api target
-bunx nx docker:down:all api
+# frontend: перегенерация orval-клиента
+bunx nx orval:run zeroquest
 ```
 
-## Конфиг и централизованность
+### 7. Проверка качества перед merge
 
-В проекте принято:
+```bash
+# lint и typecheck по всем проектам
+bunx nx run-many -t lint,typecheck --all
 
-- не хранить `.env` в `apps/*` и `libs/*`
-- использовать только корневые `/.env` и `/.env.local`
-- подключать конфиг модулем `ZeroquestConfigModule.forRoot(...)`
-- держать feature-конфиги через `registerAs(...)` + `forFeature(...)` внутри `libs/config`
+# unit/integration/e2e (по необходимости)
+bunx nx run-many -t test,e2e --all
+```
 
-## Docker/Nginx
+## Workspace-таргеты (корень репозитория)
 
-Базовый compose находится в [compose.yaml](/home/zerok/projects/zeroquest/compose.yaml).
+Корневой проект (`@zeroquest/source`) содержит db-таргеты-обертки, чтобы не запоминать `cwd`:
 
-Для reverse-proxy используется конфиг в `infra/nginx/*` (если нужен внешний роутинг между `api`, `wallet-service`, frontend).
+| Таргет | Что делает | Команда |
+| --- | --- | --- |
+| `db-migrate-dev` | Запускает `prisma migrate dev` в `libs/db`. | `bunx prisma migrate dev {args}` |
+| `db-migrate-deploy` | Применяет миграции в `libs/db` (deploy-режим). | `bunx prisma migrate deploy` |
+| `db-seed` | Запускает seed в `libs/db`. | `bun run seed` |
 
-## Важные замечания по безопасности
+Также есть script-алиасы:
 
-- Не логировать секреты (`YOOKASSA_API_TOKEN`, auth headers, JWT secrets)
-- `/.env.local` не коммитить в публичные репозитории
-- После утечки токенов перевыпускать их у провайдера
+- `db:migrate:dev`
+- `db:migrate:deploy`
+- `db:seed`
 
-## Рекомендованный поток разработки
+Они вызывают те же действия через `nx:run-script`.
 
-1. Обновить `/.env.local` под локальную машину
-2. Поднять `postgres`/`redis`
-3. Запустить `api` + нужные сервисы
-4. Внести изменения в libs/apps
-5. Прогнать `bunx nx build <project>` перед коммитом
+## Инженерные принципы проекта
+
+- Единый task-graph: всё запускается через `Nx` таргеты.
+- Явные bounded contexts: API/Frontend/Bot изолированы по приложениям.
+- Shared-код выносится в `libs/*`, а не копируется между `apps/*`.
+- Для интеграционных контуров есть отдельные e2e-проекты.
+- Генерируемые клиенты (`YooKassa`, `orval`) хранятся в репозитории для воспроизводимости билдов.
+
+## Навигация по задачам
+
+- Новый backend endpoint: `apps/api` + при необходимости `libs/types`/`libs/converters`.
+- Изменения UI/UX: `apps/zeroquest`.
+- Изменения в продуктовых интеграциях Telegram: `apps/telegram-bot`.
+- Схема данных и миграции: `libs/db`.
+
+## Полный Каталог Nx-таргетов (Apps и Libs)
+
+Секция сгенерирована по актуальному `project-graph` и покрывает **все таргеты** в `apps/*` и `libs/*`.
+
+### @zeroquest/api
+
+- Путь: `apps/api`
+- Тип: `app`
+- Назначение: Основной NestJS API: авторизация, платежи, подписки, интеграции с YooKassa и 3x-ui.
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `build` | Собирает backend через Webpack. | `nx:run-commands` | `webpack-cli build` |
+| `build-deps` | Технический таргет Nx для построения графа зависимостей сборки. | `nx:noop` | — |
+| `copy-workspace-modules` | Копирует workspace modules в dist для запуска сборки. | `@nx/js:copy-workspace-modules` | — |
+| `docker:build` | Выполняет команду `docker compose build api`. | `nx:run-commands` | `docker compose build api` |
+| `docker:run` | Выполняет команду `docker compose up -d --build api`. | `nx:run-commands` | `docker compose up -d --build api` |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `ngrok:run` | Выполняет команду `ngrok http $API_PORT --log=stdout --log-format=logfmt`. | `nx:run-commands` | `ngrok http $API_PORT --log=stdout --log-format=logfmt` |
+| `nx-release-publish` | Публикует Docker-образ через Nx release pipeline. | `@nx/docker:release-publish` | — |
+| `preview` | Запускает Webpack dev server в режиме production-конфига. | `nx:run-commands` | `webpack-cli serve` |
+| `prune` | Агрегирующий таргет для упаковки build-артефактов и workspace-модулей. | `nx:noop` | — |
+| `prune-lockfile` | Готовит lockfile, очищенный под runtime-артефакты сборки. | `@nx/js:prune-lockfile` | — |
+| `serve` | Запускает Node.js приложение на основе build-target (dev/prod конфигурации). | `@nx/js:node` | — |
+| `serve-static` | Поднимает статический file server для готовых артефактов. | `@nx/web:file-server` | — |
+| `test` | Запускает тесты через Jest. | `nx:run-commands` | `jest` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+| `watch-deps` | Выполняет команду `bun nx watch --projects @zeroquest/api --includeDependentProjects -- bun nx build-deps @zeroquest/api`. | `nx:run-commands` | `bun nx watch --projects @zeroquest/api --includeDependentProjects -- bun nx build-deps @zeroquest/api` |
+| `yookassa:openapi` | Выполняет команду `bunx openapi-generator-cli generate -i https://yookassa.ru/developers/api/yookassa-openapi-specification.yaml -g typescript-axios -o ./src/generated/yookassa --additional-properties=supportsES6=true,npmName=yookassa-client`. | `nx:run-commands` | `bunx openapi-generator-cli generate -i https://yookassa.ru/developers/api/yookassa-openapi-specification.yaml -g typescript-axios -o ./src/generated/yookassa --additional-properties=supportsES6=true,npmName=yookassa-client` |
+
+### @zeroquest/api-e2e
+
+- Путь: `apps/api-e2e`
+- Тип: `app`
+- Назначение: E2E/интеграционные тесты для API.
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `e2e` | Запускает e2e/интеграционные тесты через Jest. | `@nx/jest:jest` | — |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+
+### yookassa-client
+
+- Путь: `apps/api/src/generated/yookassa`
+- Тип: `lib`
+- Назначение: Сгенерированный TypeScript SDK YooKassa (OpenAPI) для backend-интеграции.
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+
+### @zeroquest/telegram-bot
+
+- Путь: `apps/telegram-bot`
+- Тип: `app`
+- Назначение: Telegram-бот для пользовательского канала продаж/поддержки.
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `build` | Собирает проект через esbuild. | `@nx/esbuild:esbuild` | — |
+| `copy-workspace-modules` | Копирует workspace modules в dist для запуска сборки. | `@nx/js:copy-workspace-modules` | — |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `prune` | Агрегирующий таргет для упаковки build-артефактов и workspace-модулей. | `nx:noop` | — |
+| `prune-lockfile` | Готовит lockfile, очищенный под runtime-артефакты сборки. | `@nx/js:prune-lockfile` | — |
+| `serve` | Запускает Node.js приложение на основе build-target (dev/prod конфигурации). | `@nx/js:node` | — |
+| `test` | Запускает тесты через Jest. | `nx:run-commands` | `jest` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+
+### @zeroquest/telegram-bot-e2e
+
+- Путь: `apps/telegram-bot-e2e`
+- Тип: `app`
+- Назначение: E2E/интеграционные тесты Telegram-бота.
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `e2e` | Запускает e2e/интеграционные тесты через Jest. | `@nx/jest:jest` | — |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+
+### @zeroquest/zeroquest
+
+- Путь: `apps/zeroquest`
+- Тип: `lib`
+- Назначение: Frontend-приложение (React + Vite + Mantine).
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `build` | Собирает frontend через Vite. | `nx:run-commands` | `vite build` |
+| `build-deps` | Технический таргет Nx для построения графа зависимостей сборки. | `nx:noop` | — |
+| `dev` | Запускает Vite dev server для локальной разработки. | `nx:run-commands` | `vite` |
+| `docker:build` | Собирает Docker-образ проекта. | `nx:run-commands` | `docker build .` |
+| `docker:run` | Запускает контейнер проекта через `docker run`. | `nx:run-commands` | `docker run {args} apps-zeroquest` |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `nx-release-publish` | Публикует Docker-образ через Nx release pipeline. | `@nx/docker:release-publish` | — |
+| `orval:run` | Выполняет команду `bunx orval`. | `nx:run-commands` | `bunx orval` |
+| `preview` | Локально поднимает preview production-сборки Vite. | `nx:run-commands` | `vite preview` |
+| `serve` | Запускает Vite dev server для локальной разработки. | `nx:run-commands` | `vite` |
+| `serve-static` | Поднимает статический file server для готовых артефактов. | `@nx/web:file-server` | — |
+| `test` | Запускает тесты через Vitest. | `nx:run-commands` | `vitest` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build --emitDeclarationOnly` |
+| `watch-deps` | Выполняет команду `bun nx watch --projects @zeroquest/zeroquest --includeDependentProjects -- bun nx build-deps @zeroquest/zeroquest`. | `nx:run-commands` | `bun nx watch --projects @zeroquest/zeroquest --includeDependentProjects -- bun nx build-deps @zeroquest/zeroquest` |
+
+### @zeroquest/zeroquest-e2e
+
+- Путь: `apps/zeroquest-e2e`
+- Тип: `app`
+- Назначение: E2E UI-тесты frontend-приложения (Playwright).
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `e2e` | Запускает e2e-тесты через Playwright. | `nx:run-commands` | `playwright test` |
+| `e2e-ci` | CI-оркестрация Playwright-тестов. | `nx:noop` | — |
+| `e2e-ci--merge-reports` | Объединяет atomized Playwright blob-репорты в единый отчет. | `@nx/playwright:merge-reports` | — |
+| `e2e-ci--src/example.spec.ts` | CI-прогон Playwright для `src/example.spec.ts`. | `nx:run-commands` | `playwright test src/example.spec.ts --output=test-output/playwright/output/src-example-spec-ts` |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+
+### @zeroquest/config
+
+- Путь: `libs/config`
+- Тип: `lib`
+- Назначение: Общая конфигурация и env-модель для приложений.
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+
+### @zeroquest/converters
+
+- Путь: `libs/converters`
+- Тип: `lib`
+- Назначение: Утилиты конвертации и маппинга данных.
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `build` | Собирает библиотеку через `tsc` (tsconfig.lib.json). | `nx:run-commands` | `tsc --build tsconfig.lib.json` |
+| `build-deps` | Технический таргет Nx для построения графа зависимостей сборки. | `nx:noop` | — |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `test` | Запускает тесты через Vitest. | `nx:run-commands` | `vitest` |
+| `test-ci` | CI-таргет Vitest для атомизированного прогона. | `nx:noop` | — |
+| `test-ci--src/lib/converters.spec.ts` | Запускает Vitest только для `src/lib/converters.spec.ts`. | `nx:run-commands` | `vitest run src/lib/converters.spec.ts` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build --emitDeclarationOnly` |
+| `watch-deps` | Выполняет команду `bun nx watch --projects @zeroquest/converters --includeDependentProjects -- bun nx build-deps @zeroquest/converters`. | `nx:run-commands` | `bun nx watch --projects @zeroquest/converters --includeDependentProjects -- bun nx build-deps @zeroquest/converters` |
+
+### @zeroquest/db
+
+- Путь: `libs/db`
+- Тип: `lib`
+- Назначение: Prisma schema/client и операции с БД (включая seed).
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `seed` | Запускает script `seed` из package.json: `bun run prisma/seed.ts`. | `nx:run-script` | `bun run prisma/seed.ts` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+
+### @zeroquest/nest-shared
+
+- Путь: `libs/nest-shared`
+- Тип: `lib`
+- Назначение: Общие NestJS-утилиты: guards, decorators, shared helpers.
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+
+### @zeroquest/types
+
+- Путь: `libs/types`
+- Тип: `lib`
+- Назначение: Общие доменные и транспортные типы для apps/libs.
+
+| Таргет | Что делает | Executor | Команда |
+| --- | --- | --- | --- |
+| `build` | Собирает библиотеку через `tsc` (tsconfig.lib.json). | `nx:run-commands` | `tsc --build tsconfig.lib.json` |
+| `build-deps` | Технический таргет Nx для построения графа зависимостей сборки. | `nx:noop` | — |
+| `lint` | Запускает ESLint для проекта. | `nx:run-commands` | `eslint .` |
+| `typecheck` | Проверяет типы TypeScript без эмита runtime-кода. | `nx:run-commands` | `tsc --build tsconfig.json --emitDeclarationOnly` |
+| `watch-deps` | Выполняет команду `bun nx watch --projects @zeroquest/types --includeDependentProjects -- bun nx build-deps @zeroquest/types`. | `nx:run-commands` | `bun nx watch --projects @zeroquest/types --includeDependentProjects -- bun nx build-deps @zeroquest/types` |
