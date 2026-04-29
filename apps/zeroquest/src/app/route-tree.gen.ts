@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ManualRouteImport } from './routes/manual'
 import { Route as AuthorizedRouteRouteImport } from './routes/_authorized/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnauthorizedSignUpRouteImport } from './routes/_unauthorized/sign-up'
@@ -18,6 +19,11 @@ import { Route as AuthorizedPaymentHistoryRouteImport } from './routes/_authoriz
 import { Route as AuthorizedMagazineRouteImport } from './routes/_authorized/magazine'
 import { Route as AuthorizedDashboardRouteImport } from './routes/_authorized/dashboard'
 
+const ManualRoute = ManualRouteImport.update({
+  id: '/manual',
+  path: '/manual',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthorizedRouteRoute = AuthorizedRouteRouteImport.update({
   id: '/_authorized',
   getParentRoute: () => rootRouteImport,
@@ -61,6 +67,7 @@ const AuthorizedDashboardRoute = AuthorizedDashboardRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/manual': typeof ManualRoute
   '/dashboard': typeof AuthorizedDashboardRoute
   '/magazine': typeof AuthorizedMagazineRoute
   '/payment-history': typeof AuthorizedPaymentHistoryRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/manual': typeof ManualRoute
   '/dashboard': typeof AuthorizedDashboardRoute
   '/magazine': typeof AuthorizedMagazineRoute
   '/payment-history': typeof AuthorizedPaymentHistoryRoute
@@ -81,6 +89,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authorized': typeof AuthorizedRouteRouteWithChildren
+  '/manual': typeof ManualRoute
   '/_authorized/dashboard': typeof AuthorizedDashboardRoute
   '/_authorized/magazine': typeof AuthorizedMagazineRoute
   '/_authorized/payment-history': typeof AuthorizedPaymentHistoryRoute
@@ -92,6 +101,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/manual'
     | '/dashboard'
     | '/magazine'
     | '/payment-history'
@@ -101,6 +111,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/manual'
     | '/dashboard'
     | '/magazine'
     | '/payment-history'
@@ -111,6 +122,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authorized'
+    | '/manual'
     | '/_authorized/dashboard'
     | '/_authorized/magazine'
     | '/_authorized/payment-history'
@@ -122,12 +134,20 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthorizedRouteRoute: typeof AuthorizedRouteRouteWithChildren
+  ManualRoute: typeof ManualRoute
   GeneralPolicyRoute: typeof GeneralPolicyRoute
   UnauthorizedSignUpRoute: typeof UnauthorizedSignUpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/manual': {
+      id: '/manual'
+      path: '/manual'
+      fullPath: '/manual'
+      preLoaderRoute: typeof ManualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authorized': {
       id: '/_authorized'
       path: ''
@@ -208,6 +228,7 @@ const AuthorizedRouteRouteWithChildren = AuthorizedRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthorizedRouteRoute: AuthorizedRouteRouteWithChildren,
+  ManualRoute: ManualRoute,
   GeneralPolicyRoute: GeneralPolicyRoute,
   UnauthorizedSignUpRoute: UnauthorizedSignUpRoute,
 }

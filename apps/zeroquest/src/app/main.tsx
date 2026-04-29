@@ -19,6 +19,7 @@ import { ModalsProvider } from '@mantine/modals';
 import { theme } from './mantine/theme';
 import { InnerApp } from './inner-app';
 import { LucideProvider } from 'lucide-react';
+import { MotionConfig } from 'motion/react';
 
 // Create a new router instance
 export const router = createRouter({
@@ -42,7 +43,10 @@ if (!rootElement.innerHTML) {
         <ModalsProvider>
           <QueryClientProvider client={queryClient}>
             <LucideProvider strokeWidth={3} size={16}>
+              <MotionConfig transition={{type:'tween'}}>
+
               <InnerApp />
+              </MotionConfig>
             </LucideProvider>
           </QueryClientProvider>
         </ModalsProvider>

@@ -16,7 +16,7 @@ export default defineConfig(() => ({
   },
   server: {
     port: 4200,
-
+    allowedHosts: import.meta.env.DEV ? ['.lhr.life'] : ['zerokqk.ru'],
     host: '127.0.0.1',
     proxy: {
       '/api': {

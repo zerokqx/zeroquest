@@ -49,8 +49,8 @@ export const WalletCard = (props: CardProps) => {
 
   if (!data) return null;
 
-  const total = Number(fromPenny(data.wallet.balance));
-  const held = Number(fromPenny(data.wallet.held));
+  const total = Number(fromPenny(data.wallet?.balance ?? 0));
+  const held = Number(fromPenny(data.wallet?.held ?? 0));
   const available = Math.max(total - held, 0);
 
   return (
@@ -69,7 +69,7 @@ export const WalletCard = (props: CardProps) => {
               <Text fw={600}>Баланс</Text>
             </Group>
             <Group gap="xs">
-              <Button variant="light" onClick={openPaymentModal}>
+              <Button variant="subtle" onClick={openPaymentModal}>
                 Пополнить баланс
               </Button>
               <Button component={Link} to="/payment-history" variant="subtle">
