@@ -60,10 +60,29 @@ bun install
 
 Репозиторий использует корневые env-файлы:
 
+- `/.env.example` (шаблон с примерами)
 - `/.env`
 - `/.env.local` (локальный override)
 
+Быстрый старт:
+
+```bash
+cp .env.example .env.local
+```
+
 Минимально проверь, что заполнены подключения к БД/Redis и ключи внешних интеграций (`YooKassa`, `3x-ui`).
+
+Ключевые переменные для `3x-ui`:
+
+- `THREE_X_UI_PROTOCOL` (`http`/`https`)
+- `THREE_X_UI_HOST`
+- `THREE_X_UI_PORT`
+- `THREE_X_UI_WEB_BASE_PATH`
+- `THREE_X_UI_USERNAME`
+- `THREE_X_UI_PASSWORD`
+- `THREE_X_UI_TIMEOUT_MS`
+- `THREE_X_UI_TLS_INSECURE` (`true`/`false`, полезно для локального IP/tunnel-сценария)
+- `THREE_X_UI_TLS_SERVER_NAME` (опционально, SNI при `https` + IP)
 
 ### 3. Поднять инфраструктуру
 

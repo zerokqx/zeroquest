@@ -14,10 +14,10 @@
           "cwd": "apps/api"
         }
       },
-      "ngrok:run": {
+      "forward-port:run": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "ngrok http $API_PORT --log=stdout --log-format=logfmt",
+          "command": "ssh -R zerokqx-api:80:localhost:$API_PORT serveo.net",
           "cwd": "apps/api",
           "envFile": ".env"
         }

@@ -51,6 +51,7 @@ bun install
 ### 2) Переменные окружения
 
 Приложение читает `.env` и `.env.local` (значения из `.env.local` приоритетнее).
+Для быстрого старта можно взять шаблон из корня репозитория: `.env.example`.
 
 Минимально нужны:
 
@@ -66,7 +67,15 @@ bun install
 - `YOOKASSA_API_TOKEN` или `YOOKASSA_TOKEN`
 - `YOOKASSA_SHOP_ID`
 - `YOOKASSA_REDIRECT_TO`
-- `THREE_X_UI_*` (для интеграции с 3x-ui)
+- `THREE_X_UI_PROTOCOL`
+- `THREE_X_UI_HOST`
+- `THREE_X_UI_PORT`
+- `THREE_X_UI_WEB_BASE_PATH`
+- `THREE_X_UI_USERNAME`
+- `THREE_X_UI_PASSWORD`
+- `THREE_X_UI_TIMEOUT_MS`
+- `THREE_X_UI_TLS_INSECURE`
+- `THREE_X_UI_TLS_SERVER_NAME`
 
 Конфигурация собирается в [src/config/configuration.ts](./src/config/configuration.ts).
 

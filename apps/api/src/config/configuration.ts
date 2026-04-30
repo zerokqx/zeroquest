@@ -67,6 +67,8 @@ const config = () => ({
     username: process.env.THREE_X_UI_USERNAME ?? '',
     password: process.env.THREE_X_UI_PASSWORD ?? '',
     timeoutMs: parseInt(process.env.THREE_X_UI_TIMEOUT_MS ?? '10000', 10),
+    tlsInsecure: process.env.THREE_X_UI_TLS_INSECURE === 'true',
+    tlsServerName: process.env.THREE_X_UI_TLS_SERVER_NAME ?? '',
     get panelBaseUrl() {
       const protocol = this.protocol.replace(/:$/, '');
       const path = this.webBasePath.replace(/^\/+|\/+$/g, '');

@@ -12,12 +12,11 @@
 
   # https://devenv.sh/packages/
   packages = with pkgs; [
+    envsubst
     git
     prisma-engines
     openssl
     ngrok
-    tmux
-
     zellij
     stdenv.cc.cc.lib
     jdk21

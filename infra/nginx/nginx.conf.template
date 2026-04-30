@@ -1,0 +1,62 @@
+server {
+  listen 80;
+  server_name ${DOMAIN} www.${DOMAIN};
+
+  return 301 https://$$host$$request_uri;
+}
+
+server {
+  listen 443 ssl http2;
+  server_name ${DOMAIN} www.${DOMAIN};
+
+  ssl_certificate ${SSL_CERTIFICATE};
+  ssl_certificate_key ${SSL_CERTIFICATE_KEY};
+
+  location = / {
+    return 301 /vpn/;
+  }
+
+  location = /api {
+    return 301 /api/;
+  }
+
+  location ^~ /api/ {
+    proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
+    proxy_set_header Host $$host;
+    proxy_set_header X-Real-IP $$remote_addr;
+    proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+  }
+
+  location = /vpn {
+    return 301 /vpn/;
+  }
+
+  location ^~ /vpn/ {
+    proxy_pass http://${HOST}:${WEB_PORT}/;
+    proxy_set_header Host $$host;
+    proxy_set_header X-Real-IP $$remote_addr;
+    proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+  }
+
+  location = /${THREE_X_UI_SECRET_PATH} {
+    return 301 /${THREE_X_UI_SECRET_PATH}/;
+  }
+
+  location ^~ /${THREE_X_UI_SECRET_PATH}/ {
+    proxy_pass ${THREE_X_UI_PROTOCOL}://${HOST}:${THREE_X_UI_PORT}/${THREE_X_UI_WEB_BASE_PATH}/;
+
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_ssl_verify off;
+
+    proxy_set_header Host $$host;
+    proxy_set_header X-Real-IP $$remote_addr;
+    proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+
+    proxy_set_header Upgrade $$http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+}

@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Agent as HttpsAgent } from 'node:https';
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -85,9 +86,19 @@ export class ThreeXUiService {
       infer: true,
     });
 
+    const protocol = this.threeXUiEnvironment.protocol.replace(/:$/, '');
+    const httpsAgent =
+      protocol === 'https'
+        ? new HttpsAgent({
+            rejectUnauthorized: !this.threeXUiEnvironment.tlsInsecure,
+            servername: this.threeXUiEnvironment.tlsServerName || undefined,
+          })
+        : undefined;
+
     this.threeXUiClient = axios.create({
       baseURL: this.threeXUiEnvironment.apiBaseUrl,
       timeout: this.threeXUiEnvironment.timeoutMs,
+      httpsAgent,
       headers: {
         'Content-Type': 'application/json',
       },

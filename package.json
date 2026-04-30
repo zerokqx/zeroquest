@@ -10,6 +10,45 @@
   },
   "nx": {
     "targets": {
+      "x-ui-tunnel:enable": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": ".",
+          "command": "ssh -f -N -L $HOST_PORT:127.0.0.1:$REMOTE_PORT $REMOTE_USER@$REMOTE_IP",
+          "envFile": "./.env.x-ui-tunnel.enable"
+        }
+      },
+      "x-ui-tunnel:disable": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": ".",
+          "command": "pkill -f \"ssh -f -N -L $HOST_PORT:127.0.0.1:$REMOTE_PORT $REMOTE_USER@$REMOTE_IP\" || true",
+          "envFile": "./.env.x-ui-tunnel.enable"
+        }
+      },
+      "nginx:render": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": ".",
+          "command": "set -a && . ./.env && [ -f .env.local ] && . ./.env.local || true && set +a && echo '▶ Rendering nginx config...' && echo \"  domain: ${THREE_X_UI_HOST}\" && echo \"  api:    http://${BACKEND_HOST}:${BACKEND_PORT}\" && echo \"  web:    http://${HOST}:${WEB_PORT}\" && echo \"  x-ui:   ${THREE_X_UI_PROTOCOL}://${HOST}:${THREE_X_UI_PORT}/${THREE_X_UI_WEB_BASE_PATH}/\" && envsubst '$THREE_X_UI_HOST $BACKEND_HOST $BACKEND_PORT $HOST $WEB_PORT $THREE_X_UI_PROTOCOL $THREE_X_UI_PORT $THREE_X_UI_WEB_BASE_PATH $XUI_SECRET_PATH' < infra/nginx/nginx.conf.template | sudo tee /etc/nginx/sites-available/zeroquest > /dev/null && echo '✓ Rendered: /etc/nginx/sites-available/zeroquest'"
+        }
+      },
+      "nginx:enable": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "echo '▶ Enabling nginx site...' && sudo ln -sf /etc/nginx/sites-available/zeroquest /etc/nginx/sites-enabled/zeroquest && echo '✓ Symlink: /etc/nginx/sites-enabled/zeroquest -> /etc/nginx/sites-available/zeroquest' && echo '▶ Testing nginx config...' && sudo nginx -t && echo '▶ Reloading nginx...' && sudo systemctl reload nginx && echo '✓ Nginx reloaded'"
+        }
+      },
+      "nginx:deploy": {
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          "nginx:render",
+          "nginx:enable"
+        ],
+        "options": {
+          "command": "set -a && . ./.env && [ -f .env.local ] && . ./.env.local || true && set +a && echo '✓ Nginx deployed successfully' && echo \"  Open: http://${THREE_X_UI_HOST}/vpn/\" && echo \"  API:  http://${THREE_X_UI_HOST}/api/\""
+        }
+      },
       "db-migrate-deploy": {
         "executor": "nx:run-commands",
         "options": {
@@ -21,6 +60,13 @@
         "executor": "nx:run-commands",
         "options": {
           "command": "bunx prisma migrate dev {args}",
+          "cwd": "libs/db"
+        }
+      },
+      "db-studio": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bunx prisma studio",
           "cwd": "libs/db"
         }
       },

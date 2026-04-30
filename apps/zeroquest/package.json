@@ -4,6 +4,14 @@
   "private": true,
   "nx": {
     "targets": {
+      "forward-port:run": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "ssh -R zerokqx:80:localhost:4200 serveo.net",
+          "cwd": "apps/zeroquest",
+          "envFile": ".env"
+        }
+      },
       "orval:run": {
         "executor": "nx:run-commands",
         "options": {
