@@ -37,13 +37,16 @@ export class AuthRepository {
     this.logger.debug(`Поиск сессии для refresh: sessionId=${id}`);
     return this.prisma.session.findUnique({
       where: { id },
-      include: { clientType: true, user: { select: { role: true } } },
+      include: { clientType: true, user: true },
     });
   }
 
-  updateSessionRefreshData(
+  updateSessionTokensData(
     id: string,
-    data: Pick<Prisma.SessionUpdateInput, 'refreshTokenHash' | 'refreshTokenJti'>,
+    data: Pick<
+      Prisma.SessionUpdateInput,
+      'refreshTokenHash' | 'refreshTokenJti' | 'accessTokenJti'
+    >,
     options?: { tx?: Prisma.TransactionClient },
   ) {
     return (options?.tx ?? this.prisma).session.update({
@@ -52,15 +55,20 @@ export class AuthRepository {
     });
   }
 
-  updateSessionRefreshDataIfJtiMatches(
+  updateSessionTokensDataIfJtiMatches(
     id: string,
     refreshTokenJti: string,
-    data: Pick<Prisma.SessionUpdateManyMutationInput, 'refreshTokenHash' | 'refreshTokenJti'>,
+    accessTokenJti: string,
+    data: Pick<
+      Prisma.SessionUpdateManyMutationInput,
+      'refreshTokenHash' | 'refreshTokenJti' | 'accessTokenJti'
+    >,
   ) {
     return this.prisma.session.updateMany({
       where: {
         id,
         refreshTokenJti,
+        accessTokenJti,
       },
       data,
     });

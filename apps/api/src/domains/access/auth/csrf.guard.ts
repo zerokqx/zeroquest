@@ -1,3 +1,4 @@
+import { EnvironmentVariables } from '@/config/configuration';
 import { Request } from 'express';
 import {
   CanActivate,
@@ -5,6 +6,7 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { CSRF_PUBLIC_KEY } from './csrf.decorator';
 
@@ -20,9 +22,25 @@ const getCSRFCookie = (res: Request) => {
   throw new ForbiddenException('Not found CSRF Token Cookie');
 };
 
+const getClientTypeHeader = (req: Request) => {
+  const raw = req.headers['x-client-type'];
+  if (typeof raw === 'string') return raw.trim().toLowerCase();
+  if (Array.isArray(raw) && typeof raw[0] === 'string') {
+    return raw[0].trim().toLowerCase();
+  }
+  return null;
+};
+
 @Injectable()
 export class CsrfGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  private readonly isProduction: boolean;
+
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly config: ConfigService<EnvironmentVariables>,
+  ) {
+    this.isProduction = this.config.getOrThrow('app', { infer: true }).isProduction;
+  }
 
   canActivate(
     context: ExecutionContext,
@@ -34,6 +52,12 @@ export class CsrfGuard implements CanActivate {
     if (isCsrfPublic) return true;
 
     const req = context.switchToHttp().getRequest<Request>();
+
+    const clientType = getClientTypeHeader(req);
+    if (!this.isProduction && clientType === 'swagger') {
+      return true;
+    }
+
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
       return true;
     }

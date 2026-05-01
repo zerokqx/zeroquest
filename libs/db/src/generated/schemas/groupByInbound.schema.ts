@@ -1,0 +1,15 @@
+import type { Prisma } from '../client';
+import * as z from 'zod';
+import { InboundWhereInputObjectSchema as InboundWhereInputObjectSchema } from './objects/InboundWhereInput.schema';
+import { InboundOrderByWithAggregationInputObjectSchema as InboundOrderByWithAggregationInputObjectSchema } from './objects/InboundOrderByWithAggregationInput.schema';
+import { InboundScalarWhereWithAggregatesInputObjectSchema as InboundScalarWhereWithAggregatesInputObjectSchema } from './objects/InboundScalarWhereWithAggregatesInput.schema';
+import { InboundScalarFieldEnumSchema } from './enums/InboundScalarFieldEnum.schema';
+import { InboundCountAggregateInputObjectSchema as InboundCountAggregateInputObjectSchema } from './objects/InboundCountAggregateInput.schema';
+import { InboundMinAggregateInputObjectSchema as InboundMinAggregateInputObjectSchema } from './objects/InboundMinAggregateInput.schema';
+import { InboundMaxAggregateInputObjectSchema as InboundMaxAggregateInputObjectSchema } from './objects/InboundMaxAggregateInput.schema';
+import { InboundAvgAggregateInputObjectSchema as InboundAvgAggregateInputObjectSchema } from './objects/InboundAvgAggregateInput.schema';
+import { InboundSumAggregateInputObjectSchema as InboundSumAggregateInputObjectSchema } from './objects/InboundSumAggregateInput.schema';
+
+export const InboundGroupBySchema: z.ZodType<Prisma.InboundGroupByArgs> = z.object({ where: InboundWhereInputObjectSchema.optional(), orderBy: z.union([InboundOrderByWithAggregationInputObjectSchema, InboundOrderByWithAggregationInputObjectSchema.array()]).optional(), having: InboundScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(InboundScalarFieldEnumSchema), _count: z.union([ z.literal(true), InboundCountAggregateInputObjectSchema ]).optional(), _min: InboundMinAggregateInputObjectSchema.optional(), _max: InboundMaxAggregateInputObjectSchema.optional(), _avg: InboundAvgAggregateInputObjectSchema.optional(), _sum: InboundSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.InboundGroupByArgs>;
+
+export const InboundGroupByZodSchema = z.object({ where: InboundWhereInputObjectSchema.optional(), orderBy: z.union([InboundOrderByWithAggregationInputObjectSchema, InboundOrderByWithAggregationInputObjectSchema.array()]).optional(), having: InboundScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(InboundScalarFieldEnumSchema), _count: z.union([ z.literal(true), InboundCountAggregateInputObjectSchema ]).optional(), _min: InboundMinAggregateInputObjectSchema.optional(), _max: InboundMaxAggregateInputObjectSchema.optional(), _avg: InboundAvgAggregateInputObjectSchema.optional(), _sum: InboundSumAggregateInputObjectSchema.optional() }).strict();

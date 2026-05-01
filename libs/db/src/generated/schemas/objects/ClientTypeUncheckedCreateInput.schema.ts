@@ -1,0 +1,12 @@
+import * as z from 'zod';
+import type { Prisma } from '../../client';
+import { SessionUncheckedCreateNestedManyWithoutClientTypeInputObjectSchema as SessionUncheckedCreateNestedManyWithoutClientTypeInputObjectSchema } from './SessionUncheckedCreateNestedManyWithoutClientTypeInput.schema'
+
+const makeSchema = () => z.object({
+  id: z.number().int().optional(),
+  name: z.string(),
+  createdAt: z.coerce.date().optional(),
+  sessions: z.lazy(() => SessionUncheckedCreateNestedManyWithoutClientTypeInputObjectSchema).optional()
+}).strict();
+export const ClientTypeUncheckedCreateInputObjectSchema: z.ZodType<Prisma.ClientTypeUncheckedCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.ClientTypeUncheckedCreateInput>;
+export const ClientTypeUncheckedCreateInputObjectZodSchema = makeSchema();

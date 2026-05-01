@@ -1,0 +1,15 @@
+import type { Prisma } from '../client';
+import * as z from 'zod';
+import { LegalDocumentWhereInputObjectSchema as LegalDocumentWhereInputObjectSchema } from './objects/LegalDocumentWhereInput.schema';
+import { LegalDocumentOrderByWithAggregationInputObjectSchema as LegalDocumentOrderByWithAggregationInputObjectSchema } from './objects/LegalDocumentOrderByWithAggregationInput.schema';
+import { LegalDocumentScalarWhereWithAggregatesInputObjectSchema as LegalDocumentScalarWhereWithAggregatesInputObjectSchema } from './objects/LegalDocumentScalarWhereWithAggregatesInput.schema';
+import { LegalDocumentScalarFieldEnumSchema } from './enums/LegalDocumentScalarFieldEnum.schema';
+import { LegalDocumentCountAggregateInputObjectSchema as LegalDocumentCountAggregateInputObjectSchema } from './objects/LegalDocumentCountAggregateInput.schema';
+import { LegalDocumentMinAggregateInputObjectSchema as LegalDocumentMinAggregateInputObjectSchema } from './objects/LegalDocumentMinAggregateInput.schema';
+import { LegalDocumentMaxAggregateInputObjectSchema as LegalDocumentMaxAggregateInputObjectSchema } from './objects/LegalDocumentMaxAggregateInput.schema';
+import { LegalDocumentAvgAggregateInputObjectSchema as LegalDocumentAvgAggregateInputObjectSchema } from './objects/LegalDocumentAvgAggregateInput.schema';
+import { LegalDocumentSumAggregateInputObjectSchema as LegalDocumentSumAggregateInputObjectSchema } from './objects/LegalDocumentSumAggregateInput.schema';
+
+export const LegalDocumentGroupBySchema: z.ZodType<Prisma.LegalDocumentGroupByArgs> = z.object({ where: LegalDocumentWhereInputObjectSchema.optional(), orderBy: z.union([LegalDocumentOrderByWithAggregationInputObjectSchema, LegalDocumentOrderByWithAggregationInputObjectSchema.array()]).optional(), having: LegalDocumentScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(LegalDocumentScalarFieldEnumSchema), _count: z.union([ z.literal(true), LegalDocumentCountAggregateInputObjectSchema ]).optional(), _min: LegalDocumentMinAggregateInputObjectSchema.optional(), _max: LegalDocumentMaxAggregateInputObjectSchema.optional(), _avg: LegalDocumentAvgAggregateInputObjectSchema.optional(), _sum: LegalDocumentSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.LegalDocumentGroupByArgs>;
+
+export const LegalDocumentGroupByZodSchema = z.object({ where: LegalDocumentWhereInputObjectSchema.optional(), orderBy: z.union([LegalDocumentOrderByWithAggregationInputObjectSchema, LegalDocumentOrderByWithAggregationInputObjectSchema.array()]).optional(), having: LegalDocumentScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(LegalDocumentScalarFieldEnumSchema), _count: z.union([ z.literal(true), LegalDocumentCountAggregateInputObjectSchema ]).optional(), _min: LegalDocumentMinAggregateInputObjectSchema.optional(), _max: LegalDocumentMaxAggregateInputObjectSchema.optional(), _avg: LegalDocumentAvgAggregateInputObjectSchema.optional(), _sum: LegalDocumentSumAggregateInputObjectSchema.optional() }).strict();

@@ -33,11 +33,12 @@ const formatDate = (value: string): string => {
   }).format(date);
 };
 
+export type ProfileProps  = Card.Props
 const MyCard = Card.withProps({
   radius: 'xl',
   withBorder: true,
 });
-export const Profile = () => {
+export const Profile = (props: ProfileProps) => {
   const { data: profile, isLoading, isError, refetch } = useGetMyProfile();
 
   if (isLoading) {
@@ -91,7 +92,7 @@ export const Profile = () => {
   }
 
   return (
-    <MyCard>
+    <MyCard {...props}>
       <Stack gap="lg">
         <div className={styles.header}>
           <Group justify="space-between" align="center" wrap="nowrap">

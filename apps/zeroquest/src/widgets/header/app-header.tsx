@@ -5,7 +5,7 @@ import { Avatar, Burger, Card, Group, Menu, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useRouter } from '@tanstack/react-router';
-import { Home, LogOut, ShoppingBag, UserStar } from 'lucide-react';
+import { Home, LogOut, MonitorSmartphone, ShoppingBag, UserStar } from 'lucide-react';
 import { Logotype } from '@/shared/ui/logotype';
 
 export const AppHeader = () => {
@@ -75,6 +75,14 @@ export const AppHeader = () => {
               }}
             >
               Магазин
+            </Menu.Item>
+            <Menu.Item
+              leftSection={<MonitorSmartphone size={14} />}
+              onClick={() => {
+                navigate({ to: '/sessions' });
+              }}
+            >
+              Сессии
             </Menu.Item>
             <Menu.Item
               color="red"

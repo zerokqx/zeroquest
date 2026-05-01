@@ -60,13 +60,6 @@ services:
       - "127.0.0.1:5540:5540"
     volumes:
       - redis_data:/data
-  redisinsight:
-    image: redis/redisinsight:latest
-    network_mode: "service:redis"
-    container_name: zeroquest_redisinsight
-    depends_on:
-      - redis
-    restart: unless-stopped
 volumes:
   redis_data:
 networks:

@@ -1,0 +1,14 @@
+import type { Prisma } from '../client';
+import * as z from 'zod';
+import { ClientTypeOrderByWithRelationInputObjectSchema as ClientTypeOrderByWithRelationInputObjectSchema } from './objects/ClientTypeOrderByWithRelationInput.schema';
+import { ClientTypeWhereInputObjectSchema as ClientTypeWhereInputObjectSchema } from './objects/ClientTypeWhereInput.schema';
+import { ClientTypeWhereUniqueInputObjectSchema as ClientTypeWhereUniqueInputObjectSchema } from './objects/ClientTypeWhereUniqueInput.schema';
+import { ClientTypeCountAggregateInputObjectSchema as ClientTypeCountAggregateInputObjectSchema } from './objects/ClientTypeCountAggregateInput.schema';
+import { ClientTypeMinAggregateInputObjectSchema as ClientTypeMinAggregateInputObjectSchema } from './objects/ClientTypeMinAggregateInput.schema';
+import { ClientTypeMaxAggregateInputObjectSchema as ClientTypeMaxAggregateInputObjectSchema } from './objects/ClientTypeMaxAggregateInput.schema';
+import { ClientTypeAvgAggregateInputObjectSchema as ClientTypeAvgAggregateInputObjectSchema } from './objects/ClientTypeAvgAggregateInput.schema';
+import { ClientTypeSumAggregateInputObjectSchema as ClientTypeSumAggregateInputObjectSchema } from './objects/ClientTypeSumAggregateInput.schema';
+
+export const ClientTypeAggregateSchema: z.ZodType<Prisma.ClientTypeAggregateArgs> = z.object({ orderBy: z.union([ClientTypeOrderByWithRelationInputObjectSchema, ClientTypeOrderByWithRelationInputObjectSchema.array()]).optional(), where: ClientTypeWhereInputObjectSchema.optional(), cursor: ClientTypeWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), ClientTypeCountAggregateInputObjectSchema ]).optional(), _min: ClientTypeMinAggregateInputObjectSchema.optional(), _max: ClientTypeMaxAggregateInputObjectSchema.optional(), _avg: ClientTypeAvgAggregateInputObjectSchema.optional(), _sum: ClientTypeSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.ClientTypeAggregateArgs>;
+
+export const ClientTypeAggregateZodSchema = z.object({ orderBy: z.union([ClientTypeOrderByWithRelationInputObjectSchema, ClientTypeOrderByWithRelationInputObjectSchema.array()]).optional(), where: ClientTypeWhereInputObjectSchema.optional(), cursor: ClientTypeWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), ClientTypeCountAggregateInputObjectSchema ]).optional(), _min: ClientTypeMinAggregateInputObjectSchema.optional(), _max: ClientTypeMaxAggregateInputObjectSchema.optional(), _avg: ClientTypeAvgAggregateInputObjectSchema.optional(), _sum: ClientTypeSumAggregateInputObjectSchema.optional() }).strict();

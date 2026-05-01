@@ -9,17 +9,17 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
 import { AuthServiceTypes } from '@zeroquest/types';
 import { SessionRepository } from './session.repository';
-import { ClientTypeRepository } from '@/domains/access/client-type/client-type.repository';
 import { Prisma, PrismaService } from '@zeroquest/db';
+import { TokenService } from '@/domains/access/token/token.service';
 
 @Injectable()
 export class SessionService {
   private readonly logger = new Logger(SessionService.name);
+  private static readonly MIN_DELETE_SESSION_AGE_MS = 60_000;
   constructor(
     private readonly sessionRepository: SessionRepository,
     private readonly prisma: PrismaService,
-
-    private readonly clientTypeRepository: ClientTypeRepository,
+    private readonly tokenService: TokenService,
   ) {}
   async create(
     {
@@ -34,19 +34,13 @@ export class SessionService {
     this.logger.debug(
       `Создание сессии: userId=${userId}, clientType=${clientType}`,
     );
-    const clientTypeExist = await this.clientTypeRepository.exist(clientType);
-    if (!clientTypeExist) {
-      this.logger.warn(
-        `Пользователь попытался пройти с несуществующим в базе данных ClientType: ${clientType}`,
-      );
-      throw new BadRequestException('Unknown type of client');
-    }
     return this.sessionRepository.create(
       {
         user: {
           connect: { id: userId },
         },
         userAgentHash,
+        accessTokenJti:'',
         refreshTokenJti: refreshTokenJti ?? '',
         refreshTokenHash: refreshToken ?? '',
         clientType: {
@@ -63,28 +57,75 @@ export class SessionService {
     return this.sessionRepository.updateById(id, updateSessionDto);
   }
 
-  async remove(id: string, payload: AuthServiceTypes.JwtPayload) {
+  async remove(
+    id: string,
+    payload: AuthServiceTypes.JwtPayload,
+  ) {
     this.logger.debug(
       `Запрошено удаление сессии: sessionId=${id}, requester=${payload.sub}`,
     );
 
-    const session = await this.sessionRepository.findById(id);
+    const session = await this.sessionRepository.findOneByIdAndUserId(
+      id,
+      payload.sub,
+    );
     if (!session) {
-      this.logger.warn(`Сессия не найдена: sessionId=${id}`);
+      this.logger.warn(
+        `Сессия не найдена или недоступна: sessionId=${id}, requester=${payload.sub}`,
+      );
       throw new NotFoundException('Session not found');
     }
 
-    if (payload.jti === session.refreshTokenJti) {
-      this.logger.log(
-        `Сессия удалена: sessionId=${id}, userId=${session.userId}`,
+    const currentSession = await this.sessionRepository.findOneByIdAndUserId(
+      payload.sid,
+      payload.sub,
+    );
+    if (!currentSession) {
+      this.logger.warn(
+        `Удаление сессии отклонено: текущая refresh-сессия не найдена (sid=${payload.sid}), requester=${payload.sub}`,
       );
-      return await this.sessionRepository.deleteById(id);
+      throw new UnauthorizedException('Session not found for refresh context');
     }
 
-    this.logger.warn(
-      `Удаление сессии отклонено: sessionId=${id}, requester=${payload.sub}`,
+    const ageMs = Date.now() - currentSession.createdAt.getTime();
+    if (ageMs < SessionService.MIN_DELETE_SESSION_AGE_MS) {
+      this.logger.warn(
+        `Удаление сессии отклонено: текущая сессия слишком новая (${ageMs}ms), requester=${payload.sub}, currentSessionId=${currentSession.id}, targetSessionId=${id}`,
+      );
+      throw new BadRequestException(
+        'Session can be deleted only after 1 minute in current session',
+      );
+    }
+
+    const removeKeys: Promise<boolean>[] = [
+      ...(session.refreshTokenJti
+        ? [
+            this.tokenService.removeTrackedToken({
+              sub: session.userId,
+              sid: session.id,
+              jti: session.refreshTokenJti,
+              type: 'refresh',
+            }),
+          ]
+        : []),
+      ...(session.accessTokenJti
+        ? [
+            this.tokenService.removeTrackedToken({
+              sub: session.userId,
+              sid: session.id,
+              jti: session.accessTokenJti,
+              type: 'access',
+            }),
+          ]
+        : []),
+    ];
+
+    await Promise.all(removeKeys);
+
+    this.logger.log(
+      `Сессия удалена: sessionId=${id}, userId=${session.userId}, accessRevoked=${Boolean(session.accessTokenJti)}, refreshRevoked=${Boolean(session.refreshTokenJti)}`,
     );
-    throw new UnauthorizedException();
+    return await this.sessionRepository.deleteById(id);
   }
 
   async findAll(userId: string) {

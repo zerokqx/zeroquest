@@ -10,6 +10,11 @@ generator client {
   moduleFormat = "cjs"
 }
 
+generator zod {
+  output       = "../src/generated/schemas"
+  provider = "prisma-zod-generator"
+}
+
 datasource db {
   provider = "postgresql"
 }
@@ -67,12 +72,14 @@ model ClientType {
 }
 
 model Session {
-  id               String     @id @default(cuid())
-  userAgentHash    String     @map("user_agent_hash")
-  clientType       ClientType @relation(fields: [clientTypeId], references: [id], onDelete: Cascade)
-  clientTypeId     Int        @map("client_type_id")
-  refreshTokenJti  String     @map("refrest_token_jti")
-  refreshTokenHash String     @map("refresh_token_hash")
+  id              String     @id @default(cuid())
+  userAgentHash   String     @map("user_agent_hash")
+  clientType      ClientType @relation(fields: [clientTypeId], references: [id], onDelete: Cascade)
+  clientTypeId    Int        @map("client_type_id")
+  refreshTokenJti String     @map("refrest_token_jti")
+  accessTokenJti  String     @map("access_token_jti")
+  refreshTokenHash String    @map("refresh_token_hash")
+  createdAt       DateTime   @default(now()) @map("created_at")
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @map("user_id")

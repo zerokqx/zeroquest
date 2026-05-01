@@ -49,28 +49,42 @@
           "command": "set -a && . ./.env && [ -f .env.local ] && . ./.env.local || true && set +a && echo '✓ Nginx deployed successfully' && echo \"  Open: http://${THREE_X_UI_HOST}/vpn/\" && echo \"  API:  http://${THREE_X_UI_HOST}/api/\""
         }
       },
-      "db-migrate-deploy": {
+      "db:migrate:deploy": {
         "executor": "nx:run-commands",
         "options": {
           "command": "bunx prisma migrate deploy",
           "cwd": "libs/db"
         }
       },
-      "db-migrate-dev": {
+      "db:client:generate": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bunx prisma generate",
+          "cwd": "libs/db"
+        }
+      },
+      "db:migrate:reset": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "bunx prisma migrate reset {args}",
+          "cwd": "libs/db"
+        }
+      },
+      "db:migrate:dev": {
         "executor": "nx:run-commands",
         "options": {
           "command": "bunx prisma migrate dev {args}",
           "cwd": "libs/db"
         }
       },
-      "db-studio": {
+      "db:studio": {
         "executor": "nx:run-commands",
         "options": {
           "command": "bunx prisma studio",
           "cwd": "libs/db"
         }
       },
-      "db-seed": {
+      "db:seed": {
         "executor": "nx:run-commands",
         "options": {
           "command": "bun run seed",
@@ -121,6 +135,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "cookie-parser": "^1.4.7",
+    "decimal.js": "^10.6.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-formidable": "^1.2.0",
@@ -215,6 +230,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "~3.6.2",
     "prisma": "^7.3.0",
+    "prisma-zod-generator": "^2.1.4",
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
     "typescript": "~5.9.2",

@@ -1,8 +1,8 @@
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import configuration, { EnvironmentVariables } from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from '../domains/access/auth/auth.module';
-import { APP_GUARD, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { InboundModule } from '@/domains/network/inbound/inbound.module';
 import { UserModule } from '@/domains/access/user/user.module';
 import { BullModule } from '@nestjs/bullmq';
@@ -23,12 +23,25 @@ import { PolicyModule } from '@/domains/content/policy/policy.module';
 import { CsrfGuard } from '@/domains/access/auth/csrf.guard';
 import { AuthGuard } from '@/domains/access/auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
+import KeyvRedis from '@keyv/redis';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    CacheModule.register({
+    CacheModule.registerAsync({
+      inject: [ConfigService],
       isGlobal: true,
+      useFactory: async (config: ConfigService<EnvironmentVariables>) => {
+        const redis = config.get('redis', { infer: true });
+        if (!redis?.host || !redis.port) {
+          throw new Error('REDIS_HOST and REDIS_PORT must be set');
+        }
+
+        return {
+          stores: [new KeyvRedis(`redis://${redis.host}:${redis.port}`)],
+          ttl: 30_000,
+        };
+      },
     }),
     ZeroquestConfigModule.forRoot([configuration]),
     ThrottlerModule.forRoot({

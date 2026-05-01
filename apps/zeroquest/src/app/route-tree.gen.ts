@@ -14,6 +14,7 @@ import { Route as AuthorizedRouteRouteImport } from './routes/_authorized/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnauthorizedSignUpRouteImport } from './routes/_unauthorized/sign-up'
 import { Route as GeneralPolicyRouteImport } from './routes/_general/policy'
+import { Route as AuthorizedSessionsRouteImport } from './routes/_authorized/sessions'
 import { Route as AuthorizedReviewRouteImport } from './routes/_authorized/review'
 import { Route as AuthorizedPaymentHistoryRouteImport } from './routes/_authorized/payment-history'
 import { Route as AuthorizedMagazineRouteImport } from './routes/_authorized/magazine'
@@ -42,6 +43,11 @@ const GeneralPolicyRoute = GeneralPolicyRouteImport.update({
   id: '/_general/policy',
   path: '/policy',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthorizedSessionsRoute = AuthorizedSessionsRouteImport.update({
+  id: '/sessions',
+  path: '/sessions',
+  getParentRoute: () => AuthorizedRouteRoute,
 } as any)
 const AuthorizedReviewRoute = AuthorizedReviewRouteImport.update({
   id: '/review',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/magazine': typeof AuthorizedMagazineRoute
   '/payment-history': typeof AuthorizedPaymentHistoryRoute
   '/review': typeof AuthorizedReviewRoute
+  '/sessions': typeof AuthorizedSessionsRoute
   '/policy': typeof GeneralPolicyRoute
   '/sign-up': typeof UnauthorizedSignUpRoute
 }
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/magazine': typeof AuthorizedMagazineRoute
   '/payment-history': typeof AuthorizedPaymentHistoryRoute
   '/review': typeof AuthorizedReviewRoute
+  '/sessions': typeof AuthorizedSessionsRoute
   '/policy': typeof GeneralPolicyRoute
   '/sign-up': typeof UnauthorizedSignUpRoute
 }
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/_authorized/magazine': typeof AuthorizedMagazineRoute
   '/_authorized/payment-history': typeof AuthorizedPaymentHistoryRoute
   '/_authorized/review': typeof AuthorizedReviewRoute
+  '/_authorized/sessions': typeof AuthorizedSessionsRoute
   '/_general/policy': typeof GeneralPolicyRoute
   '/_unauthorized/sign-up': typeof UnauthorizedSignUpRoute
 }
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/magazine'
     | '/payment-history'
     | '/review'
+    | '/sessions'
     | '/policy'
     | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/magazine'
     | '/payment-history'
     | '/review'
+    | '/sessions'
     | '/policy'
     | '/sign-up'
   id:
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/_authorized/magazine'
     | '/_authorized/payment-history'
     | '/_authorized/review'
+    | '/_authorized/sessions'
     | '/_general/policy'
     | '/_unauthorized/sign-up'
   fileRoutesById: FileRoutesById
@@ -176,6 +188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GeneralPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authorized/sessions': {
+      id: '/_authorized/sessions'
+      path: '/sessions'
+      fullPath: '/sessions'
+      preLoaderRoute: typeof AuthorizedSessionsRouteImport
+      parentRoute: typeof AuthorizedRouteRoute
+    }
     '/_authorized/review': {
       id: '/_authorized/review'
       path: '/review'
@@ -212,6 +231,7 @@ interface AuthorizedRouteRouteChildren {
   AuthorizedMagazineRoute: typeof AuthorizedMagazineRoute
   AuthorizedPaymentHistoryRoute: typeof AuthorizedPaymentHistoryRoute
   AuthorizedReviewRoute: typeof AuthorizedReviewRoute
+  AuthorizedSessionsRoute: typeof AuthorizedSessionsRoute
 }
 
 const AuthorizedRouteRouteChildren: AuthorizedRouteRouteChildren = {
@@ -219,6 +239,7 @@ const AuthorizedRouteRouteChildren: AuthorizedRouteRouteChildren = {
   AuthorizedMagazineRoute: AuthorizedMagazineRoute,
   AuthorizedPaymentHistoryRoute: AuthorizedPaymentHistoryRoute,
   AuthorizedReviewRoute: AuthorizedReviewRoute,
+  AuthorizedSessionsRoute: AuthorizedSessionsRoute,
 }
 
 const AuthorizedRouteRouteWithChildren = AuthorizedRouteRoute._addFileChildren(

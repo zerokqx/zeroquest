@@ -1,5 +1,6 @@
 import { applyDecorators, SetMetadata } from '@nestjs/common';
 import { ApiHeader } from '@nestjs/swagger';
+import { env } from 'node:process';
 
 export const CLIENT_TYPE_KEY = 'client_type';
 
@@ -14,7 +15,10 @@ export function ApiClientType() {
       description: 'Тип клиента',
       schema: {
         type: 'string',
-        enum: ['web', 'telegram'],
+        enum:
+          env.NODE_ENV === 'production' && !env.SWAGGER_ENABLED
+            ? ['web', 'telegram']
+            : ['web', 'telegram', 'swagger'],
       },
     }),
   );

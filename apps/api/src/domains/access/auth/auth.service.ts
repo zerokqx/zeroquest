@@ -14,6 +14,7 @@ import { AuthRepository } from './auth.repository';
 import { LegalDocumentType, UserRole } from '@zeroquest/db';
 import { LoginDto } from './dto/login.dto';
 import { PolicyService } from '@/domains/content/policy/policy.service';
+import { SessionPayloadCompareSchema } from './dto/schemas/session-compare-wit-token.schema';
 
 @Injectable()
 export class AuthService {
@@ -45,7 +46,15 @@ export class AuthService {
     const user = await this.authRepository.findUserByLogin(login);
     if (user && (await compare(password, user?.passwordHash))) {
       const userAgentHash = this.getUserAgentHash(userAgent);
-      return await this.authRepository.transaction(async (tx) => {
+      const tokenPayload = await this.authRepository.transaction(async (tx) => {
+        await this.policyService.acceptRequiredPolicies(
+          user.id,
+          policy,
+          [LegalDocumentType.PRIVACY],
+          {
+            tx,
+          },
+        );
         const session = await this.sessionService.create(
           {
             clientType,
@@ -64,31 +73,51 @@ export class AuthService {
           login,
         });
 
-        await this.authRepository.updateSessionRefreshData(
+        await this.authRepository.updateSessionTokensData(
           session.id,
           {
             refreshTokenHash: await this.tokenService.hashToken(
               tokens.refreshToken,
             ),
-            refreshTokenJti: inputs.refreshTokenJti,
+            ...inputs,
           },
+
           { tx },
         );
 
-        await this.policyService.acceptRequiredPolicies(
-          user.id,
-          policy,
-          [LegalDocumentType.PRIVACY],
-          {
-            tx,
-          },
-        );
-
-        this.logger.log(
-          `Пользователь успешно вошёл: login=${login}, sessionId=${session.id}, clientType=${clientType}`,
-        );
-        return tokens;
+        return {
+          tokens,
+          accessPayload: {
+            userAgentHash,
+            clientType,
+            sid: session.id,
+            sub: user.id,
+            role: user.role ?? UserRole.USER,
+            login,
+            type: 'access',
+            jti: inputs.accessTokenJti,
+          } satisfies AuthServiceTypes.JwtPayload,
+          refreshPayload: {
+            userAgentHash,
+            clientType,
+            sid: session.id,
+            sub: user.id,
+            role: user.role ?? UserRole.USER,
+            login,
+            type: 'refresh',
+            jti: inputs.refreshTokenJti,
+          } satisfies AuthServiceTypes.JwtPayload,
+          sessionId: session.id,
+        };
       });
+      await Promise.all([
+        this.tokenService.trackToken(tokenPayload.accessPayload),
+        this.tokenService.trackToken(tokenPayload.refreshPayload),
+      ]);
+      this.logger.log(
+        `Пользователь успешно вошёл: login=${login}, sessionId=${tokenPayload.sessionId}, clientType=${clientType}`,
+      );
+      return tokenPayload.tokens;
     }
     this.logger.warn(
       `Неуспешная попытка входа: login=${login}, clientType=${clientType}`,
@@ -96,152 +125,155 @@ export class AuthService {
     throw new UnauthorizedException();
   }
 
-  async register(
-    login: string,
-    password: string,
-    userAgent: string | undefined,
-    clientType: string,
-  ) {
+  async register(login: string, password: string) {
     const user = await this.authRepository.findUserLoginByLogin(login);
-    this.logger.debug(
-      `Проверка возможности регистрации: login=${login}, clientType=${clientType}`,
-    );
+    this.logger.debug(`Проверка возможности регистрации: login=${login}`);
 
     if (user?.login === login) {
       this.logger.warn(`Регистрация отклонена: login=${login} уже существует`);
       throw new ConflictException();
     }
     const salt = await genSalt();
-    const userAgentHash = this.getUserAgentHash(userAgent);
     const passwordHash = await hash(password, salt);
-    const result = await this.authRepository.transaction(async (tx) => {
-      const user = await this.authRepository.createUser(
-        {
-          wallet: {
-            create: {},
-          },
-          login,
-          passwordHash,
-        },
-        { tx },
-      );
-
-      const session = await this.sessionService.create(
-        {
-          clientType,
-          userAgentHash,
-          userId: user.id,
-        },
-        { tx },
-      );
-
-      const [tokens, inputs] = await this.tokenService.createTokenPair({
-        userAgentHash,
-        clientType,
-        sid: session.id,
-        sub: session.userId,
-        role: user.role ?? UserRole.USER,
-        login: user.login,
-      });
-
-      await this.authRepository.updateSessionRefreshData(
-        session.id,
-        {
-          refreshTokenHash: await this.tokenService.hashToken(
-            tokens.refreshToken,
-          ),
-          refreshTokenJti: inputs.refreshTokenJti,
-        },
-        { tx },
-      );
-
-      this.logger.log(
-        `Пользователь зарегистрирован: login=${login}, sessionId=${session.id}, clientType=${clientType}`,
-      );
-      return tokens;
+    await this.authRepository.createUser({
+      wallet: {
+        create: {},
+      },
+      login,
+      passwordHash,
     });
-    return result;
+
+    this.logger.log(`Пользователь зарегистрирован: login=${login}`);
   }
 
   /**
    * @description Валидирует в 2 стадии
-   * 1) Валидирует старый токен который дал пользователь с тем что реально пришло в запросе, валидирует userAgent, clientType с данными из токена
+   * 1) Валидирует старый токен который дал пользователь с тем что реально пришло в запросе, валидирует userAgent с данными из токена
    * 2) После того как проверки предыдущие выдали true валидируем старый токен с данными сессии.
    * */
   async refresh(
     userAgent: string | undefined,
     clientType: string,
-    payload: AuthServiceTypes.JwtPayload,
+    refreshPayload: AuthServiceTypes.JwtPayload,
+    accessPayload: AuthServiceTypes.JwtPayload,
   ) {
     const userAgentHash = this.getUserAgentHash(userAgent);
-    const isClientTypeValid = clientType === payload.clientType;
-    const isRefreshToken = payload.type === 'refresh';
-    const isUserAgentValid = userAgentHash === payload.userAgentHash;
+    const isRefreshToken = refreshPayload.type === 'refresh';
+    const isUserAgentValid = userAgentHash === refreshPayload.userAgentHash;
 
-    if (!isClientTypeValid || !isRefreshToken || !isUserAgentValid) {
+    if (!isRefreshToken || !isUserAgentValid) {
       this.logger.warn(
-        `Refresh отклонён на этапе проверки payload: login=${payload.login}, sessionId=${payload.sid}, clientTypeMatch=${isClientTypeValid}, userAgentMatch=${isUserAgentValid}, tokenType=${payload.type}`,
+        `Refresh отклонён на этапе проверки payload: login=${refreshPayload.login}, sessionId=${refreshPayload.sid}, userAgentMatch=${isUserAgentValid}, tokenType=${refreshPayload.type}`,
       );
       throw new UnauthorizedException();
     }
 
     this.logger.debug(
-      `Payload refresh токена подтверждён: login=${payload.login}, sessionId=${payload.sid}`,
+      `Payload refresh токена подтверждён: login=${refreshPayload.login}, sessionId=${refreshPayload.sid}`,
     );
 
     const session = await this.authRepository.findSessionForRefresh(
-      payload.sid,
+      refreshPayload.sid,
     );
 
-    const isSessionValid =
-      !!session &&
-      session.clientType.name === payload.clientType &&
-      userAgentHash === session.userAgentHash &&
-      session.refreshTokenJti === payload.jti &&
-      payload.sub === session.userId;
+    const {
+      success,
+      data: sessionValid,
+      error,
+    } = SessionPayloadCompareSchema.safeParse({
+      session,
+      access: accessPayload,
+      refresh: refreshPayload,
+    });
+    this.logger.debug({ success, sessionValid, error });
+    // !!session &&
+    // session.clientType.name === refreshPayload.clientType &&
+    // userAgentHash === session.userAgentHash &&
+    // session.refreshTokenJti === refreshPayload.jti &&
+    // refreshPayload.sub === session.userId;
 
-    if (!isSessionValid) {
+    if (!success) {
       this.logger.warn(
-        `Refresh отклонён на этапе проверки сессии: login=${payload.login}, sessionId=${payload.sid}`,
+        `Refresh отклонён на этапе проверки сессии: login=${refreshPayload.login}, sessionId=${refreshPayload.sid}`,
       );
       throw new UnauthorizedException();
     }
 
+    // Удаляем старые track-записи; новую пару трекаем ниже после успешного обновления сессии.
+    await Promise.all([
+      this.tokenService.removeTrackedToken(refreshPayload),
+      this.tokenService.removeTrackedToken(accessPayload),
+    ]);
+
     const [tokens, inputs] = await this.tokenService.createTokenPair({
-      userAgentHash: session.userAgentHash,
+      userAgentHash: sessionValid.session.userAgentHash,
       clientType,
-      sid: session.id,
-      sub: session.userId,
-      role: session.user.role ?? UserRole.USER,
-      login: payload.login,
+      sid: sessionValid.session.id,
+      sub: sessionValid.session.userId,
+      role: session?.user.role ?? UserRole.USER,
+      login: refreshPayload.login,
     });
 
     const refreshTokenHash = await this.tokenService.hashToken(
       tokens.refreshToken,
     );
     const updated =
-      await this.authRepository.updateSessionRefreshDataIfJtiMatches(
-        session.id,
-        payload.jti,
+      await this.authRepository.updateSessionTokensDataIfJtiMatches(
+        sessionValid.session.id,
+        refreshPayload.jti,
+        inputs.accessTokenJti,
         {
-          refreshTokenJti: inputs.refreshTokenJti,
+          ...inputs,
           refreshTokenHash,
         },
       );
     if (updated.count !== 1) {
       this.logger.warn(
-        `Refresh не завершён: не удалось атомарно обновить сессию ${session.id}`,
+        `Refresh не завершён: не удалось атомарно обновить сессию ${sessionValid.session.id}`,
       );
       throw new UnauthorizedException();
     }
 
+    await Promise.all([
+      this.tokenService.trackToken({
+        userAgentHash: sessionValid.session.userAgentHash,
+        clientType,
+        sid: sessionValid.session.id,
+        sub: sessionValid.session.userId,
+        role: session?.user.role ?? UserRole.USER,
+        login: refreshPayload.login,
+        type: 'access',
+        jti: inputs.accessTokenJti,
+      }),
+      this.tokenService.trackToken({
+        userAgentHash: sessionValid.session.userAgentHash,
+        clientType,
+        sid: sessionValid.session.id,
+        sub: sessionValid.session.userId,
+        role: session?.user.role ?? UserRole.USER,
+        login: refreshPayload.login,
+        type: 'refresh',
+        jti: inputs.refreshTokenJti,
+      }),
+    ]);
+
     this.logger.log(
-      `Refresh выполнен успешно: login=${payload.login}, sessionId=${session.id}`,
+      `Refresh выполнен успешно: login=${refreshPayload.login}, sessionId=${sessionValid.session.id}`,
     );
     return tokens;
   }
 
-  async logout({ sid, sub }: AuthServiceTypes.JwtPayload) {
-    this.sessionService.removeByRefreshHash(sid, sub);
+  async logout(
+    accessPayload: AuthServiceTypes.JwtPayload,
+    refreshPayload: AuthServiceTypes.JwtPayload,
+  ) {
+    await Promise.all([
+      this.tokenService.removeTrackedToken(accessPayload),
+      this.tokenService.removeTrackedToken(refreshPayload),
+    ]);
+    return await this.sessionService.removeByRefreshHash(
+      accessPayload.sid,
+      accessPayload.sub,
+    );
   }
 }

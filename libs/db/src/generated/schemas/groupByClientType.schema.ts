@@ -1,0 +1,15 @@
+import type { Prisma } from '../client';
+import * as z from 'zod';
+import { ClientTypeWhereInputObjectSchema as ClientTypeWhereInputObjectSchema } from './objects/ClientTypeWhereInput.schema';
+import { ClientTypeOrderByWithAggregationInputObjectSchema as ClientTypeOrderByWithAggregationInputObjectSchema } from './objects/ClientTypeOrderByWithAggregationInput.schema';
+import { ClientTypeScalarWhereWithAggregatesInputObjectSchema as ClientTypeScalarWhereWithAggregatesInputObjectSchema } from './objects/ClientTypeScalarWhereWithAggregatesInput.schema';
+import { ClientTypeScalarFieldEnumSchema } from './enums/ClientTypeScalarFieldEnum.schema';
+import { ClientTypeCountAggregateInputObjectSchema as ClientTypeCountAggregateInputObjectSchema } from './objects/ClientTypeCountAggregateInput.schema';
+import { ClientTypeMinAggregateInputObjectSchema as ClientTypeMinAggregateInputObjectSchema } from './objects/ClientTypeMinAggregateInput.schema';
+import { ClientTypeMaxAggregateInputObjectSchema as ClientTypeMaxAggregateInputObjectSchema } from './objects/ClientTypeMaxAggregateInput.schema';
+import { ClientTypeAvgAggregateInputObjectSchema as ClientTypeAvgAggregateInputObjectSchema } from './objects/ClientTypeAvgAggregateInput.schema';
+import { ClientTypeSumAggregateInputObjectSchema as ClientTypeSumAggregateInputObjectSchema } from './objects/ClientTypeSumAggregateInput.schema';
+
+export const ClientTypeGroupBySchema: z.ZodType<Prisma.ClientTypeGroupByArgs> = z.object({ where: ClientTypeWhereInputObjectSchema.optional(), orderBy: z.union([ClientTypeOrderByWithAggregationInputObjectSchema, ClientTypeOrderByWithAggregationInputObjectSchema.array()]).optional(), having: ClientTypeScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(ClientTypeScalarFieldEnumSchema), _count: z.union([ z.literal(true), ClientTypeCountAggregateInputObjectSchema ]).optional(), _min: ClientTypeMinAggregateInputObjectSchema.optional(), _max: ClientTypeMaxAggregateInputObjectSchema.optional(), _avg: ClientTypeAvgAggregateInputObjectSchema.optional(), _sum: ClientTypeSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.ClientTypeGroupByArgs>;
+
+export const ClientTypeGroupByZodSchema = z.object({ where: ClientTypeWhereInputObjectSchema.optional(), orderBy: z.union([ClientTypeOrderByWithAggregationInputObjectSchema, ClientTypeOrderByWithAggregationInputObjectSchema.array()]).optional(), having: ClientTypeScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(ClientTypeScalarFieldEnumSchema), _count: z.union([ z.literal(true), ClientTypeCountAggregateInputObjectSchema ]).optional(), _min: ClientTypeMinAggregateInputObjectSchema.optional(), _max: ClientTypeMaxAggregateInputObjectSchema.optional(), _avg: ClientTypeAvgAggregateInputObjectSchema.optional(), _sum: ClientTypeSumAggregateInputObjectSchema.optional() }).strict();

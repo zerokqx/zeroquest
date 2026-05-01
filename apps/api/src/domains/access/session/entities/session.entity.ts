@@ -9,6 +9,10 @@ export class SessionEntity implements Session {
 
   @ApiHideProperty()
   @Exclude()
+  accessTokenJti!: string;
+
+  @ApiHideProperty()
+  @Exclude()
   refreshTokenHash!: string;
 
   @ApiProperty()
@@ -22,6 +26,9 @@ export class SessionEntity implements Session {
 
   @ApiProperty()
   clientTypeId!: number;
+
+  @ApiProperty()
+  createdAt!: Date;
 
   constructor(partial: Partial<Session>) {
     Object.assign(this, partial);

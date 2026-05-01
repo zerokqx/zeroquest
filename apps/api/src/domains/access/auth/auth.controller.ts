@@ -35,8 +35,8 @@ import {
   Public,
 } from '@zeroquest/nest-shared';
 import { CookieJwtManager } from './cookie-manager.service';
-import { randomBytes } from 'crypto';
 import { CsrfPublic } from './csrf.decorator';
+import { JwtDecode } from './jwt-decode.decorator';
 
 type RequestWithClientType = {
   clientType: string;
@@ -122,10 +122,9 @@ export class AuthController {
   @ApiOperation({
     summary: 'Регистрация пользователя',
     description:
-      'Создаёт нового пользователя и сразу устанавливает access и refresh токены в httpOnly cookies.',
+      'Создаёт нового пользователя. Токены не выдаются: после регистрации требуется отдельный вход.',
   })
   @ApiClientType()
-  @ApiUserAgent()
   @ApiConsumes('application/json')
   @ApiBody({
     type: RegisterDto,
@@ -133,7 +132,7 @@ export class AuthController {
   })
   @ApiCreatedResponse({
     description:
-      'Пользователь успешно зарегистрирован. Токены установлены в cookies.',
+      'Пользователь успешно зарегистрирован.',
     schema: {
       example: {
         message: 'Пользователь успешно зарегистрирован',
@@ -148,22 +147,15 @@ export class AuthController {
   })
   async register(
     @Body() body: RegisterDto,
-    @Headers('user-agent') userAgent: string,
     @Req() req: RequestWithClientType,
-    @Res({ passthrough: true }) res: Response,
   ) {
     this.logger.log(
       `Запрос на регистрацию: login=${body.login}, clientType=${req.clientType}`,
     );
-    const tokens = await this.authService.register(
+    await this.authService.register(
       body.login,
       body.password,
-      userAgent,
-      req.clientType,
     );
-
-    this.cookieManager.setAuthCookies(res, tokens);
-    this.cookieManager.setCsrf(res);
 
     return { message: 'Пользователь успешно зарегистрирован' };
   }
@@ -199,21 +191,24 @@ export class AuthController {
     @Req() req: RequestWithClientType,
     @Res({ passthrough: true }) res: Response,
     @AuthPayload()
-    payload: AuthServiceTypes.JwtPayload,
+    refreshPayload: AuthServiceTypes.JwtPayload,
+    @JwtDecode('zeroquestAccess')
+    accessPayload: AuthServiceTypes.JwtPayload,
   ) {
     this.logger.debug(
-      `Запрошено обновление токенов: login=${payload.login}, clientType=${req.clientType}`,
+      `Запрошено обновление токенов: login=${refreshPayload.login}, clientType=${req.clientType}`,
     );
     const tokens = await this.authService.refresh(
       userAgent,
       req.clientType,
-      payload,
+      refreshPayload,
+      accessPayload,
     );
 
     this.cookieManager.setAuthCookies(res, tokens);
 
     this.logger.log(
-      `Токены обновлены: login=${payload.login}, sessionId=${payload.sid}`,
+      `Токены обновлены: login=${refreshPayload.login}, sessionId=${refreshPayload.sid}`,
     );
     return { message: 'Токены успешно обновлены' };
   }
@@ -242,19 +237,16 @@ export class AuthController {
   @ApiClientType()
   @ApiUserAgent()
   async logout(
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() accessPayload: AuthServiceTypes.JwtPayload,
     @Req() req: RequestWithClientType,
+    @JwtDecode('zeroquestRefresh') refreshPayload : AuthServiceTypes.JwtPayload,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const cookies = this.cookieManager.readAuthCookies(req);
-    if (!cookies.zeroquestAccess && !cookies.zeroquestRefresh) {
-      this.logger.debug(
-        `Logout вызван без auth cookies: userId=${payload.sub}, sessionId=${payload.sid}`,
-      );
-    }
 
-    await this.authService.logout(payload);
+
+    await this.authService.logout(accessPayload, refreshPayload);
     this.cookieManager.clearAuthCookies(res);
+    return;
   }
 
   @ApiOperation({ description: 'Выдает CSRF токен' })

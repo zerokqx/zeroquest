@@ -1,0 +1,14 @@
+import type { Prisma } from '../client';
+import * as z from 'zod';
+import { SubscribeOrderByWithRelationInputObjectSchema as SubscribeOrderByWithRelationInputObjectSchema } from './objects/SubscribeOrderByWithRelationInput.schema';
+import { SubscribeWhereInputObjectSchema as SubscribeWhereInputObjectSchema } from './objects/SubscribeWhereInput.schema';
+import { SubscribeWhereUniqueInputObjectSchema as SubscribeWhereUniqueInputObjectSchema } from './objects/SubscribeWhereUniqueInput.schema';
+import { SubscribeCountAggregateInputObjectSchema as SubscribeCountAggregateInputObjectSchema } from './objects/SubscribeCountAggregateInput.schema';
+import { SubscribeMinAggregateInputObjectSchema as SubscribeMinAggregateInputObjectSchema } from './objects/SubscribeMinAggregateInput.schema';
+import { SubscribeMaxAggregateInputObjectSchema as SubscribeMaxAggregateInputObjectSchema } from './objects/SubscribeMaxAggregateInput.schema';
+import { SubscribeAvgAggregateInputObjectSchema as SubscribeAvgAggregateInputObjectSchema } from './objects/SubscribeAvgAggregateInput.schema';
+import { SubscribeSumAggregateInputObjectSchema as SubscribeSumAggregateInputObjectSchema } from './objects/SubscribeSumAggregateInput.schema';
+
+export const SubscribeAggregateSchema: z.ZodType<Prisma.SubscribeAggregateArgs> = z.object({ orderBy: z.union([SubscribeOrderByWithRelationInputObjectSchema, SubscribeOrderByWithRelationInputObjectSchema.array()]).optional(), where: SubscribeWhereInputObjectSchema.optional(), cursor: SubscribeWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), SubscribeCountAggregateInputObjectSchema ]).optional(), _min: SubscribeMinAggregateInputObjectSchema.optional(), _max: SubscribeMaxAggregateInputObjectSchema.optional(), _avg: SubscribeAvgAggregateInputObjectSchema.optional(), _sum: SubscribeSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.SubscribeAggregateArgs>;
+
+export const SubscribeAggregateZodSchema = z.object({ orderBy: z.union([SubscribeOrderByWithRelationInputObjectSchema, SubscribeOrderByWithRelationInputObjectSchema.array()]).optional(), where: SubscribeWhereInputObjectSchema.optional(), cursor: SubscribeWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), SubscribeCountAggregateInputObjectSchema ]).optional(), _min: SubscribeMinAggregateInputObjectSchema.optional(), _max: SubscribeMaxAggregateInputObjectSchema.optional(), _avg: SubscribeAvgAggregateInputObjectSchema.optional(), _sum: SubscribeSumAggregateInputObjectSchema.optional() }).strict();

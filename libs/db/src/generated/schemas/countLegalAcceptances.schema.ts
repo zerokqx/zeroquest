@@ -1,0 +1,10 @@
+import type { Prisma } from '../client';
+import * as z from 'zod';
+import { LegalAcceptancesOrderByWithRelationInputObjectSchema as LegalAcceptancesOrderByWithRelationInputObjectSchema } from './objects/LegalAcceptancesOrderByWithRelationInput.schema';
+import { LegalAcceptancesWhereInputObjectSchema as LegalAcceptancesWhereInputObjectSchema } from './objects/LegalAcceptancesWhereInput.schema';
+import { LegalAcceptancesWhereUniqueInputObjectSchema as LegalAcceptancesWhereUniqueInputObjectSchema } from './objects/LegalAcceptancesWhereUniqueInput.schema';
+import { LegalAcceptancesCountAggregateInputObjectSchema as LegalAcceptancesCountAggregateInputObjectSchema } from './objects/LegalAcceptancesCountAggregateInput.schema';
+
+export const LegalAcceptancesCountSchema: z.ZodType<Prisma.LegalAcceptancesCountArgs> = z.object({ orderBy: z.union([LegalAcceptancesOrderByWithRelationInputObjectSchema, LegalAcceptancesOrderByWithRelationInputObjectSchema.array()]).optional(), where: LegalAcceptancesWhereInputObjectSchema.optional(), cursor: LegalAcceptancesWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), select: z.union([ z.literal(true), LegalAcceptancesCountAggregateInputObjectSchema ]).optional() }).strict() as unknown as z.ZodType<Prisma.LegalAcceptancesCountArgs>;
+
+export const LegalAcceptancesCountZodSchema = z.object({ orderBy: z.union([LegalAcceptancesOrderByWithRelationInputObjectSchema, LegalAcceptancesOrderByWithRelationInputObjectSchema.array()]).optional(), where: LegalAcceptancesWhereInputObjectSchema.optional(), cursor: LegalAcceptancesWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), select: z.union([ z.literal(true), LegalAcceptancesCountAggregateInputObjectSchema ]).optional() }).strict();

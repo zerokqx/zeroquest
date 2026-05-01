@@ -97,7 +97,9 @@ export const SessionScalarFieldEnum = {
   userAgentHash: 'userAgentHash',
   clientTypeId: 'clientTypeId',
   refreshTokenJti: 'refreshTokenJti',
+  accessTokenJti: 'accessTokenJti',
   refreshTokenHash: 'refreshTokenHash',
+  createdAt: 'createdAt',
   userId: 'userId'
 } as const
 

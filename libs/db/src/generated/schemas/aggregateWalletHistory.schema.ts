@@ -1,0 +1,14 @@
+import type { Prisma } from '../client';
+import * as z from 'zod';
+import { WalletHistoryOrderByWithRelationInputObjectSchema as WalletHistoryOrderByWithRelationInputObjectSchema } from './objects/WalletHistoryOrderByWithRelationInput.schema';
+import { WalletHistoryWhereInputObjectSchema as WalletHistoryWhereInputObjectSchema } from './objects/WalletHistoryWhereInput.schema';
+import { WalletHistoryWhereUniqueInputObjectSchema as WalletHistoryWhereUniqueInputObjectSchema } from './objects/WalletHistoryWhereUniqueInput.schema';
+import { WalletHistoryCountAggregateInputObjectSchema as WalletHistoryCountAggregateInputObjectSchema } from './objects/WalletHistoryCountAggregateInput.schema';
+import { WalletHistoryMinAggregateInputObjectSchema as WalletHistoryMinAggregateInputObjectSchema } from './objects/WalletHistoryMinAggregateInput.schema';
+import { WalletHistoryMaxAggregateInputObjectSchema as WalletHistoryMaxAggregateInputObjectSchema } from './objects/WalletHistoryMaxAggregateInput.schema';
+import { WalletHistoryAvgAggregateInputObjectSchema as WalletHistoryAvgAggregateInputObjectSchema } from './objects/WalletHistoryAvgAggregateInput.schema';
+import { WalletHistorySumAggregateInputObjectSchema as WalletHistorySumAggregateInputObjectSchema } from './objects/WalletHistorySumAggregateInput.schema';
+
+export const WalletHistoryAggregateSchema: z.ZodType<Prisma.WalletHistoryAggregateArgs> = z.object({ orderBy: z.union([WalletHistoryOrderByWithRelationInputObjectSchema, WalletHistoryOrderByWithRelationInputObjectSchema.array()]).optional(), where: WalletHistoryWhereInputObjectSchema.optional(), cursor: WalletHistoryWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), WalletHistoryCountAggregateInputObjectSchema ]).optional(), _min: WalletHistoryMinAggregateInputObjectSchema.optional(), _max: WalletHistoryMaxAggregateInputObjectSchema.optional(), _avg: WalletHistoryAvgAggregateInputObjectSchema.optional(), _sum: WalletHistorySumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.WalletHistoryAggregateArgs>;
+
+export const WalletHistoryAggregateZodSchema = z.object({ orderBy: z.union([WalletHistoryOrderByWithRelationInputObjectSchema, WalletHistoryOrderByWithRelationInputObjectSchema.array()]).optional(), where: WalletHistoryWhereInputObjectSchema.optional(), cursor: WalletHistoryWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), WalletHistoryCountAggregateInputObjectSchema ]).optional(), _min: WalletHistoryMinAggregateInputObjectSchema.optional(), _max: WalletHistoryMaxAggregateInputObjectSchema.optional(), _avg: WalletHistoryAvgAggregateInputObjectSchema.optional(), _sum: WalletHistorySumAggregateInputObjectSchema.optional() }).strict();

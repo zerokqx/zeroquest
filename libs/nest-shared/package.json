@@ -13,6 +13,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
+    "@zeroquest/db": "workspace:*",
     "@zeroquest/types": "workspace:*"
   }
 }

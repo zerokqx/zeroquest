@@ -6,11 +6,12 @@ import { SessionModule } from '@/domains/access/session/session.module';
 import { AuthRepository } from './auth.repository';
 import { PolicyModule } from '@/domains/content/policy/policy.module';
 import { CookieJwtManager } from './cookie-manager.service';
+import { JwtDecodePipe } from './jwt-decode.pipe';
 
 @Module({
   imports: [TokenModule, SessionModule, PolicyModule],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, CookieJwtManager],
+  providers: [AuthService, AuthRepository, CookieJwtManager, JwtDecodePipe],
   exports: [TokenModule],
 })
 export class AuthModule {}

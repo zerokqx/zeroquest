@@ -2,6 +2,7 @@ import { Profile } from '@/entites/user';
 import { WalletCard } from '@/entites/wallet';
 import { SubscribeList } from '@/widgets/subscribe/ui/subscibe-list';
 import { SimpleGrid } from '@mantine/core';
+import { motion } from 'motion/react';
 
 export const Dashboard = () => {
   return (
@@ -11,9 +12,27 @@ export const Dashboard = () => {
       verticalSpacing="md"
       spacing="md"
     >
-      <WalletCard />
-      <Profile />
-      <SubscribeList />
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
+        <WalletCard h={'100%'} />
+      </motion.div>
+      <motion.div
+        initial={{ y: -60, opacity: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
+        <Profile />
+      </motion.div>
+      <motion.div
+        initial={{ y: -70, opacity: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
+        <SubscribeList />
+      </motion.div>
     </SimpleGrid>
   );
 };
