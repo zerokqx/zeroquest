@@ -96,6 +96,7 @@
     "@colorfy-software/zfy": "^1.0.0",
     "@fontsource/open-sans": "^5.2.7",
     "@fontsource/roboto": "^5.2.10",
+    "@keyv/redis": "^5.1.6",
     "@mantine/core": "^9.0.2",
     "@mantine/hooks": "^9.0.2",
     "@mantine/modals": "^9.0.2",
