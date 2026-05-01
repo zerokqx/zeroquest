@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **saved** | **boolean** | Признак сохранения способа оплаты для автоплатежей: https://yookassa.ru/developers/payment-acceptance/scenario-extensions/recurring-payments/pay-with-saved. Возможные значения: * true — способ оплаты сохранен для автоплатежей и выплат; * false — способ оплаты не сохранен. | [default to undefined]
 **status** | [**PaymentMethodStatus**](PaymentMethodStatus.md) | Статус проверки и сохранения способа оплаты. Возможные значения: * pending — ожидает действий от пользователя; * active — способ оплаты сохранен, его можно использовать для автоплатежей или выплат; * inactive — способ оплаты не сохранен: возникла ошибка или не было попытки сохранения способа оплаты. | [default to undefined]
 **title** | **string** | Название способа оплаты. | [optional] [default to undefined]
-**card** | [**BankCardData**](BankCardData.md) | Данные банковской карты «Мир». | [optional] [default to undefined]
+**card** | [**InvoicingBankCardData**](InvoicingBankCardData.md) |  | [optional] [default to undefined]
 **login** | **string** | Логин пользователя в Альфа-Клике (привязанный телефон или дополнительный логин). | [optional] [default to undefined]
 **phone** | **string** | Телефон пользователя, на который зарегистрирован аккаунт в SberPay. Указывается в формате ITU-T E.164: https://ru.wikipedia.org/wiki/E.164, например 79000000000. | [optional] [default to undefined]
 **account_number** | **string** | Номер кошелька ЮMoney, из которого заплатил пользователь. | [optional] [default to undefined]
@@ -27,7 +27,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PaymentPaymentMethod } from 'yookassa-client';
+import { PaymentPaymentMethod } from './api';
 
 const instance: PaymentPaymentMethod = {
     type,

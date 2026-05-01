@@ -21,7 +21,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PaymentOrderDataUtilities } from 'yookassa-client';
+import { PaymentOrderDataUtilities } from './api';
 
 const instance: PaymentOrderDataUtilities = {
     amount,

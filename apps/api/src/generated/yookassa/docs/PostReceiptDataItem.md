@@ -29,7 +29,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PostReceiptDataItem } from 'yookassa-client';
+import { PostReceiptDataItem } from './api';
 
 const instance: PostReceiptDataItem = {
     description,

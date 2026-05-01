@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Forbidden } from 'yookassa-client';
+import { Forbidden } from './api';
 
 const instance: Forbidden = {
     type,

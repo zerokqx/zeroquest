@@ -19,7 +19,7 @@ All URIs are relative to *https://api.yookassa.ru/v3*
 import {
     WebhooksApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new WebhooksApi(configuration);
@@ -67,7 +67,7 @@ import {
     WebhooksApi,
     Configuration,
     CreateWebhookRequest
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new WebhooksApi(configuration);
@@ -125,7 +125,7 @@ const { status, data } = await apiInstance.webhooksPost(
 import {
     WebhooksApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new WebhooksApi(configuration);

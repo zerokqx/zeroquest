@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Gone } from 'yookassa-client';
+import { Gone } from './api';
 
 const instance: Gone = {
     type,

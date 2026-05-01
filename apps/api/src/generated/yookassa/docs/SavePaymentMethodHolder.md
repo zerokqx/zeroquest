@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { SavePaymentMethodHolder } from 'yookassa-client';
+import { SavePaymentMethodHolder } from './api';
 
 const instance: SavePaymentMethodHolder = {
     account_id,

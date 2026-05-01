@@ -10,7 +10,7 @@
       "yookassa:openapi": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "bunx openapi-generator-cli generate -i https://yookassa.ru/developers/api/yookassa-openapi-specification.yaml -g typescript-axios -o ./src/generated/yookassa --additional-properties=supportsES6=true,npmName=yookassa-client",
+          "command": "bunx openapi-generator-cli generate -i https://yookassa.ru/developers/api/yookassa-openapi-specification.yaml -g typescript-axios -o ./src/generated/yookassa --additional-properties=supportsES6=true",
           "cwd": "apps/api"
         }
       },

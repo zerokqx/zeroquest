@@ -614,7 +614,7 @@ export type CreatePaymentRequestConfirmation = ConfirmationDataEmbedded | Confir
 /**
  * @type CreatePaymentRequestPaymentMethodData
  */
-export type CreatePaymentRequestPaymentMethodData = PaymentMethodDataB2bSberbank | PaymentMethodDataBankCard | PaymentMethodDataCash | PaymentMethodDataElectronicCertificate | PaymentMethodDataMobileBalance | PaymentMethodDataSberBnpl | PaymentMethodDataSberLoan | PaymentMethodDataSberbank | PaymentMethodDataSbp | PaymentMethodDataTinkoffBank | PaymentMethodDataYooMoney;
+export type CreatePaymentRequestPaymentMethodData = PaymentMethodDataAlfaPay | PaymentMethodDataB2bSberbank | PaymentMethodDataBankCard | PaymentMethodDataCash | PaymentMethodDataElectronicCertificate | PaymentMethodDataMobileBalance | PaymentMethodDataSberBnpl | PaymentMethodDataSberLoan | PaymentMethodDataSberbank | PaymentMethodDataSbp | PaymentMethodDataTinkoffBank | PaymentMethodDataYooMoney;
 
 /**
  * @type CreatePaymentRequestReceiver
@@ -1816,6 +1816,14 @@ export interface PaymentMethod {
 
 
 /**
+ * Payment via Alfa Pay.
+ */
+export interface PaymentMethodAlfaPay extends PaymentMethod {
+    'card'?: InvoicingBankCardData;
+}
+
+
+/**
  * Оплата через Альфа-Клик.
  */
 export interface PaymentMethodAlfabank extends PaymentMethod {
@@ -1885,9 +1893,17 @@ export const PaymentMethodDataTypeEnum = {
     SberLoan: 'sber_loan',
     ElectronicCertificate: 'electronic_certificate',
     SberBnpl: 'sber_bnpl',
+    AlfaPay: 'alfa_pay',
 } as const;
 
 export type PaymentMethodDataTypeEnum = typeof PaymentMethodDataTypeEnum[keyof typeof PaymentMethodDataTypeEnum];
+
+/**
+ * Data for payments via Alfa Pay.
+ */
+export interface PaymentMethodDataAlfaPay extends PaymentMethodData {
+}
+
 
 /**
  * Данные для оплаты через СберБанк Бизнес Онлайн.
@@ -2137,6 +2153,7 @@ export const PaymentMethodType = {
     SberLoan: 'sber_loan',
     ElectronicCertificate: 'electronic_certificate',
     SberBnpl: 'sber_bnpl',
+    AlfaPay: 'alfa_pay',
 } as const;
 
 export type PaymentMethodType = typeof PaymentMethodType[keyof typeof PaymentMethodType];
@@ -2370,7 +2387,7 @@ export interface PaymentOverviewStatementEmailDeliveryMethod extends PaymentOver
 /**
  * @type PaymentPaymentMethod
  */
-export type PaymentPaymentMethod = PaymentMethodAlfabank | PaymentMethodApplePay | PaymentMethodB2bSberbank | PaymentMethodBankCard | PaymentMethodCash | PaymentMethodElectronicCertificate | PaymentMethodGooglePay | PaymentMethodInstallments | PaymentMethodMobileBalance | PaymentMethodQiwi | PaymentMethodSberBnpl | PaymentMethodSberLoan | PaymentMethodSberbank | PaymentMethodSbp | PaymentMethodTinkoffBank | PaymentMethodWeChat | PaymentMethodWebmoney | PaymentMethodYooMoney;
+export type PaymentPaymentMethod = PaymentMethodAlfaPay | PaymentMethodAlfabank | PaymentMethodApplePay | PaymentMethodB2bSberbank | PaymentMethodBankCard | PaymentMethodCash | PaymentMethodElectronicCertificate | PaymentMethodGooglePay | PaymentMethodInstallments | PaymentMethodMobileBalance | PaymentMethodQiwi | PaymentMethodSberBnpl | PaymentMethodSberLoan | PaymentMethodSberbank | PaymentMethodSbp | PaymentMethodTinkoffBank | PaymentMethodWeChat | PaymentMethodWebmoney | PaymentMethodYooMoney;
 
 /**
  * Период оплаты, за который выставлены начисления и за который вносится оплата.

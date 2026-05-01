@@ -3,11 +3,6 @@
   "type": "module",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-    "db:migrate:deploy": "cd libs/db && bunx prisma migrate deploy",
-    "db:migrate:dev": "cd libs/db && bunx prisma migrate dev",
-    "db:seed": "bun run --cwd libs/db seed"
-  },
   "nx": {
     "targets": {
       "x-ui-tunnel:enable": {

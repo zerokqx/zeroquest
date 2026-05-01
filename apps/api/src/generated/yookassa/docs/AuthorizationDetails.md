@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { AuthorizationDetails } from 'yookassa-client';
+import { AuthorizationDetails } from './api';
 
 const instance: AuthorizationDetails = {
     rrn,

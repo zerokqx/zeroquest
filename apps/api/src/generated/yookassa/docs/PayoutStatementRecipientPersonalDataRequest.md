@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PayoutStatementRecipientPersonalDataRequest } from 'yookassa-client';
+import { PayoutStatementRecipientPersonalDataRequest } from './api';
 
 const instance: PayoutStatementRecipientPersonalDataRequest = {
     last_name,

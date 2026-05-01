@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { B2bSberbankCalculatedVatData } from 'yookassa-client';
+import { B2bSberbankCalculatedVatData } from './api';
 
 const instance: B2bSberbankCalculatedVatData = {
     rate,

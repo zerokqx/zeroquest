@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { TooManyRequests } from 'yookassa-client';
+import { TooManyRequests } from './api';
 
 const instance: TooManyRequests = {
     type,

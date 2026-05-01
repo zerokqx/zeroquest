@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PaymentPeriod } from 'yookassa-client';
+import { PaymentPeriod } from './api';
 
 const instance: PaymentPeriod = {
     month,

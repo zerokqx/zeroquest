@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ElectronicCertificatePaymentData } from 'yookassa-client';
+import { ElectronicCertificatePaymentData } from './api';
 
 const instance: ElectronicCertificatePaymentData = {
     amount,

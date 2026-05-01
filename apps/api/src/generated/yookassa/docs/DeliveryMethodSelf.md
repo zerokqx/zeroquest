@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { DeliveryMethodSelf } from 'yookassa-client';
+import { DeliveryMethodSelf } from './api';
 
 const instance: DeliveryMethodSelf = {
     url,

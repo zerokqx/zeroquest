@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { OperationalDetails } from 'yookassa-client';
+import { OperationalDetails } from './api';
 
 const instance: OperationalDetails = {
     operation_id,

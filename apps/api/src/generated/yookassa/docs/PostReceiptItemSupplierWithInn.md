@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PostReceiptItemSupplierWithInn } from 'yookassa-client';
+import { PostReceiptItemSupplierWithInn } from './api';
 
 const instance: PostReceiptItemSupplierWithInn = {
     name,

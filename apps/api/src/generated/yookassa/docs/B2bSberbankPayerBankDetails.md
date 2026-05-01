@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { B2bSberbankPayerBankDetails } from 'yookassa-client';
+import { B2bSberbankPayerBankDetails } from './api';
 
 const instance: B2bSberbankPayerBankDetails = {
     full_name,

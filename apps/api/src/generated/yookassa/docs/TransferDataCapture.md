@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { TransferDataCapture } from 'yookassa-client';
+import { TransferDataCapture } from './api';
 
 const instance: TransferDataCapture = {
     account_id,

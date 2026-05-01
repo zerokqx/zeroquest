@@ -33,7 +33,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Payment } from 'yookassa-client';
+import { Payment } from './api';
 
 const instance: Payment = {
     id,

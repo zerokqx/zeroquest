@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ModelError } from 'yookassa-client';
+import { ModelError } from './api';
 
 const instance: ModelError = {
     type,

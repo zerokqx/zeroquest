@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Receiver } from 'yookassa-client';
+import { Receiver } from './api';
 
 const instance: Receiver = {
     type,

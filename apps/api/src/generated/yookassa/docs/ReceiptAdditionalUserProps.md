@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ReceiptAdditionalUserProps } from 'yookassa-client';
+import { ReceiptAdditionalUserProps } from './api';
 
 const instance: ReceiptAdditionalUserProps = {
     name,

@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { MarkQuantity } from 'yookassa-client';
+import { MarkQuantity } from './api';
 
 const instance: MarkQuantity = {
     numerator,

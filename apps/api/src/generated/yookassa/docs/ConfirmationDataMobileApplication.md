@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ConfirmationDataMobileApplication } from 'yookassa-client';
+import { ConfirmationDataMobileApplication } from './api';
 
 const instance: ConfirmationDataMobileApplication = {
     return_url,

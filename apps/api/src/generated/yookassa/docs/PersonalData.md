@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PersonalData } from 'yookassa-client';
+import { PersonalData } from './api';
 
 const instance: PersonalData = {
     id,

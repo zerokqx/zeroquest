@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PaymentMethodDataYooMoney } from 'yookassa-client';
+import { PaymentMethodDataYooMoney } from './api';
 
 const instance: PaymentMethodDataYooMoney = {
 };

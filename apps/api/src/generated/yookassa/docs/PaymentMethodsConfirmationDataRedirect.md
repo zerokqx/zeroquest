@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PaymentMethodsConfirmationDataRedirect } from 'yookassa-client';
+import { PaymentMethodsConfirmationDataRedirect } from './api';
 
 const instance: PaymentMethodsConfirmationDataRedirect = {
     enforce,

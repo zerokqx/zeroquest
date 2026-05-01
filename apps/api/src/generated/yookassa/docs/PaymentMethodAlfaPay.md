@@ -1,17 +1,20 @@
-# ConfirmationDataExternal
+# PaymentMethodAlfaPay
 
+Payment via Alfa Pay.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**card** | [**InvoicingBankCardData**](InvoicingBankCardData.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { ConfirmationDataExternal } from './api';
+import { PaymentMethodAlfaPay } from './api';
 
-const instance: ConfirmationDataExternal = {
+const instance: PaymentMethodAlfaPay = {
+    card,
 };
 ```
 

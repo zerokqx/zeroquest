@@ -28,7 +28,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { CreatePaymentRequest } from 'yookassa-client';
+import { CreatePaymentRequest } from './api';
 
 const instance: CreatePaymentRequest = {
     amount,

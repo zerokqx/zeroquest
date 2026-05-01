@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ElectronicCertificateApprovedPaymentArticle } from 'yookassa-client';
+import { ElectronicCertificateApprovedPaymentArticle } from './api';
 
 const instance: ElectronicCertificateApprovedPaymentArticle = {
     article_number,

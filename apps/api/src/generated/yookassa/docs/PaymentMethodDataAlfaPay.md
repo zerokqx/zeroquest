@@ -1,5 +1,6 @@
-# ConfirmationDataExternal
+# PaymentMethodDataAlfaPay
 
+Data for payments via Alfa Pay.
 
 ## Properties
 
@@ -9,9 +10,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ConfirmationDataExternal } from './api';
+import { PaymentMethodDataAlfaPay } from './api';
 
-const instance: ConfirmationDataExternal = {
+const instance: PaymentMethodDataAlfaPay = {
 };
 ```
 

@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { CreateWebhookRequest } from 'yookassa-client';
+import { CreateWebhookRequest } from './api';
 
 const instance: CreateWebhookRequest = {
     event,

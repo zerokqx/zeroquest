@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { NotFound } from 'yookassa-client';
+import { NotFound } from './api';
 
 const instance: NotFound = {
     type,

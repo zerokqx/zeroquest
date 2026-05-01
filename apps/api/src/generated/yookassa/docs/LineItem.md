@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { LineItem } from 'yookassa-client';
+import { LineItem } from './api';
 
 const instance: LineItem = {
     description,

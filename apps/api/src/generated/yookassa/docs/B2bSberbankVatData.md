@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { B2bSberbankVatData } from 'yookassa-client';
+import { B2bSberbankVatData } from './api';
 
 const instance: B2bSberbankVatData = {
     type,

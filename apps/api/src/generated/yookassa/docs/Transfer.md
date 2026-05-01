@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Transfer } from 'yookassa-client';
+import { Transfer } from './api';
 
 const instance: Transfer = {
     account_id,

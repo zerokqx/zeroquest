@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Airline } from 'yookassa-client';
+import { Airline } from './api';
 
 const instance: Airline = {
     ticket_number,

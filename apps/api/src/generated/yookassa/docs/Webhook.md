@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Webhook } from 'yookassa-client';
+import { Webhook } from './api';
 
 const instance: Webhook = {
     id,

@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ReceiverMobileBalance } from 'yookassa-client';
+import { ReceiverMobileBalance } from './api';
 
 const instance: ReceiverMobileBalance = {
     phone,

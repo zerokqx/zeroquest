@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { SbpPayoutRecipientPersonalDataRequest } from 'yookassa-client';
+import { SbpPayoutRecipientPersonalDataRequest } from './api';
 
 const instance: SbpPayoutRecipientPersonalDataRequest = {
     last_name,

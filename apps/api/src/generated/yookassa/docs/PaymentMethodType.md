@@ -40,4 +40,6 @@ Payment method code is the type of a means of payment used for paying. More abou
 
 * `SberBnpl` (value: `'sber_bnpl'`)
 
+* `AlfaPay` (value: `'alfa_pay'`)
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

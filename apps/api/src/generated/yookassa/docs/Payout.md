@@ -23,7 +23,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Payout } from 'yookassa-client';
+import { Payout } from './api';
 
 const instance: Payout = {
     id,

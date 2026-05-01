@@ -37,7 +37,7 @@ All URIs are relative to *https://api.yookassa.ru/v3*
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -94,7 +94,7 @@ const { status, data } = await apiInstance.dealsDealIdGet(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -185,7 +185,7 @@ import {
     DefaultApi,
     Configuration,
     SafeDealRequest
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -244,7 +244,7 @@ const { status, data } = await apiInstance.dealsPost(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -300,7 +300,7 @@ import {
     DefaultApi,
     Configuration,
     CreateInvoiceRequest
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -358,7 +358,7 @@ const { status, data } = await apiInstance.invoicesPost(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -413,7 +413,7 @@ const { status, data } = await apiInstance.meGet(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -471,7 +471,7 @@ import {
     DefaultApi,
     Configuration,
     SavePaymentMethodDataBankCard
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -530,7 +530,7 @@ Use this request to get a list of payouts. You can download payments created ove
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -620,7 +620,7 @@ const { status, data } = await apiInstance.payoutsGet(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -678,7 +678,7 @@ import {
     DefaultApi,
     Configuration,
     PayoutRequest
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -737,7 +737,7 @@ Use this request to search for payouts by the specified criteria. Available only
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -812,7 +812,7 @@ const { status, data } = await apiInstance.payoutsSearchGet(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -870,7 +870,7 @@ import {
     DefaultApi,
     Configuration,
     PersonalDataPostRequest
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -929,7 +929,7 @@ const { status, data } = await apiInstance.personalDataPost(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -1009,7 +1009,7 @@ import {
     DefaultApi,
     Configuration,
     PostReceiptData
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -1067,7 +1067,7 @@ const { status, data } = await apiInstance.receiptsPost(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -1122,7 +1122,7 @@ Use this request to get a list of refunds. You can download refunds created over
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -1199,7 +1199,7 @@ import {
     DefaultApi,
     Configuration,
     RefundRequest
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -1257,7 +1257,7 @@ const { status, data } = await apiInstance.refundsPost(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);
@@ -1313,7 +1313,7 @@ const { status, data } = await apiInstance.refundsRefundIdGet(
 import {
     DefaultApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new DefaultApi(configuration);

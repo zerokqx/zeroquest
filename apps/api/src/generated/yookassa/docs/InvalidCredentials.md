@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { InvalidCredentials } from 'yookassa-client';
+import { InvalidCredentials } from './api';
 
 const instance: InvalidCredentials = {
     type,

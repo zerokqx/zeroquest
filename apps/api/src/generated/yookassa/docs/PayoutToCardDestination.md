@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PayoutToCardDestination } from 'yookassa-client';
+import { PayoutToCardDestination } from './api';
 
 const instance: PayoutToCardDestination = {
     card,

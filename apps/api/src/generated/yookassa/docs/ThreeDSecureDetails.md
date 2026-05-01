@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ThreeDSecureDetails } from 'yookassa-client';
+import { ThreeDSecureDetails } from './api';
 
 const instance: ThreeDSecureDetails = {
     applied,

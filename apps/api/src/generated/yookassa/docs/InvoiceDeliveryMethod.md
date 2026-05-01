@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { InvoiceDeliveryMethod } from 'yookassa-client';
+import { InvoiceDeliveryMethod } from './api';
 
 const instance: InvoiceDeliveryMethod = {
     type,

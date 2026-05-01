@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { CreateInvoiceRequest } from 'yookassa-client';
+import { CreateInvoiceRequest } from './api';
 
 const instance: CreateInvoiceRequest = {
     payment_data,

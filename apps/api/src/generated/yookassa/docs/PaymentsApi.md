@@ -21,7 +21,7 @@ Use this request to get a list of payments. You can download payments created ov
 import {
     PaymentsApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new PaymentsApi(configuration);
@@ -109,7 +109,7 @@ Cancel payments with the waiting_for_capture status. Payment cancelation means y
 import {
     PaymentsApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new PaymentsApi(configuration);
@@ -168,7 +168,7 @@ import {
     PaymentsApi,
     Configuration,
     PaymentCaptureRequest
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new PaymentsApi(configuration);
@@ -229,7 +229,7 @@ This request allows you to get the information about the current payment status 
 import {
     PaymentsApi,
     Configuration
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new PaymentsApi(configuration);
@@ -286,7 +286,7 @@ import {
     PaymentsApi,
     Configuration,
     CreatePaymentRequest
-} from 'yookassa-client';
+} from './api';
 
 const configuration = new Configuration();
 const apiInstance = new PaymentsApi(configuration);

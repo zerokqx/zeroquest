@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { SbpPayerBankDetails } from 'yookassa-client';
+import { SbpPayerBankDetails } from './api';
 
 const instance: SbpPayerBankDetails = {
     bank_id,

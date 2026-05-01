@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ElectronicCertificateRefundMethod } from 'yookassa-client';
+import { ElectronicCertificateRefundMethod } from './api';
 
 const instance: ElectronicCertificateRefundMethod = {
     electronic_certificate,

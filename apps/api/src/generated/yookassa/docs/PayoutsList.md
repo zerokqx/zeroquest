@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PayoutsList } from 'yookassa-client';
+import { PayoutsList } from './api';
 
 const instance: PayoutsList = {
     type,

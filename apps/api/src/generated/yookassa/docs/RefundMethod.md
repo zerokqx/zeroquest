@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { RefundMethod } from 'yookassa-client';
+import { RefundMethod } from './api';
 
 const instance: RefundMethod = {
     type,

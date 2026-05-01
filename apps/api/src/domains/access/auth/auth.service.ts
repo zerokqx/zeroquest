@@ -186,11 +186,6 @@ export class AuthService {
       refresh: refreshPayload,
     });
     this.logger.debug({ success, sessionValid, error });
-    // !!session &&
-    // session.clientType.name === refreshPayload.clientType &&
-    // userAgentHash === session.userAgentHash &&
-    // session.refreshTokenJti === refreshPayload.jti &&
-    // refreshPayload.sub === session.userId;
 
     if (!success) {
       this.logger.warn(

@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ConfirmationDataQr } from 'yookassa-client';
+import { ConfirmationDataQr } from './api';
 
 const instance: ConfirmationDataQr = {
     return_url,

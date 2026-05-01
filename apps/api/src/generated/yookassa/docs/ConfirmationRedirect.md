@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ConfirmationRedirect } from 'yookassa-client';
+import { ConfirmationRedirect } from './api';
 
 const instance: ConfirmationRedirect = {
     enforce,

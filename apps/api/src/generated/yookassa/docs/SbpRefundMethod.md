@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { SbpRefundMethod } from 'yookassa-client';
+import { SbpRefundMethod } from './api';
 
 const instance: SbpRefundMethod = {
     sbp_operation_id,

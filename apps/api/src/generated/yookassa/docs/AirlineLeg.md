@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { AirlineLeg } from 'yookassa-client';
+import { AirlineLeg } from './api';
 
 const instance: AirlineLeg = {
     departure_airport,

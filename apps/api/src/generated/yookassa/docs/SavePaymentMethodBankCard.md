@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { SavePaymentMethodBankCard } from 'yookassa-client';
+import { SavePaymentMethodBankCard } from './api';
 
 const instance: SavePaymentMethodBankCard = {
     card,

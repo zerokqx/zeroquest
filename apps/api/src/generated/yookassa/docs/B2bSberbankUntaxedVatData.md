@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { B2bSberbankUntaxedVatData } from 'yookassa-client';
+import { B2bSberbankUntaxedVatData } from './api';
 
 const instance: B2bSberbankUntaxedVatData = {
 };

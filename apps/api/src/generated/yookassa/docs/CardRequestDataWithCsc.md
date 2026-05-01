@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { CardRequestDataWithCsc } from 'yookassa-client';
+import { CardRequestDataWithCsc } from './api';
 
 const instance: CardRequestDataWithCsc = {
     number,

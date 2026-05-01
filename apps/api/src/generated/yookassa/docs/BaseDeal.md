@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { BaseDeal } from 'yookassa-client';
+import { BaseDeal } from './api';
 
 const instance: BaseDeal = {
     type,

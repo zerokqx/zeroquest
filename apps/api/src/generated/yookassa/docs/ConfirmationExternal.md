@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ConfirmationExternal } from 'yookassa-client';
+import { ConfirmationExternal } from './api';
 
 const instance: ConfirmationExternal = {
 };

@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Recipient } from 'yookassa-client';
+import { Recipient } from './api';
 
 const instance: Recipient = {
     gateway_id,

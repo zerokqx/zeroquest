@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ReceiverBankAccount } from 'yookassa-client';
+import { ReceiverBankAccount } from './api';
 
 const instance: ReceiverBankAccount = {
     account_number,

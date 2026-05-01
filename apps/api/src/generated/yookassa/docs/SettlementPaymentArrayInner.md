@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { SettlementPaymentArrayInner } from 'yookassa-client';
+import { SettlementPaymentArrayInner } from './api';
 
 const instance: SettlementPaymentArrayInner = {
 };

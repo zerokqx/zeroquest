@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { BadRequest } from 'yookassa-client';
+import { BadRequest } from './api';
 
 const instance: BadRequest = {
     type,

@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { BankCardData } from 'yookassa-client';
+import { BankCardData } from './api';
 
 const instance: BankCardData = {
     first6,

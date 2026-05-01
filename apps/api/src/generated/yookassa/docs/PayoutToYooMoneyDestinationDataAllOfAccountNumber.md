@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { PayoutToYooMoneyDestinationDataAllOfAccountNumber } from 'yookassa-client';
+import { PayoutToYooMoneyDestinationDataAllOfAccountNumber } from './api';
 
 const instance: PayoutToYooMoneyDestinationDataAllOfAccountNumber = {
 };

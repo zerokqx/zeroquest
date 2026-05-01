@@ -20,7 +20,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { Me } from 'yookassa-client';
+import { Me } from './api';
 
 const instance: Me = {
     account_id,

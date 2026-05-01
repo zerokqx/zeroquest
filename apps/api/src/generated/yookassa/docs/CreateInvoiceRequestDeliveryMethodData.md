@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { CreateInvoiceRequestDeliveryMethodData } from 'yookassa-client';
+import { CreateInvoiceRequestDeliveryMethodData } from './api';
 
 const instance: CreateInvoiceRequestDeliveryMethodData = {
     type,

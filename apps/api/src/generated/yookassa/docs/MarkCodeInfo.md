@@ -21,7 +21,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { MarkCodeInfo } from 'yookassa-client';
+import { MarkCodeInfo } from './api';
 
 const instance: MarkCodeInfo = {
     mark_code_raw,

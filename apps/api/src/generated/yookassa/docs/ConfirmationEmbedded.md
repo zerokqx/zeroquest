@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ConfirmationEmbedded } from 'yookassa-client';
+import { ConfirmationEmbedded } from './api';
 
 const instance: ConfirmationEmbedded = {
     confirmation_token,

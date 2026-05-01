@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ReceiverDigitalWallet } from 'yookassa-client';
+import { ReceiverDigitalWallet } from './api';
 
 const instance: ReceiverDigitalWallet = {
     account_number,

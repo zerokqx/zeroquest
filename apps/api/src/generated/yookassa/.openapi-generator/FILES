@@ -1,6 +1,6 @@
 .gitignore
 .npmignore
-README.md
+.openapi-generator-ignore
 api.ts
 base.ts
 common.ts
@@ -104,6 +104,7 @@ docs/PaymentDetails.md
 docs/PaymentInvoiceDetails.md
 docs/PaymentList.md
 docs/PaymentMethod.md
+docs/PaymentMethodAlfaPay.md
 docs/PaymentMethodAlfabank.md
 docs/PaymentMethodApplePay.md
 docs/PaymentMethodB2bSberbank.md
@@ -111,6 +112,7 @@ docs/PaymentMethodB2bSberbankAllOfVatData.md
 docs/PaymentMethodBankCard.md
 docs/PaymentMethodCash.md
 docs/PaymentMethodData.md
+docs/PaymentMethodDataAlfaPay.md
 docs/PaymentMethodDataB2bSberbank.md
 docs/PaymentMethodDataB2bSberbankAllOfVatData.md
 docs/PaymentMethodDataBankCard.md
@@ -261,6 +263,3 @@ docs/WebhookList.md
 docs/WebhooksApi.md
 git_push.sh
 index.ts
-package.json
-tsconfig.esm.json
-tsconfig.json

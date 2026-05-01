@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { SafeDeal } from 'yookassa-client';
+import { SafeDeal } from './api';
 
 const instance: SafeDeal = {
     id,
