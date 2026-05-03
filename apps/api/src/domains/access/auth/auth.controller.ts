@@ -32,6 +32,7 @@ import {
   AuthPayload,
   AuthToken,
   ClientType,
+  getRequestHeader,
   Public,
 } from '@zeroquest/nest-shared';
 import { CookieJwtManager } from './cookie-manager.service';
@@ -108,11 +109,16 @@ export class AuthController {
     this.logger.log(
       `Запрос на вход по паролю: login=${body.login}, clientType=${req.clientType}`,
     );
+    this.logger.debug( userAgent, req.clientType ??"ClientType",
+
+
+      getRequestHeader(req,'x-forwarded-for') ?? 'NotFound'
+    )
     const tokens = await this.authService.password(
       body,
       userAgent,
       req.clientType,
-      req.headers['x-forwarded-for']
+      getRequestHeader(req,'x-forwarded-for') ?? ''
     );
 
     this.cookieManager.setAuthCookies(res, tokens);

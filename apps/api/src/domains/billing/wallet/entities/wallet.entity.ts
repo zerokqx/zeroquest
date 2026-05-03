@@ -8,6 +8,4 @@ export class WalletEntity implements Wallet {
   held!: number;
   @ApiProperty()
   balance!: number;
-  @ApiProperty()
-  userId!: string;
 }

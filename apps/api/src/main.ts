@@ -57,6 +57,14 @@ async function bootstrap() {
     const config = new DocumentBuilder()
       .setTitle('Zeroquest API')
       .setVersion('1.0')
+      .addApiKey(
+        {
+          type: 'apiKey',
+          in: 'header',
+          name: 'Client Type',
+        },
+        'client-type',
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, config);

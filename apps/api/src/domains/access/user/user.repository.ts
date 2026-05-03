@@ -1,5 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Prisma, PrismaService } from '@zeroquest/db';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Prisma, PrismaService, User } from '@zeroquest/db';
 
 @Injectable()
 export class UserRepository {
@@ -19,5 +19,14 @@ export class UserRepository {
   ) {
     this.logger.log(`Обновление пользователя: userId=${data.where.id}`);
     return this.prisma.user.update<T>(data);
+  }
+
+  async isAdmin(userId: User['id']) {
+    const data = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true },
+    });
+    if (!data) throw new NotFoundException('User not found');
+    return data.role;
   }
 }

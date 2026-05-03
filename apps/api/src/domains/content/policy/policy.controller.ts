@@ -1,4 +1,4 @@
-import { Public } from '@zeroquest/nest-shared';
+import { ApiClientType, Public } from '@zeroquest/nest-shared';
 import {
   ApiExtraModels,
   ApiOkResponse,
@@ -32,8 +32,10 @@ export class PolicyController {
     enum: LegalDocumentType,
     description: 'Тип юридического документа.',
   })
+  @ApiClientType()
   @ApiOkResponse({
     description: 'Актуальный документ успешно получен (или null).',
+
     type: PolicyEntity,
   })
   async getActual(

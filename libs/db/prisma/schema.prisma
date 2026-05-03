@@ -207,7 +207,7 @@ model User {
   passwordHash     String             @map("password_hash")
   subscribes       Subscribe[]
   isBanned         Boolean            @default(false) @map("is_banned")
-  role             UserRole?          @default(USER)
+  role             UserRole          @default(USER)
   createdAt        DateTime           @default(now()) @map("created_at")
   updatedAt        DateTime           @updatedAt @map("updated_at")
   payments         Payment[]
@@ -269,7 +269,7 @@ model Ip {
   metro    Int
   area     Int // точность в км
 
-  status    IpStatus  @default(ACTIVE)
+  status IpStatus @default(ACTIVE)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   sessions  Session[]

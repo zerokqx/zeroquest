@@ -9,9 +9,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PatchMeDto } from './dto/patch-me.dto';
-import { AuthPayload } from '@zeroquest/nest-shared';
+import { ApiClientType, ApiUserAgent, AuthPayload, Role } from '@zeroquest/nest-shared';
 import { UserEntity } from './entities/user.entity';
 import { SkipThrottle } from '@nestjs/throttler';
+import { UserRole } from '@zeroquest/db';
 
 @ApiTags('User')
 @ApiCookieAuth('zeroquestAccess')
@@ -55,5 +56,17 @@ export class UserController {
     const data = await this.userService.patchMe(payload, body);
 
     return new UserEntity(data);
+  }
+
+  @ApiOperation({
+    summary: 'Проверка на админа текущего пользователя',
+    description: 'Проверка',
+  })
+  @ApiClientType()
+  @ApiUserAgent()
+  @Get('is-admin')
+  @Role(UserRole.ADMIN)
+  isAdmin(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
+    return this.userService.isAdmin(payload.sub);
   }
 }

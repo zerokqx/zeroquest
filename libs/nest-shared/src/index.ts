@@ -8,6 +8,8 @@ export * from './lib/decorators/log-access-to-route.interceptor';
 export * from './lib/ip/allow-api.guard';
 export * from './lib/ip/allow-ip.decorator';
 export * from './lib/ip/allow-ip.guard';
+export * from './lib/request/get-request-cookie';
+export * from './lib/request/get-request-header';
 export * from './lib/request-logger/sniff.interceptor';
 export * from './lib/role/api-role-only.decorator';
 export * from './lib/role/role.decorator';

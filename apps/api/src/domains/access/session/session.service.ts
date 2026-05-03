@@ -38,11 +38,19 @@ export class SessionService {
       `Создание сессии: userId=${userId}, clientType=${clientType}`,
     );
 
+    this.logger.debug({
+      refreshTokenJti,
+      refreshToken,
+      clientType,
+      userAgentHash,
+      ip,
+      userId,
+    });
     const ipInfo = await this.ipInfoService.lookupIp(ip);
+
     if (!ipInfo) {
       this.logger.warn(`Ip '${ip}' не был распознан`);
     }
-    this.logger.debug(ipInfo)
 
     return this.sessionRepository.create(
       {
@@ -51,7 +59,7 @@ export class SessionService {
         },
         expriesAt: new Date(),
 
-        ...(ipInfo && {
+        ...(ipInfo !== null && {
           ip: {
             connectOrCreate: {
               where: { ip },

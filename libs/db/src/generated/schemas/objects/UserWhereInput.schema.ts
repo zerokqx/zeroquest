@@ -3,7 +3,7 @@ import type { Prisma } from '../../client';
 import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
 import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
 import { BoolFilterObjectSchema as BoolFilterObjectSchema } from './BoolFilter.schema';
-import { EnumUserRoleNullableFilterObjectSchema as EnumUserRoleNullableFilterObjectSchema } from './EnumUserRoleNullableFilter.schema';
+import { EnumUserRoleFilterObjectSchema as EnumUserRoleFilterObjectSchema } from './EnumUserRoleFilter.schema';
 import { UserRoleSchema } from '../enums/UserRole.schema';
 import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { SubscribeListRelationFilterObjectSchema as SubscribeListRelationFilterObjectSchema } from './SubscribeListRelationFilter.schema';
@@ -24,7 +24,7 @@ const userwhereinputSchema = z.object({
   telegramId: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).optional().nullable(),
   passwordHash: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   isBanned: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
-  role: z.union([z.lazy(() => EnumUserRoleNullableFilterObjectSchema), UserRoleSchema]).optional().nullable(),
+  role: z.union([z.lazy(() => EnumUserRoleFilterObjectSchema), UserRoleSchema]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   canComment: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
