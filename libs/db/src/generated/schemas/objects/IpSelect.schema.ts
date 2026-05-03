@@ -16,6 +16,7 @@ const makeSchema = () => z.object({
   ll: z.boolean().optional(),
   metro: z.boolean().optional(),
   area: z.boolean().optional(),
+  status: z.boolean().optional(),
   createdAt: z.boolean().optional(),
   updatedAt: z.boolean().optional(),
   sessions: z.union([z.boolean(), z.lazy(() => SessionFindManySchema)]).optional(),

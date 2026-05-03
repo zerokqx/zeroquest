@@ -14,6 +14,7 @@ const makeSchema = () => z.object({
   city: SortOrderSchema.optional(),
   metro: SortOrderSchema.optional(),
   area: SortOrderSchema.optional(),
+  status: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional()
 }).strict();

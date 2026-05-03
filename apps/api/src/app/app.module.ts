@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import configuration, { EnvironmentVariables } from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from '../domains/access/auth/auth.module';
@@ -25,6 +25,8 @@ import { AuthGuard } from '@/domains/access/auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
 import KeyvRedis from '@keyv/redis';
 import { FingerprintGuard } from '@/domains/security/fingerprint/fingerprint.guard';
+import { IpInfoMiddleware } from '@/domains/network/ipinfo/ipinfo.middleware';
+import { IpInfoModule } from '@/domains/network/ipinfo/ipinfo.module';
 
 @Module({
   imports: [
@@ -80,6 +82,7 @@ import { FingerprintGuard } from '@/domains/security/fingerprint/fingerprint.gua
     WalletModule,
     BillingModule,
     PolicyModule,
+    IpInfoModule,
   ],
   providers: [
     {
@@ -99,4 +102,8 @@ import { FingerprintGuard } from '@/domains/security/fingerprint/fingerprint.gua
     { provide: APP_GUARD, useClass: RoleGuard },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+      consumer.apply(IpInfoMiddleware).forRoutes({path:"*", method: RequestMethod.ALL})
+  }
+}

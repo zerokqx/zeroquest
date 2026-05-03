@@ -1,24 +1,17 @@
-import { EnvironmentVariables } from '@/config/configuration';
 import geoip from 'geoip-lite';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { IPinfoLiteWrapper } from 'node-ipinfo';
+import { Ip, PrismaService } from '@zeroquest/db';
 
 @Injectable()
 export class IpInfoService {
-  private readonly ipinfo!: IPinfoLiteWrapper;
   constructor(
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-    private readonly config: ConfigService<EnvironmentVariables>,
-  ) {
-    const ipinfo = this.config.get('ipinfo', { infer: true });
-    if (!ipinfo?.token) throw new Error('IpInfo token not found in .env');
-    this.ipinfo = new IPinfoLiteWrapper(ipinfo.token);
-  }
+    private readonly prisma: PrismaService,
+  ) {}
 
   cacheKey(ip: string) {
-    return `ip:${ip}`;
+    return `ip:data:${ip}`;
   }
 
   async lookupIp(ip: string): Promise<geoip.Lookup | null> {
@@ -28,5 +21,16 @@ export class IpInfoService {
     const details = geoip.lookup(ip);
     this.cacheManager.set<string>(key, JSON.stringify(details), 160_000_000);
     return details;
+  }
+
+  async getIpDataFromCache(ip: string): Promise<geoip.Lookup | null> {
+    const key = this.cacheKey(ip);
+    const data = await this.cacheManager.get<string>(key);
+    if (!data) return null;
+    return JSON.parse(data) as geoip.Lookup;
+  }
+
+  async getIpDataFromDb(ip: string): Promise<Ip|null> {
+    return this.prisma.ip.findUnique({ where: { ip } });
   }
 }

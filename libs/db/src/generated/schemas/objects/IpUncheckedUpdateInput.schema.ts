@@ -5,6 +5,8 @@ import { IntFieldUpdateOperationsInputObjectSchema as IntFieldUpdateOperationsIn
 import { StringFieldUpdateOperationsInputObjectSchema as StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
 import { BoolFieldUpdateOperationsInputObjectSchema as BoolFieldUpdateOperationsInputObjectSchema } from './BoolFieldUpdateOperationsInput.schema';
 import { IpUpdatellInputObjectSchema as IpUpdatellInputObjectSchema } from './IpUpdatellInput.schema';
+import { IpStatusSchema } from '../enums/IpStatus.schema';
+import { EnumIpStatusFieldUpdateOperationsInputObjectSchema as EnumIpStatusFieldUpdateOperationsInputObjectSchema } from './EnumIpStatusFieldUpdateOperationsInput.schema';
 import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
 import { SessionUncheckedUpdateManyWithoutIpNestedInputObjectSchema as SessionUncheckedUpdateManyWithoutIpNestedInputObjectSchema } from './SessionUncheckedUpdateManyWithoutIpNestedInput.schema'
 
@@ -30,6 +32,7 @@ const makeSchema = () => z.object({
 }).array()]).optional(),
   metro: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputObjectSchema)]).optional(),
   area: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputObjectSchema)]).optional(),
+  status: z.union([IpStatusSchema, z.lazy(() => EnumIpStatusFieldUpdateOperationsInputObjectSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
   sessions: z.lazy(() => SessionUncheckedUpdateManyWithoutIpNestedInputObjectSchema).optional()

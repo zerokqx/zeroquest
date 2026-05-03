@@ -306,6 +306,23 @@ export type EnumLegalDocumentTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumLegalDocumentTypeFilter<$PrismaModel>
 }
 
+export type EnumIpStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.IpStatus | Prisma.EnumIpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IpStatus[] | Prisma.ListEnumIpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IpStatus[] | Prisma.ListEnumIpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIpStatusFilter<$PrismaModel> | $Enums.IpStatus
+}
+
+export type EnumIpStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.IpStatus | Prisma.EnumIpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IpStatus[] | Prisma.ListEnumIpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IpStatus[] | Prisma.ListEnumIpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIpStatusWithAggregatesFilter<$PrismaModel> | $Enums.IpStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumIpStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumIpStatusFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -609,6 +626,23 @@ export type NestedEnumLegalDocumentTypeWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumLegalDocumentTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumLegalDocumentTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumIpStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.IpStatus | Prisma.EnumIpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IpStatus[] | Prisma.ListEnumIpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IpStatus[] | Prisma.ListEnumIpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIpStatusFilter<$PrismaModel> | $Enums.IpStatus
+}
+
+export type NestedEnumIpStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.IpStatus | Prisma.EnumIpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IpStatus[] | Prisma.ListEnumIpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IpStatus[] | Prisma.ListEnumIpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIpStatusWithAggregatesFilter<$PrismaModel> | $Enums.IpStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumIpStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumIpStatusFilter<$PrismaModel>
 }
 
 

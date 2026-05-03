@@ -4,6 +4,8 @@ import { IntWithAggregatesFilterObjectSchema as IntWithAggregatesFilterObjectSch
 import { StringWithAggregatesFilterObjectSchema as StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
 import { BoolWithAggregatesFilterObjectSchema as BoolWithAggregatesFilterObjectSchema } from './BoolWithAggregatesFilter.schema';
 import { DecimalNullableListFilterObjectSchema as DecimalNullableListFilterObjectSchema } from './DecimalNullableListFilter.schema';
+import { EnumIpStatusWithAggregatesFilterObjectSchema as EnumIpStatusWithAggregatesFilterObjectSchema } from './EnumIpStatusWithAggregatesFilter.schema';
+import { IpStatusSchema } from '../enums/IpStatus.schema';
 import { DateTimeWithAggregatesFilterObjectSchema as DateTimeWithAggregatesFilterObjectSchema } from './DateTimeWithAggregatesFilter.schema'
 
 const ipscalarwherewithaggregatesinputSchema = z.object({
@@ -22,6 +24,7 @@ const ipscalarwherewithaggregatesinputSchema = z.object({
   ll: z.lazy(() => DecimalNullableListFilterObjectSchema).optional(),
   metro: z.union([z.lazy(() => IntWithAggregatesFilterObjectSchema), z.number().int()]).optional(),
   area: z.union([z.lazy(() => IntWithAggregatesFilterObjectSchema), z.number().int()]).optional(),
+  status: z.union([z.lazy(() => EnumIpStatusWithAggregatesFilterObjectSchema), IpStatusSchema]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.coerce.date()]).optional()
 }).strict();

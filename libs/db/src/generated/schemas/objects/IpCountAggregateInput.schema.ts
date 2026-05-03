@@ -15,6 +15,7 @@ const makeSchema = () => z.object({
   ll: z.literal(true).optional(),
   metro: z.literal(true).optional(),
   area: z.literal(true).optional(),
+  status: z.literal(true).optional(),
   createdAt: z.literal(true).optional(),
   updatedAt: z.literal(true).optional(),
   _all: z.literal(true).optional()

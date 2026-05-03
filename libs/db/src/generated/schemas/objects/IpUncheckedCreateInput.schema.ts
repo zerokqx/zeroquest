@@ -2,6 +2,7 @@ import * as z from 'zod';
 import { Prisma } from '../../client';
 import Decimal from 'decimal.js';
 import { IpCreatellInputObjectSchema as IpCreatellInputObjectSchema } from './IpCreatellInput.schema';
+import { IpStatusSchema } from '../enums/IpStatus.schema';
 import { SessionUncheckedCreateNestedManyWithoutIpInputObjectSchema as SessionUncheckedCreateNestedManyWithoutIpInputObjectSchema } from './SessionUncheckedCreateNestedManyWithoutIpInput.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../helpers/decimal-helpers';
@@ -26,6 +27,7 @@ const makeSchema = () => z.object({
 }).array()]).optional(),
   metro: z.number().int(),
   area: z.number().int(),
+  status: IpStatusSchema.optional(),
   createdAt: z.coerce.date().optional(),
   sessions: z.lazy(() => SessionUncheckedCreateNestedManyWithoutIpInputObjectSchema).optional()
 }).strict();

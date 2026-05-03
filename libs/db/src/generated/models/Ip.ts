@@ -56,6 +56,7 @@ export type IpMinAggregateOutputType = {
   city: string | null
   metro: number | null
   area: number | null
+  status: $Enums.IpStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -72,6 +73,7 @@ export type IpMaxAggregateOutputType = {
   city: string | null
   metro: number | null
   area: number | null
+  status: $Enums.IpStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -89,6 +91,7 @@ export type IpCountAggregateOutputType = {
   ll: number
   metro: number
   area: number
+  status: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -125,6 +128,7 @@ export type IpMinAggregateInputType = {
   city?: true
   metro?: true
   area?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -141,6 +145,7 @@ export type IpMaxAggregateInputType = {
   city?: true
   metro?: true
   area?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -158,6 +163,7 @@ export type IpCountAggregateInputType = {
   ll?: true
   metro?: true
   area?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -262,6 +268,7 @@ export type IpGroupByOutputType = {
   ll: runtime.Decimal[]
   metro: number
   area: number
+  status: $Enums.IpStatus
   createdAt: Date
   updatedAt: Date
   _count: IpCountAggregateOutputType | null
@@ -302,6 +309,7 @@ export type IpWhereInput = {
   ll?: Prisma.DecimalNullableListFilter<"Ip">
   metro?: Prisma.IntFilter<"Ip"> | number
   area?: Prisma.IntFilter<"Ip"> | number
+  status?: Prisma.EnumIpStatusFilter<"Ip"> | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFilter<"Ip"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ip"> | Date | string
   sessions?: Prisma.SessionListRelationFilter
@@ -320,6 +328,7 @@ export type IpOrderByWithRelationInput = {
   ll?: Prisma.SortOrder
   metro?: Prisma.SortOrder
   area?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
@@ -341,6 +350,7 @@ export type IpWhereUniqueInput = Prisma.AtLeast<{
   ll?: Prisma.DecimalNullableListFilter<"Ip">
   metro?: Prisma.IntFilter<"Ip"> | number
   area?: Prisma.IntFilter<"Ip"> | number
+  status?: Prisma.EnumIpStatusFilter<"Ip"> | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFilter<"Ip"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ip"> | Date | string
   sessions?: Prisma.SessionListRelationFilter
@@ -359,6 +369,7 @@ export type IpOrderByWithAggregationInput = {
   ll?: Prisma.SortOrder
   metro?: Prisma.SortOrder
   area?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.IpCountOrderByAggregateInput
@@ -384,6 +395,7 @@ export type IpScalarWhereWithAggregatesInput = {
   ll?: Prisma.DecimalNullableListFilter<"Ip">
   metro?: Prisma.IntWithAggregatesFilter<"Ip"> | number
   area?: Prisma.IntWithAggregatesFilter<"Ip"> | number
+  status?: Prisma.EnumIpStatusWithAggregatesFilter<"Ip"> | $Enums.IpStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ip"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Ip"> | Date | string
 }
@@ -400,6 +412,7 @@ export type IpCreateInput = {
   ll?: Prisma.IpCreatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro: number
   area: number
+  status?: $Enums.IpStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutIpInput
@@ -418,6 +431,7 @@ export type IpUncheckedCreateInput = {
   ll?: Prisma.IpCreatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro: number
   area: number
+  status?: $Enums.IpStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutIpInput
@@ -435,6 +449,7 @@ export type IpUpdateInput = {
   ll?: Prisma.IpUpdatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro?: Prisma.IntFieldUpdateOperationsInput | number
   area?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutIpNestedInput
@@ -453,6 +468,7 @@ export type IpUncheckedUpdateInput = {
   ll?: Prisma.IpUpdatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro?: Prisma.IntFieldUpdateOperationsInput | number
   area?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutIpNestedInput
@@ -471,6 +487,7 @@ export type IpCreateManyInput = {
   ll?: Prisma.IpCreatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro: number
   area: number
+  status?: $Enums.IpStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -487,6 +504,7 @@ export type IpUpdateManyMutationInput = {
   ll?: Prisma.IpUpdatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro?: Prisma.IntFieldUpdateOperationsInput | number
   area?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -504,6 +522,7 @@ export type IpUncheckedUpdateManyInput = {
   ll?: Prisma.IpUpdatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro?: Prisma.IntFieldUpdateOperationsInput | number
   area?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -534,6 +553,7 @@ export type IpCountOrderByAggregateInput = {
   ll?: Prisma.SortOrder
   metro?: Prisma.SortOrder
   area?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -559,6 +579,7 @@ export type IpMaxOrderByAggregateInput = {
   city?: Prisma.SortOrder
   metro?: Prisma.SortOrder
   area?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -575,6 +596,7 @@ export type IpMinOrderByAggregateInput = {
   city?: Prisma.SortOrder
   metro?: Prisma.SortOrder
   area?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -613,6 +635,10 @@ export type IpUpdatellInput = {
   push?: runtime.Decimal | runtime.DecimalJsLike | number | string | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
 }
 
+export type EnumIpStatusFieldUpdateOperationsInput = {
+  set?: $Enums.IpStatus
+}
+
 export type IpCreateWithoutSessionsInput = {
   ip: string
   rangeLow: number
@@ -625,6 +651,7 @@ export type IpCreateWithoutSessionsInput = {
   ll?: Prisma.IpCreatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro: number
   area: number
+  status?: $Enums.IpStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -642,6 +669,7 @@ export type IpUncheckedCreateWithoutSessionsInput = {
   ll?: Prisma.IpCreatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro: number
   area: number
+  status?: $Enums.IpStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -674,6 +702,7 @@ export type IpUpdateWithoutSessionsInput = {
   ll?: Prisma.IpUpdatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro?: Prisma.IntFieldUpdateOperationsInput | number
   area?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -691,6 +720,7 @@ export type IpUncheckedUpdateWithoutSessionsInput = {
   ll?: Prisma.IpUpdatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
   metro?: Prisma.IntFieldUpdateOperationsInput | number
   area?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -739,6 +769,7 @@ export type IpSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
   ll?: boolean
   metro?: boolean
   area?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   sessions?: boolean | Prisma.Ip$sessionsArgs<ExtArgs>
@@ -758,6 +789,7 @@ export type IpSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   ll?: boolean
   metro?: boolean
   area?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["ip"]>
@@ -775,6 +807,7 @@ export type IpSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   ll?: boolean
   metro?: boolean
   area?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["ip"]>
@@ -792,11 +825,12 @@ export type IpSelectScalar = {
   ll?: boolean
   metro?: boolean
   area?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type IpOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ip" | "rangeLow" | "rangeHigh" | "country" | "region" | "eu" | "timezone" | "city" | "ll" | "metro" | "area" | "createdAt" | "updatedAt", ExtArgs["result"]["ip"]>
+export type IpOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ip" | "rangeLow" | "rangeHigh" | "country" | "region" | "eu" | "timezone" | "city" | "ll" | "metro" | "area" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["ip"]>
 export type IpInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.Ip$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.IpCountOutputTypeDefaultArgs<ExtArgs>
@@ -822,6 +856,7 @@ export type $IpPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     ll: runtime.Decimal[]
     metro: number
     area: number
+    status: $Enums.IpStatus
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["ip"]>
@@ -1260,6 +1295,7 @@ export interface IpFieldRefs {
   readonly ll: Prisma.FieldRef<"Ip", 'Decimal[]'>
   readonly metro: Prisma.FieldRef<"Ip", 'Int'>
   readonly area: Prisma.FieldRef<"Ip", 'Int'>
+  readonly status: Prisma.FieldRef<"Ip", 'IpStatus'>
   readonly createdAt: Prisma.FieldRef<"Ip", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ip", 'DateTime'>
 }

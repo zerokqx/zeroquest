@@ -27,6 +27,7 @@ export const IpGroupByResultSchema = z.array(z.object({
     ll: z.number(),
     metro: z.number(),
     area: z.number(),
+    status: z.number(),
     createdAt: z.number(),
     updatedAt: z.number(),
     sessions: z.number()

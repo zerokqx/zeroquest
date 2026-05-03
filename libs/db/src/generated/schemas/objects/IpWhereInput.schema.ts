@@ -4,6 +4,8 @@ import { IntFilterObjectSchema as IntFilterObjectSchema } from './IntFilter.sche
 import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
 import { BoolFilterObjectSchema as BoolFilterObjectSchema } from './BoolFilter.schema';
 import { DecimalNullableListFilterObjectSchema as DecimalNullableListFilterObjectSchema } from './DecimalNullableListFilter.schema';
+import { EnumIpStatusFilterObjectSchema as EnumIpStatusFilterObjectSchema } from './EnumIpStatusFilter.schema';
+import { IpStatusSchema } from '../enums/IpStatus.schema';
 import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { SessionListRelationFilterObjectSchema as SessionListRelationFilterObjectSchema } from './SessionListRelationFilter.schema'
 
@@ -23,6 +25,7 @@ const ipwhereinputSchema = z.object({
   ll: z.lazy(() => DecimalNullableListFilterObjectSchema).optional(),
   metro: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
   area: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
+  status: z.union([z.lazy(() => EnumIpStatusFilterObjectSchema), IpStatusSchema]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   sessions: z.lazy(() => SessionListRelationFilterObjectSchema).optional()

@@ -1661,6 +1661,7 @@ export const IpScalarFieldEnum = {
   ll: 'll',
   metro: 'metro',
   area: 'area',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1850,6 +1851,20 @@ export type EnumLegalDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'LegalDocumentType[]'
  */
 export type ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LegalDocumentType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'IpStatus'
+ */
+export type EnumIpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IpStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'IpStatus[]'
+ */
+export type ListEnumIpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IpStatus[]'>
     
 
 

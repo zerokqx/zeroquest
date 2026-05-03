@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { IpStatusSchema } from '../../enums/IpStatus.schema';
 // prettier-ignore
 export const IpResultSchema = z.object({
     id: z.number().int(),
@@ -13,6 +14,7 @@ export const IpResultSchema = z.object({
     ll: z.array(z.number()),
     metro: z.number().int(),
     area: z.number().int(),
+    status: IpStatusSchema,
     createdAt: z.date(),
     updatedAt: z.date(),
     sessions: z.array(z.unknown())

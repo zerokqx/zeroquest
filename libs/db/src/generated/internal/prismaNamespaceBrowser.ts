@@ -252,6 +252,7 @@ export const IpScalarFieldEnum = {
   ll: 'll',
   metro: 'metro',
   area: 'area',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
