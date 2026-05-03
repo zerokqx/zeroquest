@@ -36,7 +36,9 @@ const config = () => ({
     globalPrefix: 'api',
     isProduction: process.env.NODE_ENV === 'production',
     swaggerEnabled: process.env.SWAGGER_ENABLED === 'true',
-    corsOrigins: toCorsOrigins(process.env.CORS_ORIGINS ?? DEFAULT_CORS_ORIGINS),
+    corsOrigins: toCorsOrigins(
+      process.env.CORS_ORIGINS ?? DEFAULT_CORS_ORIGINS,
+    ),
   },
 
   backend: {
@@ -58,6 +60,9 @@ const config = () => ({
       process.env.JWT_REFRESH_EXPIRE_TIME_MS,
       DEFAULT_JWT_REFRESH_EXPIRE_TIME_MS,
     ),
+  },
+  ipinfo: {
+    token: process.env.IPINFO_TOKEN,
   },
   threeXUi: {
     protocol: process.env.THREE_X_UI_PROTOCOL ?? 'https',

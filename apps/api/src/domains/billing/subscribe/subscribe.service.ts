@@ -180,7 +180,7 @@ export class SubscribeService {
         plan: true,
       },
     });
-    if (!subscribe) throw new NotFoundException();
+    if (!subscribe) throw new NotFoundException('Subscribe not found');
 
     const debit = await this.walletService.debit({
       userId: payload.sub,
@@ -227,7 +227,7 @@ export class SubscribeService {
       },
       where: { id: planId },
     });
-    if (!plan) throw new NotFoundException();
+    if (!plan) throw new NotFoundException('Plan not found');
 
     await this.policyService.acceptRequiredPolicies(payload.sub, policy, [
       LegalDocumentType.TERMS,

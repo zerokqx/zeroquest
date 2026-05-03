@@ -1,0 +1,64 @@
+import * as z from 'zod';
+export const IpAggregateResultSchema = z.object({  _count: z.object({
+    id: z.number(),
+    ip: z.number(),
+    rangeLow: z.number(),
+    rangeHigh: z.number(),
+    country: z.number(),
+    region: z.number(),
+    eu: z.number(),
+    timezone: z.number(),
+    city: z.number(),
+    ll: z.number(),
+    metro: z.number(),
+    area: z.number(),
+    createdAt: z.number(),
+    updatedAt: z.number(),
+    sessions: z.number()
+  }).optional(),
+  _sum: z.object({
+    id: z.number().nullable(),
+    rangeLow: z.number().nullable(),
+    rangeHigh: z.number().nullable(),
+    ll: z.number().nullable(),
+    metro: z.number().nullable(),
+    area: z.number().nullable()
+  }).nullable().optional(),
+  _avg: z.object({
+    id: z.number().nullable(),
+    rangeLow: z.number().nullable(),
+    rangeHigh: z.number().nullable(),
+    ll: z.number().nullable(),
+    metro: z.number().nullable(),
+    area: z.number().nullable()
+  }).nullable().optional(),
+  _min: z.object({
+    id: z.number().int().nullable(),
+    ip: z.string().nullable(),
+    rangeLow: z.number().int().nullable(),
+    rangeHigh: z.number().int().nullable(),
+    country: z.string().nullable(),
+    region: z.string().nullable(),
+    timezone: z.string().nullable(),
+    city: z.string().nullable(),
+    ll: z.array(z.number()).nullable(),
+    metro: z.number().int().nullable(),
+    area: z.number().int().nullable(),
+    createdAt: z.date().nullable(),
+    updatedAt: z.date().nullable()
+  }).nullable().optional(),
+  _max: z.object({
+    id: z.number().int().nullable(),
+    ip: z.string().nullable(),
+    rangeLow: z.number().int().nullable(),
+    rangeHigh: z.number().int().nullable(),
+    country: z.string().nullable(),
+    region: z.string().nullable(),
+    timezone: z.string().nullable(),
+    city: z.string().nullable(),
+    ll: z.array(z.number()).nullable(),
+    metro: z.number().int().nullable(),
+    area: z.number().int().nullable(),
+    createdAt: z.date().nullable(),
+    updatedAt: z.date().nullable()
+  }).nullable().optional()});

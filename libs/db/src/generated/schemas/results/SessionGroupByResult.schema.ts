@@ -6,8 +6,10 @@ export const SessionGroupByResultSchema = z.array(z.object({
   refreshTokenJti: z.string(),
   accessTokenJti: z.string(),
   refreshTokenHash: z.string(),
+  expriesAt: z.date(),
   createdAt: z.date(),
   userId: z.string(),
+  ipId: z.number().int(),
   _count: z.object({
     id: z.number(),
     userAgentHash: z.number(),
@@ -16,15 +18,20 @@ export const SessionGroupByResultSchema = z.array(z.object({
     refreshTokenJti: z.number(),
     accessTokenJti: z.number(),
     refreshTokenHash: z.number(),
+    ip: z.number(),
+    expriesAt: z.number(),
     createdAt: z.number(),
     user: z.number(),
-    userId: z.number()
+    userId: z.number(),
+    ipId: z.number()
   }).optional(),
   _sum: z.object({
-    clientTypeId: z.number().nullable()
+    clientTypeId: z.number().nullable(),
+    ipId: z.number().nullable()
   }).nullable().optional(),
   _avg: z.object({
-    clientTypeId: z.number().nullable()
+    clientTypeId: z.number().nullable(),
+    ipId: z.number().nullable()
   }).nullable().optional(),
   _min: z.object({
     id: z.string().nullable(),
@@ -33,8 +40,10 @@ export const SessionGroupByResultSchema = z.array(z.object({
     refreshTokenJti: z.string().nullable(),
     accessTokenJti: z.string().nullable(),
     refreshTokenHash: z.string().nullable(),
+    expriesAt: z.date().nullable(),
     createdAt: z.date().nullable(),
-    userId: z.string().nullable()
+    userId: z.string().nullable(),
+    ipId: z.number().int().nullable()
   }).nullable().optional(),
   _max: z.object({
     id: z.string().nullable(),
@@ -43,7 +52,9 @@ export const SessionGroupByResultSchema = z.array(z.object({
     refreshTokenJti: z.string().nullable(),
     accessTokenJti: z.string().nullable(),
     refreshTokenHash: z.string().nullable(),
+    expriesAt: z.date().nullable(),
     createdAt: z.date().nullable(),
-    userId: z.string().nullable()
+    userId: z.string().nullable(),
+    ipId: z.number().int().nullable()
   }).nullable().optional()
 }));

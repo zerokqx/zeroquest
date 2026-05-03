@@ -3,7 +3,8 @@ import type { Prisma } from '../../client';
 
 
 const makeSchema = () => z.object({
-  clientTypeId: z.literal(true).optional()
+  clientTypeId: z.literal(true).optional(),
+  ipId: z.literal(true).optional()
 }).strict();
 export const SessionAvgAggregateInputObjectSchema: z.ZodType<Prisma.SessionAvgAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.SessionAvgAggregateInputType>;
 export const SessionAvgAggregateInputObjectZodSchema = makeSchema();

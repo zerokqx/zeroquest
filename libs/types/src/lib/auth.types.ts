@@ -4,7 +4,6 @@ export interface JwtPayload {
   sub: string;
   sid: string;
   clientType: string;
-  userAgentHash: string;
   role: UserRole;
   type: 'access' | 'refresh';
   jti: string;

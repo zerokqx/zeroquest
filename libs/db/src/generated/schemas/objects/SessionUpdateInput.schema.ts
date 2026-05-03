@@ -3,6 +3,7 @@ import type { Prisma } from '../../client';
 import { StringFieldUpdateOperationsInputObjectSchema as StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
 import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
 import { ClientTypeUpdateOneRequiredWithoutSessionsNestedInputObjectSchema as ClientTypeUpdateOneRequiredWithoutSessionsNestedInputObjectSchema } from './ClientTypeUpdateOneRequiredWithoutSessionsNestedInput.schema';
+import { IpUpdateOneWithoutSessionsNestedInputObjectSchema as IpUpdateOneWithoutSessionsNestedInputObjectSchema } from './IpUpdateOneWithoutSessionsNestedInput.schema';
 import { UserUpdateOneRequiredWithoutSessionsNestedInputObjectSchema as UserUpdateOneRequiredWithoutSessionsNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutSessionsNestedInput.schema'
 
 const makeSchema = () => z.object({
@@ -11,8 +12,10 @@ const makeSchema = () => z.object({
   refreshTokenJti: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   accessTokenJti: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   refreshTokenHash: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
+  expriesAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
   clientType: z.lazy(() => ClientTypeUpdateOneRequiredWithoutSessionsNestedInputObjectSchema).optional(),
+  ip: z.lazy(() => IpUpdateOneWithoutSessionsNestedInputObjectSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutSessionsNestedInputObjectSchema).optional()
 }).strict();
 export const SessionUpdateInputObjectSchema: z.ZodType<Prisma.SessionUpdateInput> = makeSchema() as unknown as z.ZodType<Prisma.SessionUpdateInput>;

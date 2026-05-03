@@ -15,4 +15,5 @@ export { UserResultSchema } from './User.result';
 export { WalletResultSchema } from './Wallet.result';
 export { WalletHistoryResultSchema } from './WalletHistory.result';
 export { LegalDocumentResultSchema } from './LegalDocument.result';
+export { IpResultSchema } from './Ip.result';
 export { LegalAcceptancesResultSchema } from './LegalAcceptances.result';

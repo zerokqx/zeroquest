@@ -9,8 +9,10 @@ const makeSchema = () => z.object({
   refreshTokenJti: SortOrderSchema.optional(),
   accessTokenJti: SortOrderSchema.optional(),
   refreshTokenHash: SortOrderSchema.optional(),
+  expriesAt: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
-  userId: SortOrderSchema.optional()
+  userId: SortOrderSchema.optional(),
+  ipId: SortOrderSchema.optional()
 }).strict();
 export const SessionCountOrderByAggregateInputObjectSchema: z.ZodType<Prisma.SessionCountOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.SessionCountOrderByAggregateInput>;
 export const SessionCountOrderByAggregateInputObjectZodSchema = makeSchema();

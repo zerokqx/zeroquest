@@ -21,6 +21,6 @@ export const AuthPayload = createParamDecorator(
     if (user) {
       return user;
     }
-    throw new UnauthorizedException();
+    throw new UnauthorizedException('Authenticated user payload is missing');
   },
 );

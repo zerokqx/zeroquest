@@ -18,19 +18,27 @@ export const PromoActionButtons = ({
 }: PromoActionButtonsProps) => {
   return (
     <Group gap="sm">
-      <motion.div animate={{scale:[1,1.05,1] } } transition={{repeat:Infinity}}>
-
+      <motion.div
+        animate={{ scale: [1, 1.05, 1] }}
+        transition={{ repeat: Infinity }}
+      >
+        <Button
+          renderRoot={(props) => <Link to="/sign-up" search={{ mode: 'sign-in' }} {...props}/>}
+          size="md"
+          radius="xl"
+          rightSection={<ArrowRight size={16} />}
+        >
+          {isAuth ? authLabel : guestLabel}
+        </Button>
+      </motion.div>
       <Button
         component={Link}
-        to={isAuth ? '/magazine' : '/sign-up'}
+        to="/manual"
+        variant="light"
         size="md"
         radius="xl"
-        rightSection={<ArrowRight size={16} />}
+        {...secondaryButtonProps}
       >
-        {isAuth ? authLabel : guestLabel}
-      </Button>
-      </motion.div>
-      <Button component={Link} to="/manual" variant="light" size="md" radius="xl" {...secondaryButtonProps}>
         Смотреть инструкцию
       </Button>
     </Group>

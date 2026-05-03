@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@zeroquest/db": "workspace:*",
+
+    "@zeroquest/constants": "workspace:*",
     "@zeroquest/types": "workspace:*"
   }
 }

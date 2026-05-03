@@ -1,5 +1,6 @@
 import { applyDecorators, SetMetadata } from '@nestjs/common';
 import { ApiHeader } from '@nestjs/swagger';
+import { HEADERS_NAMES } from '@zeroquest/constants';
 import { env } from 'node:process';
 
 export const CLIENT_TYPE_KEY = 'client_type';
@@ -10,7 +11,7 @@ export const ClientType = (...clientTypes: string[]) =>
 export function ApiClientType() {
   return applyDecorators(
     ApiHeader({
-      name: 'x-client-type',
+      name: HEADERS_NAMES.CLIENT_TYPE,
       required: true,
       description: 'Тип клиента',
       schema: {

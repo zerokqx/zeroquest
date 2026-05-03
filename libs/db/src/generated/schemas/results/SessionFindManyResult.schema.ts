@@ -8,9 +8,12 @@ export const SessionFindManyResultSchema = z.object({
   refreshTokenJti: z.string(),
   accessTokenJti: z.string(),
   refreshTokenHash: z.string(),
+  ip: z.unknown().optional(),
+  expriesAt: z.date(),
   createdAt: z.date(),
   user: z.unknown(),
-  userId: z.string()
+  userId: z.string(),
+  ipId: z.number().int().optional()
 })),
   pagination: z.object({
   page: z.number().int().min(1),

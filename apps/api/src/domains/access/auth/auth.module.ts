@@ -6,12 +6,13 @@ import { SessionModule } from '@/domains/access/session/session.module';
 import { AuthRepository } from './auth.repository';
 import { PolicyModule } from '@/domains/content/policy/policy.module';
 import { CookieJwtManager } from './cookie-manager.service';
-import { JwtDecodePipe } from './jwt-decode.pipe';
+import { JwtDecodePipe } from '@/domains/security/jwt/jwt-decode.pipe';
+import { CsrfService } from '@/domains/security/csrf/csrf.service';
 
 @Module({
   imports: [TokenModule, SessionModule, PolicyModule],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, CookieJwtManager, JwtDecodePipe],
-  exports: [TokenModule],
+  providers: [AuthService, AuthRepository, CookieJwtManager, JwtDecodePipe, CsrfService],
+  exports: [TokenModule, CsrfService],
 })
 export class AuthModule {}

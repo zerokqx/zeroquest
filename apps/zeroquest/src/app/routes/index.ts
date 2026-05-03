@@ -4,7 +4,8 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
   beforeLoad() {
-    if (useUserAuthStore.getState().isAuth) throw redirect({ to: '/dashboard' });
+    if (useUserAuthStore.getState().isAuth)
+      throw redirect({ to: '/dashboard' });
   },
   component: VpnPromoPage,
 });

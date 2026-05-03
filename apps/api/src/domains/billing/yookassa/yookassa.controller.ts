@@ -11,7 +11,8 @@ import {
 } from '@nestjs/swagger';
 import { AllowIp, Public } from '@zeroquest/nest-shared';
 import { env } from 'process';
-import { CsrfPublic } from '@/domains/access/auth/csrf.decorator';
+import { CsrfPublic } from '@/domains/security/csrf/csrf.decorator';
+import { SkipFingerprint } from '@/domains/security/fingerprint/fingerprint.decorator';
 
 const YOOKASSA_ALLOWED_IPS = (
   env.YOOKASSA_WEBHOOK_ALLOWED_IPS ??
@@ -22,6 +23,7 @@ const YOOKASSA_ALLOWED_IPS = (
   .filter(Boolean);
 
 @CsrfPublic()
+@SkipFingerprint()
 @ApiExcludeController()
 @ApiTags('YooKassa')
 @Controller(`yookassa/${env.YOOKASSA_WEBHOOK_PATH}`)

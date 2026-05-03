@@ -11,6 +11,7 @@ import { AuthServiceTypes } from '@zeroquest/types';
 import { SessionRepository } from './session.repository';
 import { Prisma, PrismaService } from '@zeroquest/db';
 import { TokenService } from '@/domains/access/token/token.service';
+import { IpInfoService } from '@/domains/network/ipinfo/ipinfo.service';
 
 @Injectable()
 export class SessionService {
@@ -20,6 +21,7 @@ export class SessionService {
     private readonly sessionRepository: SessionRepository,
     private readonly prisma: PrismaService,
     private readonly tokenService: TokenService,
+    private readonly ipInfoService: IpInfoService,
   ) {}
   async create(
     {
@@ -27,6 +29,7 @@ export class SessionService {
       refreshToken,
       clientType,
       userAgentHash,
+      ip,
       userId,
     }: CreateSessionDto,
     options?: { tx?: Prisma.TransactionClient },
@@ -34,13 +37,43 @@ export class SessionService {
     this.logger.debug(
       `Создание сессии: userId=${userId}, clientType=${clientType}`,
     );
+
+    const ipInfo = await this.ipInfoService.lookupIp(ip);
+    if (!ipInfo) {
+      this.logger.warn(`Ip '${ip}' не был распознан`);
+    }
+    this.logger.debug(ipInfo)
+
     return this.sessionRepository.create(
       {
         user: {
           connect: { id: userId },
         },
+        expriesAt: new Date(),
+
+        ...(ipInfo && {
+          ip: {
+            connectOrCreate: {
+              where: { ip },
+              create: {
+                ip,
+                rangeLow: ipInfo.range[0],
+                rangeHigh: ipInfo.range[1],
+                country: ipInfo.country,
+                region: ipInfo.region,
+                eu: ipInfo.eu === '1',
+                timezone: ipInfo.timezone,
+                city: ipInfo.city,
+                ll: ipInfo.ll,
+                metro: ipInfo.metro,
+                area: ipInfo.area,
+              },
+            },
+          },
+        }),
+
         userAgentHash,
-        accessTokenJti:'',
+        accessTokenJti: '',
         refreshTokenJti: refreshTokenJti ?? '',
         refreshTokenHash: refreshToken ?? '',
         clientType: {
@@ -57,10 +90,7 @@ export class SessionService {
     return this.sessionRepository.updateById(id, updateSessionDto);
   }
 
-  async remove(
-    id: string,
-    payload: AuthServiceTypes.JwtPayload,
-  ) {
+  async remove(id: string, payload: AuthServiceTypes.JwtPayload) {
     this.logger.debug(
       `Запрошено удаление сессии: sessionId=${id}, requester=${payload.sub}`,
     );
@@ -133,7 +163,10 @@ export class SessionService {
   }
 
   async findOne(id: string, userId: string) {
-    const session = await this.sessionRepository.findOneByIdAndUserId(id, userId);
+    const session = await this.sessionRepository.findOneByIdAndUserId(
+      id,
+      userId,
+    );
     if (!session) throw new NotFoundException('Session not found');
 
     return session;
@@ -143,8 +176,12 @@ export class SessionService {
     return this.sessionRepository.findManyByUserId(userId);
   }
   async findSessionByRefresh(userId: string, sid: string) {
-    const session = await this.sessionRepository.findOneByIdAndUserId(sid, userId);
-    if (!session) throw new UnauthorizedException('Session not found for refresh context');
+    const session = await this.sessionRepository.findOneByIdAndUserId(
+      sid,
+      userId,
+    );
+    if (!session)
+      throw new UnauthorizedException('Session not found for refresh context');
 
     return session;
   }

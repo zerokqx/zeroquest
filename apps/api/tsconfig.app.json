@@ -28,19 +28,22 @@
   ],
   "references": [
     {
-      "path": "../../libs/converters/tsconfig.lib.json"
-    },
-    {
-      "path": "../../libs/config/tsconfig.lib.json"
-    },
-    {
-      "path": "../../libs/db/tsconfig.lib.json"
+      "path": "../../libs/types/tsconfig.lib.json"
     },
     {
       "path": "../../libs/nest-shared/tsconfig.lib.json"
     },
     {
-      "path": "../../libs/types/tsconfig.lib.json"
+      "path": "../../libs/db/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/converters/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/constants/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/config/tsconfig.lib.json"
     }
   ]
 }

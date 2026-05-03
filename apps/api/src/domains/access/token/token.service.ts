@@ -12,6 +12,7 @@ import { hash, verify } from 'argon2';
 import { EnvironmentVariables } from '@/config/configuration';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { JwtPayloadSchema } from './dto/schemas/payload.schema';
+import { createHash } from 'crypto';
 
 type TokenTrackKey = Pick<
   AuthServiceTypes.JwtPayload,
@@ -30,9 +31,8 @@ export class TokenService {
   ) {
     this.jwtEnvironment = this.config.getOrThrow('jwt', { infer: true });
   }
-
   tokenRedisKey({ sub, jti, sid, type }: TokenTrackKey) {
-    return `user:${sub}:${jti}:${sid}:${type}`;
+    return `user:${sub}:${createHash('sha-256').update(`${jti}:${sid}:${type}`).digest('hex')}`;
   }
 
   async createTokenPair(payload: CreateTokenPairDto): Promise<
@@ -94,7 +94,7 @@ export class TokenService {
       const decoded = JwtPayloadSchema.parse(this.jwtService.decode(token));
       return decoded;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Failed to decode JWT token');
     }
   }
   async verify(token: string): Promise<AuthServiceTypes.JwtPayload> {
@@ -106,7 +106,7 @@ export class TokenService {
       await this.getTrackedToken(payload);
       return payload;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Failed to verify JWT token');
     }
   }
   async hashToken(token: string) {
@@ -127,8 +127,8 @@ export class TokenService {
       JwtPayloadSchema.parse(payload);
       this.logger.verbose(`Создания токена по ключу - ${key}`);
       return this.cacheManager.set(key, JSON.stringify(payload), ttl);
-    } catch {
-      throw new UnauthorizedException();
+    } catch (e){
+      throw new UnauthorizedException('Failed to store token state',e.message);
     }
   }
 
@@ -138,7 +138,8 @@ export class TokenService {
     const key = this.tokenRedisKey(payload);
     this.logger.verbose(`Получение токенов в redis по ключу - ${key}`);
     const tokenRaw = await this.cacheManager.get<string>(key);
-    if (!tokenRaw) throw new UnauthorizedException();
+    if (!tokenRaw)
+      throw new UnauthorizedException('Token is not tracked or expired');
     return JSON.parse(tokenRaw) satisfies AuthServiceTypes.JwtPayload;
   }
 

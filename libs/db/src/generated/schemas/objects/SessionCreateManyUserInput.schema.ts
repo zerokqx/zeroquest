@@ -9,7 +9,9 @@ const makeSchema = () => z.object({
   refreshTokenJti: z.string(),
   accessTokenJti: z.string(),
   refreshTokenHash: z.string(),
-  createdAt: z.coerce.date().optional()
+  expriesAt: z.coerce.date(),
+  createdAt: z.coerce.date().optional(),
+  ipId: z.number().int().optional().nullable()
 }).strict();
 export const SessionCreateManyUserInputObjectSchema: z.ZodType<Prisma.SessionCreateManyUserInput> = makeSchema() as unknown as z.ZodType<Prisma.SessionCreateManyUserInput>;
 export const SessionCreateManyUserInputObjectZodSchema = makeSchema();

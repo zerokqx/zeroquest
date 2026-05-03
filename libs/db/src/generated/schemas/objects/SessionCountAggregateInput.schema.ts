@@ -9,8 +9,10 @@ const makeSchema = () => z.object({
   refreshTokenJti: z.literal(true).optional(),
   accessTokenJti: z.literal(true).optional(),
   refreshTokenHash: z.literal(true).optional(),
+  expriesAt: z.literal(true).optional(),
   createdAt: z.literal(true).optional(),
   userId: z.literal(true).optional(),
+  ipId: z.literal(true).optional(),
   _all: z.literal(true).optional()
 }).strict();
 export const SessionCountAggregateInputObjectSchema: z.ZodType<Prisma.SessionCountAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.SessionCountAggregateInputType>;

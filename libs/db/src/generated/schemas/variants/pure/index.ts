@@ -15,4 +15,5 @@ export { UserModelSchema } from './User.pure';
 export { WalletModelSchema } from './Wallet.pure';
 export { WalletHistoryModelSchema } from './WalletHistory.pure';
 export { LegalDocumentModelSchema } from './LegalDocument.pure';
+export { IpModelSchema } from './Ip.pure';
 export { LegalAcceptancesModelSchema } from './LegalAcceptances.pure';

@@ -39,6 +39,9 @@
   "references": [
     {
       "path": "../../libs/converters/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/constants/tsconfig.lib.json"
     }
   ]
 }

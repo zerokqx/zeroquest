@@ -22,6 +22,7 @@ import {
   ShoppingCart,
   TriangleAlert,
 } from 'lucide-react';
+import { motion } from 'motion/react';
 
 export const Route = createFileRoute('/manual')({
   component: RouteComponent,
@@ -86,13 +87,7 @@ const steps: ManualStep[] = [
 
 function RouteComponent() {
   return (
-    <Container
-      size="lg"
-      h="100%"
-      w="100%"
-      px={{ base: 'sm', sm: 'md' }}
-      py="md"
-    >
+    <Container size="lg" h="100%" w="100%" px={{ base: 'sm', sm: 'md' }}>
       <Stack gap="lg" pb="xl">
         <Paper
           radius="xl"
@@ -122,58 +117,64 @@ function RouteComponent() {
         </Paper>
 
         <Stack gap="sm">
-          {steps.map((step) => {
+          {steps.map((step, index) => {
             const StepIcon = step.icon;
 
+            const initial = index % 2 === 0 ? -100 : 100;
             return (
-              <Card
+              <motion.div
                 key={step.id}
-                withBorder
-                radius="lg"
-                p={{ base: 'md', md: 'lg' }}
+                initial={{ opacity: 0, x: initial }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                viewport={{ once: true }}
               >
-                <Stack gap="sm">
-                  <Group justify="space-between" align="flex-start" gap="sm">
-                    <Group
-                      gap="sm"
-                      wrap="nowrap"
-                      align="flex-start"
-                      style={{ flex: 1, minWidth: 220 }}
-                    >
-                      <ThemeIcon
-                        size={38}
-                        radius="md"
-                        variant="light"
-                        style={{ flexShrink: 0 }}
+                <Card withBorder radius="lg" p={{ base: 'md', md: 'lg' }}>
+                  <Stack gap="sm">
+                    <Group justify="space-between" align="flex-start" gap="sm">
+                      <Group
+                        gap="sm"
+                        wrap="nowrap"
+                        align="flex-start"
+                        style={{ flex: 1, minWidth: 220 }}
                       >
-                        <StepIcon size={18} />
-                      </ThemeIcon>
-                      <Stack gap={2}>
-                        <Text fw={700}>
-                          Шаг {step.id}. {step.title}
-                        </Text>
-                        <Text c="dimmed">{step.description}</Text>
-                      </Stack>
+                        <ThemeIcon
+                          size={38}
+                          radius="md"
+                          variant="light"
+                          style={{ flexShrink: 0 }}
+                        >
+                          <StepIcon size={18} />
+                        </ThemeIcon>
+                        <Stack gap={2}>
+                          <Text fw={700}>
+                            Шаг {step.id}. {step.title}
+                          </Text>
+                          <Text c="dimmed">{step.description}</Text>
+                        </Stack>
+                      </Group>
+
+                      {step.actionLabel && step.actionHref ? (
+                        <Button
+                          component="a"
+                          href={step.actionHref}
+                          variant="light"
+                          size="compact-sm"
+                          style={{ flexShrink: 0 }}
+                        >
+                          {step.actionLabel}
+                        </Button>
+                      ) : null}
                     </Group>
 
-                    {step.actionLabel && step.actionHref ? (
-                      <Button
-                        component="a"
-                        href={step.actionHref}
-                        variant="light"
-                        size="compact-sm"
-                        style={{ flexShrink: 0 }}
-                      >
-                        {step.actionLabel}
-                      </Button>
-                    ) : null}
-                  </Group>
-
-                  <Text c="gray.7" fz="sm">
-                    {step.tip}
-                  </Text>
-                </Stack>
-              </Card>
+                    <Text c="gray.7" fz="sm">
+                      {step.tip}
+                    </Text>
+                  </Stack>
+                </Card>
+              </motion.div>
             );
           })}
         </Stack>

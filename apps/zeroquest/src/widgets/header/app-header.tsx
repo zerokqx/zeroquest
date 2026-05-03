@@ -5,7 +5,13 @@ import { Avatar, Burger, Card, Group, Menu, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useRouter } from '@tanstack/react-router';
-import { Home, LogOut, MonitorSmartphone, ShoppingBag, UserStar } from 'lucide-react';
+import {
+  Home,
+  LogOut,
+  MonitorSmartphone,
+  ShoppingBag,
+  UserStar,
+} from 'lucide-react';
 import { Logotype } from '@/shared/ui/logotype';
 
 export const AppHeader = () => {
@@ -89,11 +95,11 @@ export const AppHeader = () => {
               leftSection={<LogOut size={14} />}
               onClick={async () => {
                 await logout();
+                await router.navigate({ to: '/' });
                 await queryClient.invalidateQueries({
                   queryKey: getUserControllerMeQueryKey(),
                 });
                 await router.invalidate();
-                await router.navigate({ to: '/sign-up' });
                 close();
               }}
             >

@@ -6,7 +6,6 @@ export const JwtPayloadSchema = z.object({
   sub: z.string(),
   sid: z.string(),
   clientType: z.string(),
-  userAgentHash: z.string(),
   role: z.enum(UserRole),
   type: z.enum(['access', 'refresh']),
   jti: z.string(),

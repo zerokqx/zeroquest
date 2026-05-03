@@ -120,6 +120,7 @@
   },
   "dependencies": {
     "@zeroquest/config": "workspace:*",
+    "@zeroquest/constants": "workspace:*",
     "@zeroquest/converters": "workspace:*",
     "@zeroquest/db": "workspace:*",
     "@zeroquest/nest-shared": "workspace:*",

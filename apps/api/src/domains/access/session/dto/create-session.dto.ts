@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsString,
   IsHash,
+  IsIP,
 } from 'class-validator';
 
 export class CreateSessionDto {
@@ -34,4 +35,7 @@ export class CreateSessionDto {
   @IsHash('sha256')
   @IsString()
   userAgentHash!: string;
+
+  @IsIP()
+  ip!: string;
 }

@@ -1,3 +1,5 @@
+import { HEADERS_NAMES } from '@zeroquest/constants';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import Axios, {
   AxiosRequestConfig,
   AxiosError,
@@ -6,27 +8,16 @@ import Axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 
-const resolveDevBackendPort = (): string => {
-  const fromEnv =
-    import.meta.env.VITE_BACKEND_PORT ?? import.meta.env.VITE_API_PORT;
-  return fromEnv && fromEnv.trim().length > 0 ? fromEnv : '4000';
-};
+const BASE_URL = '';
 
-const resolveDevBackendHost = (): string => {
-  const fromEnv = import.meta.env.VITE_BACKEND_HOST;
-  return fromEnv && fromEnv.trim().length > 0 ? fromEnv : 'localhost';
-};
-
-const BASE_URL = ''
-
-  const CSRF_COOKIE_NAME = 'zeroquestCsrf';
+const CSRF_COOKIE_NAME = 'zeroquestCsrf';
 const CSRF_HEADER_NAME = 'x-csrf-token';
 
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: {
-    'x-client-type': 'web',
+    [HEADERS_NAMES.CLIENT_TYPE]: 'web',
   },
 });
 
@@ -37,6 +28,10 @@ type RetryableConfig = InternalAxiosRequestConfig & {
 
 let refreshPromise: Promise<AxiosResponse> | null = null;
 let csrfPromise: Promise<void> | null = null;
+
+type ErrorResponseData = {
+  message?: string | string[];
+};
 
 const isAuthEndpoint = (url?: string): boolean => {
   if (!url) return false;
@@ -58,8 +53,8 @@ const readCookie = (name: string): string | null => {
 
 const getCsrfFromCookie = (): string | null => readCookie(CSRF_COOKIE_NAME);
 
-const ensureCsrf = async (): Promise<void> => {
-  if (getCsrfFromCookie()) return;
+const ensureCsrf = async (force = false): Promise<void> => {
+  if (!force && getCsrfFromCookie()) return;
 
   csrfPromise ??= AXIOS_INSTANCE.get('/api/auth/csrf')
     .then(() => undefined)
@@ -72,6 +67,31 @@ const ensureCsrf = async (): Promise<void> => {
 
 const refresh = async (): Promise<AxiosResponse> =>
   AXIOS_INSTANCE.post('/api/auth/refresh', {});
+
+const getErrorMessage = (error: AxiosError): string | null => {
+  const data = error.response?.data as ErrorResponseData | undefined;
+  const message = data?.message;
+
+  if (typeof message === 'string') return message;
+  if (Array.isArray(message) && typeof message[0] === 'string') {
+    return message[0];
+  }
+
+  return null;
+};
+
+const isCsrfSyncError = (error: AxiosError): boolean => {
+  const message = getErrorMessage(error);
+  if (!message) return false;
+
+  return [
+    'CSRF token is not tracked for fingerprint',
+    'CSRF not equals',
+    'Unknown CSRF',
+    'Not found CSRF Token Header',
+    'Not found CSRF Token Cookie',
+  ].includes(message);
+};
 
 const installCsrfHeaderInterceptor = () => {
   AXIOS_INSTANCE.interceptors.request.use((config) => {
@@ -112,7 +132,7 @@ AXIOS_INSTANCE.interceptors.response.use(
       originalRequest._csrfRetry = true;
 
       try {
-        await ensureCsrf();
+        await ensureCsrf(isCsrfSyncError(error));
         return AXIOS_INSTANCE(originalRequest);
       } catch (csrfError) {
         return Promise.reject(csrfError);
@@ -145,6 +165,18 @@ AXIOS_INSTANCE.interceptors.response.use(
   },
 );
 
+let fingerprint: string | undefined;
+
+AXIOS_INSTANCE.interceptors.request.use(async (config) => {
+  if (!fingerprint) {
+    const fpPromise = FingerprintJS.load();
+    const fp = await fpPromise;
+    const result = await fp.get();
+    fingerprint = result.visitorId;
+  }
+  config.headers.set(HEADERS_NAMES.FINGERPRINT, fingerprint);
+  return config;
+});
 export const customInstance = async <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig,

@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -29,6 +30,8 @@ function extractTokenFromCookie(
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  private readonly logger = new Logger(AuthGuard.name);
+
   constructor(
     private readonly tokenService: TokenService,
     private readonly reflector: Reflector,
@@ -54,20 +57,28 @@ export class AuthGuard implements CanActivate {
     const token = extractTokenFromCookie(request, tokenType);
 
     if (!token) {
-      throw new UnauthorizedException();
+      this.logger.warn(
+        `Missing ${tokenType} cookie on ${request.method} ${request.originalUrl}`,
+      );
+      throw new UnauthorizedException(`Missing ${tokenType} cookie`);
     }
 
     try {
       const payload =
         await this.tokenService.verify(token);
       if (payload.type !== tokenType) {
-        throw new UnauthorizedException();
+        this.logger.warn(
+          `Token type mismatch on ${request.method} ${request.originalUrl}: expected=${tokenType}, actual=${payload.type}`,
+        );
+        throw new UnauthorizedException(`Invalid ${tokenType} token`);
       }
       request.user = payload;
     } catch {
-      throw new UnauthorizedException();
+      this.logger.warn(
+        `Token verify failed on ${request.method} ${request.originalUrl}`,
+      );
+      throw new UnauthorizedException(`Invalid ${tokenType} token`);
     }
-
     return true;
   }
 }

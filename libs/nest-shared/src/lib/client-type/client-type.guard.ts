@@ -12,10 +12,11 @@ import { PrismaService } from '@zeroquest/db';
 import type { Request } from 'express';
 import { env } from 'process';
 
+import { HEADERS_NAMES } from '@zeroquest/constants';
 import { CLIENT_TYPE_KEY } from './client-type.decorator';
 
 const extractClientTypeFromRequest = (request: Request): string | undefined => {
-  const clientType = request.headers['x-client-type'];
+  const clientType = request.headers[HEADERS_NAMES.CLIENT_TYPE];
   return Array.isArray(clientType) ? clientType[0] : clientType;
 };
 

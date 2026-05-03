@@ -20,10 +20,11 @@ import { WalletModule } from '@/domains/billing/wallet/wallet.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BillingModule } from '@/domains/billing/billing/billing.module';
 import { PolicyModule } from '@/domains/content/policy/policy.module';
-import { CsrfGuard } from '@/domains/access/auth/csrf.guard';
+import { CsrfGuard } from '@/domains/security/csrf/csrf.guard';
 import { AuthGuard } from '@/domains/access/auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
 import KeyvRedis from '@keyv/redis';
+import { FingerprintGuard } from '@/domains/security/fingerprint/fingerprint.guard';
 
 @Module({
   imports: [
@@ -81,6 +82,10 @@ import KeyvRedis from '@keyv/redis';
     PolicyModule,
   ],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: FingerprintGuard,
+    },
     {
       provide: APP_GUARD,
       useClass: CsrfGuard,

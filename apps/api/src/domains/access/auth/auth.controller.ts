@@ -35,8 +35,10 @@ import {
   Public,
 } from '@zeroquest/nest-shared';
 import { CookieJwtManager } from './cookie-manager.service';
-import { CsrfPublic } from './csrf.decorator';
-import { JwtDecode } from './jwt-decode.decorator';
+import { CsrfPublic } from '@/domains/security/csrf/csrf.decorator';
+import { JwtDecode } from '@/domains/security/jwt/jwt-decode.decorator';
+import { Fingerprint } from '@/domains/security/fingerprint/fingerprint.decorator';
+import { CsrfService } from '@/domains/security/csrf/csrf.service';
 
 type RequestWithClientType = {
   clientType: string;
@@ -48,6 +50,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly cookieManager: CookieJwtManager,
+    private readonly csrfService: CsrfService,
   ) {}
 
   private readonly logger = new Logger(AuthController.name);
@@ -99,6 +102,7 @@ export class AuthController {
     @Body() body: LoginDto,
     @Headers('user-agent') userAgent: string,
     @Req() req: RequestWithClientType,
+    @Fingerprint() fingerprint: string,
     @Res({ passthrough: true }) res: Response,
   ) {
     this.logger.log(
@@ -108,11 +112,13 @@ export class AuthController {
       body,
       userAgent,
       req.clientType,
+      req.headers['x-forwarded-for']
     );
 
     this.cookieManager.setAuthCookies(res, tokens);
-    this.cookieManager.setCsrf(res);
-
+    const csrf = this.csrfService.generateCsrfToken();
+    this.cookieManager.setCsrf(res, csrf);
+    await this.csrfService.trackCsrfToken(csrf, fingerprint);
     return { message: 'Успешный вход' };
   }
 
@@ -131,8 +137,7 @@ export class AuthController {
     description: 'Данные для регистрации',
   })
   @ApiCreatedResponse({
-    description:
-      'Пользователь успешно зарегистрирован.',
+    description: 'Пользователь успешно зарегистрирован.',
     schema: {
       example: {
         message: 'Пользователь успешно зарегистрирован',
@@ -145,17 +150,11 @@ export class AuthController {
   @ApiForbiddenResponse({
     description: 'Указан неподдерживаемый client type.',
   })
-  async register(
-    @Body() body: RegisterDto,
-    @Req() req: RequestWithClientType,
-  ) {
+  async register(@Body() body: RegisterDto, @Req() req: RequestWithClientType) {
     this.logger.log(
       `Запрос на регистрацию: login=${body.login}, clientType=${req.clientType}`,
     );
-    await this.authService.register(
-      body.login,
-      body.password,
-    );
+    await this.authService.register(body.login, body.password);
 
     return { message: 'Пользователь успешно зарегистрирован' };
   }
@@ -187,7 +186,6 @@ export class AuthController {
     description: 'Указан неподдерживаемый client type.',
   })
   async refresh(
-    @Headers('user-agent') userAgent: string,
     @Req() req: RequestWithClientType,
     @Res({ passthrough: true }) res: Response,
     @AuthPayload()
@@ -199,7 +197,6 @@ export class AuthController {
       `Запрошено обновление токенов: login=${refreshPayload.login}, clientType=${req.clientType}`,
     );
     const tokens = await this.authService.refresh(
-      userAgent,
       req.clientType,
       refreshPayload,
       accessPayload,
@@ -238,12 +235,9 @@ export class AuthController {
   @ApiUserAgent()
   async logout(
     @AuthPayload() accessPayload: AuthServiceTypes.JwtPayload,
-    @Req() req: RequestWithClientType,
-    @JwtDecode('zeroquestRefresh') refreshPayload : AuthServiceTypes.JwtPayload,
+    @JwtDecode('zeroquestRefresh') refreshPayload: AuthServiceTypes.JwtPayload,
     @Res({ passthrough: true }) res: Response,
   ) {
-
-
     await this.authService.logout(accessPayload, refreshPayload);
     this.cookieManager.clearAuthCookies(res);
     return;
@@ -256,8 +250,13 @@ export class AuthController {
   @ApiUserAgent()
   @ApiClientType()
   @Get('csrf')
-  getCsrf(@Res({ passthrough: true }) res: Response) {
-    this.cookieManager.setCsrf(res);
+  async getCsrf(
+    @Res({ passthrough: true }) res: Response,
+    @Fingerprint() fingerprint: string,
+  ) {
+    const token = this.csrfService.generateCsrfToken();
+    this.cookieManager.setCsrf(res, token);
+    await this.csrfService.trackCsrfToken(token, fingerprint);
     return { ok: true };
   }
 }

@@ -9,6 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const IpStatus = {
+  BLOCKED: 'BLOCKED',
+  ACTIVE: 'ACTIVE'
+} as const
+
+export type IpStatus = (typeof IpStatus)[keyof typeof IpStatus]
+
+
 export const LegalDocumentType = {
   PRIVACY: 'PRIVACY',
   PUBLIC: 'PUBLIC',

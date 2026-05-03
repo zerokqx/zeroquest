@@ -15,4 +15,5 @@ export { UserInputSchema } from './User.input';
 export { WalletInputSchema } from './Wallet.input';
 export { WalletHistoryInputSchema } from './WalletHistory.input';
 export { LegalDocumentInputSchema } from './LegalDocument.input';
+export { IpInputSchema } from './Ip.input';
 export { LegalAcceptancesInputSchema } from './LegalAcceptances.input';

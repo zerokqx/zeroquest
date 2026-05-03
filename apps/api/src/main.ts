@@ -15,6 +15,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { logger } from './logger.config';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from './config/configuration';
+import { HEADERS_NAMES } from '@zeroquest/constants';
+import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -34,6 +36,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.useGlobalFilters(new HttpExceptionFilter());
   app.use(cookieParser());
   app.enableCors({
     origin: corsOrigins,
@@ -42,7 +45,8 @@ async function bootstrap() {
     allowedHeaders: [
       'Content-Type',
       'Authorization',
-      'x-client-type',
+      HEADERS_NAMES.CLIENT_TYPE,
+      HEADERS_NAMES.FINGERPRINT,
       'x-csrf-token',
       'X-Requested-With',
     ],

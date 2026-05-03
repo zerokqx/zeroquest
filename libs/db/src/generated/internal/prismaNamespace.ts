@@ -396,6 +396,7 @@ export const ModelName = {
   Wallet: 'Wallet',
   WalletHistory: 'WalletHistory',
   LegalDocument: 'LegalDocument',
+  Ip: 'Ip',
   LegalAcceptances: 'LegalAcceptances'
 } as const
 
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "clientType" | "session" | "refund" | "inbound" | "plan" | "review" | "payment" | "subscribe" | "user" | "wallet" | "walletHistory" | "legalDocument" | "legalAcceptances"
+    modelProps: "clientType" | "session" | "refund" | "inbound" | "plan" | "review" | "payment" | "subscribe" | "user" | "wallet" | "walletHistory" | "legalDocument" | "ip" | "legalAcceptances"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1304,6 +1305,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Ip: {
+      payload: Prisma.$IpPayload<ExtArgs>
+      fields: Prisma.IpFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IpFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IpFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload>
+        }
+        findFirst: {
+          args: Prisma.IpFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IpFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload>
+        }
+        findMany: {
+          args: Prisma.IpFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload>[]
+        }
+        create: {
+          args: Prisma.IpCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload>
+        }
+        createMany: {
+          args: Prisma.IpCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IpCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload>[]
+        }
+        delete: {
+          args: Prisma.IpDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload>
+        }
+        update: {
+          args: Prisma.IpUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload>
+        }
+        deleteMany: {
+          args: Prisma.IpDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IpUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IpUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload>[]
+        }
+        upsert: {
+          args: Prisma.IpUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IpPayload>
+        }
+        aggregate: {
+          args: Prisma.IpAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIp>
+        }
+        groupBy: {
+          args: Prisma.IpGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IpGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IpCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IpCountAggregateOutputType> | number
+        }
+      }
+    }
     LegalAcceptances: {
       payload: Prisma.$LegalAcceptancesPayload<ExtArgs>
       fields: Prisma.LegalAcceptancesFieldRefs
@@ -1434,8 +1509,10 @@ export const SessionScalarFieldEnum = {
   refreshTokenJti: 'refreshTokenJti',
   accessTokenJti: 'accessTokenJti',
   refreshTokenHash: 'refreshTokenHash',
+  expriesAt: 'expriesAt',
   createdAt: 'createdAt',
-  userId: 'userId'
+  userId: 'userId',
+  ipId: 'ipId'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -1569,6 +1646,26 @@ export const LegalDocumentScalarFieldEnum = {
 } as const
 
 export type LegalDocumentScalarFieldEnum = (typeof LegalDocumentScalarFieldEnum)[keyof typeof LegalDocumentScalarFieldEnum]
+
+
+export const IpScalarFieldEnum = {
+  id: 'id',
+  ip: 'ip',
+  rangeLow: 'rangeLow',
+  rangeHigh: 'rangeHigh',
+  country: 'country',
+  region: 'region',
+  eu: 'eu',
+  timezone: 'timezone',
+  city: 'city',
+  ll: 'll',
+  metro: 'metro',
+  area: 'area',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IpScalarFieldEnum = (typeof IpScalarFieldEnum)[keyof typeof IpScalarFieldEnum]
 
 
 export const LegalAcceptancesScalarFieldEnum = {
@@ -1876,6 +1973,7 @@ export type GlobalOmitConfig = {
   wallet?: Prisma.WalletOmit
   walletHistory?: Prisma.WalletHistoryOmit
   legalDocument?: Prisma.LegalDocumentOmit
+  ip?: Prisma.IpOmit
   legalAcceptances?: Prisma.LegalAcceptancesOmit
 }
 

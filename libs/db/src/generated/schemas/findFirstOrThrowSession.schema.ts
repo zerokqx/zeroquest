@@ -17,9 +17,12 @@ export const SessionFindFirstOrThrowSelectSchema: z.ZodType<Prisma.SessionSelect
     refreshTokenJti: z.boolean().optional(),
     accessTokenJti: z.boolean().optional(),
     refreshTokenHash: z.boolean().optional(),
+    ip: z.boolean().optional(),
+    expriesAt: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     user: z.boolean().optional(),
-    userId: z.boolean().optional()
+    userId: z.boolean().optional(),
+    ipId: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.SessionSelect>;
 
 export const SessionFindFirstOrThrowSelectZodSchema = z.object({
@@ -30,9 +33,12 @@ export const SessionFindFirstOrThrowSelectZodSchema = z.object({
     refreshTokenJti: z.boolean().optional(),
     accessTokenJti: z.boolean().optional(),
     refreshTokenHash: z.boolean().optional(),
+    ip: z.boolean().optional(),
+    expriesAt: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     user: z.boolean().optional(),
-    userId: z.boolean().optional()
+    userId: z.boolean().optional(),
+    ipId: z.boolean().optional()
   }).strict();
 
 export const SessionFindFirstOrThrowSchema: z.ZodType<Prisma.SessionFindFirstOrThrowArgs> = z.object({ select: SessionFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => SessionIncludeObjectSchema.optional()), orderBy: z.union([SessionOrderByWithRelationInputObjectSchema, SessionOrderByWithRelationInputObjectSchema.array()]).optional(), where: SessionWhereInputObjectSchema.optional(), cursor: SessionWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([SessionScalarFieldEnumSchema, SessionScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.SessionFindFirstOrThrowArgs>;

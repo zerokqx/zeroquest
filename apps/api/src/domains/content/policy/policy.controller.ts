@@ -10,7 +10,7 @@ import { Controller, Get, ParseEnumPipe, Query } from '@nestjs/common';
 import { LegalDocumentType } from '@zeroquest/db';
 import { PolicyService } from './policy.service';
 import { PolicyEntity } from './entities/policy.entity';
-import { CsrfPublic } from '@/domains/access/auth/csrf.decorator';
+import { CsrfPublic } from '@/domains/security/csrf/csrf.decorator';
 
 @CsrfPublic()
 @ApiTags('Policy')

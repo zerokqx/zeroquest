@@ -1,4 +1,4 @@
-import { IsHash, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import type { AuthServiceTypes } from '@zeroquest/types';
 
 export class CreateTokenPairDto {
@@ -9,10 +9,6 @@ export class CreateTokenPairDto {
   @IsNotEmpty()
   @IsString()
   sid!: string;
-
-  @IsNotEmpty()
-  @IsHash('sha256')
-  userAgentHash!: string;
 
   @IsNotEmpty()
   @IsString()

@@ -16,6 +16,7 @@ import { LoginDto } from './dto/login.dto';
 import { PolicyService } from '@/domains/content/policy/policy.service';
 import { SessionPayloadCompareSchema } from './dto/schemas/session-compare-wit-token.schema';
 
+
 @Injectable()
 export class AuthService {
   private logger = new Logger(AuthService.name);
@@ -42,6 +43,8 @@ export class AuthService {
     { login, password, policy }: LoginDto,
     userAgent: string | undefined,
     clientType: string,
+    ip: string
+
   ) {
     const user = await this.authRepository.findUserByLogin(login);
     if (user && (await compare(password, user?.passwordHash))) {
@@ -57,6 +60,8 @@ export class AuthService {
         );
         const session = await this.sessionService.create(
           {
+
+            ip,
             clientType,
             userAgentHash,
             userId: user.id,
@@ -65,7 +70,6 @@ export class AuthService {
         );
 
         const [tokens, inputs] = await this.tokenService.createTokenPair({
-          userAgentHash,
           clientType,
           sid: session.id,
           sub: user.id,
@@ -88,7 +92,6 @@ export class AuthService {
         return {
           tokens,
           accessPayload: {
-            userAgentHash,
             clientType,
             sid: session.id,
             sub: user.id,
@@ -98,7 +101,6 @@ export class AuthService {
             jti: inputs.accessTokenJti,
           } satisfies AuthServiceTypes.JwtPayload,
           refreshPayload: {
-            userAgentHash,
             clientType,
             sid: session.id,
             sub: user.id,
@@ -122,7 +124,7 @@ export class AuthService {
     this.logger.warn(
       `Неуспешная попытка входа: login=${login}, clientType=${clientType}`,
     );
-    throw new UnauthorizedException();
+    throw new UnauthorizedException('Invalid login or password');
   }
 
   async register(login: string, password: string) {
@@ -131,7 +133,7 @@ export class AuthService {
 
     if (user?.login === login) {
       this.logger.warn(`Регистрация отклонена: login=${login} уже существует`);
-      throw new ConflictException();
+      throw new ConflictException('User with this login already exists');
     }
     const salt = await genSalt();
     const passwordHash = await hash(password, salt);
@@ -152,20 +154,17 @@ export class AuthService {
    * 2) После того как проверки предыдущие выдали true валидируем старый токен с данными сессии.
    * */
   async refresh(
-    userAgent: string | undefined,
     clientType: string,
     refreshPayload: AuthServiceTypes.JwtPayload,
     accessPayload: AuthServiceTypes.JwtPayload,
   ) {
-    const userAgentHash = this.getUserAgentHash(userAgent);
     const isRefreshToken = refreshPayload.type === 'refresh';
-    const isUserAgentValid = userAgentHash === refreshPayload.userAgentHash;
 
-    if (!isRefreshToken || !isUserAgentValid) {
+    if (!isRefreshToken) {
       this.logger.warn(
-        `Refresh отклонён на этапе проверки payload: login=${refreshPayload.login}, sessionId=${refreshPayload.sid}, userAgentMatch=${isUserAgentValid}, tokenType=${refreshPayload.type}`,
+        `Refresh отклонён на этапе проверки payload: login=${refreshPayload.login}, sessionId=${refreshPayload.sid}, tokenType=${refreshPayload.type}`,
       );
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid refresh token type');
     }
 
     this.logger.debug(
@@ -191,7 +190,7 @@ export class AuthService {
       this.logger.warn(
         `Refresh отклонён на этапе проверки сессии: login=${refreshPayload.login}, sessionId=${refreshPayload.sid}`,
       );
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Refresh session validation failed');
     }
 
     // Удаляем старые track-записи; новую пару трекаем ниже после успешного обновления сессии.
@@ -201,7 +200,6 @@ export class AuthService {
     ]);
 
     const [tokens, inputs] = await this.tokenService.createTokenPair({
-      userAgentHash: sessionValid.session.userAgentHash,
       clientType,
       sid: sessionValid.session.id,
       sub: sessionValid.session.userId,
@@ -226,12 +224,11 @@ export class AuthService {
       this.logger.warn(
         `Refresh не завершён: не удалось атомарно обновить сессию ${sessionValid.session.id}`,
       );
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Refresh session update conflict');
     }
 
     await Promise.all([
       this.tokenService.trackToken({
-        userAgentHash: sessionValid.session.userAgentHash,
         clientType,
         sid: sessionValid.session.id,
         sub: sessionValid.session.userId,
@@ -241,7 +238,6 @@ export class AuthService {
         jti: inputs.accessTokenJti,
       }),
       this.tokenService.trackToken({
-        userAgentHash: sessionValid.session.userAgentHash,
         clientType,
         sid: sessionValid.session.id,
         sub: sessionValid.session.userId,

@@ -63,6 +63,7 @@ export const ModelName = {
   Wallet: 'Wallet',
   WalletHistory: 'WalletHistory',
   LegalDocument: 'LegalDocument',
+  Ip: 'Ip',
   LegalAcceptances: 'LegalAcceptances'
 } as const
 
@@ -99,8 +100,10 @@ export const SessionScalarFieldEnum = {
   refreshTokenJti: 'refreshTokenJti',
   accessTokenJti: 'accessTokenJti',
   refreshTokenHash: 'refreshTokenHash',
+  expriesAt: 'expriesAt',
   createdAt: 'createdAt',
-  userId: 'userId'
+  userId: 'userId',
+  ipId: 'ipId'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -234,6 +237,26 @@ export const LegalDocumentScalarFieldEnum = {
 } as const
 
 export type LegalDocumentScalarFieldEnum = (typeof LegalDocumentScalarFieldEnum)[keyof typeof LegalDocumentScalarFieldEnum]
+
+
+export const IpScalarFieldEnum = {
+  id: 'id',
+  ip: 'ip',
+  rangeLow: 'rangeLow',
+  rangeHigh: 'rangeHigh',
+  country: 'country',
+  region: 'region',
+  eu: 'eu',
+  timezone: 'timezone',
+  city: 'city',
+  ll: 'll',
+  metro: 'metro',
+  area: 'area',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IpScalarFieldEnum = (typeof IpScalarFieldEnum)[keyof typeof IpScalarFieldEnum]
 
 
 export const LegalAcceptancesScalarFieldEnum = {

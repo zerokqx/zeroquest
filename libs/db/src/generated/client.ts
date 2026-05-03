@@ -100,6 +100,11 @@ export type WalletHistory = Prisma.WalletHistoryModel
  */
 export type LegalDocument = Prisma.LegalDocumentModel
 /**
+ * Model Ip
+ * 
+ */
+export type Ip = Prisma.IpModel
+/**
  * Model LegalAcceptances
  * 
  */

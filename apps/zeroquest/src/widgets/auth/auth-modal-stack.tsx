@@ -1,14 +1,26 @@
 import { setIsAuth } from '@/entites/user/model';
-import { Button, Center, Modal, Stack, Text, Title, useModalsStack } from '@mantine/core';
+import {
+  Button,
+  Center,
+  Modal,
+  Stack,
+  Text,
+  Title,
+  useModalsStack,
+} from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { SignInModal } from '@/features/auth/sign-in';
 import { SignUpModal } from '@/features/auth/sign-up';
 import { getUserControllerMeQueryKey } from '@/shared/api/orval/base-api/user/user';
+import { useLayoutEffect } from 'react';
 
 type AuthModalId = 'sign-in' | 'sign-up';
 
-export const AuthModalStack = () => {
+interface AuthMoodalStackProps {
+  mode?: AuthModalId;
+}
+export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const stack = useModalsStack<AuthModalId>(['sign-in', 'sign-up']);
@@ -23,6 +35,14 @@ export const AuthModalStack = () => {
     await navigate({ to: '/' });
   };
 
+  useLayoutEffect(() => {
+    if (!mode) return;
+    const timeoutId = setTimeout(() => {
+      stack.open(mode);
+    }, 200);
+    return () => clearTimeout(timeoutId);
+  }, [mode]);
+
   return (
     <Center mih="calc(100dvh - 16px)">
       <Stack align="center" gap="xs">
@@ -31,7 +51,9 @@ export const AuthModalStack = () => {
           Кроссплатформенный софт для всех ваших устройств
         </Text>
         <Button onClick={() => stack.open('sign-in')}>Логин</Button>
-        <Button variant="default" onClick={() => stack.open('sign-up')}>Регистрация</Button>
+        <Button variant="default" onClick={() => stack.open('sign-up')}>
+          Регистрация
+        </Button>
       </Stack>
 
       <Modal.Stack>
@@ -43,7 +65,9 @@ export const AuthModalStack = () => {
         <SignUpModal
           {...stack.register('sign-up')}
           onOpenSignIn={() => stack.open('sign-in')}
-          onSuccess={handleAuthSuccess}
+          onSuccess={() => {
+            stack.open('sign-in');
+          }}
         />
       </Modal.Stack>
     </Center>
