@@ -1,6 +1,7 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Session } from '@zeroquest/db';
 import { Exclude} from 'class-transformer';
+import { IsDate } from 'class-validator';
 
 export class SessionEntity implements Session {
   @ApiHideProperty()
@@ -29,6 +30,8 @@ export class SessionEntity implements Session {
 
   @ApiProperty()
   createdAt!: Date;
+
+
 
   constructor(partial: Partial<Session>) {
     Object.assign(this, partial);

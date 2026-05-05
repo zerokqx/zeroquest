@@ -15,7 +15,6 @@ import { LegalDocumentType, UserRole } from '@zeroquest/db';
 import { LoginDto } from './dto/login.dto';
 import { PolicyService } from '@/domains/content/policy/policy.service';
 
-
 @Injectable()
 export class AuthService {
   private logger = new Logger(AuthService.name);
@@ -42,8 +41,7 @@ export class AuthService {
     { login, password, policy }: LoginDto,
     userAgent: string | undefined,
     clientType: string,
-    ip: string
-
+    ip: string,
   ) {
     const user = await this.authRepository.findUserByLogin(login);
     if (user && (await compare(password, user?.passwordHash))) {
@@ -59,7 +57,6 @@ export class AuthService {
         );
         const session = await this.sessionService.create(
           {
-
             ip,
             clientType,
             userAgentHash,
