@@ -5,27 +5,21 @@
  * OpenAPI spec version: 1.0
  */
 import {
-  useMutation,
   useQuery
 } from '@tanstack/react-query';
 import type {
-  MutationFunction,
   QueryFunction,
   QueryKey,
-  UseMutationOptions,
-  UseMutationResult,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
-  CreatePlanDto,
-  PlanEntity,
-  UpdatePlanDto
+  PlanEntity
 } from '../base-api.schemas';
 
 import { customInstance } from '../../../axios-client';
-import type { ErrorType , BodyType } from '../../../axios-client';
+import type { ErrorType } from '../../../axios-client';
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -37,70 +31,6 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Создаёт тарифный план. Доступно только ADMIN.
- * @summary Создать план
- */
-export const planControllerCreate = (
-    createPlanDto: BodyType<CreatePlanDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<PlanEntity>(
-      {url: `/api/plans`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createPlanDto, signal
-    },
-      options);
-    }
-
-
-
-export const getPlanControllerCreateMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof planControllerCreate>>, TError,{data: BodyType<CreatePlanDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof planControllerCreate>>, TError,{data: BodyType<CreatePlanDto>}, TContext> => {
-
-const mutationKey = ['planControllerCreate'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof planControllerCreate>>, {data: BodyType<CreatePlanDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  planControllerCreate(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PlanControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof planControllerCreate>>>
-    export type PlanControllerCreateMutationBody = BodyType<CreatePlanDto>
-    export type PlanControllerCreateMutationError = ErrorType<void>
-
-    /**
- * @summary Создать план
- */
-export const usePlanControllerCreate = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof planControllerCreate>>, TError,{data: BodyType<CreatePlanDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- ): UseMutationResult<
-        Awaited<ReturnType<typeof planControllerCreate>>,
-        TError,
-        {data: BodyType<CreatePlanDto>},
-        TContext
-      > => {
-      return useMutation(getPlanControllerCreateMutationOptions(options));
-    }
-    /**
  * Возвращает публичный список тарифных планов.
  * @summary Получить список планов
  */
@@ -238,130 +168,3 @@ export function usePlanControllerFindOne<TData = Awaited<ReturnType<typeof planC
 
 
 
-/**
- * Обновляет тарифный план. Доступно только ADMIN.
- * @summary Обновить план
- */
-export const planControllerUpdate = (
-    id: number,
-    updatePlanDto: BodyType<UpdatePlanDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<PlanEntity>(
-      {url: `/api/plans/${id}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updatePlanDto, signal
-    },
-      options);
-    }
-
-
-
-export const getPlanControllerUpdateMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof planControllerUpdate>>, TError,{id: number;data: BodyType<UpdatePlanDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof planControllerUpdate>>, TError,{id: number;data: BodyType<UpdatePlanDto>}, TContext> => {
-
-const mutationKey = ['planControllerUpdate'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof planControllerUpdate>>, {id: number;data: BodyType<UpdatePlanDto>}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  planControllerUpdate(id,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PlanControllerUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof planControllerUpdate>>>
-    export type PlanControllerUpdateMutationBody = BodyType<UpdatePlanDto>
-    export type PlanControllerUpdateMutationError = ErrorType<unknown>
-
-    /**
- * @summary Обновить план
- */
-export const usePlanControllerUpdate = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof planControllerUpdate>>, TError,{id: number;data: BodyType<UpdatePlanDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- ): UseMutationResult<
-        Awaited<ReturnType<typeof planControllerUpdate>>,
-        TError,
-        {id: number;data: BodyType<UpdatePlanDto>},
-        TContext
-      > => {
-      return useMutation(getPlanControllerUpdateMutationOptions(options));
-    }
-    /**
- * Удаляет тарифный план. Доступно только ADMIN.
- * @summary Удалить план
- */
-export const planControllerRemove = (
-    id: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<PlanEntity>(
-      {url: `/api/plans/${id}`, method: 'DELETE', signal
-    },
-      options);
-    }
-
-
-
-export const getPlanControllerRemoveMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof planControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof planControllerRemove>>, TError,{id: number}, TContext> => {
-
-const mutationKey = ['planControllerRemove'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof planControllerRemove>>, {id: number}> = (props) => {
-          const {id} = props ?? {};
-
-          return  planControllerRemove(id,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PlanControllerRemoveMutationResult = NonNullable<Awaited<ReturnType<typeof planControllerRemove>>>
-
-    export type PlanControllerRemoveMutationError = ErrorType<unknown>
-
-    /**
- * @summary Удалить план
- */
-export const usePlanControllerRemove = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof planControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- ): UseMutationResult<
-        Awaited<ReturnType<typeof planControllerRemove>>,
-        TError,
-        {id: number},
-        TContext
-      > => {
-      return useMutation(getPlanControllerRemoveMutationOptions(options));
-    }

@@ -3,9 +3,10 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { UserRepository } from './user.repository';
 import { UserCache } from './user.cache';
+import { UserAdminController } from './user-admin.controller';
 
 @Module({
-  controllers: [UserController],
+  controllers: [UserController, UserAdminController],
   providers: [UserService, UserRepository, UserCache],
   exports: [UserService],
 })

@@ -4,7 +4,6 @@ import {
   Badge,
   Button,
   Card,
-  Divider,
   Group,
   Skeleton,
   Stack,
@@ -14,8 +13,6 @@ import {
 } from '@mantine/core';
 import {
   Ban,
-  CalendarClock,
-  Fingerprint,
   MessageSquare,
   RefreshCw,
   UserCircle2,
@@ -24,16 +21,8 @@ import { useGetMyProfile } from '../api';
 import styles from './profile.module.css';
 import { ErrorCatSvg } from '@/shared/ui/svg-cat/error-cat';
 
-const formatDate = (value: string): string => {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return 'Неизвестно';
-  return new Intl.DateTimeFormat('ru-RU', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(date);
-};
 
-export type ProfileProps  = Card.Props
+export type ProfileProps = Card.Props;
 const MyCard = Card.withProps({
   radius: 'xl',
   withBorder: true,
@@ -129,26 +118,6 @@ export const Profile = (props: ProfileProps) => {
           </Group>
         </div>
 
-        <Group>
-          <MyCard>
-            <Group gap="sm" wrap="nowrap">
-              <ThemeIcon variant="light" color="blue">
-                <Fingerprint size={16} />
-              </ThemeIcon>
-              <Stack gap={0}>
-                <Text size="xs" c="dimmed">
-                  ID
-                </Text>
-                <Text fw={600} size="sm" className={styles.mono}>
-                  {profile.id}
-                </Text>
-              </Stack>
-            </Group>
-          </MyCard>
-        </Group>
-
-        <Divider />
-
         <Group grow>
           <MyCard>
             <Group wrap="nowrap" gap="sm">
@@ -184,36 +153,6 @@ export const Profile = (props: ProfileProps) => {
                 <Text fw={600}>
                   {profile.isBanned ? 'Заблокирован' : 'В порядке'}
                 </Text>
-              </Stack>
-            </Group>
-          </MyCard>
-        </Group>
-
-        <Group grow>
-          <MyCard >
-            <Group wrap="nowrap" gap="sm">
-              <ThemeIcon variant="light" color="grape">
-                <CalendarClock size={16} />
-              </ThemeIcon>
-              <Stack gap={0}>
-                <Text size="xs" c="dimmed">
-                  Создан
-                </Text>
-                <Text fw={600}>{formatDate(profile.createdAt)}</Text>
-              </Stack>
-            </Group>
-          </MyCard>
-
-          <MyCard>
-            <Group wrap="nowrap" gap="sm">
-              <ThemeIcon variant="light" color="indigo">
-                <CalendarClock size={16} />
-              </ThemeIcon>
-              <Stack gap={0}>
-                <Text size="xs" c="dimmed">
-                  Обновлён
-                </Text>
-                <Text fw={600}>{formatDate(profile.updatedAt)}</Text>
               </Stack>
             </Group>
           </MyCard>

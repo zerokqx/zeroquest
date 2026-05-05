@@ -6,33 +6,23 @@ import { motion } from 'motion/react';
 
 export const Dashboard = () => {
   return (
-    <SimpleGrid
-      cols={{ base: 1, md: 2 }}
-      w="100%"
-      verticalSpacing="md"
-      spacing="md"
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: -100,
+      }}
+      animate={{ opacity: 1, y: 0 }}
     >
-      <motion.div
-        initial={{ y: -50, opacity: 0 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+      <SimpleGrid
+        cols={{ base: 1, md: 2 }}
+        w="100%"
+        verticalSpacing="md"
+        spacing="md"
       >
         <WalletCard h={'100%'} />
-      </motion.div>
-      <motion.div
-        initial={{ y: -60, opacity: 0 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
         <Profile />
-      </motion.div>
-      <motion.div
-        initial={{ y: -70, opacity: 0 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
         <SubscribeList />
-      </motion.div>
-    </SimpleGrid>
+      </SimpleGrid>
+    </motion.div>
   );
 };

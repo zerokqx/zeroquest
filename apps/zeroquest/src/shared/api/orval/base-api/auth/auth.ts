@@ -169,7 +169,7 @@ export const useAuthControllerPassword = <TError = ErrorType<void>,
       return useMutation(getAuthControllerPasswordMutationOptions(options));
     }
     /**
- * Создаёт нового пользователя и сразу устанавливает access и refresh токены в httpOnly cookies.
+ * Создаёт нового пользователя. Токены не выдаются: после регистрации требуется отдельный вход.
  * @summary Регистрация пользователя
  */
 export const authControllerRegister = (

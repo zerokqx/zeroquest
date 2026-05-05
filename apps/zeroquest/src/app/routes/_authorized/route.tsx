@@ -7,7 +7,10 @@ export const Route = createFileRoute('/_authorized')({
   beforeLoad({ location }) {
     if (!useUserAuthStore.getState().isAuth)
       throw redirect({
-        search: location.href,
+        search: {
+          search: location.href,
+          mode: 'sign-in',
+        },
         to: '/sign-up',
       });
   },

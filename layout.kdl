@@ -1,7 +1,6 @@
 layout {
   pane split_direction="vertical" {
 
-    // ВЕРХ: ngrok + фронт
     pane split_direction="horizontal" {
       pane {
         command "nx"
@@ -13,7 +12,6 @@ layout {
       }
     }
 
-    // НИЗ: backend на всю ширину
     pane {
       command "nx"
       args "serve" "api" "--no-tui"

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Prisma, PrismaService, UserRole } from '@zeroquest/db';
+import { Prisma, PrismaService } from '@zeroquest/db';
 
 @Injectable()
 export class AuthRepository {
@@ -58,7 +58,6 @@ export class AuthRepository {
   updateSessionTokensDataIfJtiMatches(
     id: string,
     refreshTokenJti: string,
-    accessTokenJti: string,
     data: Pick<
       Prisma.SessionUpdateManyMutationInput,
       'refreshTokenHash' | 'refreshTokenJti' | 'accessTokenJti'
@@ -68,7 +67,6 @@ export class AuthRepository {
       where: {
         id,
         refreshTokenJti,
-        accessTokenJti,
       },
       data,
     });

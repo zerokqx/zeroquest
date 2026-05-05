@@ -17,6 +17,71 @@ export class WalletRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
+  create(data: Prisma.WalletCreateInput) {
+    return this.prisma.wallet.create({ data });
+  }
+
+  async findOneById(walletId: Wallet['id']) {
+    return this.prisma.wallet.findUnique({
+      where: { id: walletId },
+    });
+  }
+
+  async findOneByIdAndUserId(walletId: Wallet['id'], userId: User['id']) {
+    return this.prisma.wallet.findFirst({
+      where: {
+        id: walletId,
+        user: {
+          is: {
+            id: userId,
+          },
+        },
+      },
+    });
+  }
+
+  async findManyByIds(ids: Wallet['id'][]) {
+    return this.prisma.wallet.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
+  async findAll(params: FindAllWalletsParams) {
+    const normalizedSort = params.sort as keyof Prisma.WalletOrderByWithRelationInput;
+    const normalizedOrder: Prisma.SortOrder =
+      params.order === 'DESC' ? 'desc' : 'asc';
+
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.wallet.findMany({
+        skip: params.skip,
+        take: params.take,
+        orderBy: {
+          [normalizedSort]: normalizedOrder,
+        } as Prisma.WalletOrderByWithRelationInput,
+      }),
+      this.prisma.wallet.count(),
+    ]);
+
+    return { data, total };
+  }
+
+  updateById(walletId: Wallet['id'], data: Prisma.WalletUpdateInput) {
+    return this.prisma.wallet.update({
+      where: { id: walletId },
+      data,
+    });
+  }
+
+  deleteById(walletId: Wallet['id']) {
+    return this.prisma.wallet.delete({
+      where: { id: walletId },
+    });
+  }
+
   private walletWhereByUserId(userId: User['id']): Prisma.WalletWhereInput {
     return {
       user: {
@@ -291,3 +356,10 @@ export class WalletRepository {
     });
   }
 }
+
+export type FindAllWalletsParams = {
+  skip: number;
+  take: number;
+  sort: string;
+  order: 'ASC' | 'DESC';
+};

@@ -196,8 +196,6 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @AuthPayload()
     refreshPayload: AuthServiceTypes.JwtPayload,
-    @JwtDecode('zeroquestAccess')
-    accessPayload: AuthServiceTypes.JwtPayload,
   ) {
     this.logger.debug(
       `Запрошено обновление токенов: login=${refreshPayload.login}, clientType=${req.clientType}`,
@@ -205,7 +203,6 @@ export class AuthController {
     const tokens = await this.authService.refresh(
       req.clientType,
       refreshPayload,
-      accessPayload,
     );
 
     this.cookieManager.setAuthCookies(res, tokens);

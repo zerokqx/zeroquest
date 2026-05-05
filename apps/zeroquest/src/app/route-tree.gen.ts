@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ManualRouteImport } from './routes/manual'
 import { Route as AuthorizedRouteRouteImport } from './routes/_authorized/route'
+import { Route as AdminRouteRouteImport } from './routes/_admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnauthorizedSignUpRouteImport } from './routes/_unauthorized/sign-up'
 import { Route as GeneralPolicyRouteImport } from './routes/_general/policy'
@@ -19,6 +20,7 @@ import { Route as AuthorizedReviewRouteImport } from './routes/_authorized/revie
 import { Route as AuthorizedPaymentHistoryRouteImport } from './routes/_authorized/payment-history'
 import { Route as AuthorizedMagazineRouteImport } from './routes/_authorized/magazine'
 import { Route as AuthorizedDashboardRouteImport } from './routes/_authorized/dashboard'
+import { Route as AdminAdminRouteImport } from './routes/_admin/admin'
 
 const ManualRoute = ManualRouteImport.update({
   id: '/manual',
@@ -27,6 +29,10 @@ const ManualRoute = ManualRouteImport.update({
 } as any)
 const AuthorizedRouteRoute = AuthorizedRouteRouteImport.update({
   id: '/_authorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/_admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -70,10 +76,16 @@ const AuthorizedDashboardRoute = AuthorizedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthorizedRouteRoute,
 } as any)
+const AdminAdminRoute = AdminAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/manual': typeof ManualRoute
+  '/admin': typeof AdminAdminRoute
   '/dashboard': typeof AuthorizedDashboardRoute
   '/magazine': typeof AuthorizedMagazineRoute
   '/payment-history': typeof AuthorizedPaymentHistoryRoute
@@ -85,6 +97,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/manual': typeof ManualRoute
+  '/admin': typeof AdminAdminRoute
   '/dashboard': typeof AuthorizedDashboardRoute
   '/magazine': typeof AuthorizedMagazineRoute
   '/payment-history': typeof AuthorizedPaymentHistoryRoute
@@ -96,8 +109,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_admin': typeof AdminRouteRouteWithChildren
   '/_authorized': typeof AuthorizedRouteRouteWithChildren
   '/manual': typeof ManualRoute
+  '/_admin/admin': typeof AdminAdminRoute
   '/_authorized/dashboard': typeof AuthorizedDashboardRoute
   '/_authorized/magazine': typeof AuthorizedMagazineRoute
   '/_authorized/payment-history': typeof AuthorizedPaymentHistoryRoute
@@ -111,6 +126,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/manual'
+    | '/admin'
     | '/dashboard'
     | '/magazine'
     | '/payment-history'
@@ -122,6 +138,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/manual'
+    | '/admin'
     | '/dashboard'
     | '/magazine'
     | '/payment-history'
@@ -132,8 +149,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_admin'
     | '/_authorized'
     | '/manual'
+    | '/_admin/admin'
     | '/_authorized/dashboard'
     | '/_authorized/magazine'
     | '/_authorized/payment-history'
@@ -145,6 +164,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthorizedRouteRoute: typeof AuthorizedRouteRouteWithChildren
   ManualRoute: typeof ManualRoute
   GeneralPolicyRoute: typeof GeneralPolicyRoute
@@ -165,6 +185,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthorizedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_admin': {
+      id: '/_admin'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -223,8 +250,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedDashboardRouteImport
       parentRoute: typeof AuthorizedRouteRoute
     }
+    '/_admin/admin': {
+      id: '/_admin/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminAdminRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
   }
 }
+
+interface AdminRouteRouteChildren {
+  AdminAdminRoute: typeof AdminAdminRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAdminRoute: AdminAdminRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
 
 interface AuthorizedRouteRouteChildren {
   AuthorizedDashboardRoute: typeof AuthorizedDashboardRoute
@@ -248,6 +294,7 @@ const AuthorizedRouteRouteWithChildren = AuthorizedRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthorizedRouteRoute: AuthorizedRouteRouteWithChildren,
   ManualRoute: ManualRoute,
   GeneralPolicyRoute: GeneralPolicyRoute,

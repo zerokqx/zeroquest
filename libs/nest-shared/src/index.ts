@@ -15,3 +15,5 @@ export * from './lib/role/api-role-only.decorator';
 export * from './lib/role/role.decorator';
 export * from './lib/role/role.guard';
 export * from './lib/user-agent/user-agent.decorator';
+export * from './lib/react-admin';
+export * from './lib/react-admin-simple-rest';

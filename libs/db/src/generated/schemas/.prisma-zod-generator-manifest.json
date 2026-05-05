@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "generatorVersion": "0.0.1",
-  "generatedAt": "2026-05-03T11:21:32.243Z",
+  "generatedAt": "2026-05-05T10:54:47.099Z",
   "outputPath": "/home/zerok/projects/zeroquest/libs/db/src/generated/schemas",
   "files": [
     "enums/TransactionIsolationLevel.schema.ts",

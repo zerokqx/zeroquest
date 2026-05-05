@@ -79,7 +79,7 @@ export class CsrfGuard implements CanActivate {
       throw new UnauthorizedException('Fingerprint not found');
     const csrfFromRedis = await this.csrfService.getToken(req.fingerprint);
     if (typeof csrfFromRedis !== 'string') {
-      throw new UnauthorizedException('Unknown CSRF');
+      throw new ForbiddenException('Unknown CSRF');
     }
     if (csrfFromRedis !== csrfHeader) {
       throw new ForbiddenException('CSRF token is not tracked for fingerprint');

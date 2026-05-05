@@ -42,8 +42,10 @@ async function bootstrap() {
     origin: corsOrigins,
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    exposedHeaders: ['Content-Range', 'X-Total-Count'],
     allowedHeaders: [
       'Content-Type',
+      'Range',
       'Authorization',
       HEADERS_NAMES.CLIENT_TYPE,
       HEADERS_NAMES.FINGERPRINT,
