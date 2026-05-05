@@ -7,13 +7,16 @@ import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '@/config/configuration';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import {
-  JwtPayloadSchema,
   JwtPayloadSchemaType,
-} from '../token/dto/schemas/payload.schema';
-import { TokenService } from '../token/token.service';
+  JwtPayloadSchema,
+} from '../../token/dto/schemas/payload.schema';
+import { TokenService } from '../../token/token.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtAccessStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-access',
+) {
   constructor(
     config: ConfigService<EnvironmentVariables>,
     private readonly tokenService: TokenService,

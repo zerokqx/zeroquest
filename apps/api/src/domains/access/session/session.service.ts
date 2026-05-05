@@ -12,12 +12,14 @@ import { SessionRepository } from './session.repository';
 import { Prisma, PrismaService } from '@zeroquest/db';
 import { TokenService } from '@/domains/access/token/token.service';
 import { IpInfoService } from '@/domains/network/ipinfo/ipinfo.service';
+import Redis from 'ioredis';
 
 @Injectable()
 export class SessionService {
   private readonly logger = new Logger(SessionService.name);
   private static readonly MIN_DELETE_SESSION_AGE_MS = 60_000;
   constructor(
+    private readonly redis: Redis,
     private readonly sessionRepository: SessionRepository,
     private readonly prisma: PrismaService,
     private readonly tokenService: TokenService,
@@ -34,6 +36,7 @@ export class SessionService {
     }: CreateSessionDto,
     options?: { tx?: Prisma.TransactionClient },
   ) {
+    await this.redis.set('pisun', 'pisun', 'EX', 60);
     this.logger.debug(
       `Создание сессии: userId=${userId}, clientType=${clientType}`,
     );

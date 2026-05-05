@@ -1,4 +1,10 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
+import Redis from 'ioredis';
 import configuration, { EnvironmentVariables } from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from '../domains/access/auth/auth.module';
@@ -27,6 +33,7 @@ import KeyvRedis from '@keyv/redis';
 import { FingerprintGuard } from '@/domains/security/fingerprint/fingerprint.guard';
 import { IpInfoMiddleware } from '@/domains/network/ipinfo/ipinfo.middleware';
 import { IpInfoModule } from '@/domains/network/ipinfo/ipinfo.module';
+import { RedisModule } from '@/common/modules/redis.module';
 
 @Module({
   imports: [
@@ -83,6 +90,7 @@ import { IpInfoModule } from '@/domains/network/ipinfo/ipinfo.module';
     BillingModule,
     PolicyModule,
     IpInfoModule,
+    RedisModule,
   ],
   providers: [
     {
@@ -104,6 +112,8 @@ import { IpInfoModule } from '@/domains/network/ipinfo/ipinfo.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-      consumer.apply(IpInfoMiddleware).forRoutes({path:"*", method: RequestMethod.ALL})
+    consumer
+      .apply(IpInfoMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

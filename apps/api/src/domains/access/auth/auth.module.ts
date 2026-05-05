@@ -9,7 +9,8 @@ import { PolicyModule } from '@/domains/content/policy/policy.module';
 import { CookieJwtManager } from './cookie-manager.service';
 import { JwtDecodePipe } from '@/domains/security/jwt/jwt-decode.pipe';
 import { CsrfService } from '@/domains/security/csrf/csrf.service';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtRefreshStrategy } from './jwt-passport/jwt-refresh.strategy';
+import { JwtAccessStrategy } from './jwt-passport/jwt-access.strategy';
 
 @Module({
   imports: [PassportModule, TokenModule, SessionModule, PolicyModule],
@@ -20,7 +21,8 @@ import { JwtStrategy } from './jwt.strategy';
     CookieJwtManager,
     JwtDecodePipe,
     CsrfService,
-    JwtStrategy,
+    JwtAccessStrategy,
+    JwtRefreshStrategy,
   ],
   exports: [TokenModule, CsrfService],
 })
