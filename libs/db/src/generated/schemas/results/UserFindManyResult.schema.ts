@@ -7,7 +7,7 @@ export const UserFindManyResultSchema = z.object({
   passwordHash: z.string(),
   subscribes: z.array(z.unknown()),
   isBanned: z.boolean(),
-  role: z.unknown().optional(),
+  role: z.unknown(),
   createdAt: z.date(),
   updatedAt: z.date(),
   payments: z.array(z.unknown()),

@@ -2,11 +2,11 @@ import { WalletEntity } from '@/domains/billing/wallet/entities/wallet.entity';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { User, UserRole } from '@zeroquest/db';
 import { Exclude } from 'class-transformer';
+import { IsString } from 'class-validator';
 
 export class UserEntity implements User {
   @ApiProperty()
   id!: string;
-
 
   @ApiProperty()
   login!: string;
@@ -22,7 +22,7 @@ export class UserEntity implements User {
   isBanned!: boolean;
 
   @ApiProperty({ enum: UserRole })
-  role!: UserRole | null;
+  role!: UserRole;
 
   @ApiProperty()
   createdAt!: Date;
@@ -36,6 +36,9 @@ export class UserEntity implements User {
   @ApiProperty({ type: WalletEntity, nullable: true, required: false })
   wallet!: WalletEntity | null;
 
+  @ApiProperty()
+  @IsString()
+  walletId!: string;
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

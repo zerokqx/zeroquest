@@ -8,7 +8,7 @@ export const UserModelSchema = z.object({
     passwordHash: z.string(),
     subscribes: z.array(z.unknown()),
     isBanned: z.boolean(),
-    role: UserRoleSchema.nullable(),
+    role: UserRoleSchema,
     createdAt: z.date(),
     updatedAt: z.date(),
     payments: z.array(z.unknown()),

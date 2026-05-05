@@ -1,4 +1,9 @@
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import {

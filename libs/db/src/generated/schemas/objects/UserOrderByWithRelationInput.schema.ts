@@ -15,7 +15,7 @@ const makeSchema = () => z.object({
   telegramId: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   passwordHash: SortOrderSchema.optional(),
   isBanned: SortOrderSchema.optional(),
-  role: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  role: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional(),
   canComment: SortOrderSchema.optional(),

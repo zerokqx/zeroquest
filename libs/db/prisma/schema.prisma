@@ -87,7 +87,7 @@ model Session {
   ip               Ip?        @relation(fields: [ipId], references: [id])
   expriesAt        DateTime   @map("expires_at")
   createdAt        DateTime   @default(now()) @map("created_at")
-  user             User       @relation(fields: [userId], references: [id])
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           String     @map("user_id")
   ipId             Int?
 
@@ -134,22 +134,22 @@ model Plan {
   name              String      @unique
   isSpecial         Boolean     @default(false) @map("is_special")
   discountedPercent Decimal     @default(0.0) @map("discounted_percent") @db.Decimal(5, 2)
-  features          String?
+  features          String      @default("")
   price             Int
-  description       String?
+  description       String      @default("")
   totalGb           Int         @default(30) @map("total_gb")
   payments          Payment[]
   subscribes        Subscribe[]
   inbound           Inbound     @relation(fields: [inboundId], references: [id])
   inboundId         Int         @map("inbound_id")
-  duratationDays    Int         @map("durataton_days")
+  duratationDays    Int         @default(30) @map("durataton_days")
 
   @@map("plans")
 }
 
 model Review {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @unique @map("user_id")
   content   String
   rating    Int
@@ -168,11 +168,11 @@ model Payment {
   idempotenceKey    String        @unique @map("idempotence_key")
   createdAt         DateTime      @default(now()) @map("created_at")
   description       String?
-  user              User          @relation(fields: [userId], references: [id])
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String        @map("user_id")
   refund            Refund?
   confirmationUrl   String        @map("confirmation_url")
-  plan              Plan?         @relation(fields: [planId], references: [id])
+  plan              Plan?         @relation(fields: [planId], references: [id], onDelete: NoAction)
   planId            Int?          @map("plan_id")
 
   @@unique([id, userId])
@@ -183,7 +183,7 @@ model Subscribe {
   id              String          @id @default(cuid())
   name            String          @unique
   vlessLink       String          @map("vless_link")
-  user            User            @relation(fields: [userId], references: [id])
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   vlessClientId   String          @map("vless_client_id")
   userId          String          @map("user_id")
   email           String          @default(uuid())
@@ -207,7 +207,7 @@ model User {
   passwordHash     String             @map("password_hash")
   subscribes       Subscribe[]
   isBanned         Boolean            @default(false) @map("is_banned")
-  role             UserRole?          @default(USER)
+  role             UserRole           @default(USER)
   createdAt        DateTime           @default(now()) @map("created_at")
   updatedAt        DateTime           @updatedAt @map("updated_at")
   payments         Payment[]
@@ -278,7 +278,7 @@ model Ip {
 }
 
 model LegalAcceptances {
-  user            User          @relation(fields: [userId], references: [id])
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String        @map("user_id")
   legalDocumentId Int           @map("legal_document_id")
   legalDocument   LegalDocument @relation(fields: [legalDocumentId], references: [id])

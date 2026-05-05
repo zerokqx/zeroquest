@@ -39,4 +39,8 @@ export class PlanEntity
 
   @ApiProperty({ example: 30 })
   duratationDays!: number;
+
+  constructor(partial?: Partial<PlanEntity>) {
+    Object.assign(this, partial);
+  }
 }

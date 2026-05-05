@@ -5,6 +5,7 @@ import z from 'zod';
 
 export const Route = createFileRoute('/_unauthorized/sign-up')({
   validateSearch: z.object({
+    search: z.string().default('/').optional(),
     mode: z.enum(['sign-in', 'sign-up']).optional(),
   }),
   beforeLoad() {

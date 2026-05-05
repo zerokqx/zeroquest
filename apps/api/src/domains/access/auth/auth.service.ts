@@ -14,7 +14,6 @@ import { AuthRepository } from './auth.repository';
 import { LegalDocumentType, UserRole } from '@zeroquest/db';
 import { LoginDto } from './dto/login.dto';
 import { PolicyService } from '@/domains/content/policy/policy.service';
-import { SessionPayloadCompareSchema } from './dto/schemas/session-compare-wit-token.schema';
 
 
 @Injectable()
@@ -148,15 +147,9 @@ export class AuthService {
     this.logger.log(`Пользователь зарегистрирован: login=${login}`);
   }
 
-  /**
-   * @description Валидирует в 2 стадии
-   * 1) Валидирует старый токен который дал пользователь с тем что реально пришло в запросе, валидирует userAgent с данными из токена
-   * 2) После того как проверки предыдущие выдали true валидируем старый токен с данными сессии.
-   * */
   async refresh(
     clientType: string,
     refreshPayload: AuthServiceTypes.JwtPayload,
-    accessPayload: AuthServiceTypes.JwtPayload,
   ) {
     const isRefreshToken = refreshPayload.type === 'refresh';
 
@@ -175,35 +168,21 @@ export class AuthService {
       refreshPayload.sid,
     );
 
-    const {
-      success,
-      data: sessionValid,
-      error,
-    } = SessionPayloadCompareSchema.safeParse({
-      session,
-      access: accessPayload,
-      refresh: refreshPayload,
-    });
-    this.logger.debug({ success, sessionValid, error });
-
-    if (!success) {
+    if (!session || session.userId !== refreshPayload.sub) {
       this.logger.warn(
         `Refresh отклонён на этапе проверки сессии: login=${refreshPayload.login}, sessionId=${refreshPayload.sid}`,
       );
       throw new UnauthorizedException('Refresh session validation failed');
     }
 
-    // Удаляем старые track-записи; новую пару трекаем ниже после успешного обновления сессии.
-    await Promise.all([
-      this.tokenService.removeTrackedToken(refreshPayload),
-      this.tokenService.removeTrackedToken(accessPayload),
-    ]);
+    // Удаляем только старый refresh-tracking; access истечёт по TTL.
+    await this.tokenService.removeTrackedToken(refreshPayload);
 
     const [tokens, inputs] = await this.tokenService.createTokenPair({
       clientType,
-      sid: sessionValid.session.id,
-      sub: sessionValid.session.userId,
-      role: session?.user.role ?? UserRole.USER,
+      sid: session.id,
+      sub: session.userId,
+      role: session.user.role ?? UserRole.USER,
       login: refreshPayload.login,
     });
 
@@ -212,9 +191,8 @@ export class AuthService {
     );
     const updated =
       await this.authRepository.updateSessionTokensDataIfJtiMatches(
-        sessionValid.session.id,
+        session.id,
         refreshPayload.jti,
-        inputs.accessTokenJti,
         {
           ...inputs,
           refreshTokenHash,
@@ -222,7 +200,7 @@ export class AuthService {
       );
     if (updated.count !== 1) {
       this.logger.warn(
-        `Refresh не завершён: не удалось атомарно обновить сессию ${sessionValid.session.id}`,
+        `Refresh не завершён: не удалось атомарно обновить сессию ${session.id}`,
       );
       throw new UnauthorizedException('Refresh session update conflict');
     }
@@ -230,18 +208,18 @@ export class AuthService {
     await Promise.all([
       this.tokenService.trackToken({
         clientType,
-        sid: sessionValid.session.id,
-        sub: sessionValid.session.userId,
-        role: session?.user.role ?? UserRole.USER,
+        sid: session.id,
+        sub: session.userId,
+        role: session.user.role ?? UserRole.USER,
         login: refreshPayload.login,
         type: 'access',
         jti: inputs.accessTokenJti,
       }),
       this.tokenService.trackToken({
         clientType,
-        sid: sessionValid.session.id,
-        sub: sessionValid.session.userId,
-        role: session?.user.role ?? UserRole.USER,
+        sid: session.id,
+        sub: session.userId,
+        role: session.user.role ?? UserRole.USER,
         login: refreshPayload.login,
         type: 'refresh',
         jti: inputs.refreshTokenJti,
@@ -249,7 +227,7 @@ export class AuthService {
     ]);
 
     this.logger.log(
-      `Refresh выполнен успешно: login=${refreshPayload.login}, sessionId=${sessionValid.session.id}`,
+      `Refresh выполнен успешно: login=${refreshPayload.login}, sessionId=${session.id}`,
     );
     return tokens;
   }

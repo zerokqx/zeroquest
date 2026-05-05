@@ -13,8 +13,10 @@ import {
   UserStar,
 } from 'lucide-react';
 import { Logotype } from '@/shared/ui/logotype';
+import { userAdminControllerIsAdmin, useUserAdminControllerIsAdmin } from '@/shared/api/orval/base-api/user-admin/user-admin';
 
 export const AppHeader = () => {
+  const { data: isAdmin } = useUserAdminControllerIsAdmin();
   const { data: user } = useGetMyProfile();
   const { logout } = useLogout();
   const queryClient = useQueryClient();
@@ -82,6 +84,17 @@ export const AppHeader = () => {
             >
               Магазин
             </Menu.Item>
+
+            {isAdmin && (
+              <Menu.Item
+                leftSection={<MonitorSmartphone size={14} />}
+                onClick={() => {
+                  navigate({ to: '/admin' });
+                }}
+              >
+                Админ Панель
+              </Menu.Item>
+            )}
             <Menu.Item
               leftSection={<MonitorSmartphone size={14} />}
               onClick={() => {

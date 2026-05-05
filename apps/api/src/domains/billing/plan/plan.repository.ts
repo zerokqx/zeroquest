@@ -36,6 +36,27 @@ export class PlanRepository {
     return plans;
   }
 
+  async findAll({ skip, take, sort, order }: FindAllPlansParams) {
+    const normalizedSort = sort as keyof Prisma.PlanOrderByWithRelationInput;
+    const normalizedOrder: Prisma.SortOrder = order === 'DESC' ? 'desc' : 'asc';
+
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.plan.findMany({
+        skip,
+        take,
+        orderBy: {
+          [normalizedSort]: normalizedOrder,
+        } as Prisma.PlanOrderByWithRelationInput,
+        omit: {
+          inboundId: true,
+        },
+      }),
+      this.prisma.plan.count(),
+    ]);
+
+    return { data, total };
+  }
+
   async findById(id: number) {
     this.logger.debug(`Поиск плана: planId=${id}`);
     const cacheKey = this.planByIdCacheKey(id);
@@ -48,6 +69,19 @@ export class PlanRepository {
     const plan = await this.prisma.plan.findUnique({ where: { id } });
     await this.cacheManager.set(cacheKey, plan, this.cacheTtlMs);
     return plan;
+  }
+
+  async findManyByIds(ids: number[]) {
+    return this.prisma.plan.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      omit: {
+        inboundId: true,
+      },
+    });
   }
 
   async updateById(id: number, data: Prisma.PlanUpdateInput) {
@@ -68,3 +102,10 @@ export class PlanRepository {
     return `plan:${id}`;
   }
 }
+
+export type FindAllPlansParams = {
+  skip: number;
+  take: number;
+  sort: string;
+  order: 'ASC' | 'DESC';
+};

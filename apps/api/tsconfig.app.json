@@ -14,7 +14,7 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/generate-metadata.cjs"],
+  "include": ["src/**/*.ts", "src/generate-metadata.cjs", "src/**/*.d.ts"],
   "exclude": [
     "out-tsc",
     "dist",

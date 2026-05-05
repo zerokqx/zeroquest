@@ -13,7 +13,7 @@ const makeSchema = () => z.object({
   telegramId: z.number().int().optional().nullable(),
   passwordHash: z.string(),
   isBanned: z.boolean().optional(),
-  role: UserRoleSchema.optional().nullable(),
+  role: UserRoleSchema.optional(),
   createdAt: z.coerce.date().optional(),
   canComment: z.boolean().optional(),
   walletId: z.string(),

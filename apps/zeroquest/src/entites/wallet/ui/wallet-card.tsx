@@ -2,6 +2,7 @@ import { useGetMyProfile } from '@/entites/user';
 import { CreditBalanceForm } from '@/features/credit-balance';
 import { fromPenny } from '@zeroquest/converters';
 import {
+  ActionIcon,
   Button,
   Card,
   CardProps,
@@ -16,7 +17,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Link } from '@tanstack/react-router';
-import { Coins, Snowflake, Wallet2 } from 'lucide-react';
+import { Coins, History, Plus, Snowflake, Wallet2 } from 'lucide-react';
 
 const formatRub = (value: string): string =>
   new Intl.NumberFormat('ru-RU', {
@@ -59,30 +60,61 @@ export const WalletCard = (props: CardProps) => {
         <CreditBalanceForm />
       </Modal>
 
-      <Card withBorder radius="xl" p="xl" {...props}>
+      <Card bg={'violet'} withBorder radius="xl" p="xl" {...props}>
         <Stack gap="lg">
           <Group justify="space-between" align="center">
             <Group gap={8}>
-              <ThemeIcon size={32} radius="xl" variant="light" color="blue">
+              <ThemeIcon size={32} radius="xl" variant="light">
                 <Wallet2 size={18} />
               </ThemeIcon>
-              <Text fw={600}>Баланс</Text>
+              <Text c="white" fw={600}>
+                Баланс
+              </Text>
             </Group>
-            <Group gap="xs">
-              <Button variant="subtle" onClick={openPaymentModal}>
+            <Group gap="xs" hiddenFrom="sm">
+              <ActionIcon
+                variant="light"
+                radius="xl"
+                onClick={openPaymentModal}
+                aria-label="Пополнить баланс"
+              >
+                <Plus size={16} />
+              </ActionIcon>
+
+              <ActionIcon
+                component={Link}
+                to="/payment-history"
+                variant="subtle"
+                color="white"
+                radius="xl"
+                aria-label="История платежей"
+              >
+                <History size={16} />
+              </ActionIcon>
+            </Group>
+
+            <Group gap="xs" visibleFrom="sm">
+              <Button variant="white" bdrs={'xl'} onClick={openPaymentModal}>
                 Пополнить баланс
               </Button>
-              <Button component={Link} to="/payment-history" variant="subtle">
+              <Button
+                component={Link}
+                to="/payment-history"
+                color="white"
+                bdrs={'xl'}
+                variant="subtle"
+              >
                 История платежей
               </Button>
             </Group>
           </Group>
 
           <div>
-            <Text size="xs" c="dimmed" mb={6}>
+            <Text size="xs" opacity={0.7} c="white" mb={6}>
               Доступно сейчас
             </Text>
             <Title
+              c="white"
               order={2}
               style={{ letterSpacing: '-0.02em', lineHeight: 1 }}
             >
@@ -93,7 +125,7 @@ export const WalletCard = (props: CardProps) => {
           <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
             <Card withBorder radius="xl" p="md">
               <Group gap="xs" wrap="nowrap">
-                <ThemeIcon size={30} radius="md" variant="light">
+                <ThemeIcon size={30} radius="xl" variant="light">
                   <Coins size={16} />
                 </ThemeIcon>
                 <Stack gap={0}>
@@ -107,7 +139,7 @@ export const WalletCard = (props: CardProps) => {
 
             <Card withBorder radius="xl" p="md">
               <Group gap="xs" wrap="nowrap">
-                <ThemeIcon size={30} radius="md" variant="light" color="blue">
+                <ThemeIcon size={30} radius="xl" variant="light" color="blue">
                   <Snowflake size={16} />
                 </ThemeIcon>
                 <Stack gap={0}>

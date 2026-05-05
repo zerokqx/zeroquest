@@ -1,36 +1,30 @@
 import geoip from 'geoip-lite';
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Ip, PrismaService } from '@zeroquest/db';
+import { IpInfoCache } from './ipinfo.cache';
 
 @Injectable()
 export class IpInfoService {
   constructor(
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    private readonly ipInfoCache: IpInfoCache,
     private readonly prisma: PrismaService,
   ) {}
 
-  cacheKey(ip: string) {
-    return `ip:data:${ip}`;
-  }
-
   async lookupIp(ip: string): Promise<geoip.Lookup | null> {
-    const key = this.cacheKey(ip);
-    const cachedIp = await this.cacheManager.get<geoip.Lookup | null>(key);
+    const cachedIp = await this.ipInfoCache.getCachedIp(ip);
     if (cachedIp) return cachedIp;
     const details = geoip.lookup(ip);
-    this.cacheManager.set<string>(key, JSON.stringify(details), 160_000_000);
+    this.ipInfoCache.cacheIp(ip, details);
     return details;
   }
 
   async getIpDataFromCache(ip: string): Promise<geoip.Lookup | null> {
-    const key = this.cacheKey(ip);
-    const data = await this.cacheManager.get<string>(key);
+    const data = await this.ipInfoCache.getCachedIp(ip);
     if (!data) return null;
-    return JSON.parse(data) as geoip.Lookup;
+    return data;
   }
 
-  async getIpDataFromDb(ip: string): Promise<Ip|null> {
+  async getIpDataFromDb(ip: string): Promise<Ip | null> {
     return this.prisma.ip.findUnique({ where: { ip } });
   }
 }

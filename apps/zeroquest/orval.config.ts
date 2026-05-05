@@ -13,7 +13,6 @@ const targetPath = <T extends string>(
   return `${BASE_TARGET_PATH}/${name}/${name}.ts`;
 };
 
-
 export default defineConfig({
   api: {
     input: {
@@ -26,7 +25,9 @@ export default defineConfig({
       indexFiles: true,
       mode: 'tags-split',
       namingConvention: 'kebab-case',
-      override: { mutator: MUTATOR_CONFIG },
+      override: {
+        mutator: MUTATOR_CONFIG,
+      },
     },
   },
 });

@@ -8,7 +8,7 @@ export const UserInputSchema = z.object({
     passwordHash: z.string(),
     subscribes: z.array(z.unknown()),
     isBanned: z.boolean(),
-    role: UserRoleSchema.optional().nullable(),
+    role: UserRoleSchema,
     createdAt: z.date(),
     updatedAt: z.date(),
     payments: z.array(z.unknown()),

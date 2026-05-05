@@ -4,14 +4,6 @@
  * Zeroquest API
  * OpenAPI spec version: 1.0
  */
-export interface CreatePlanDto {
-  price: number;
-  description: string;
-  inboundId: number;
-  name: string;
-  duratationDays: number;
-}
-
 export interface Decimal2 { [key: string]: unknown }
 
 export interface PlanEntity {
@@ -30,6 +22,16 @@ export interface PlanEntity {
   totalGb: number;
   duratationDays: number;
 }
+
+export interface CreatePlanDto {
+  price: number;
+  description: string;
+  inboundId: number;
+  name: string;
+  duratationDays: number;
+}
+
+export interface Object { [key: string]: unknown }
 
 export interface UpdatePlanDto {
   price?: number;
@@ -69,10 +71,7 @@ export interface SessionEntity {
   id: string;
   userAgentHash: string;
   clientTypeId: number;
-}
-
-export interface ClientTypeExistDto {
-  clientTypeName: string;
+  createdAt: string;
 }
 
 export type PolicyEntityType = typeof PolicyEntityType[keyof typeof PolicyEntityType];
@@ -132,7 +131,6 @@ export interface WalletEntity {
   id: string;
   held: number;
   balance: number;
-  userId: string;
 }
 
 export type UserEntityRole = typeof UserEntityRole[keyof typeof UserEntityRole];
@@ -154,9 +152,26 @@ export interface UserEntity {
   updatedAt: string;
   canComment: boolean;
   wallet?: WalletEntity | null;
+  walletId: string;
 }
 
 export interface PatchMeDto { [key: string]: unknown }
+
+export type UpdateUserDtoRole = typeof UpdateUserDtoRole[keyof typeof UpdateUserDtoRole];
+
+
+export const UpdateUserDtoRole = {
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+} as const;
+
+export interface UpdateUserDto {
+  role?: UpdateUserDtoRole;
+  telegramId?: number;
+  login?: string;
+  isBanned?: boolean;
+  canComment?: boolean;
+}
 
 export interface CreateRefundDto {
   /** Локальный идентификатор платежа в таблице payments. */
@@ -181,6 +196,20 @@ export interface RefundEntity {
 export interface CreditWalletDto { [key: string]: unknown }
 
 export interface DebitWalletDto { [key: string]: unknown }
+
+export interface CreateWalletDto {
+  /** @minimum 0 */
+  held?: number;
+  /** @minimum 0 */
+  balance?: number;
+}
+
+export interface UpdateWalletDto {
+  /** @minimum 0 */
+  held?: number;
+  /** @minimum 0 */
+  balance?: number;
+}
 
 export interface CreateReviewDto {
   /** Текст отзыва. */
@@ -288,6 +317,29 @@ export interface UpdateSubscribeDto {
   name: string;
 }
 
+export interface ClientTypeExistDto {
+  clientTypeName: string;
+}
+
+export type PlanAdminControllerFindAllParams = {
+/**
+ * JSON-массив вида [field, order]
+ */
+sort?: string[];
+/**
+ * JSON-массив вида [start, end]
+ */
+range?: string[];
+/**
+ * JSON-объект фильтра
+ */
+filter?: Object;
+/**
+ * JSON-массив embed-полей
+ */
+embed?: string;
+};
+
 export type PolicyControllerGetActualParams = {
 /**
  * Тип юридического документа.
@@ -303,4 +355,46 @@ export const PolicyControllerGetActualType = {
   PUBLIC: 'PUBLIC',
   TERMS: 'TERMS',
 } as const;
+
+export type UserAdminControllerGetAllParams = {
+/**
+ * JSON-массив вида [field, order]
+ */
+sort?: string[];
+/**
+ * JSON-массив вида [start, end]
+ */
+range?: string[];
+/**
+ * JSON-объект фильтра
+ */
+filter?: Object;
+/**
+ * JSON-массив embed-полей
+ */
+embed?: string;
+};
+
+export type WalletControllerGetMyWalletParams = {
+id: string;
+};
+
+export type WalletAdminControllerFindAllParams = {
+/**
+ * JSON-массив вида [field, order]
+ */
+sort?: string[];
+/**
+ * JSON-массив вида [start, end]
+ */
+range?: string[];
+/**
+ * JSON-объект фильтра
+ */
+filter?: Object;
+/**
+ * JSON-массив embed-полей
+ */
+embed?: string;
+};
 

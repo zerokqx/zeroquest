@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 import type { Request } from 'express';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import {
@@ -29,15 +30,20 @@ function extractTokenFromCookie(
 }
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard
+  extends PassportAuthGuard('jwt')
+  implements CanActivate
+{
   private readonly logger = new Logger(AuthGuard.name);
 
   constructor(
     private readonly tokenService: TokenService,
     private readonly reflector: Reflector,
-  ) {}
+  ) {
+    super();
+  }
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  override async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -54,31 +60,48 @@ export class AuthGuard implements CanActivate {
         context.getClass(),
       ]) ?? 'access';
 
-    const token = extractTokenFromCookie(request, tokenType);
+    if (tokenType === 'access') {
+      const activated = await super.canActivate(context);
+      return Boolean(activated);
+    }
+
+    const token = extractTokenFromCookie(request, 'refresh');
 
     if (!token) {
       this.logger.warn(
-        `Missing ${tokenType} cookie on ${request.method} ${request.originalUrl}`,
+        `Missing refresh cookie on ${request.method} ${request.originalUrl}`,
       );
-      throw new UnauthorizedException(`Missing ${tokenType} cookie`);
+      throw new UnauthorizedException('Missing refresh cookie');
     }
 
     try {
-      const payload =
-        await this.tokenService.verify(token);
-      if (payload.type !== tokenType) {
+      const payload = await this.tokenService.verify(token);
+      if (payload.type !== 'refresh') {
         this.logger.warn(
-          `Token type mismatch on ${request.method} ${request.originalUrl}: expected=${tokenType}, actual=${payload.type}`,
+          `Token type mismatch on ${request.method} ${request.originalUrl}: expected=refresh, actual=${payload.type}`,
         );
-        throw new UnauthorizedException(`Invalid ${tokenType} token`);
+        throw new UnauthorizedException('Invalid refresh token');
       }
       request.user = payload;
     } catch {
       this.logger.warn(
-        `Token verify failed on ${request.method} ${request.originalUrl}`,
+        `Refresh token verify failed on ${request.method} ${request.originalUrl}`,
       );
-      throw new UnauthorizedException(`Invalid ${tokenType} token`);
+      throw new UnauthorizedException('Invalid refresh token');
     }
+
     return true;
+  }
+
+  override handleRequest<TUser = AuthServiceTypes.JwtPayload>(
+    err: unknown,
+    user: TUser | false | null,
+  ): TUser {
+    if (err || !user) {
+      this.logger.warn('Access token validation failed in passport strategy');
+      throw new UnauthorizedException('Invalid access token');
+    }
+
+    return user;
   }
 }

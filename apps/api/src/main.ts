@@ -42,8 +42,10 @@ async function bootstrap() {
     origin: corsOrigins,
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    exposedHeaders: ['Content-Range', 'X-Total-Count'],
     allowedHeaders: [
       'Content-Type',
+      'Range',
       'Authorization',
       HEADERS_NAMES.CLIENT_TYPE,
       HEADERS_NAMES.FINGERPRINT,
@@ -57,6 +59,14 @@ async function bootstrap() {
     const config = new DocumentBuilder()
       .setTitle('Zeroquest API')
       .setVersion('1.0')
+      .addApiKey(
+        {
+          type: 'apiKey',
+          in: 'header',
+          name: 'Client Type',
+        },
+        'client-type',
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, config);

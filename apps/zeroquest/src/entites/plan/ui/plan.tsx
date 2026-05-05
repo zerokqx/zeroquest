@@ -27,6 +27,7 @@ export const Plan = ({ data, onButtonClck }: PlanProps) => {
   const discountedPrice = getDiscountedPrice(data.price, percentDiscounted);
   return (
     <Stack
+      bg={'gray.0'}
       className={styles.plan}
       data-is-special={isSpecial.toString()}
       miw={0}

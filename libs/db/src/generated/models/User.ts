@@ -215,7 +215,7 @@ export type UserGroupByOutputType = {
   telegramId: number | null
   passwordHash: string
   isBanned: boolean
-  role: $Enums.UserRole | null
+  role: $Enums.UserRole
   createdAt: Date
   updatedAt: Date
   canComment: boolean
@@ -251,7 +251,7 @@ export type UserWhereInput = {
   telegramId?: Prisma.IntNullableFilter<"User"> | number | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   isBanned?: Prisma.BoolFilter<"User"> | boolean
-  role?: Prisma.EnumUserRoleNullableFilter<"User"> | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   canComment?: Prisma.BoolFilter<"User"> | boolean
@@ -270,7 +270,7 @@ export type UserOrderByWithRelationInput = {
   telegramId?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
-  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   canComment?: Prisma.SortOrder
@@ -293,7 +293,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   telegramId?: Prisma.IntNullableFilter<"User"> | number | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   isBanned?: Prisma.BoolFilter<"User"> | boolean
-  role?: Prisma.EnumUserRoleNullableFilter<"User"> | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   canComment?: Prisma.BoolFilter<"User"> | boolean
@@ -311,7 +311,7 @@ export type UserOrderByWithAggregationInput = {
   telegramId?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
-  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   canComment?: Prisma.SortOrder
@@ -332,7 +332,7 @@ export type UserScalarWhereWithAggregatesInput = {
   telegramId?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   isBanned?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
-  role?: Prisma.EnumUserRoleNullableWithAggregatesFilter<"User"> | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   canComment?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -345,7 +345,7 @@ export type UserCreateInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -363,7 +363,7 @@ export type UserUncheckedCreateInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -381,7 +381,7 @@ export type UserUpdateInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -399,7 +399,7 @@ export type UserUncheckedUpdateInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -417,7 +417,7 @@ export type UserCreateManyInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -430,7 +430,7 @@ export type UserUpdateManyMutationInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -442,7 +442,7 @@ export type UserUncheckedUpdateManyInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -562,8 +562,8 @@ export type UserUpdateOneRequiredWithoutSubscribesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscribesInput, Prisma.UserUpdateWithoutSubscribesInput>, Prisma.UserUncheckedUpdateWithoutSubscribesInput>
 }
 
-export type NullableEnumUserRoleFieldUpdateOperationsInput = {
-  set?: $Enums.UserRole | null
+export type EnumUserRoleFieldUpdateOperationsInput = {
+  set?: $Enums.UserRole
 }
 
 export type UserCreateNestedOneWithoutWalletInput = {
@@ -618,7 +618,7 @@ export type UserCreateWithoutSessionsInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -635,7 +635,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -668,7 +668,7 @@ export type UserUpdateWithoutSessionsInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -685,7 +685,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -702,7 +702,7 @@ export type UserCreateWithoutReviewInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -719,7 +719,7 @@ export type UserUncheckedCreateWithoutReviewInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -752,7 +752,7 @@ export type UserUpdateWithoutReviewInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -769,7 +769,7 @@ export type UserUncheckedUpdateWithoutReviewInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -786,7 +786,7 @@ export type UserCreateWithoutPaymentsInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -803,7 +803,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -836,7 +836,7 @@ export type UserUpdateWithoutPaymentsInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -853,7 +853,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -870,7 +870,7 @@ export type UserCreateWithoutSubscribesInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -887,7 +887,7 @@ export type UserUncheckedCreateWithoutSubscribesInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -920,7 +920,7 @@ export type UserUpdateWithoutSubscribesInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -937,7 +937,7 @@ export type UserUncheckedUpdateWithoutSubscribesInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -954,7 +954,7 @@ export type UserCreateWithoutWalletInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -971,7 +971,7 @@ export type UserUncheckedCreateWithoutWalletInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -1004,7 +1004,7 @@ export type UserUpdateWithoutWalletInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1021,7 +1021,7 @@ export type UserUncheckedUpdateWithoutWalletInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1038,7 +1038,7 @@ export type UserCreateWithoutLegalAcceptancesInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -1055,7 +1055,7 @@ export type UserUncheckedCreateWithoutLegalAcceptancesInput = {
   telegramId?: number | null
   passwordHash: string
   isBanned?: boolean
-  role?: $Enums.UserRole | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   canComment?: boolean
@@ -1088,7 +1088,7 @@ export type UserUpdateWithoutLegalAcceptancesInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1105,7 +1105,7 @@ export type UserUncheckedUpdateWithoutLegalAcceptancesInput = {
   telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.NullableEnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1268,7 +1268,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     telegramId: number | null
     passwordHash: string
     isBanned: boolean
-    role: $Enums.UserRole | null
+    role: $Enums.UserRole
     createdAt: Date
     updatedAt: Date
     canComment: boolean
