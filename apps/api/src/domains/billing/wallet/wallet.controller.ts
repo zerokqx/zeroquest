@@ -31,7 +31,7 @@ export class WalletController {
   @Get('my')
   async getMyWallet(
     @Query('id') id: string,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.walletService.findOneByUserId(id, payload.sub);
     return new WalletEntity(data);

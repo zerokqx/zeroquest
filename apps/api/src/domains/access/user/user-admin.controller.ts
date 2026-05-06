@@ -79,7 +79,7 @@ export class UserAdminController {
   @SkipThrottle()
   @ApiUserAgent()
   @Get('is-admin')
-  isAdmin(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
+  isAdmin(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.userService.isAdmin(payload.sub);
   }
 

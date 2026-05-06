@@ -24,6 +24,11 @@ export interface PlanEntity {
 }
 
 export interface CreatePlanDto {
+  isSpecial: boolean;
+  discountedPercent: Decimal2;
+  /** @nullable */
+  features: string | null;
+  totalGb: number;
   price: number;
   description: string;
   inboundId: number;
@@ -34,6 +39,11 @@ export interface CreatePlanDto {
 export interface Object { [key: string]: unknown }
 
 export interface UpdatePlanDto {
+  isSpecial?: boolean;
+  discountedPercent?: Decimal2;
+  /** @nullable */
+  features?: string | null;
+  totalGb?: number;
   price?: number;
   description?: string;
   inboundId?: number;
@@ -67,11 +77,17 @@ export interface RegisterDto {
 }
 
 export interface SessionEntity {
-  userId: string;
-  id: string;
-  userAgentHash: string;
-  clientTypeId: number;
-  createdAt: string;
+  /** Session ID — уникальный идентификатор сессии */
+  sid: string;
+  /** User ID — идентификатор пользователя (CUID) */
+  uid: string;
+  /** Last Activity Timestamp — время последней активности в миллисекундах */
+  lat: number;
+  /** User Agent — строка с User-Agent клиента */
+  ua: string;
+  /** Client Type — тип клиента (например, web, mobile, api) */
+  ct: string;
+  isCurrent: boolean;
 }
 
 export type PolicyEntityType = typeof PolicyEntityType[keyof typeof PolicyEntityType];

@@ -8,7 +8,6 @@ import { EnumUserRoleFieldUpdateOperationsInputObjectSchema as EnumUserRoleField
 import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
 import { SubscribeUpdateManyWithoutUserNestedInputObjectSchema as SubscribeUpdateManyWithoutUserNestedInputObjectSchema } from './SubscribeUpdateManyWithoutUserNestedInput.schema';
 import { PaymentUpdateManyWithoutUserNestedInputObjectSchema as PaymentUpdateManyWithoutUserNestedInputObjectSchema } from './PaymentUpdateManyWithoutUserNestedInput.schema';
-import { SessionUpdateManyWithoutUserNestedInputObjectSchema as SessionUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUpdateManyWithoutUserNestedInput.schema';
 import { ReviewUpdateOneWithoutUserNestedInputObjectSchema as ReviewUpdateOneWithoutUserNestedInputObjectSchema } from './ReviewUpdateOneWithoutUserNestedInput.schema';
 import { WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema as WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema } from './WalletUpdateOneRequiredWithoutUserNestedInput.schema';
 import { LegalAcceptancesUpdateManyWithoutUserNestedInputObjectSchema as LegalAcceptancesUpdateManyWithoutUserNestedInputObjectSchema } from './LegalAcceptancesUpdateManyWithoutUserNestedInput.schema'
@@ -25,7 +24,6 @@ const makeSchema = () => z.object({
   canComment: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema)]).optional(),
   subscribes: z.lazy(() => SubscribeUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   payments: z.lazy(() => PaymentUpdateManyWithoutUserNestedInputObjectSchema).optional(),
-  sessions: z.lazy(() => SessionUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   review: z.lazy(() => ReviewUpdateOneWithoutUserNestedInputObjectSchema).optional(),
   wallet: z.lazy(() => WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesUpdateManyWithoutUserNestedInputObjectSchema).optional()

@@ -4,7 +4,6 @@
  */
 
 export { ClientTypeInputSchema } from './ClientType.input';
-export { SessionInputSchema } from './Session.input';
 export { RefundInputSchema } from './Refund.input';
 export { InboundInputSchema } from './Inbound.input';
 export { PlanInputSchema } from './Plan.input';

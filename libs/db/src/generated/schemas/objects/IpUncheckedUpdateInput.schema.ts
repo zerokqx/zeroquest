@@ -7,8 +7,7 @@ import { BoolFieldUpdateOperationsInputObjectSchema as BoolFieldUpdateOperations
 import { IpUpdatellInputObjectSchema as IpUpdatellInputObjectSchema } from './IpUpdatellInput.schema';
 import { IpStatusSchema } from '../enums/IpStatus.schema';
 import { EnumIpStatusFieldUpdateOperationsInputObjectSchema as EnumIpStatusFieldUpdateOperationsInputObjectSchema } from './EnumIpStatusFieldUpdateOperationsInput.schema';
-import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
-import { SessionUncheckedUpdateManyWithoutIpNestedInputObjectSchema as SessionUncheckedUpdateManyWithoutIpNestedInputObjectSchema } from './SessionUncheckedUpdateManyWithoutIpNestedInput.schema'
+import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../helpers/decimal-helpers';
 const makeSchema = () => z.object({
@@ -34,8 +33,7 @@ const makeSchema = () => z.object({
   area: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputObjectSchema)]).optional(),
   status: z.union([IpStatusSchema, z.lazy(() => EnumIpStatusFieldUpdateOperationsInputObjectSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
-  updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
-  sessions: z.lazy(() => SessionUncheckedUpdateManyWithoutIpNestedInputObjectSchema).optional()
+  updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional()
 }).strict();
 export const IpUncheckedUpdateInputObjectSchema: z.ZodType<Prisma.IpUncheckedUpdateInput> = makeSchema() as unknown as z.ZodType<Prisma.IpUncheckedUpdateInput>;
 export const IpUncheckedUpdateInputObjectZodSchema = makeSchema();

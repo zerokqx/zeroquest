@@ -52,7 +52,6 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   ClientType: 'ClientType',
-  Session: 'Session',
   Refund: 'Refund',
   Inbound: 'Inbound',
   Plan: 'Plan',
@@ -91,22 +90,6 @@ export const ClientTypeScalarFieldEnum = {
 } as const
 
 export type ClientTypeScalarFieldEnum = (typeof ClientTypeScalarFieldEnum)[keyof typeof ClientTypeScalarFieldEnum]
-
-
-export const SessionScalarFieldEnum = {
-  id: 'id',
-  userAgentHash: 'userAgentHash',
-  clientTypeId: 'clientTypeId',
-  refreshTokenJti: 'refreshTokenJti',
-  accessTokenJti: 'accessTokenJti',
-  refreshTokenHash: 'refreshTokenHash',
-  expriesAt: 'expriesAt',
-  createdAt: 'createdAt',
-  userId: 'userId',
-  ipId: 'ipId'
-} as const
-
-export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
 export const RefundScalarFieldEnum = {

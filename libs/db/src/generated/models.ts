@@ -9,7 +9,6 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/ClientType'
-export type * from './models/Session'
 export type * from './models/Refund'
 export type * from './models/Inbound'
 export type * from './models/Plan'

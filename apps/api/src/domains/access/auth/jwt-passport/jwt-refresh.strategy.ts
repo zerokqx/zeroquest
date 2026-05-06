@@ -6,11 +6,7 @@ import { getRequestCookie } from '@zeroquest/nest-shared';
 import { type Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { EnvironmentVariables } from '@/config/configuration';
-import {
-  JwtPayloadSchema,
-  JwtPayloadSchemaType,
-} from '../../token/dto/schemas/payload.schema';
-import { TokenService } from '../../token/token.service';
+import { AuthServiceTypes } from '@zeroquest/types';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -19,7 +15,6 @@ export class JwtRefreshStrategy extends PassportStrategy(
 ) {
   constructor(
     config: ConfigService<EnvironmentVariables>,
-    private readonly tokenService: TokenService,
   ) {
     const secret = config.get('jwt', { infer: true })?.secret;
     if (!secret) throw new Error('SECRET IS NOT DEFINED');
@@ -34,8 +29,8 @@ export class JwtRefreshStrategy extends PassportStrategy(
     });
   }
 
-  override async validate(payload: unknown): Promise<JwtPayloadSchemaType> {
-    const parsed = await JwtPayloadSchema.safeParseAsync(payload);
+  override async validate(payload: unknown): Promise<AuthServiceTypes.JwtPayloadSchemaType> {
+    const parsed = await AuthServiceTypes.JwtPayloadSchema.safeParseAsync(payload);
 
     if (!parsed.success) {
       throw new UnauthorizedException('Invalid token payload');
@@ -45,7 +40,6 @@ export class JwtRefreshStrategy extends PassportStrategy(
       throw new UnauthorizedException('Invalid token type');
     }
 
-    await this.tokenService.getTrackedToken(parsed.data);
 
     return parsed.data;
   }

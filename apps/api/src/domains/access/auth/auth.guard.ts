@@ -1,11 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
-import {
-  AUTH_TOKEN_TYPE_KEY,
-  type AuthTokenType,
-  IS_PUBLIC_KEY,
-} from '@zeroquest/nest-shared';
+import { AUTH_TOKEN_TYPE_KEY, IS_PUBLIC_KEY } from '@zeroquest/nest-shared';
+import { AuthServiceTypes } from '@zeroquest/types';
 import { isObservable, lastValueFrom } from 'rxjs';
 
 const JwtAccessGuard = PassportAuthGuard('jwt-access');
@@ -29,13 +26,14 @@ export class AuthGuard implements CanActivate {
     }
 
     const tokenType =
-      this.reflector.getAllAndOverride<AuthTokenType>(AUTH_TOKEN_TYPE_KEY, [
-        context.getHandler(),
-        context.getClass(),
-      ]) ?? 'access';
+      this.reflector.getAllAndOverride<
+        AuthServiceTypes.JwtPayloadSchemaType['type']
+      >(AUTH_TOKEN_TYPE_KEY, [context.getHandler(), context.getClass()]) ??
+      'access';
 
     const guard =
       tokenType === 'refresh' ? this.refreshGuard : this.accessGuard;
+
     const result = guard.canActivate(context);
     if (isObservable(result)) {
       return lastValueFrom(result);

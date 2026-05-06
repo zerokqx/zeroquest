@@ -4,7 +4,6 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import Redis from 'ioredis';
 import configuration, { EnvironmentVariables } from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from '../domains/access/auth/auth.module';
@@ -15,7 +14,6 @@ import { BullModule } from '@nestjs/bullmq';
 import { QueueModule } from '@/queue.module';
 import { PaymentModule } from '@/domains/billing/payment/payment.module';
 import { PlanModule } from '@/domains/billing/plan/plan.module';
-import { ThreeXUiModule } from '@/domains/network/three-x-ui/three-x-ui.module';
 import { SubscribeModule } from '@/domains/billing/subscribe/subscribe.module';
 import { ClientTypeModule } from '@/domains/access/client-type/client-type.module';
 import { ZeroquestConfigModule } from '@zeroquest/config';
@@ -27,6 +25,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BillingModule } from '@/domains/billing/billing/billing.module';
 import { PolicyModule } from '@/domains/content/policy/policy.module';
 import { CsrfGuard } from '@/domains/security/csrf/csrf.guard';
+import { CsrfModule } from '@/domains/security/csrf/csrf.module';
 import { AuthGuard } from '@/domains/access/auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
 import KeyvRedis from '@keyv/redis';
@@ -77,22 +76,26 @@ import { RedisModule } from '@/common/modules/redis.module';
       },
     }),
     PlanModule,
-    AuthModule,
+    AuthModule.register({ globalAuth: true }),
     ZeroquestDbModule,
     InboundModule,
     UserModule,
     QueueModule,
     PaymentModule,
-    ThreeXUiModule,
     SubscribeModule,
     ClientTypeModule,
     WalletModule,
     BillingModule,
     PolicyModule,
+    CsrfModule,
     IpInfoModule,
     RedisModule,
   ],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     {
       provide: APP_GUARD,
       useClass: FingerprintGuard,
@@ -101,12 +104,7 @@ import { RedisModule } from '@/common/modules/redis.module';
       provide: APP_GUARD,
       useClass: CsrfGuard,
     },
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
     { provide: APP_GUARD, useClass: ClientTypeGuard },
-    { provide: APP_GUARD, useClass: AuthGuard },
     { provide: APP_GUARD, useClass: RoleGuard },
   ],
 })

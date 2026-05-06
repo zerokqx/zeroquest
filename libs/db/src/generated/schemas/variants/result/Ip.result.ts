@@ -16,8 +16,7 @@ export const IpResultSchema = z.object({
     area: z.number().int(),
     status: IpStatusSchema,
     createdAt: z.date(),
-    updatedAt: z.date(),
-    sessions: z.array(z.unknown())
+    updatedAt: z.date()
 }).strict();
 
 export type IpResultType = z.infer<typeof IpResultSchema>;

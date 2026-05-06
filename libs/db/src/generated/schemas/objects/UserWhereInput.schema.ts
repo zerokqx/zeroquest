@@ -8,7 +8,6 @@ import { UserRoleSchema } from '../enums/UserRole.schema';
 import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { SubscribeListRelationFilterObjectSchema as SubscribeListRelationFilterObjectSchema } from './SubscribeListRelationFilter.schema';
 import { PaymentListRelationFilterObjectSchema as PaymentListRelationFilterObjectSchema } from './PaymentListRelationFilter.schema';
-import { SessionListRelationFilterObjectSchema as SessionListRelationFilterObjectSchema } from './SessionListRelationFilter.schema';
 import { ReviewNullableScalarRelationFilterObjectSchema as ReviewNullableScalarRelationFilterObjectSchema } from './ReviewNullableScalarRelationFilter.schema';
 import { ReviewWhereInputObjectSchema as ReviewWhereInputObjectSchema } from './ReviewWhereInput.schema';
 import { WalletScalarRelationFilterObjectSchema as WalletScalarRelationFilterObjectSchema } from './WalletScalarRelationFilter.schema';
@@ -31,7 +30,6 @@ const userwhereinputSchema = z.object({
   walletId: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   subscribes: z.lazy(() => SubscribeListRelationFilterObjectSchema).optional(),
   payments: z.lazy(() => PaymentListRelationFilterObjectSchema).optional(),
-  sessions: z.lazy(() => SessionListRelationFilterObjectSchema).optional(),
   review: z.union([z.lazy(() => ReviewNullableScalarRelationFilterObjectSchema), z.lazy(() => ReviewWhereInputObjectSchema)]).optional(),
   wallet: z.union([z.lazy(() => WalletScalarRelationFilterObjectSchema), z.lazy(() => WalletWhereInputObjectSchema)]).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesListRelationFilterObjectSchema).optional()

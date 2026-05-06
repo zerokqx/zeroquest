@@ -10,7 +10,6 @@ export const UserAggregateResultSchema = z.object({  _count: z.object({
     createdAt: z.number(),
     updatedAt: z.number(),
     payments: z.number(),
-    sessions: z.number(),
     review: z.number(),
     canComment: z.number(),
     wallet: z.number(),

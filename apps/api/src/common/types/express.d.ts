@@ -1,9 +1,10 @@
-import { JwtPayloadSchemaType } from '@/domains/access/token/dto/schemas/payload.schema';
+import { AuthServiceTypes } from "@zeroquest/types";
 
 declare global {
   namespace Express {
-    interface User extends JwtPayloadSchemaType {}
+    interface User extends AuthServiceTypes.JwtPayloadSchemaType {}
     interface Request {
+      clientType?:string
       user?: User;
     }
   }

@@ -1,5 +1,6 @@
 import { HEADERS_NAMES } from '@zeroquest/constants';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { useUserAuthStore } from '@/entites/user/model';
 import Axios, {
   AxiosRequestConfig,
   AxiosError,
@@ -31,12 +32,26 @@ let csrfPromise: Promise<void> | null = null;
 
 type ErrorResponseData = {
   message?: string | string[];
+  code?: string;
+  details?: {
+    code?: string;
+    [key: string]: unknown;
+  };
 };
 
 const isAuthEndpoint = (url?: string): boolean => {
   if (!url) return false;
   return url.includes('/api/auth/');
 };
+
+const isUserAuthorized = (): boolean => useUserAuthStore.getState().isAuth;
+
+const SESSION_REVOKED_CODES = new Set([
+  'SESSION_REVOKED',
+  'SESSION_NOT_FOUND',
+  'SESSION_NOT_EXISTS',
+  'AUTH_SESSION_INVALID',
+]);
 
 const readCookie = (name: string): string | null => {
   if (typeof document === 'undefined') return null;
@@ -78,6 +93,28 @@ const getErrorMessage = (error: AxiosError): string | null => {
   }
 
   return null;
+};
+
+const getErrorCode = (error: AxiosError): string | null => {
+  const data = error.response?.data as ErrorResponseData | undefined;
+  return data?.code ?? data?.details?.code ?? null;
+};
+
+const handleSessionRevoked = (): void => {
+  useUserAuthStore.getState().setIsAuth(false);
+
+  if (typeof window === 'undefined') return;
+
+  const signInPath = '/sign-up?mode=sign-in';
+  if (window.location.pathname === '/sign-up') return;
+  window.location.assign(signInPath);
+};
+
+const isSessionRevokedError = (error: AxiosError): boolean => {
+  const errorCode = getErrorCode(error);
+  if (errorCode && SESSION_REVOKED_CODES.has(errorCode)) return true;
+
+  return getErrorMessage(error) === 'Session is not defined';
 };
 
 const isCsrfSyncError = (error: AxiosError): boolean => {
@@ -123,6 +160,11 @@ AXIOS_INSTANCE.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    if (isSessionRevokedError(error)) {
+      handleSessionRevoked();
+      return Promise.reject(error);
+    }
+
     if (status === 403) {
       // чтобы не зациклиться
       if (originalRequest._csrfRetry) {
@@ -149,6 +191,10 @@ AXIOS_INSTANCE.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    if (!isUserAuthorized()) {
+      return Promise.reject(error);
+    }
+
     originalRequest._refreshRetry = true;
 
     try {
@@ -165,8 +211,10 @@ AXIOS_INSTANCE.interceptors.response.use(
   },
 );
 
-let fingerprint: string | undefined;
 
+
+
+let fingerprint: string | undefined;
 AXIOS_INSTANCE.interceptors.request.use(async (config) => {
   if (!fingerprint) {
     const fpPromise = FingerprintJS.load();

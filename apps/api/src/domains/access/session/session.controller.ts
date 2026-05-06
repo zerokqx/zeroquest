@@ -33,9 +33,21 @@ export class SessionController {
     type: SessionEntity,
     description: 'Список сессий успешно получен.',
   })
-  async findAll(@AuthPayload() user: AuthServiceTypes.JwtPayload) {
+  async findAll(@AuthPayload() user: AuthServiceTypes.JwtPayloadSchemaType) {
     const data = await this.sessionService.findAll(user.sub);
-    return data.map((session) => new SessionEntity(session));
+    return data
+      .map(
+        (session) =>
+          new SessionEntity({
+            ...session,
+            isCurrent: session.sid === user.sid,
+          }),
+      )
+      .sort((a, b) => {
+        if (a.sid === user.sid) return -1;
+        if (b.sid === user.sid) return 1;
+        return 0;
+      });
   }
 
   @Get('me')
@@ -49,7 +61,7 @@ export class SessionController {
     description: 'Текущая сессия успешно получена.',
   })
   async currentUserSession(
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.sessionService.findSessionByRefresh(
       payload.sub,
@@ -75,7 +87,7 @@ export class SessionController {
   })
   async findOne(
     @Param('id') id: string,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.sessionService.findOne(id, payload.sub);
     return new SessionEntity(data);
@@ -106,7 +118,7 @@ export class SessionController {
   })
   async remove(
     @Param('id') id: string,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.sessionService.remove(id, payload);
 

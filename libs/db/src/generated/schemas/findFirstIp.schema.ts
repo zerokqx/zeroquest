@@ -1,6 +1,5 @@
 import type { Prisma } from '../client';
 import * as z from 'zod';
-import { IpIncludeObjectSchema as IpIncludeObjectSchema } from './objects/IpInclude.schema';
 import { IpOrderByWithRelationInputObjectSchema as IpOrderByWithRelationInputObjectSchema } from './objects/IpOrderByWithRelationInput.schema';
 import { IpWhereInputObjectSchema as IpWhereInputObjectSchema } from './objects/IpWhereInput.schema';
 import { IpWhereUniqueInputObjectSchema as IpWhereUniqueInputObjectSchema } from './objects/IpWhereUniqueInput.schema';
@@ -24,9 +23,7 @@ export const IpFindFirstSelectSchema: z.ZodType<Prisma.IpSelect> = z.object({
     area: z.boolean().optional(),
     status: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional(),
-    sessions: z.boolean().optional(),
-    _count: z.boolean().optional()
+    updatedAt: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.IpSelect>;
 
 export const IpFindFirstSelectZodSchema = z.object({
@@ -44,11 +41,9 @@ export const IpFindFirstSelectZodSchema = z.object({
     area: z.boolean().optional(),
     status: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional(),
-    sessions: z.boolean().optional(),
-    _count: z.boolean().optional()
+    updatedAt: z.boolean().optional()
   }).strict();
 
-export const IpFindFirstSchema: z.ZodType<Prisma.IpFindFirstArgs> = z.object({ select: IpFindFirstSelectSchema.optional(), include: z.lazy(() => IpIncludeObjectSchema.optional()), orderBy: z.union([IpOrderByWithRelationInputObjectSchema, IpOrderByWithRelationInputObjectSchema.array()]).optional(), where: IpWhereInputObjectSchema.optional(), cursor: IpWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([IpScalarFieldEnumSchema, IpScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.IpFindFirstArgs>;
+export const IpFindFirstSchema: z.ZodType<Prisma.IpFindFirstArgs> = z.object({ select: IpFindFirstSelectSchema.optional(),  orderBy: z.union([IpOrderByWithRelationInputObjectSchema, IpOrderByWithRelationInputObjectSchema.array()]).optional(), where: IpWhereInputObjectSchema.optional(), cursor: IpWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([IpScalarFieldEnumSchema, IpScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.IpFindFirstArgs>;
 
-export const IpFindFirstZodSchema = z.object({ select: IpFindFirstSelectSchema.optional(), include: z.lazy(() => IpIncludeObjectSchema.optional()), orderBy: z.union([IpOrderByWithRelationInputObjectSchema, IpOrderByWithRelationInputObjectSchema.array()]).optional(), where: IpWhereInputObjectSchema.optional(), cursor: IpWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([IpScalarFieldEnumSchema, IpScalarFieldEnumSchema.array()]).optional() }).strict();
+export const IpFindFirstZodSchema = z.object({ select: IpFindFirstSelectSchema.optional(),  orderBy: z.union([IpOrderByWithRelationInputObjectSchema, IpOrderByWithRelationInputObjectSchema.array()]).optional(), where: IpWhereInputObjectSchema.optional(), cursor: IpWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([IpScalarFieldEnumSchema, IpScalarFieldEnumSchema.array()]).optional() }).strict();

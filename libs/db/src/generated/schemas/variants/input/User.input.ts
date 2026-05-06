@@ -12,7 +12,6 @@ export const UserInputSchema = z.object({
     createdAt: z.date(),
     updatedAt: z.date(),
     payments: z.array(z.unknown()),
-    sessions: z.array(z.unknown()),
     review: z.unknown().optional().nullable(),
     canComment: z.boolean(),
     wallet: z.unknown(),

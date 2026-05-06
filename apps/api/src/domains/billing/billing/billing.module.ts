@@ -6,9 +6,7 @@ import { ThreeXUiModule } from '@/domains/network/three-x-ui/three-x-ui.module';
 import { SubscribeModule } from '@/domains/billing/subscribe/subscribe.module';
 
 @Module({
-  imports: [ZeroquestDbModule, WalletModule, ThreeXUiModule,
-SubscribeModule,
-  ],
+  imports: [ZeroquestDbModule, WalletModule, ThreeXUiModule, SubscribeModule],
   providers: [BillingService],
 })
 export class BillingModule {}

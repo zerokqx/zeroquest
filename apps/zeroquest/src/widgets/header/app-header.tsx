@@ -1,7 +1,7 @@
 import { useLogout } from '@/features/logout';
 import { useGetMyProfile } from '@/entites/user';
 import { getUserControllerMeQueryKey } from '@/shared/api/orval/base-api/user/user';
-import { Avatar, Burger, Card, Group, Menu, Stack, Text } from '@mantine/core';
+import { Burger, Card, Group, Menu } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useRouter } from '@tanstack/react-router';
@@ -13,10 +13,9 @@ import {
   UserStar,
 } from 'lucide-react';
 import { Logotype } from '@/shared/ui/logotype';
-import { userAdminControllerIsAdmin, useUserAdminControllerIsAdmin } from '@/shared/api/orval/base-api/user-admin/user-admin';
+import { UserEntityRole } from '@/shared/api/orval/base-api/base-api.schemas';
 
 export const AppHeader = () => {
-  const { data: isAdmin } = useUserAdminControllerIsAdmin();
   const { data: user } = useGetMyProfile();
   const { logout } = useLogout();
   const queryClient = useQueryClient();
@@ -85,7 +84,7 @@ export const AppHeader = () => {
               Магазин
             </Menu.Item>
 
-            {isAdmin && (
+            {user.role === UserEntityRole.ADMIN && (
               <Menu.Item
                 leftSection={<MonitorSmartphone size={14} />}
                 onClick={() => {

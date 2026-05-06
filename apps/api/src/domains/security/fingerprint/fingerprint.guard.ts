@@ -51,8 +51,7 @@ export class FingerprintGuard implements CanActivate {
 
     const fingerprint = getFingerprintHeader(req);
     if (fingerprint) {
-      req.fingerprint = fingerprint;
-    }
+      req.fingerprint = fingerprint; }
 
     if (isFingerprintSkipped) {
       return true;

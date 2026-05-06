@@ -10,7 +10,7 @@ import type { Request } from 'express';
 import { Observable, tap } from 'rxjs';
 
 type RequestWithIdentity = Request & {
-  user?: AuthServiceTypes.JwtPayload;
+  user?: AuthServiceTypes.JwtPayloadSchemaType;
   clientType?: string;
 };
 

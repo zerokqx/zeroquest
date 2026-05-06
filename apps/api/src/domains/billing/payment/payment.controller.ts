@@ -71,7 +71,7 @@ export class PaymentController {
   })
   async create(
     @Body() createPaymentDto: CreatePaymentDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
     @Headers(IDEMPOTENCE_KEY_HEADER) idempotenceKey?: string,
   ) {
     return this.paymentService.create(createPaymentDto, payload, idempotenceKey);
@@ -105,7 +105,7 @@ export class PaymentController {
     isArray: true,
     description: 'Список платежей успешно получен.',
   })
-  async findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
+  async findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.paymentService.findAll(payload);
   }
 
@@ -123,7 +123,7 @@ export class PaymentController {
     },
   })
   events(
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
     @Req() req: Request,
   ) {
     this.logger.verbose(
@@ -162,7 +162,7 @@ export class PaymentController {
   })
   findOne(
     @Param('id', ParseIntPipe) id: number,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.paymentService.findOne(id, payload);
   }

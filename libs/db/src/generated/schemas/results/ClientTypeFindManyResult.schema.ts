@@ -3,7 +3,6 @@ export const ClientTypeFindManyResultSchema = z.object({
   data: z.array(z.object({
   id: z.number().int(),
   name: z.string(),
-  sessions: z.array(z.unknown()),
   createdAt: z.date(),
   updatedAt: z.date()
 })),

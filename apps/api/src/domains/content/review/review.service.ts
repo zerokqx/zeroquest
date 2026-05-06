@@ -18,7 +18,7 @@ export class ReviewService {
     private readonly userService: UserService,
   ) {}
 
-  async create(body: CreateReviewDto, payload: AuthServiceTypes.JwtPayload) {
+  async create(body: CreateReviewDto, payload: AuthServiceTypes.JwtPayloadSchemaType) {
     const user = await this.userService.findById(payload.sub);
 
     if (!user) {
@@ -68,7 +68,7 @@ export class ReviewService {
     return review;
   }
 
-  async removeMyReview(payload: AuthServiceTypes.JwtPayload) {
+  async removeMyReview(payload: AuthServiceTypes.JwtPayloadSchemaType) {
     const review = await this.reviewRepository.findByUserId(payload.sub);
     if (!review) {
       throw new NotFoundException('Отзыв пользователя не найден.');

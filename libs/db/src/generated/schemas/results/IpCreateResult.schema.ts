@@ -14,6 +14,5 @@ export const IpCreateResultSchema = z.object({
   area: z.number().int(),
   status: z.unknown(),
   createdAt: z.date(),
-  updatedAt: z.date(),
-  sessions: z.array(z.unknown())
+  updatedAt: z.date()
 });

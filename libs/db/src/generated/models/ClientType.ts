@@ -208,7 +208,6 @@ export type ClientTypeWhereInput = {
   name?: Prisma.StringFilter<"ClientType"> | string
   createdAt?: Prisma.DateTimeFilter<"ClientType"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClientType"> | Date | string
-  sessions?: Prisma.SessionListRelationFilter
 }
 
 export type ClientTypeOrderByWithRelationInput = {
@@ -216,7 +215,6 @@ export type ClientTypeOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  sessions?: Prisma.SessionOrderByRelationAggregateInput
 }
 
 export type ClientTypeWhereUniqueInput = Prisma.AtLeast<{
@@ -227,7 +225,6 @@ export type ClientTypeWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ClientTypeWhereInput | Prisma.ClientTypeWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"ClientType"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClientType"> | Date | string
-  sessions?: Prisma.SessionListRelationFilter
 }, "id" | "name">
 
 export type ClientTypeOrderByWithAggregationInput = {
@@ -256,7 +253,6 @@ export type ClientTypeCreateInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutClientTypeInput
 }
 
 export type ClientTypeUncheckedCreateInput = {
@@ -264,14 +260,12 @@ export type ClientTypeUncheckedCreateInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutClientTypeInput
 }
 
 export type ClientTypeUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutClientTypeNestedInput
 }
 
 export type ClientTypeUncheckedUpdateInput = {
@@ -279,7 +273,6 @@ export type ClientTypeUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutClientTypeNestedInput
 }
 
 export type ClientTypeCreateManyInput = {
@@ -331,11 +324,6 @@ export type ClientTypeSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
-export type ClientTypeScalarRelationFilter = {
-  is?: Prisma.ClientTypeWhereInput
-  isNot?: Prisma.ClientTypeWhereInput
-}
-
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -352,91 +340,6 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type ClientTypeCreateNestedOneWithoutSessionsInput = {
-  create?: Prisma.XOR<Prisma.ClientTypeCreateWithoutSessionsInput, Prisma.ClientTypeUncheckedCreateWithoutSessionsInput>
-  connectOrCreate?: Prisma.ClientTypeCreateOrConnectWithoutSessionsInput
-  connect?: Prisma.ClientTypeWhereUniqueInput
-}
-
-export type ClientTypeUpdateOneRequiredWithoutSessionsNestedInput = {
-  create?: Prisma.XOR<Prisma.ClientTypeCreateWithoutSessionsInput, Prisma.ClientTypeUncheckedCreateWithoutSessionsInput>
-  connectOrCreate?: Prisma.ClientTypeCreateOrConnectWithoutSessionsInput
-  upsert?: Prisma.ClientTypeUpsertWithoutSessionsInput
-  connect?: Prisma.ClientTypeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientTypeUpdateToOneWithWhereWithoutSessionsInput, Prisma.ClientTypeUpdateWithoutSessionsInput>, Prisma.ClientTypeUncheckedUpdateWithoutSessionsInput>
-}
-
-export type ClientTypeCreateWithoutSessionsInput = {
-  name: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ClientTypeUncheckedCreateWithoutSessionsInput = {
-  id?: number
-  name: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ClientTypeCreateOrConnectWithoutSessionsInput = {
-  where: Prisma.ClientTypeWhereUniqueInput
-  create: Prisma.XOR<Prisma.ClientTypeCreateWithoutSessionsInput, Prisma.ClientTypeUncheckedCreateWithoutSessionsInput>
-}
-
-export type ClientTypeUpsertWithoutSessionsInput = {
-  update: Prisma.XOR<Prisma.ClientTypeUpdateWithoutSessionsInput, Prisma.ClientTypeUncheckedUpdateWithoutSessionsInput>
-  create: Prisma.XOR<Prisma.ClientTypeCreateWithoutSessionsInput, Prisma.ClientTypeUncheckedCreateWithoutSessionsInput>
-  where?: Prisma.ClientTypeWhereInput
-}
-
-export type ClientTypeUpdateToOneWithWhereWithoutSessionsInput = {
-  where?: Prisma.ClientTypeWhereInput
-  data: Prisma.XOR<Prisma.ClientTypeUpdateWithoutSessionsInput, Prisma.ClientTypeUncheckedUpdateWithoutSessionsInput>
-}
-
-export type ClientTypeUpdateWithoutSessionsInput = {
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ClientTypeUncheckedUpdateWithoutSessionsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-
-/**
- * Count Type ClientTypeCountOutputType
- */
-
-export type ClientTypeCountOutputType = {
-  sessions: number
-}
-
-export type ClientTypeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  sessions?: boolean | ClientTypeCountOutputTypeCountSessionsArgs
-}
-
-/**
- * ClientTypeCountOutputType without action
- */
-export type ClientTypeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ClientTypeCountOutputType
-   */
-  select?: Prisma.ClientTypeCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * ClientTypeCountOutputType without action
- */
-export type ClientTypeCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SessionWhereInput
-}
 
 
 export type ClientTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -444,8 +347,6 @@ export type ClientTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   name?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  sessions?: boolean | Prisma.ClientType$sessionsArgs<ExtArgs>
-  _count?: boolean | Prisma.ClientTypeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["clientType"]>
 
 export type ClientTypeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -470,18 +371,10 @@ export type ClientTypeSelectScalar = {
 }
 
 export type ClientTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["clientType"]>
-export type ClientTypeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  sessions?: boolean | Prisma.ClientType$sessionsArgs<ExtArgs>
-  _count?: boolean | Prisma.ClientTypeCountOutputTypeDefaultArgs<ExtArgs>
-}
-export type ClientTypeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ClientTypeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $ClientTypePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ClientType"
-  objects: {
-    sessions: Prisma.$SessionPayload<ExtArgs>[]
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
@@ -881,7 +774,6 @@ readonly fields: ClientTypeFieldRefs;
  */
 export interface Prisma__ClientTypeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  sessions<T extends Prisma.ClientType$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientType$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -932,10 +824,6 @@ export type ClientTypeFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
-  /**
    * Filter, which ClientType to fetch.
    */
   where: Prisma.ClientTypeWhereUniqueInput
@@ -954,10 +842,6 @@ export type ClientTypeFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
-  /**
    * Filter, which ClientType to fetch.
    */
   where: Prisma.ClientTypeWhereUniqueInput
@@ -975,10 +859,6 @@ export type ClientTypeFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the ClientType
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
   /**
    * Filter, which ClientType to fetch.
    */
@@ -1028,10 +908,6 @@ export type ClientTypeFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
-  /**
    * Filter, which ClientType to fetch.
    */
   where?: Prisma.ClientTypeWhereInput
@@ -1079,10 +955,6 @@ export type ClientTypeFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the ClientType
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
   /**
    * Filter, which ClientTypes to fetch.
    */
@@ -1132,10 +1004,6 @@ export type ClientTypeCreateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
-  /**
    * The data needed to create a ClientType.
    */
   data: Prisma.XOR<Prisma.ClientTypeCreateInput, Prisma.ClientTypeUncheckedCreateInput>
@@ -1183,10 +1051,6 @@ export type ClientTypeUpdateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the ClientType
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
   /**
    * The data needed to update a ClientType.
    */
@@ -1254,10 +1118,6 @@ export type ClientTypeUpsertArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
-  /**
    * The filter to search for the ClientType to update in case it exists.
    */
   where: Prisma.ClientTypeWhereUniqueInput
@@ -1284,10 +1144,6 @@ export type ClientTypeDeleteArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
-  /**
    * Filter which ClientType to delete.
    */
   where: Prisma.ClientTypeWhereUniqueInput
@@ -1308,30 +1164,6 @@ export type ClientTypeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * ClientType.sessions
- */
-export type ClientType$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Session
-   */
-  select?: Prisma.SessionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Session
-   */
-  omit?: Prisma.SessionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SessionInclude<ExtArgs> | null
-  where?: Prisma.SessionWhereInput
-  orderBy?: Prisma.SessionOrderByWithRelationInput | Prisma.SessionOrderByWithRelationInput[]
-  cursor?: Prisma.SessionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
-}
-
-/**
  * ClientType without action
  */
 export type ClientTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1343,8 +1175,4 @@ export type ClientTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the ClientType
    */
   omit?: Prisma.ClientTypeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ClientTypeInclude<ExtArgs> | null
 }

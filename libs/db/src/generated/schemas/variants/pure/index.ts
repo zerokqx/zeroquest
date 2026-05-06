@@ -4,7 +4,6 @@
  */
 
 export { ClientTypeModelSchema } from './ClientType.pure';
-export { SessionModelSchema } from './Session.pure';
 export { RefundModelSchema } from './Refund.pure';
 export { InboundModelSchema } from './Inbound.pure';
 export { PlanModelSchema } from './Plan.pure';

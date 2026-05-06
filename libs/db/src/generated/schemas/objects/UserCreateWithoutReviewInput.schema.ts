@@ -3,7 +3,6 @@ import type { Prisma } from '../../client';
 import { UserRoleSchema } from '../enums/UserRole.schema';
 import { SubscribeCreateNestedManyWithoutUserInputObjectSchema as SubscribeCreateNestedManyWithoutUserInputObjectSchema } from './SubscribeCreateNestedManyWithoutUserInput.schema';
 import { PaymentCreateNestedManyWithoutUserInputObjectSchema as PaymentCreateNestedManyWithoutUserInputObjectSchema } from './PaymentCreateNestedManyWithoutUserInput.schema';
-import { SessionCreateNestedManyWithoutUserInputObjectSchema as SessionCreateNestedManyWithoutUserInputObjectSchema } from './SessionCreateNestedManyWithoutUserInput.schema';
 import { WalletCreateNestedOneWithoutUserInputObjectSchema as WalletCreateNestedOneWithoutUserInputObjectSchema } from './WalletCreateNestedOneWithoutUserInput.schema';
 import { LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema as LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema } from './LegalAcceptancesCreateNestedManyWithoutUserInput.schema'
 
@@ -19,7 +18,6 @@ const makeSchema = () => z.object({
   canComment: z.boolean().optional(),
   subscribes: z.lazy(() => SubscribeCreateNestedManyWithoutUserInputObjectSchema).optional(),
   payments: z.lazy(() => PaymentCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputObjectSchema).optional(),
   wallet: z.lazy(() => WalletCreateNestedOneWithoutUserInputObjectSchema),
   legalAcceptances: z.lazy(() => LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema).optional()
 }).strict();

@@ -312,7 +312,6 @@ export type IpWhereInput = {
   status?: Prisma.EnumIpStatusFilter<"Ip"> | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFilter<"Ip"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ip"> | Date | string
-  sessions?: Prisma.SessionListRelationFilter
 }
 
 export type IpOrderByWithRelationInput = {
@@ -331,7 +330,6 @@ export type IpOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  sessions?: Prisma.SessionOrderByRelationAggregateInput
 }
 
 export type IpWhereUniqueInput = Prisma.AtLeast<{
@@ -353,7 +351,6 @@ export type IpWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumIpStatusFilter<"Ip"> | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFilter<"Ip"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ip"> | Date | string
-  sessions?: Prisma.SessionListRelationFilter
 }, "id" | "ip">
 
 export type IpOrderByWithAggregationInput = {
@@ -415,7 +412,6 @@ export type IpCreateInput = {
   status?: $Enums.IpStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutIpInput
 }
 
 export type IpUncheckedCreateInput = {
@@ -434,7 +430,6 @@ export type IpUncheckedCreateInput = {
   status?: $Enums.IpStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutIpInput
 }
 
 export type IpUpdateInput = {
@@ -452,7 +447,6 @@ export type IpUpdateInput = {
   status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutIpNestedInput
 }
 
 export type IpUncheckedUpdateInput = {
@@ -471,7 +465,6 @@ export type IpUncheckedUpdateInput = {
   status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutIpNestedInput
 }
 
 export type IpCreateManyInput = {
@@ -525,11 +518,6 @@ export type IpUncheckedUpdateManyInput = {
   status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type IpNullableScalarRelationFilter = {
-  is?: Prisma.IpWhereInput | null
-  isNot?: Prisma.IpWhereInput | null
 }
 
 export type DecimalNullableListFilter<$PrismaModel = never> = {
@@ -610,22 +598,6 @@ export type IpSumOrderByAggregateInput = {
   area?: Prisma.SortOrder
 }
 
-export type IpCreateNestedOneWithoutSessionsInput = {
-  create?: Prisma.XOR<Prisma.IpCreateWithoutSessionsInput, Prisma.IpUncheckedCreateWithoutSessionsInput>
-  connectOrCreate?: Prisma.IpCreateOrConnectWithoutSessionsInput
-  connect?: Prisma.IpWhereUniqueInput
-}
-
-export type IpUpdateOneWithoutSessionsNestedInput = {
-  create?: Prisma.XOR<Prisma.IpCreateWithoutSessionsInput, Prisma.IpUncheckedCreateWithoutSessionsInput>
-  connectOrCreate?: Prisma.IpCreateOrConnectWithoutSessionsInput
-  upsert?: Prisma.IpUpsertWithoutSessionsInput
-  disconnect?: Prisma.IpWhereInput | boolean
-  delete?: Prisma.IpWhereInput | boolean
-  connect?: Prisma.IpWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.IpUpdateToOneWithWhereWithoutSessionsInput, Prisma.IpUpdateWithoutSessionsInput>, Prisma.IpUncheckedUpdateWithoutSessionsInput>
-}
-
 export type IpCreatellInput = {
   set: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
 }
@@ -639,121 +611,6 @@ export type EnumIpStatusFieldUpdateOperationsInput = {
   set?: $Enums.IpStatus
 }
 
-export type IpCreateWithoutSessionsInput = {
-  ip: string
-  rangeLow: number
-  rangeHigh: number
-  country: string
-  region: string
-  eu: boolean
-  timezone: string
-  city: string
-  ll?: Prisma.IpCreatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
-  metro: number
-  area: number
-  status?: $Enums.IpStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type IpUncheckedCreateWithoutSessionsInput = {
-  id?: number
-  ip: string
-  rangeLow: number
-  rangeHigh: number
-  country: string
-  region: string
-  eu: boolean
-  timezone: string
-  city: string
-  ll?: Prisma.IpCreatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
-  metro: number
-  area: number
-  status?: $Enums.IpStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type IpCreateOrConnectWithoutSessionsInput = {
-  where: Prisma.IpWhereUniqueInput
-  create: Prisma.XOR<Prisma.IpCreateWithoutSessionsInput, Prisma.IpUncheckedCreateWithoutSessionsInput>
-}
-
-export type IpUpsertWithoutSessionsInput = {
-  update: Prisma.XOR<Prisma.IpUpdateWithoutSessionsInput, Prisma.IpUncheckedUpdateWithoutSessionsInput>
-  create: Prisma.XOR<Prisma.IpCreateWithoutSessionsInput, Prisma.IpUncheckedCreateWithoutSessionsInput>
-  where?: Prisma.IpWhereInput
-}
-
-export type IpUpdateToOneWithWhereWithoutSessionsInput = {
-  where?: Prisma.IpWhereInput
-  data: Prisma.XOR<Prisma.IpUpdateWithoutSessionsInput, Prisma.IpUncheckedUpdateWithoutSessionsInput>
-}
-
-export type IpUpdateWithoutSessionsInput = {
-  ip?: Prisma.StringFieldUpdateOperationsInput | string
-  rangeLow?: Prisma.IntFieldUpdateOperationsInput | number
-  rangeHigh?: Prisma.IntFieldUpdateOperationsInput | number
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  region?: Prisma.StringFieldUpdateOperationsInput | string
-  eu?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  timezone?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  ll?: Prisma.IpUpdatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
-  metro?: Prisma.IntFieldUpdateOperationsInput | number
-  area?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type IpUncheckedUpdateWithoutSessionsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  ip?: Prisma.StringFieldUpdateOperationsInput | string
-  rangeLow?: Prisma.IntFieldUpdateOperationsInput | number
-  rangeHigh?: Prisma.IntFieldUpdateOperationsInput | number
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  region?: Prisma.StringFieldUpdateOperationsInput | string
-  eu?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  timezone?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  ll?: Prisma.IpUpdatellInput | runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[]
-  metro?: Prisma.IntFieldUpdateOperationsInput | number
-  area?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumIpStatusFieldUpdateOperationsInput | $Enums.IpStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-
-/**
- * Count Type IpCountOutputType
- */
-
-export type IpCountOutputType = {
-  sessions: number
-}
-
-export type IpCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  sessions?: boolean | IpCountOutputTypeCountSessionsArgs
-}
-
-/**
- * IpCountOutputType without action
- */
-export type IpCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the IpCountOutputType
-   */
-  select?: Prisma.IpCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * IpCountOutputType without action
- */
-export type IpCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SessionWhereInput
-}
 
 
 export type IpSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -772,8 +629,6 @@ export type IpSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  sessions?: boolean | Prisma.Ip$sessionsArgs<ExtArgs>
-  _count?: boolean | Prisma.IpCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ip"]>
 
 export type IpSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -831,18 +686,10 @@ export type IpSelectScalar = {
 }
 
 export type IpOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ip" | "rangeLow" | "rangeHigh" | "country" | "region" | "eu" | "timezone" | "city" | "ll" | "metro" | "area" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["ip"]>
-export type IpInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  sessions?: boolean | Prisma.Ip$sessionsArgs<ExtArgs>
-  _count?: boolean | Prisma.IpCountOutputTypeDefaultArgs<ExtArgs>
-}
-export type IpIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type IpIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $IpPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Ip"
-  objects: {
-    sessions: Prisma.$SessionPayload<ExtArgs>[]
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     ip: string
@@ -1253,7 +1100,6 @@ readonly fields: IpFieldRefs;
  */
 export interface Prisma__IpClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  sessions<T extends Prisma.Ip$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ip$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1315,10 +1161,6 @@ export type IpFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
-  /**
    * Filter, which Ip to fetch.
    */
   where: Prisma.IpWhereUniqueInput
@@ -1337,10 +1179,6 @@ export type IpFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
-  /**
    * Filter, which Ip to fetch.
    */
   where: Prisma.IpWhereUniqueInput
@@ -1358,10 +1196,6 @@ export type IpFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the Ip
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
   /**
    * Filter, which Ip to fetch.
    */
@@ -1411,10 +1245,6 @@ export type IpFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
-  /**
    * Filter, which Ip to fetch.
    */
   where?: Prisma.IpWhereInput
@@ -1462,10 +1292,6 @@ export type IpFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the Ip
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
   /**
    * Filter, which Ips to fetch.
    */
@@ -1515,10 +1341,6 @@ export type IpCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs =
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
-  /**
    * The data needed to create a Ip.
    */
   data: Prisma.XOR<Prisma.IpCreateInput, Prisma.IpUncheckedCreateInput>
@@ -1566,10 +1388,6 @@ export type IpUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs =
    * Omit specific fields from the Ip
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
   /**
    * The data needed to update a Ip.
    */
@@ -1637,10 +1455,6 @@ export type IpUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs =
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
-  /**
    * The filter to search for the Ip to update in case it exists.
    */
   where: Prisma.IpWhereUniqueInput
@@ -1667,10 +1481,6 @@ export type IpDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs =
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
-  /**
    * Filter which Ip to delete.
    */
   where: Prisma.IpWhereUniqueInput
@@ -1691,30 +1501,6 @@ export type IpDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 /**
- * Ip.sessions
- */
-export type Ip$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Session
-   */
-  select?: Prisma.SessionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Session
-   */
-  omit?: Prisma.SessionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SessionInclude<ExtArgs> | null
-  where?: Prisma.SessionWhereInput
-  orderBy?: Prisma.SessionOrderByWithRelationInput | Prisma.SessionOrderByWithRelationInput[]
-  cursor?: Prisma.SessionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
-}
-
-/**
  * Ip without action
  */
 export type IpDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1726,8 +1512,4 @@ export type IpDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
    * Omit specific fields from the Ip
    */
   omit?: Prisma.IpOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IpInclude<ExtArgs> | null
 }

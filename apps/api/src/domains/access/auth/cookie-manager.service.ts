@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { COOKIE_NAME } from '@zeroquest/constants';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import { log } from 'console';
-import { randomBytes } from 'crypto';
 import type { CookieOptions, Request, Response } from 'express';
 
 type JwtTokenPair = {

@@ -17,12 +17,12 @@ const makeSchema = () => z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'discountedPercent' must be a Decimal",
 }).optional(),
-  features: z.string().optional().nullable(),
+  features: z.string().optional(),
   price: z.number().int(),
-  description: z.string().optional().nullable(),
+  description: z.string().optional(),
   totalGb: z.number().int().optional(),
   inboundId: z.number().int(),
-  duratationDays: z.number().int(),
+  duratationDays: z.number().int().optional(),
   payments: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutPlanInputObjectSchema).optional()
 }).strict();
 export const PlanUncheckedCreateWithoutSubscribesInputObjectSchema: z.ZodType<Prisma.PlanUncheckedCreateWithoutSubscribesInput> = makeSchema() as unknown as z.ZodType<Prisma.PlanUncheckedCreateWithoutSubscribesInput>;

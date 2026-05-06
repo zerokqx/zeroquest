@@ -8,11 +8,11 @@ import { TokenService } from '@/domains/access/token/token.service';
 
 @Injectable()
 export class JwtDecodePipe
-  implements PipeTransform<string | undefined, AuthServiceTypes.JwtPayload>
+  implements PipeTransform<string | undefined, AuthServiceTypes.JwtPayloadSchemaType>
 {
   constructor(private readonly tokenService: TokenService) {}
 
-  transform(token: string | undefined): AuthServiceTypes.JwtPayload {
+  transform(token: string | undefined): AuthServiceTypes.JwtPayloadSchemaType {
     if (typeof token !== 'string' || token.length === 0) {
       throw new UnauthorizedException('JWT token is missing');
     }

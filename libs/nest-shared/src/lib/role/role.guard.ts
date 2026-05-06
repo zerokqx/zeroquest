@@ -11,7 +11,7 @@ import type { AuthServiceTypes } from '@zeroquest/types';
 import { ROLE_KEY } from './role.decorator';
 
 type AuthenticatedRequest = Request & {
-  user?: AuthServiceTypes.JwtPayload;
+  user?: AuthServiceTypes.JwtPayloadSchemaType;
 };
 
 @Injectable()

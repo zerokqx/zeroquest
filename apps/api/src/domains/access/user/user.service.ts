@@ -5,7 +5,6 @@ import { Prisma, User, UserRole } from '@zeroquest/db';
 import {
   Injectable,
   NotFoundException,
-  Req,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserCache } from './user.cache';
@@ -24,7 +23,7 @@ export class UserService {
     return userId;
   }
 
-  async me(payload: AuthServiceTypes.JwtPayload) {
+  async me(payload: AuthServiceTypes.JwtPayloadSchemaType) {
     const userId = this.getAuthorizedUserId(payload.sub);
     const user = await this.userRepository.findById({
       where: {
@@ -40,7 +39,7 @@ export class UserService {
     return user;
   }
 
-  async patchMe(payload: AuthServiceTypes.JwtPayload, dto: PatchMeDto) {
+  async patchMe(payload: AuthServiceTypes.JwtPayloadSchemaType, dto: PatchMeDto) {
     const userId = this.getAuthorizedUserId(payload.sub);
     try {
       const updatedUser = await this.userRepository.updateById({
@@ -115,5 +114,4 @@ export class UserService {
     }
   }
 }
-
 

@@ -8,7 +8,6 @@ import { EnumUserRoleFieldUpdateOperationsInputObjectSchema as EnumUserRoleField
 import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
 import { SubscribeUncheckedUpdateManyWithoutUserNestedInputObjectSchema as SubscribeUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './SubscribeUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { PaymentUncheckedUpdateManyWithoutUserNestedInputObjectSchema as PaymentUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './PaymentUncheckedUpdateManyWithoutUserNestedInput.schema';
-import { SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema as SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { ReviewUncheckedUpdateOneWithoutUserNestedInputObjectSchema as ReviewUncheckedUpdateOneWithoutUserNestedInputObjectSchema } from './ReviewUncheckedUpdateOneWithoutUserNestedInput.schema';
 import { LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInputObjectSchema as LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInput.schema'
 
@@ -24,7 +23,6 @@ const makeSchema = () => z.object({
   canComment: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema)]).optional(),
   subscribes: z.lazy(() => SubscribeUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   payments: z.lazy(() => PaymentUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional(),
-  sessions: z.lazy(() => SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   review: z.lazy(() => ReviewUncheckedUpdateOneWithoutUserNestedInputObjectSchema).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional()
 }).strict();

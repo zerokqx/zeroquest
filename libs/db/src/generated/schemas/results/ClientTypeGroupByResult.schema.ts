@@ -7,7 +7,6 @@ export const ClientTypeGroupByResultSchema = z.array(z.object({
   _count: z.object({
     id: z.number(),
     name: z.number(),
-    sessions: z.number(),
     createdAt: z.number(),
     updatedAt: z.number()
   }).optional(),

@@ -2,7 +2,6 @@ import * as z from 'zod';
 export const ClientTypeAggregateResultSchema = z.object({  _count: z.object({
     id: z.number(),
     name: z.number(),
-    sessions: z.number(),
     createdAt: z.number(),
     updatedAt: z.number()
   }).optional(),

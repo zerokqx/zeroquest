@@ -1,39 +1,44 @@
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { Session } from '@zeroquest/db';
-import { Exclude} from 'class-transformer';
-import { IsDate } from 'class-validator';
+import { Session } from '../dto/schemas/session.schema';
+import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
+/**
+ * Entity для сессии пользователя
+ * Реализует интерфейс Session
+ */
 export class SessionEntity implements Session {
-  @ApiHideProperty()
+  @ApiProperty({ description: 'Session ID — уникальный идентификатор сессии' })
+  sid!: string;
+
+  @ApiProperty({ description: 'User ID — идентификатор пользователя (CUID)' })
+  uid!: string;
+
   @Exclude()
-  refreshTokenJti!: string;
-
   @ApiHideProperty()
-  @Exclude()
-  accessTokenJti!: string;
+  ajti!: string; // Access JTI
 
+  @Exclude()
   @ApiHideProperty()
-  @Exclude()
-  refreshTokenHash!: string;
+  rjti!: string; // Refresh JTI
+
+  @ApiProperty({
+    description:
+      'Last Activity Timestamp — время последней активности в миллисекундах',
+  })
+  lat!: number;
+
+  @ApiProperty({ description: 'User Agent — строка с User-Agent клиента' })
+  ua!: string;
+
+  @ApiProperty({
+    description: 'Client Type — тип клиента (например, web, mobile, api)',
+  })
+  ct!: string;
 
   @ApiProperty()
-  userId!: string;
+  isCurrent!: boolean;
 
-  @ApiProperty()
-  id!: string;
-
-  @ApiProperty()
-  userAgentHash!: string;
-
-  @ApiProperty()
-  clientTypeId!: number;
-
-  @ApiProperty()
-  createdAt!: Date;
-
-
-
-  constructor(partial: Partial<Session>) {
+  constructor(partial: Partial<Session> & {isCurrent?: boolean},) {
     Object.assign(this, partial);
   }
 }

@@ -1,32 +1,24 @@
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
-
+import { Injectable } from '@nestjs/common';
+import { CsrfCacheService } from './csrf-cache.service';
 
 @Injectable()
 export class CsrfService {
-  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
-
-  generateCsrfRedisKey(fingerprint: string) {
-    return `csrf:${fingerprint}`;
-  }
+  constructor(private readonly csrfCacheService: CsrfCacheService) {}
 
   generateCsrfToken() {
     return crypto.randomUUID();
   }
 
   async trackCsrfToken(token: string, fingerprint: string) {
-    const key = this.generateCsrfRedisKey(fingerprint);
-    await this.cacheManager.set(key, token, 3_600_000);
+    await this.csrfCacheService.trackCsrfToken(token, fingerprint);
     return token;
   }
 
   getToken(fingerprint: string) {
-    const key = this.generateCsrfRedisKey(fingerprint);
-    return this.cacheManager.get(key);
+    return this.csrfCacheService.getToken(fingerprint);
   }
 
   deleteToken(fingerprint: string) {
-    const key = this.generateCsrfRedisKey(fingerprint);
-    return this.cacheManager.del(key);
+    return this.csrfCacheService.deleteToken(fingerprint);
   }
 }

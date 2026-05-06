@@ -1,7 +1,6 @@
 import * as z from 'zod';
 import type { Prisma } from '../../client';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
-import { SortOrderInputObjectSchema as SortOrderInputObjectSchema } from './SortOrderInput.schema';
 import { PlanCountOrderByAggregateInputObjectSchema as PlanCountOrderByAggregateInputObjectSchema } from './PlanCountOrderByAggregateInput.schema';
 import { PlanAvgOrderByAggregateInputObjectSchema as PlanAvgOrderByAggregateInputObjectSchema } from './PlanAvgOrderByAggregateInput.schema';
 import { PlanMaxOrderByAggregateInputObjectSchema as PlanMaxOrderByAggregateInputObjectSchema } from './PlanMaxOrderByAggregateInput.schema';
@@ -13,9 +12,9 @@ const makeSchema = () => z.object({
   name: SortOrderSchema.optional(),
   isSpecial: SortOrderSchema.optional(),
   discountedPercent: SortOrderSchema.optional(),
-  features: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  features: SortOrderSchema.optional(),
   price: SortOrderSchema.optional(),
-  description: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  description: SortOrderSchema.optional(),
   totalGb: SortOrderSchema.optional(),
   inboundId: SortOrderSchema.optional(),
   duratationDays: SortOrderSchema.optional(),

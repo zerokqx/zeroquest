@@ -4,14 +4,7 @@ import {
   useGetCurrentSession,
   useRemoveSession,
 } from '@/entites/session';
-import {
-  Alert,
-  Paper,
-  Skeleton,
-  Stack,
-  Text,
-  rem,
-} from '@mantine/core';
+import { Alert, Paper, Skeleton, Stack, Text, rem } from '@mantine/core';
 import { AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -72,7 +65,11 @@ export const SessionList = (props: Stack.Props) => {
 
   if (isSessionsError) {
     return (
-      <Alert color="red" title="Не удалось загрузить сессии" icon={<AlertCircle size={16} />}>
+      <Alert
+        color="red"
+        title="Не удалось загрузить сессии"
+        icon={<AlertCircle size={16} />}
+      >
         Попробуйте обновить страницу или повторить позже.
       </Alert>
     );
@@ -86,12 +83,6 @@ export const SessionList = (props: Stack.Props) => {
     );
   }
 
-  const currentSessionId = currentSession?.id;
-  const sortedSessions = [...sessions].sort((a, b) => {
-    if (a.id === currentSessionId) return -1;
-    if (b.id === currentSessionId) return 1;
-    return 0;
-  });
 
   return (
     <Stack
@@ -114,12 +105,11 @@ export const SessionList = (props: Stack.Props) => {
           {deleteError}
         </Alert>
       )}
-      {sortedSessions.map((session) => (
+      {sessions.map((session) => (
         <Session
-          key={session.id}
+          key={session.sid}
           data={session}
-          isCurrent={session.id === currentSessionId}
-          isDeleting={removingSessionId === session.id}
+          isCurrent={session.isCurrent}
           onDelete={handleDeleteSession}
         />
       ))}

@@ -2,8 +2,7 @@ import * as z from 'zod';
 import { Prisma } from '../../client';
 import Decimal from 'decimal.js';
 import { IpCreatellInputObjectSchema as IpCreatellInputObjectSchema } from './IpCreatellInput.schema';
-import { IpStatusSchema } from '../enums/IpStatus.schema';
-import { SessionCreateNestedManyWithoutIpInputObjectSchema as SessionCreateNestedManyWithoutIpInputObjectSchema } from './SessionCreateNestedManyWithoutIpInput.schema'
+import { IpStatusSchema } from '../enums/IpStatus.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../helpers/decimal-helpers';
 const makeSchema = () => z.object({
@@ -27,8 +26,7 @@ const makeSchema = () => z.object({
   metro: z.number().int(),
   area: z.number().int(),
   status: IpStatusSchema.optional(),
-  createdAt: z.coerce.date().optional(),
-  sessions: z.lazy(() => SessionCreateNestedManyWithoutIpInputObjectSchema).optional()
+  createdAt: z.coerce.date().optional()
 }).strict();
 export const IpCreateInputObjectSchema: z.ZodType<Prisma.IpCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.IpCreateInput>;
 export const IpCreateInputObjectZodSchema = makeSchema();

@@ -18,7 +18,7 @@ export class PaymentService {
 
   async create(
     createPaymentDto: CreatePaymentDto,
-    payload: AuthServiceTypes.JwtPayload,
+    payload: AuthServiceTypes.JwtPayloadSchemaType,
     idempotenceKey?: string,
   ) {
     this.logger.log(
@@ -72,11 +72,11 @@ export class PaymentService {
     return payment;
   }
 
-  async findAll(payload: AuthServiceTypes.JwtPayload) {
+  async findAll(payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.paymentRepository.findManyByUserId(payload.sub);
   }
 
-  async findOne(id: number, payload: AuthServiceTypes.JwtPayload) {
+  async findOne(id: number, payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.paymentRepository.findOneByIdAndUserId(id, payload.sub);
   }
 

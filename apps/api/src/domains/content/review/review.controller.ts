@@ -41,7 +41,7 @@ export class ReviewController {
   })
   create(
     @Body() createReviewDto: CreateReviewDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.reviewService.create(createReviewDto, payload);
   }
@@ -88,7 +88,7 @@ export class ReviewController {
     type: ReviewEntity,
     description: 'Отзыв успешно удалён.',
   })
-  removeMyReview(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
+  removeMyReview(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.reviewService.removeMyReview(payload);
   }
 }

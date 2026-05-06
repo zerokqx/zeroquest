@@ -27,24 +27,13 @@ interface SessionProps {
   onDelete?: (sessionId: string) => void | Promise<void>;
 }
 
-const compact = (value: string, start = 10, end = 8) => {
-  if (value.length <= start + end + 3) return value;
-  return `${value.slice(0, start)}...${value.slice(-end)}`;
-};
-
-const resolveClientTypeLabel = (clientTypeId: number) => {
-  if (clientTypeId === 1) return 'Web';
-  return `Client #${clientTypeId}`;
-};
-
 export const Session = ({
   data,
   isCurrent = false,
   isDeleting = false,
   onDelete,
 }: SessionProps) => {
-  const sessionId = data.id;
-  const userAgentHash = data.userAgentHash;
+  const sessionId = data.sid;
 
   return (
     <Paper withBorder radius="md" p="md">
@@ -63,9 +52,9 @@ export const Session = ({
             <Text fw={600} size="lg" lineClamp={1}>
               {isCurrent ? 'Текущая сессия' : 'Активная сессия'}
             </Text>
-            <Text size="sm" c="dimmed">
-              {resolveClientTypeLabel(data.clientTypeId)}
-            </Text>
+            {/* <Text size="sm" c="dimmed"> */}
+            {/*   {resolveClientTypeLabel(data.)} */}
+            {/* </Text> */}
           </Stack>
         </Group>
 
@@ -95,8 +84,8 @@ export const Session = ({
             )}
           </CopyButton>
         </Group>
-        <Text ff="monospace" size="sm">
-          {compact(sessionId)}
+        <Text ff="monospace" c={'dimmed'} size="sm">
+          {sessionId}
         </Text>
       </Stack>
 
@@ -105,27 +94,12 @@ export const Session = ({
           <Group gap={6} align="center">
             <Fingerprint size={14} />
             <Text size="xs" c="dimmed">
-              User-Agent Hash
+              User-Agent
             </Text>
           </Group>
-
-          <CopyButton value={userAgentHash}>
-            {({ copy, copied }) => (
-              <Tooltip label={copied ? 'Скопировано' : 'Скопировать hash'}>
-                <ActionIcon
-                  onClick={copy}
-                  variant="subtle"
-                  color={copied ? 'teal' : 'gray'}
-                  aria-label="Скопировать user-agent hash"
-                >
-                  {copied ? <Check size={14} /> : <Copy size={14} />}
-                </ActionIcon>
-              </Tooltip>
-            )}
-          </CopyButton>
         </Group>
         <Text ff="monospace" size="sm">
-          {compact(userAgentHash)}
+          {data.ua}
         </Text>
       </Stack>
 
@@ -135,7 +109,7 @@ export const Session = ({
           variant="light"
           color="red"
           leftSection={<Trash2 size={14} />}
-          onClick={() => onDelete?.(data.id)}
+          onClick={() => onDelete?.(data.sid)}
           loading={isDeleting}
           disabled={!onDelete}
         >

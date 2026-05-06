@@ -14,8 +14,7 @@ export const IpAggregateResultSchema = z.object({  _count: z.object({
     area: z.number(),
     status: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number(),
-    sessions: z.number()
+    updatedAt: z.number()
   }).optional(),
   _sum: z.object({
     id: z.number().nullable(),

@@ -4,8 +4,7 @@ import Decimal from 'decimal.js';
 import { IntFilterObjectSchema as IntFilterObjectSchema } from './IntFilter.schema';
 import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
 import { BoolFilterObjectSchema as BoolFilterObjectSchema } from './BoolFilter.schema';
-import { DecimalFilterObjectSchema as DecimalFilterObjectSchema } from './DecimalFilter.schema';
-import { StringNullableFilterObjectSchema as StringNullableFilterObjectSchema } from './StringNullableFilter.schema'
+import { DecimalFilterObjectSchema as DecimalFilterObjectSchema } from './DecimalFilter.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../helpers/decimal-helpers';
 const planscalarwhereinputSchema = z.object({
@@ -24,9 +23,9 @@ const planscalarwhereinputSchema = z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'discountedPercent' must be a Decimal",
 })]).optional(),
-  features: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  features: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   price: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
-  description: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  description: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   totalGb: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
   inboundId: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
   duratationDays: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional()

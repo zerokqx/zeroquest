@@ -1,4 +1,3 @@
-
 export const COOKIE_NAME = {
   ACCESS: 'zeroquestAccess',
   REFRESH: 'zeroquestRefresh',
@@ -10,3 +9,7 @@ export const HEADERS_NAMES = {
   CLIENT_TYPE: 'x-client-type',
   CSRF: 'x-csrf-token',
 } as const;
+
+export const RESPONSE_CODES = {
+  SESSION_NOT_EXISTS: 'SESSION_NOT_EXISTS',
+};

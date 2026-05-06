@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -37,7 +38,6 @@ import {
 } from '@zeroquest/nest-shared';
 import { CookieJwtManager } from './cookie-manager.service';
 import { CsrfPublic } from '@/domains/security/csrf/csrf.decorator';
-import { JwtDecode } from '@/domains/security/jwt/jwt-decode.decorator';
 import { Fingerprint } from '@/domains/security/fingerprint/fingerprint.decorator';
 import { CsrfService } from '@/domains/security/csrf/csrf.service';
 
@@ -109,16 +109,15 @@ export class AuthController {
     this.logger.log(
       `Запрос на вход по паролю: login=${body.login}, clientType=${req.clientType}`,
     );
-    this.logger.debug( userAgent, req.clientType ??"ClientType",
-
-
-      getRequestHeader(req,'x-forwarded-for') ?? 'NotFound'
-    )
+    this.logger.debug(
+      userAgent,
+      req.clientType ?? 'ClientType',
+      getRequestHeader(req, 'x-forwarded-for') ?? 'NotFound',
+    );
     const tokens = await this.authService.password(
       body,
-      userAgent,
       req.clientType,
-      getRequestHeader(req,'x-forwarded-for') ?? ''
+      userAgent,
     );
 
     this.cookieManager.setAuthCookies(res, tokens);
@@ -192,24 +191,24 @@ export class AuthController {
     description: 'Указан неподдерживаемый client type.',
   })
   async refresh(
-    @Req() req: RequestWithClientType,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
+    @Headers('user-agent') ua: string,
     @AuthPayload()
-    refreshPayload: AuthServiceTypes.JwtPayload,
+    refreshPayload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     this.logger.debug(
-      `Запрошено обновление токенов: login=${refreshPayload.login}, clientType=${req.clientType}`,
+      `Запрошено обновление токенов: clientType=${req.clientType}`,
     );
     const tokens = await this.authService.refresh(
-      req.clientType,
       refreshPayload,
+      req.clientType!,
+      ua,
     );
 
     this.cookieManager.setAuthCookies(res, tokens);
 
-    this.logger.log(
-      `Токены обновлены: login=${refreshPayload.login}, sessionId=${refreshPayload.sid}`,
-    );
+    this.logger.log(`Токены обновлены: sessionId=${refreshPayload.sid}`);
     return { message: 'Токены успешно обновлены' };
   }
 
@@ -237,11 +236,10 @@ export class AuthController {
   @ApiClientType()
   @ApiUserAgent()
   async logout(
-    @AuthPayload() accessPayload: AuthServiceTypes.JwtPayload,
-    @JwtDecode('zeroquestRefresh') refreshPayload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() accessPayload: AuthServiceTypes.JwtPayloadSchemaType,
     @Res({ passthrough: true }) res: Response,
   ) {
-    await this.authService.logout(accessPayload, refreshPayload);
+    await this.authService.logout(accessPayload);
     this.cookieManager.clearAuthCookies(res);
     return;
   }

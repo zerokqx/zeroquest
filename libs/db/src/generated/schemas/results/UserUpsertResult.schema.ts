@@ -10,7 +10,6 @@ export const UserUpsertResultSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   payments: z.array(z.unknown()),
-  sessions: z.array(z.unknown()),
   review: z.unknown().optional(),
   canComment: z.boolean(),
   wallet: z.unknown(),

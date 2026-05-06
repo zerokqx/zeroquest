@@ -1,41 +1,26 @@
-import {
-  Inject,
-  Injectable,
-  Logger,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { CreateTokenPairDto } from './dto/create-token-pair.dto';
 import { AuthServiceTypes } from '@zeroquest/types';
 import { hash, verify } from 'argon2';
 import { EnvironmentVariables } from '@/config/configuration';
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { JwtPayloadSchema } from './dto/schemas/payload.schema';
-import { createHash } from 'crypto';
-
-type TokenTrackKey = Pick<
-  AuthServiceTypes.JwtPayload,
-  'sub' | 'jti' | 'sid' | 'type'
->;
+import {
+  TokenCreateSchema,
+  TokenCreateSchemaType,
+} from './dto/schemas/token-create.schema';
 
 @Injectable()
 export class TokenService {
   private readonly jwtEnvironment: EnvironmentVariables['jwt'];
-  private readonly logger = new Logger(TokenService.name);
 
   constructor(
     private readonly jwtService: JwtService,
     private readonly config: ConfigService<EnvironmentVariables>,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {
     this.jwtEnvironment = this.config.getOrThrow('jwt', { infer: true });
   }
-  tokenRedisKey({ sub, jti, sid, type }: TokenTrackKey) {
-    return `user:${sub}:${createHash('sha-256').update(`${jti}:${sid}:${type}`).digest('hex')}`;
-  }
 
-  async createTokenPair(payload: CreateTokenPairDto): Promise<
+  async createTokenPair(payload: TokenCreateSchemaType): Promise<
     [
       tokens: { accessToken: string; refreshToken: string },
       jti: {
@@ -44,22 +29,23 @@ export class TokenService {
       },
     ]
   > {
+    const parsedPayload = await TokenCreateSchema.parseAsync(payload);
     const accessTokenJti = crypto.randomUUID();
     const refreshTokenJti = crypto.randomUUID();
     const accessPayload = {
-      ...payload,
+      ...parsedPayload,
       type: 'access',
       jti: accessTokenJti,
-    } satisfies AuthServiceTypes.JwtPayload;
+    } satisfies AuthServiceTypes.JwtPayloadSchemaType;
     const accessToken = await this.jwtService.signAsync(accessPayload, {
       expiresIn: `${this.jwtEnvironment.accessExpireTimeMs}ms`,
     });
 
     const refreshPayload = {
-      ...payload,
+      ...parsedPayload,
       type: 'refresh',
       jti: refreshTokenJti,
-    } satisfies AuthServiceTypes.JwtPayload;
+    } satisfies AuthServiceTypes.JwtPayloadSchemaType;
 
     const refreshToken = await this.jwtService.signAsync(refreshPayload, {
       expiresIn: `${this.jwtEnvironment.refreshExpireTimeMs}ms`,
@@ -70,40 +56,26 @@ export class TokenService {
     ];
   }
 
-  async createTrackedTokenPair(payload: CreateTokenPairDto) {
-    const [tokens, jti] = await this.createTokenPair(payload);
-    const accessPayload = {
-      ...payload,
-      type: 'access',
-      jti: jti.accessTokenJti,
-    } satisfies AuthServiceTypes.JwtPayload;
-    const refreshPayload = {
-      ...payload,
-      type: 'refresh',
-      jti: jti.refreshTokenJti,
-    } satisfies AuthServiceTypes.JwtPayload;
-    this.logger.verbose('Создание track записей в redis');
-    await Promise.all([
-      this.trackToken(accessPayload),
-      this.trackToken(refreshPayload),
-    ]);
-    return [tokens, jti] as const;
-  }
-  decode(token: string): AuthServiceTypes.JwtPayload | null {
+  async decode(
+    token: string,
+  ): Promise<AuthServiceTypes.JwtPayloadSchemaType | null> {
     try {
-      const decoded = JwtPayloadSchema.parse(this.jwtService.decode(token));
+      const decoded = AuthServiceTypes.JwtPayloadSchema.parse(
+        this.jwtService.decode(token),
+      );
       return decoded;
     } catch {
       throw new UnauthorizedException('Failed to decode JWT token');
     }
   }
-  async verify(token: string): Promise<AuthServiceTypes.JwtPayload> {
+  async verify(token: string): Promise<AuthServiceTypes.JwtPayloadSchemaType> {
     try {
       const tokenVerified =
-        await this.jwtService.verifyAsync<AuthServiceTypes.JwtPayload>(token);
-      const payload = JwtPayloadSchema.parse(tokenVerified);
-
-      await this.getTrackedToken(payload);
+        await this.jwtService.verifyAsync<AuthServiceTypes.JwtPayloadSchemaType>(
+          token,
+        );
+      const payload =
+        await AuthServiceTypes.JwtPayloadSchema.parseAsync(tokenVerified);
       return payload;
     } catch {
       throw new UnauthorizedException('Failed to verify JWT token');
@@ -114,38 +86,5 @@ export class TokenService {
   }
   async compareHashWitPlain(storedHash: string, plainText: string) {
     return await verify(storedHash, plainText);
-  }
-
-  async trackToken(payload: AuthServiceTypes.JwtPayload, ttlMs?: number) {
-    try {
-      const key = this.tokenRedisKey(payload);
-      const ttl =
-        ttlMs ??
-        (payload.type === 'access'
-          ? this.jwtEnvironment.accessExpireTimeMs
-          : this.jwtEnvironment.refreshExpireTimeMs);
-      JwtPayloadSchema.parse(payload);
-      this.logger.verbose(`Создания токена по ключу - ${key}`);
-      return this.cacheManager.set(key, JSON.stringify(payload), ttl);
-    } catch (e){
-      throw new UnauthorizedException('Failed to store token state',e.message);
-    }
-  }
-
-  async getTrackedToken(
-    payload: AuthServiceTypes.JwtPayload,
-  ): Promise<AuthServiceTypes.JwtPayload> {
-    const key = this.tokenRedisKey(payload);
-    this.logger.verbose(`Получение токенов в redis по ключу - ${key}`);
-    const tokenRaw = await this.cacheManager.get<string>(key);
-    if (!tokenRaw)
-      throw new UnauthorizedException('Token is not tracked or expired');
-    return JSON.parse(tokenRaw) satisfies AuthServiceTypes.JwtPayload;
-  }
-
-  async removeTrackedToken(payload: TokenTrackKey) {
-    const key = this.tokenRedisKey(payload);
-    this.logger.verbose(`Удаление токенов redis по ключу - ${key}`);
-    return this.cacheManager.del(key);
   }
 }

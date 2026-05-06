@@ -30,7 +30,7 @@ export class RefundService {
 
   async create(
     createRefundDto: CreateRefundDto,
-    payload: AuthServiceTypes.JwtPayload,
+    payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const payment = await this.paymentRepository.findOneByIdAndUserId(
       createRefundDto.paymentId,

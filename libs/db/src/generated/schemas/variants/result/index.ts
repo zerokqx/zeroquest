@@ -4,7 +4,6 @@
  */
 
 export { ClientTypeResultSchema } from './ClientType.result';
-export { SessionResultSchema } from './Session.result';
 export { RefundResultSchema } from './Refund.result';
 export { InboundResultSchema } from './Inbound.result';
 export { PlanResultSchema } from './Plan.result';

@@ -49,7 +49,7 @@ export class RefundController {
   })
   create(
     @Body() createRefundDto: CreateRefundDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.refundService.create(createRefundDto, payload);
   }

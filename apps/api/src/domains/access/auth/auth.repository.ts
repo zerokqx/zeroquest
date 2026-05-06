@@ -41,19 +41,6 @@ export class AuthRepository {
     });
   }
 
-  updateSessionTokensData(
-    id: string,
-    data: Pick<
-      Prisma.SessionUpdateInput,
-      'refreshTokenHash' | 'refreshTokenJti' | 'accessTokenJti'
-    >,
-    options?: { tx?: Prisma.TransactionClient },
-  ) {
-    return (options?.tx ?? this.prisma).session.update({
-      where: { id },
-      data,
-    });
-  }
 
   updateSessionTokensDataIfJtiMatches(
     id: string,

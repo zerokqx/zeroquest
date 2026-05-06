@@ -35,17 +35,17 @@ export class SubscribeService {
     private readonly threeXUiService: ThreeXUiService,
     private readonly policyService: PolicyService,
   ) {}
-  async findAll(payload: AuthServiceTypes.JwtPayload) {
+  async findAll(payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.subscribeRepository.findManyByUserId(payload.sub);
   }
 
-  async findOne(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayload) {
+  async findOne(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.subscribeRepository.findOneByIdAndUserId(id, payload.sub);
   }
 
   async create(
     plan: PlanWithInbound,
-    payload: AuthServiceTypes.JwtPayload,
+    payload: AuthServiceTypes.JwtPayloadSchemaType,
     deviceName: string,
   ) {
     const expiresAt = new Date();
@@ -127,7 +127,7 @@ export class SubscribeService {
   async update(data: SubscribeUpdateArgs) {
     return this.subscribeRepository.update(data);
   }
-  async remove(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayload) {
+  async remove(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayloadSchemaType) {
     this.logger.log(
       `Запрошено удаление подписки: subscribeId=${id}, userId=${payload.sub}`,
     );
@@ -171,7 +171,7 @@ export class SubscribeService {
     }
   }
 
-  async renew(id: string, payload: AuthServiceTypes.JwtPayload) {
+  async renew(id: string, payload: AuthServiceTypes.JwtPayloadSchemaType) {
     const subscribe = await this.prisma.subscribe.findUnique({
       where: {
         id,
@@ -219,7 +219,7 @@ export class SubscribeService {
 
   async buy(
     { planId, deviceName, policy }: SubscribeBuyDto,
-    payload: AuthServiceTypes.JwtPayload,
+    payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const plan = await this.prisma.plan.findUnique({
       include: {
@@ -350,7 +350,7 @@ export class SubscribeService {
     }
   }
 
-  async getLink(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayload) {
+  async getLink(id: Subscribe['id'], payload: AuthServiceTypes.JwtPayloadSchemaType) {
     const data = await this.subscribeRepository.findOneByIdAndUserId(
       id,
       payload.sub,

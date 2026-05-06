@@ -23,11 +23,6 @@ export * from './enums';
  */
 export type ClientType = Prisma.ClientTypeModel
 /**
- * Model Session
- * 
- */
-export type Session = Prisma.SessionModel
-/**
  * Model Refund
  * 
  */

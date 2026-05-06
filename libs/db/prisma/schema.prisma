@@ -211,7 +211,7 @@ model User {
   createdAt        DateTime           @default(now()) @map("created_at")
   updatedAt        DateTime           @updatedAt @map("updated_at")
   payments         Payment[]
-  sessions         Session[]
+  // sessions         Session[]
   review           Review?
   canComment       Boolean            @default(true) @map("can_comment")
   wallet           Wallet             @relation(fields: [walletId], references: [id])

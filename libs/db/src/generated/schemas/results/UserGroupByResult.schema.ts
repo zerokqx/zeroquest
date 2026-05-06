@@ -20,7 +20,6 @@ export const UserGroupByResultSchema = z.array(z.object({
     createdAt: z.number(),
     updatedAt: z.number(),
     payments: z.number(),
-    sessions: z.number(),
     review: z.number(),
     canComment: z.number(),
     wallet: z.number(),

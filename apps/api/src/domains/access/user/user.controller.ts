@@ -34,7 +34,7 @@ export class UserController {
     type: UserEntity,
     description: 'Профиль успешно получен.',
   })
-  async me(@AuthPayload() payload: AuthServiceTypes.JwtPayload) {
+  async me(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
     const data = await this.userService.me(payload);
 
     return new UserEntity(data);
@@ -55,7 +55,7 @@ export class UserController {
   })
   async mePatch(
     @Body() body: PatchMeDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayload,
+    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.userService.patchMe(payload, body);
 
