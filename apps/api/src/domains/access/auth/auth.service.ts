@@ -1,6 +1,5 @@
 import { genSalt, compare, hash } from 'bcryptjs';
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   Logger,
@@ -9,11 +8,12 @@ import {
 import type { AuthServiceTypes } from '@zeroquest/types';
 import { createHash } from 'crypto';
 import { TokenService } from '@/domains/access/token/token.service';
-import { SessionService } from '@/domains/access/session/session.service';
 import { AuthRepository } from './auth.repository';
 import { LegalDocumentType, UserRole } from '@zeroquest/db';
 import { LoginDto } from './dto/login.dto';
 import { PolicyService } from '@/domains/content/policy/policy.service';
+import { SessionRedisService } from '../session/session-redis.service';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly tokenService: TokenService,
-    private readonly sessionService: SessionService,
+    private readonly sessionService: SessionRedisService,
     private readonly policyService: PolicyService,
   ) {}
 
@@ -29,23 +29,12 @@ export class AuthService {
     return createHash('sha256').update(data).digest('hex');
   }
 
-  private getUserAgentHash(userAgent?: string) {
-    if (!userAgent?.trim()) {
-      throw new BadRequestException('user-agent header is required');
-    }
-
-    return this.sha256(userAgent);
-  }
-
   async password(
     { login, password, policy }: LoginDto,
-    userAgent: string | undefined,
     clientType: string,
-    ip: string,
   ) {
     const user = await this.authRepository.findUserByLogin(login);
     if (user && (await compare(password, user?.passwordHash))) {
-      const userAgentHash = this.getUserAgentHash(userAgent);
       const tokenPayload = await this.authRepository.transaction(async (tx) => {
         await this.policyService.acceptRequiredPolicies(
           user.id,
@@ -55,41 +44,28 @@ export class AuthService {
             tx,
           },
         );
-        const session = await this.sessionService.create(
-          {
-            ip,
-            clientType,
-            userAgentHash,
-            userId: user.id,
-          },
-          { tx },
-        );
+        const sid = nanoid();
 
         const [tokens, inputs] = await this.tokenService.createTokenPair({
           clientType,
-          sid: session.id,
+          sid,
           sub: user.id,
           role: user.role ?? UserRole.USER,
           login,
         });
-
-        await this.authRepository.updateSessionTokensData(
-          session.id,
-          {
-            refreshTokenHash: await this.tokenService.hashToken(
-              tokens.refreshToken,
-            ),
-            ...inputs,
-          },
-
-          { tx },
-        );
+         await this.sessionService.createSession({
+          accessJti: inputs.accessTokenJti,
+          refreshJti: inputs.refreshTokenJti,
+          sid,
+          clientType,
+          uid: user.id,
+        });
 
         return {
           tokens,
           accessPayload: {
             clientType,
-            sid: session.id,
+            sid,
             sub: user.id,
             role: user.role ?? UserRole.USER,
             login,
@@ -98,14 +74,14 @@ export class AuthService {
           } satisfies AuthServiceTypes.JwtPayload,
           refreshPayload: {
             clientType,
-            sid: session.id,
+            sid,
             sub: user.id,
             role: user.role ?? UserRole.USER,
             login,
             type: 'refresh',
             jti: inputs.refreshTokenJti,
           } satisfies AuthServiceTypes.JwtPayload,
-          sessionId: session.id,
+          sessionId: sid,
         };
       });
       await Promise.all([
@@ -231,15 +207,11 @@ export class AuthService {
 
   async logout(
     accessPayload: AuthServiceTypes.JwtPayload,
-    refreshPayload: AuthServiceTypes.JwtPayload,
   ) {
-    await Promise.all([
-      this.tokenService.removeTrackedToken(accessPayload),
-      this.tokenService.removeTrackedToken(refreshPayload),
-    ]);
-    return await this.sessionService.removeByRefreshHash(
-      accessPayload.sid,
-      accessPayload.sub,
-    );
+    // await Promise.all([
+    //   this.tokenService.removeTrackedToken(accessPayload),
+    //   this.tokenService.removeTrackedToken(refreshPayload),
+    // ]);
+    return await this.sessionService.deleteSession({sid: accessPayload.sid, uid: accessPayload.sub});
   }
 }

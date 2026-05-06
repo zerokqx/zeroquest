@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { nanoid } from 'nanoid';
 import Redis from 'ioredis';
 
@@ -6,14 +7,16 @@ interface Session {
   uid: string;
   accessJti: string;
   refreshJti: string;
-  lastActivityAt: string;
+  lastActivityAt: number;
   clientType: string;
 }
 
-type SessionCreate = Omit<Session, 'sid'>;
+type SessionCreate = Omit<Session, 'sid' | 'lastActivityAt'> &
+  Partial<Pick<Session, 'sid' | 'lastActivityAt'>>;
 type SessionUpdate = Partial<Omit<Session, 'uid' | 'sid' | 'clientType'>>;
 type SessionDelete = Pick<Session, 'sid' | 'uid'>;
 
+@Injectable()
 export class SessionRedisService {
   constructor(private readonly redis: Redis) {}
   userSessionsKey(uid: Session['uid']) {
@@ -29,18 +32,20 @@ export class SessionRedisService {
   }
 
   async createSession(data: SessionCreate): Promise<Session> {
-    const sid = nanoid();
+    const sid = data.sid ?? nanoid();
     const ttl = this.ttlSession();
+    const lastActivityAt = Date.now();
     const sessionKey = this.sessionKey(sid);
     const userSessionsKey = this.userSessionsKey(data.uid);
+    const value: Session = { sid, lastActivityAt, ...data };
 
     await this.redis
       .multi()
-      .set(sessionKey, JSON.stringify({ sid, ...data }), 'EX', ttl)
+      .set(sessionKey, JSON.stringify(value), 'EX', ttl)
       .sadd(userSessionsKey, sid)
       .expire(userSessionsKey, ttl)
       .exec();
-    return { sid, ...data };
+    return value;
   }
 
   async deleteSession({ sid, uid }: SessionDelete) {
