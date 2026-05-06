@@ -30,7 +30,7 @@ export class SessionService {
     const parsedData = await SessionCreateSchema.parseAsync(data);
     const sid = parsedData.sid ?? nanoid();
     const lat = Date.now();
-    const value: Session = { sid, lat, ...parsedData };
+    const value: Session = { sid, lat, cat: Date.now(), ...parsedData };
 
     await this.sessionCacheService.createSession(value);
 

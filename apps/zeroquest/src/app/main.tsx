@@ -1,4 +1,5 @@
 import '@fontsource/open-sans/400.css';
+import 'dayjs/locale/ru';
 import '@fontsource/open-sans/600.css';
 import '@fontsource/open-sans/700.css';
 import '@fontsource/open-sans';
@@ -20,12 +21,14 @@ import { theme } from './mantine/theme';
 import { InnerApp } from './inner-app';
 import { LucideProvider } from 'lucide-react';
 import { MotionConfig } from 'motion/react';
+import dayjs from 'dayjs';
 
 // Create a new router instance
 export const router = createRouter({
   routeTree,
 });
 
+dayjs.locale('ru');
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {

@@ -11,5 +11,6 @@ export const HEADERS_NAMES = {
 } as const;
 
 export const RESPONSE_CODES = {
+  BANNED: "BANNED",
   SESSION_NOT_EXISTS: 'SESSION_NOT_EXISTS',
 };

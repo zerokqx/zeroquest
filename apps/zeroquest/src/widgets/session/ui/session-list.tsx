@@ -18,8 +18,6 @@ export const SessionList = (props: Stack.Props) => {
     isLoading: isSessionsLoading,
     isError: isSessionsError,
   } = useGetAllSessions();
-  const { data: currentSession, isError: isCurrentSessionError } =
-    useGetCurrentSession();
   const { mutateAsync: removeSession } = useRemoveSession();
 
   const handleDeleteSession = async (sessionId: string) => {
@@ -83,7 +81,6 @@ export const SessionList = (props: Stack.Props) => {
     );
   }
 
-
   return (
     <Stack
       gap="sm"
@@ -95,11 +92,6 @@ export const SessionList = (props: Stack.Props) => {
         ...props.style,
       }}
     >
-      {isCurrentSessionError && (
-        <Text c="dimmed" size="sm">
-          Текущую сессию определить не удалось, показан общий список.
-        </Text>
-      )}
       {deleteError && (
         <Alert color="red" icon={<AlertCircle size={16} />}>
           {deleteError}

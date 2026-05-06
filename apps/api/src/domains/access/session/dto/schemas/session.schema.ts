@@ -40,10 +40,16 @@ export const SessionSchema = z.object({
    * Client Type — тип клиента (например, web, mobile, api)
    */
   ct: z.string().min(1),
+
+  /**
+   * Created At — дата создания сессии
+   * */
+  cat: z.number().int().positive(),
 });
 
 export const SessionCreateSchema = SessionSchema.omit({
   sid: true,
+  cat: true,
   lat: true,
 }).extend({
   sid: SessionSchema.shape.sid.optional(),

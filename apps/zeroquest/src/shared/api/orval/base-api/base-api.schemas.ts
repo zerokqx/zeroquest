@@ -87,6 +87,7 @@ export interface SessionEntity {
   ua: string;
   /** Client Type — тип клиента (например, web, mobile, api) */
   ct: string;
+  cat: number;
   isCurrent: boolean;
 }
 

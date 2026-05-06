@@ -33,6 +33,7 @@ import { FingerprintGuard } from '@/domains/security/fingerprint/fingerprint.gua
 import { IpInfoMiddleware } from '@/domains/network/ipinfo/ipinfo.middleware';
 import { IpInfoModule } from '@/domains/network/ipinfo/ipinfo.module';
 import { RedisModule } from '@/common/modules/redis.module';
+import { BanModule } from '@/domains/access/ban/ban.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { RedisModule } from '@/common/modules/redis.module';
     }),
     PlanModule,
     AuthModule.register({ globalAuth: true }),
+    BanModule,
     ZeroquestDbModule,
     InboundModule,
     UserModule,

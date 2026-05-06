@@ -1,4 +1,5 @@
 import { SessionEntity } from '@/shared/api/orval/base-api/base-api.schemas';
+import dayjs from 'dayjs';
 import {
   ActionIcon,
   Badge,
@@ -34,6 +35,7 @@ export const Session = ({
   onDelete,
 }: SessionProps) => {
   const sessionId = data.sid;
+  const cat = dayjs(data.cat).format('D MMMM YYYY HH:mm');
 
   return (
     <Paper withBorder radius="md" p="md">
@@ -89,6 +91,18 @@ export const Session = ({
         </Text>
       </Stack>
 
+      <Stack gap="xs" mt="sm">
+        <Group gap={6} align="center">
+          <MonitorSmartphone size={14} />
+          <Text size="xs" c="dimmed">
+            Создана
+          </Text>
+        </Group>
+
+        <Text size="sm" fw={500}>
+          {cat}
+        </Text>
+      </Stack>
       <Stack gap="xs" mt="sm">
         <Group justify="space-between" align="center" wrap="nowrap">
           <Group gap={6} align="center">

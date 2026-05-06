@@ -36,9 +36,12 @@ export class SessionEntity implements Session {
   ct!: string;
 
   @ApiProperty()
+  cat!: number;
+
+  @ApiProperty()
   isCurrent!: boolean;
 
-  constructor(partial: Partial<Session> & {isCurrent?: boolean},) {
+  constructor(partial: Partial<Session> & { isCurrent?: boolean }) {
     Object.assign(this, partial);
   }
 }
