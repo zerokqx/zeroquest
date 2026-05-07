@@ -12,6 +12,7 @@ import { Reflector } from '@nestjs/core';
 import { CSRF_PUBLIC_KEY } from './csrf.decorator';
 import { CsrfService } from './csrf.service';
 import { CustomRequest } from '@zeroquest/types';
+import { RESPONSE_CODES } from '@zeroquest/constants';
 
 const getCSRFHeader = (res: Request) => {
   const csrf = res.headers['x-csrf-token'];
@@ -79,10 +80,16 @@ export class CsrfGuard implements CanActivate {
       throw new UnauthorizedException('Fingerprint not found');
     const csrfFromRedis = await this.csrfService.getToken(req.fingerprint);
     if (typeof csrfFromRedis !== 'string') {
-      throw new ForbiddenException('Unknown CSRF');
+      throw new ForbiddenException({
+        message: 'CSRF Token not valid',
+        code: RESPONSE_CODES.CSRF_INVALID,
+      });
     }
     if (csrfFromRedis !== csrfHeader) {
-      throw new ForbiddenException('CSRF token is not tracked for fingerprint');
+      throw new ForbiddenException({
+        message: 'CSRF Token not valid',
+        code: RESPONSE_CODES.CSRF_INVALID,
+      });
     }
 
     return true;

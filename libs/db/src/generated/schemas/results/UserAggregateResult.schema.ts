@@ -14,7 +14,8 @@ export const UserAggregateResultSchema = z.object({  _count: z.object({
     canComment: z.number(),
     wallet: z.number(),
     walletId: z.number(),
-    legalAcceptances: z.number()
+    legalAcceptances: z.number(),
+    totp: z.number()
   }).optional(),
   _sum: z.object({
     telegramId: z.number().nullable()

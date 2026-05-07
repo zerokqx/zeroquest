@@ -11,6 +11,7 @@ export { ReviewInputSchema } from './Review.input';
 export { PaymentInputSchema } from './Payment.input';
 export { SubscribeInputSchema } from './Subscribe.input';
 export { UserInputSchema } from './User.input';
+export { TotpTokenInputSchema } from './TotpToken.input';
 export { WalletInputSchema } from './Wallet.input';
 export { WalletHistoryInputSchema } from './WalletHistory.input';
 export { LegalDocumentInputSchema } from './LegalDocument.input';

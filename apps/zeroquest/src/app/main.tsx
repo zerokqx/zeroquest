@@ -10,6 +10,7 @@ import '@fontsource/roboto/600.css';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import '@mantine/core/styles.css';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter } from '@tanstack/react-router';
 
@@ -35,7 +36,13 @@ declare module '@tanstack/react-router' {
     router: typeof router;
   }
 }
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 36000,
+    },
+  },
+});
 // Render the app
 const rootElement = document.getElementById('root')!;
 if (!rootElement.innerHTML) {
@@ -46,9 +53,8 @@ if (!rootElement.innerHTML) {
         <ModalsProvider>
           <QueryClientProvider client={queryClient}>
             <LucideProvider strokeWidth={3} size={16}>
-              <MotionConfig transition={{type:'tween'}}>
-
-              <InnerApp />
+              <MotionConfig transition={{ type: 'tween' }}>
+                <InnerApp />
               </MotionConfig>
             </LucideProvider>
           </QueryClientProvider>

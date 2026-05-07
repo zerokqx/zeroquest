@@ -6,7 +6,8 @@ import { SubscribeOrderByRelationAggregateInputObjectSchema as SubscribeOrderByR
 import { PaymentOrderByRelationAggregateInputObjectSchema as PaymentOrderByRelationAggregateInputObjectSchema } from './PaymentOrderByRelationAggregateInput.schema';
 import { ReviewOrderByWithRelationInputObjectSchema as ReviewOrderByWithRelationInputObjectSchema } from './ReviewOrderByWithRelationInput.schema';
 import { WalletOrderByWithRelationInputObjectSchema as WalletOrderByWithRelationInputObjectSchema } from './WalletOrderByWithRelationInput.schema';
-import { LegalAcceptancesOrderByRelationAggregateInputObjectSchema as LegalAcceptancesOrderByRelationAggregateInputObjectSchema } from './LegalAcceptancesOrderByRelationAggregateInput.schema'
+import { LegalAcceptancesOrderByRelationAggregateInputObjectSchema as LegalAcceptancesOrderByRelationAggregateInputObjectSchema } from './LegalAcceptancesOrderByRelationAggregateInput.schema';
+import { TotpTokenOrderByWithRelationInputObjectSchema as TotpTokenOrderByWithRelationInputObjectSchema } from './TotpTokenOrderByWithRelationInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
@@ -23,7 +24,8 @@ const makeSchema = () => z.object({
   payments: z.lazy(() => PaymentOrderByRelationAggregateInputObjectSchema).optional(),
   review: z.lazy(() => ReviewOrderByWithRelationInputObjectSchema).optional(),
   wallet: z.lazy(() => WalletOrderByWithRelationInputObjectSchema).optional(),
-  legalAcceptances: z.lazy(() => LegalAcceptancesOrderByRelationAggregateInputObjectSchema).optional()
+  legalAcceptances: z.lazy(() => LegalAcceptancesOrderByRelationAggregateInputObjectSchema).optional(),
+  totp: z.lazy(() => TotpTokenOrderByWithRelationInputObjectSchema).optional()
 }).strict();
 export const UserOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.UserOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.UserOrderByWithRelationInput>;
 export const UserOrderByWithRelationInputObjectZodSchema = makeSchema();

@@ -1,0 +1,13 @@
+import type { Prisma } from '../client';
+import * as z from 'zod';
+import { TotpTokenWhereInputObjectSchema as TotpTokenWhereInputObjectSchema } from './objects/TotpTokenWhereInput.schema';
+import { TotpTokenOrderByWithAggregationInputObjectSchema as TotpTokenOrderByWithAggregationInputObjectSchema } from './objects/TotpTokenOrderByWithAggregationInput.schema';
+import { TotpTokenScalarWhereWithAggregatesInputObjectSchema as TotpTokenScalarWhereWithAggregatesInputObjectSchema } from './objects/TotpTokenScalarWhereWithAggregatesInput.schema';
+import { TotpTokenScalarFieldEnumSchema } from './enums/TotpTokenScalarFieldEnum.schema';
+import { TotpTokenCountAggregateInputObjectSchema as TotpTokenCountAggregateInputObjectSchema } from './objects/TotpTokenCountAggregateInput.schema';
+import { TotpTokenMinAggregateInputObjectSchema as TotpTokenMinAggregateInputObjectSchema } from './objects/TotpTokenMinAggregateInput.schema';
+import { TotpTokenMaxAggregateInputObjectSchema as TotpTokenMaxAggregateInputObjectSchema } from './objects/TotpTokenMaxAggregateInput.schema';
+
+export const TotpTokenGroupBySchema: z.ZodType<Prisma.TotpTokenGroupByArgs> = z.object({ where: TotpTokenWhereInputObjectSchema.optional(), orderBy: z.union([TotpTokenOrderByWithAggregationInputObjectSchema, TotpTokenOrderByWithAggregationInputObjectSchema.array()]).optional(), having: TotpTokenScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(TotpTokenScalarFieldEnumSchema), _count: z.union([ z.literal(true), TotpTokenCountAggregateInputObjectSchema ]).optional(), _min: TotpTokenMinAggregateInputObjectSchema.optional(), _max: TotpTokenMaxAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.TotpTokenGroupByArgs>;
+
+export const TotpTokenGroupByZodSchema = z.object({ where: TotpTokenWhereInputObjectSchema.optional(), orderBy: z.union([TotpTokenOrderByWithAggregationInputObjectSchema, TotpTokenOrderByWithAggregationInputObjectSchema.array()]).optional(), having: TotpTokenScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(TotpTokenScalarFieldEnumSchema), _count: z.union([ z.literal(true), TotpTokenCountAggregateInputObjectSchema ]).optional(), _min: TotpTokenMinAggregateInputObjectSchema.optional(), _max: TotpTokenMaxAggregateInputObjectSchema.optional() }).strict();

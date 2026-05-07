@@ -16,7 +16,8 @@ export const UserResultSchema = z.object({
     canComment: z.boolean(),
     wallet: z.unknown(),
     walletId: z.string(),
-    legalAcceptances: z.array(z.unknown())
+    legalAcceptances: z.array(z.unknown()),
+    totp: z.unknown().nullable()
 }).strict();
 
 export type UserResultType = z.infer<typeof UserResultSchema>;

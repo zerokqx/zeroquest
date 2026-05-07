@@ -1,18 +1,22 @@
-import { HEADERS_NAMES } from '@zeroquest/constants';
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import {
+  COOKIE_NAME,
+  HEADERS_NAMES,
+  RESPONSE_CODES,
+} from '@zeroquest/constants';
 import { useUserAuthStore } from '@/entites/user/model';
 import Axios, {
-  AxiosRequestConfig,
   AxiosError,
-  AxiosResponse,
   AxiosHeaders,
+  AxiosRequestConfig,
+  AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import { modals } from '@mantine/modals';
+import { router } from '@/app/main';
+import { AxiosState } from './axios-state';
 
+const state = new AxiosState();
 const BASE_URL = '';
-
-const CSRF_COOKIE_NAME = 'zeroquestCsrf';
-const CSRF_HEADER_NAME = 'x-csrf-token';
 
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: BASE_URL,
@@ -27,31 +31,12 @@ type RetryableConfig = InternalAxiosRequestConfig & {
   _csrfRetry?: boolean;
 };
 
-let refreshPromise: Promise<AxiosResponse> | null = null;
-let csrfPromise: Promise<void> | null = null;
-
 type ErrorResponseData = {
-  message?: string | string[];
   code?: string;
   details?: {
     code?: string;
-    [key: string]: unknown;
   };
 };
-
-const isAuthEndpoint = (url?: string): boolean => {
-  if (!url) return false;
-  return url.includes('/api/auth/');
-};
-
-const isUserAuthorized = (): boolean => useUserAuthStore.getState().isAuth;
-
-const SESSION_REVOKED_CODES = new Set([
-  'SESSION_REVOKED',
-  'SESSION_NOT_FOUND',
-  'SESSION_NOT_EXISTS',
-  'AUTH_SESSION_INVALID',
-]);
 
 const readCookie = (name: string): string | null => {
   if (typeof document === 'undefined') return null;
@@ -66,91 +51,36 @@ const readCookie = (name: string): string | null => {
   return decodeURIComponent(value);
 };
 
-const getCsrfFromCookie = (): string | null => readCookie(CSRF_COOKIE_NAME);
-
 const ensureCsrf = async (force = false): Promise<void> => {
-  if (!force && getCsrfFromCookie()) return;
+  if (!force && readCookie(COOKIE_NAME.CSRF)) return;
 
-  csrfPromise ??= AXIOS_INSTANCE.get('/api/auth/csrf')
-    .then(() => undefined)
-    .finally(() => {
-      csrfPromise = null;
-    });
-
-  await csrfPromise;
+  await state.getCsrfPromise(() =>
+    AXIOS_INSTANCE.get('/api/auth/csrf').then(() => undefined),
+  );
 };
 
 const refresh = async (): Promise<AxiosResponse> =>
   AXIOS_INSTANCE.post('/api/auth/refresh', {});
 
-const getErrorMessage = (error: AxiosError): string | null => {
-  const data = error.response?.data as ErrorResponseData | undefined;
-  const message = data?.message;
+AXIOS_INSTANCE.interceptors.request.use((config) => {
+  const csrfToken = readCookie(COOKIE_NAME.CSRF);
+  if (!csrfToken) return config;
 
-  if (typeof message === 'string') return message;
-  if (Array.isArray(message) && typeof message[0] === 'string') {
-    return message[0];
+  if (!config.headers) {
+    config.headers = new AxiosHeaders();
   }
 
-  return null;
-};
-
-const getErrorCode = (error: AxiosError): string | null => {
-  const data = error.response?.data as ErrorResponseData | undefined;
-  return data?.code ?? data?.details?.code ?? null;
-};
-
-const handleSessionRevoked = (): void => {
-  useUserAuthStore.getState().setIsAuth(false);
-
-  if (typeof window === 'undefined') return;
-
-  const signInPath = '/sign-up?mode=sign-in';
-  if (window.location.pathname === '/sign-up') return;
-  window.location.assign(signInPath);
-};
-
-const isSessionRevokedError = (error: AxiosError): boolean => {
-  const errorCode = getErrorCode(error);
-  if (errorCode && SESSION_REVOKED_CODES.has(errorCode)) return true;
-
-  return getErrorMessage(error) === 'Session is not defined';
-};
-
-const isCsrfSyncError = (error: AxiosError): boolean => {
-  const message = getErrorMessage(error);
-  if (!message) return false;
-
-  return [
-    'CSRF token is not tracked for fingerprint',
-    'CSRF not equals',
-    'Unknown CSRF',
-    'Not found CSRF Token Header',
-    'Not found CSRF Token Cookie',
-  ].includes(message);
-};
-
-const installCsrfHeaderInterceptor = () => {
-  AXIOS_INSTANCE.interceptors.request.use((config) => {
-    const csrfToken = getCsrfFromCookie();
-    if (!csrfToken) return config;
-
-    if (!config.headers) {
-      config.headers = new AxiosHeaders();
-    }
-
-    config.headers.set(CSRF_HEADER_NAME, csrfToken);
-    return config;
-  });
-};
-
-installCsrfHeaderInterceptor();
+  config.headers.set(HEADERS_NAMES.CSRF, csrfToken);
+  return config;
+});
 
 AXIOS_INSTANCE.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as RetryableConfig | undefined;
     const status = error.response?.status;
+    const errorData = error.response?.data as ErrorResponseData | undefined;
+    const errorCode = errorData?.code ?? errorData?.details?.code ?? null;
 
     if (!originalRequest) {
       return Promise.reject(error);
@@ -160,68 +90,96 @@ AXIOS_INSTANCE.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (isSessionRevokedError(error)) {
-      handleSessionRevoked();
-      return Promise.reject(error);
-    }
+    switch (errorCode) {
+      case RESPONSE_CODES.SESSION_NOT_EXISTS: {
+        useUserAuthStore.getState().setIsAuth(false);
+        state.handleOnce(RESPONSE_CODES.SESSION_NOT_EXISTS, () => {
+          void modals.open({
+            centered: true,
+            title: 'Сессия завершена',
+            modalId: RESPONSE_CODES.SESSION_NOT_EXISTS,
+            children: 'Для продолжения требуется повторная авторизация.',
+          });
+        });
+        void router.navigate({
+          to: '/sign-up',
+          replace: true,
+        });
 
-    if (status === 403) {
-      // чтобы не зациклиться
-      if (originalRequest._csrfRetry) {
         return Promise.reject(error);
       }
 
-      originalRequest._csrfRetry = true;
-
-      try {
-        await ensureCsrf(isCsrfSyncError(error));
-        return AXIOS_INSTANCE(originalRequest);
-      } catch (csrfError) {
-        return Promise.reject(csrfError);
+      case RESPONSE_CODES.BANNED: {
+        useUserAuthStore.getState().setIsAuth(false);
+        state.handleOnce(RESPONSE_CODES.BANNED, () => {
+          modals.open({
+            centered: true,
+            title: 'Блокировка',
+            modalId: RESPONSE_CODES.BANNED,
+            children:
+              'Вы были заблокированы администратором приложения. Если блокировка была не обоснованой обратитесь к администратору.',
+          });
+        });
+        void router.navigate({
+          to: '/sign-up',
+          replace: true,
+        });
+        return Promise.reject(error);
       }
+      default:
+        break;
     }
 
-    // чтобы не зациклиться
-    if (originalRequest._refreshRetry) {
-      return Promise.reject(error);
-    }
+    switch (status) {
+      case 403: {
+        if (originalRequest._csrfRetry) {
+          return Promise.reject(error);
+        }
 
-    // auth endpoints не должны запускать refresh
-    if (isAuthEndpoint(originalRequest.url)) {
-      return Promise.reject(error);
-    }
+        if (errorCode && errorCode !== RESPONSE_CODES.CSRF_INVALID) {
+          return Promise.reject(error);
+        }
 
-    if (!isUserAuthorized()) {
-      return Promise.reject(error);
-    }
+        originalRequest._csrfRetry = true;
 
-    originalRequest._refreshRetry = true;
+        try {
+          await ensureCsrf(true);
+          return AXIOS_INSTANCE(originalRequest);
+        } catch (csrfError) {
+          return Promise.reject(csrfError);
+        }
+      }
 
-    try {
-      refreshPromise ??= refresh().finally(() => {
-        refreshPromise = null;
-      });
+      case 401: {
+        if (originalRequest._refreshRetry) {
+          return Promise.reject(error);
+        }
 
-      await refreshPromise;
+        if (originalRequest.url?.includes('/api/auth/')) {
+          return Promise.reject(error);
+        }
 
-      return AXIOS_INSTANCE(originalRequest);
-    } catch (refreshError) {
-      return Promise.reject(refreshError);
+        if (!useUserAuthStore.getState().isAuth) {
+          return Promise.reject(error);
+        }
+
+        originalRequest._refreshRetry = true;
+
+        try {
+          await state.getRefreshPromise(refresh);
+          return AXIOS_INSTANCE(originalRequest);
+        } catch (refreshError) {
+          return Promise.reject(refreshError);
+        }
+      }
+
+      default:
+        return Promise.reject(error);
     }
   },
 );
-
-
-
-
-let fingerprint: string | undefined;
 AXIOS_INSTANCE.interceptors.request.use(async (config) => {
-  if (!fingerprint) {
-    const fpPromise = FingerprintJS.load();
-    const fp = await fpPromise;
-    const result = await fp.get();
-    fingerprint = result.visitorId;
-  }
+  const fingerprint = await state.getFingerprint();
   config.headers.set(HEADERS_NAMES.FINGERPRINT, fingerprint);
   return config;
 });

@@ -15,7 +15,8 @@ export const UserFindManyResultSchema = z.object({
   canComment: z.boolean(),
   wallet: z.unknown(),
   walletId: z.string(),
-  legalAcceptances: z.array(z.unknown())
+  legalAcceptances: z.array(z.unknown()),
+  totp: z.unknown().optional()
 })),
   pagination: z.object({
   page: z.number().int().min(1),

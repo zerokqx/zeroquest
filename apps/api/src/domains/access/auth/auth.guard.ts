@@ -3,13 +3,15 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 import { AUTH_TOKEN_TYPE_KEY, IS_PUBLIC_KEY } from '@zeroquest/nest-shared';
 import { AuthServiceTypes } from '@zeroquest/types';
-import { isObservable, lastValueFrom } from 'rxjs';
+import { isObservable, lastValueFrom, Observable } from 'rxjs';
 
 const JwtAccessGuard = PassportAuthGuard('jwt-access');
 const JwtRefreshGuard = PassportAuthGuard('jwt-refresh');
 
+type GuardResult = boolean | Promise<boolean> | Observable<boolean>;
+
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class JwtAuthGuard implements CanActivate {
   private readonly accessGuard = new JwtAccessGuard();
   private readonly refreshGuard = new JwtRefreshGuard();
 
@@ -21,9 +23,7 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    if (isPublic) {
-      return true;
-    }
+    if (isPublic) return true;
 
     const tokenType =
       this.reflector.getAllAndOverride<
@@ -34,10 +34,14 @@ export class AuthGuard implements CanActivate {
     const guard =
       tokenType === 'refresh' ? this.refreshGuard : this.accessGuard;
 
-    const result = guard.canActivate(context);
+    return this.resolveGuardResult(guard.canActivate(context));
+  }
+
+  private async resolveGuardResult(result: GuardResult): Promise<boolean> {
     if (isObservable(result)) {
       return lastValueFrom(result);
     }
+
     return Boolean(await result);
   }
 }

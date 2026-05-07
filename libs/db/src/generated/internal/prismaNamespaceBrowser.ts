@@ -59,6 +59,7 @@ export const ModelName = {
   Payment: 'Payment',
   Subscribe: 'Subscribe',
   User: 'User',
+  TotpToken: 'TotpToken',
   Wallet: 'Wallet',
   WalletHistory: 'WalletHistory',
   LegalDocument: 'LegalDocument',
@@ -189,6 +190,20 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const TotpTokenScalarFieldEnum = {
+  id: 'id',
+  enabled: 'enabled',
+  ciphertext: 'ciphertext',
+  iv: 'iv',
+  authTag: 'authTag',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type TotpTokenScalarFieldEnum = (typeof TotpTokenScalarFieldEnum)[keyof typeof TotpTokenScalarFieldEnum]
 
 
 export const WalletScalarFieldEnum = {

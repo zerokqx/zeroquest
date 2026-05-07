@@ -16,7 +16,8 @@ export const UserInputSchema = z.object({
     canComment: z.boolean(),
     wallet: z.unknown(),
     walletId: z.string(),
-    legalAcceptances: z.array(z.unknown())
+    legalAcceptances: z.array(z.unknown()),
+    totp: z.unknown().optional().nullable()
 }).strict();
 
 export type UserInputType = z.infer<typeof UserInputSchema>;

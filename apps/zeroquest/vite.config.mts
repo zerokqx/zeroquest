@@ -1,6 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
+import babel from 'vite-plugin-babel';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
@@ -23,7 +24,12 @@ export default defineConfig(({ mode, command }) => {
       host: '127.0.0.1',
 
       allowedHosts: isDev
-        ? ['.lhr.life', '.ngrok-free.app', '.trycloudflare.com', ".serveousercontent.com"]
+        ? [
+            '.lhr.life',
+            '.ngrok-free.app',
+            '.trycloudflare.com',
+            '.serveousercontent.com',
+          ]
         : ['zerokqk.ru'],
 
       proxy: {
@@ -47,6 +53,16 @@ export default defineConfig(({ mode, command }) => {
         routesDirectory: APP + '/routes',
       }),
       react(),
+      babel({
+        filter: /\.[jt]sx?$/,
+        exclude: /\/node_modules\//,
+        babelConfig: {
+          parserOpts: {
+            plugins: ['typescript', 'jsx'],
+          },
+          plugins: ['babel-plugin-react-compiler'],
+        },
+      }),
     ],
 
     build: {

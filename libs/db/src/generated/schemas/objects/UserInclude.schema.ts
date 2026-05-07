@@ -5,6 +5,7 @@ import { PaymentFindManySchema as PaymentFindManySchema } from '../findManyPayme
 import { ReviewArgsObjectSchema as ReviewArgsObjectSchema } from './ReviewArgs.schema';
 import { WalletArgsObjectSchema as WalletArgsObjectSchema } from './WalletArgs.schema';
 import { LegalAcceptancesFindManySchema as LegalAcceptancesFindManySchema } from '../findManyLegalAcceptances.schema';
+import { TotpTokenArgsObjectSchema as TotpTokenArgsObjectSchema } from './TotpTokenArgs.schema';
 import { UserCountOutputTypeArgsObjectSchema as UserCountOutputTypeArgsObjectSchema } from './UserCountOutputTypeArgs.schema'
 
 const makeSchema = () => z.object({
@@ -13,6 +14,7 @@ const makeSchema = () => z.object({
   review: z.union([z.boolean(), z.lazy(() => ReviewArgsObjectSchema)]).optional(),
   wallet: z.union([z.boolean(), z.lazy(() => WalletArgsObjectSchema)]).optional(),
   legalAcceptances: z.union([z.boolean(), z.lazy(() => LegalAcceptancesFindManySchema)]).optional(),
+  totp: z.union([z.boolean(), z.lazy(() => TotpTokenArgsObjectSchema)]).optional(),
   _count: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeArgsObjectSchema)]).optional()
 }).strict();
 export const UserIncludeObjectSchema: z.ZodType<Prisma.UserInclude> = makeSchema() as unknown as z.ZodType<Prisma.UserInclude>;

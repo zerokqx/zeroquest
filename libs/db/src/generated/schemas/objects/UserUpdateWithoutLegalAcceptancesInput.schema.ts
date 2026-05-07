@@ -9,7 +9,8 @@ import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOp
 import { SubscribeUpdateManyWithoutUserNestedInputObjectSchema as SubscribeUpdateManyWithoutUserNestedInputObjectSchema } from './SubscribeUpdateManyWithoutUserNestedInput.schema';
 import { PaymentUpdateManyWithoutUserNestedInputObjectSchema as PaymentUpdateManyWithoutUserNestedInputObjectSchema } from './PaymentUpdateManyWithoutUserNestedInput.schema';
 import { ReviewUpdateOneWithoutUserNestedInputObjectSchema as ReviewUpdateOneWithoutUserNestedInputObjectSchema } from './ReviewUpdateOneWithoutUserNestedInput.schema';
-import { WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema as WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema } from './WalletUpdateOneRequiredWithoutUserNestedInput.schema'
+import { WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema as WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema } from './WalletUpdateOneRequiredWithoutUserNestedInput.schema';
+import { TotpTokenUpdateOneWithoutUserNestedInputObjectSchema as TotpTokenUpdateOneWithoutUserNestedInputObjectSchema } from './TotpTokenUpdateOneWithoutUserNestedInput.schema'
 
 const makeSchema = () => z.object({
   id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -24,7 +25,8 @@ const makeSchema = () => z.object({
   subscribes: z.lazy(() => SubscribeUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   payments: z.lazy(() => PaymentUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   review: z.lazy(() => ReviewUpdateOneWithoutUserNestedInputObjectSchema).optional(),
-  wallet: z.lazy(() => WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema).optional()
+  wallet: z.lazy(() => WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema).optional(),
+  totp: z.lazy(() => TotpTokenUpdateOneWithoutUserNestedInputObjectSchema).optional()
 }).strict();
 export const UserUpdateWithoutLegalAcceptancesInputObjectSchema: z.ZodType<Prisma.UserUpdateWithoutLegalAcceptancesInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUpdateWithoutLegalAcceptancesInput>;
 export const UserUpdateWithoutLegalAcceptancesInputObjectZodSchema = makeSchema();

@@ -9,7 +9,6 @@ export const Route = createFileRoute('/_authorized')({
       throw redirect({
         search: {
           search: location.href,
-          mode: 'sign-in',
         },
         to: '/sign-up',
       });

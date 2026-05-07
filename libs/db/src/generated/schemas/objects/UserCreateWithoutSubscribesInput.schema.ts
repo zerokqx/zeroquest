@@ -4,7 +4,8 @@ import { UserRoleSchema } from '../enums/UserRole.schema';
 import { PaymentCreateNestedManyWithoutUserInputObjectSchema as PaymentCreateNestedManyWithoutUserInputObjectSchema } from './PaymentCreateNestedManyWithoutUserInput.schema';
 import { ReviewCreateNestedOneWithoutUserInputObjectSchema as ReviewCreateNestedOneWithoutUserInputObjectSchema } from './ReviewCreateNestedOneWithoutUserInput.schema';
 import { WalletCreateNestedOneWithoutUserInputObjectSchema as WalletCreateNestedOneWithoutUserInputObjectSchema } from './WalletCreateNestedOneWithoutUserInput.schema';
-import { LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema as LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema } from './LegalAcceptancesCreateNestedManyWithoutUserInput.schema'
+import { LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema as LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema } from './LegalAcceptancesCreateNestedManyWithoutUserInput.schema';
+import { TotpTokenCreateNestedOneWithoutUserInputObjectSchema as TotpTokenCreateNestedOneWithoutUserInputObjectSchema } from './TotpTokenCreateNestedOneWithoutUserInput.schema'
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
@@ -19,7 +20,8 @@ const makeSchema = () => z.object({
   payments: z.lazy(() => PaymentCreateNestedManyWithoutUserInputObjectSchema).optional(),
   review: z.lazy(() => ReviewCreateNestedOneWithoutUserInputObjectSchema).optional(),
   wallet: z.lazy(() => WalletCreateNestedOneWithoutUserInputObjectSchema),
-  legalAcceptances: z.lazy(() => LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema).optional()
+  legalAcceptances: z.lazy(() => LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema).optional(),
+  totp: z.lazy(() => TotpTokenCreateNestedOneWithoutUserInputObjectSchema).optional()
 }).strict();
 export const UserCreateWithoutSubscribesInputObjectSchema: z.ZodType<Prisma.UserCreateWithoutSubscribesInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateWithoutSubscribesInput>;
 export const UserCreateWithoutSubscribesInputObjectZodSchema = makeSchema();

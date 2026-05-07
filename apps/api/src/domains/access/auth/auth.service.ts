@@ -1,6 +1,7 @@
 import { genSalt, compare, hash } from 'bcryptjs';
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   Logger,
   UnauthorizedException,
@@ -14,6 +15,7 @@ import { LoginDto } from './dto/login.dto';
 import { PolicyService } from '@/domains/content/policy/policy.service';
 import { SessionService } from '../session/session.service';
 import { nanoid } from 'nanoid';
+import { RESPONSE_CODES } from '@zeroquest/constants';
 
 @Injectable()
 export class AuthService {
@@ -35,6 +37,11 @@ export class AuthService {
     ua: string,
   ) {
     const user = await this.authRepository.findUserByLogin(login);
+    if (user && user?.isBanned)
+      throw new ForbiddenException({
+        message: 'User banned',
+        code: RESPONSE_CODES.AUTHENTICATED_FAILED_BECAUSE_USER_IS_BANNED,
+      });
     if (user && (await compare(password, user?.passwordHash))) {
       await this.policyService.acceptRequiredPolicies(user.id, policy, [
         LegalDocumentType.PRIVACY,
@@ -88,7 +95,7 @@ export class AuthService {
   async refresh(
     refreshPayload: AuthServiceTypes.JwtPayloadSchemaType,
     ct: string,
-    ua: string
+    ua: string,
   ) {
     const session = (await this.sessionService.getSession(refreshPayload.sid))!;
 

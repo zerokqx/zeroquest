@@ -11,6 +11,7 @@ export { ReviewModelSchema } from './Review.pure';
 export { PaymentModelSchema } from './Payment.pure';
 export { SubscribeModelSchema } from './Subscribe.pure';
 export { UserModelSchema } from './User.pure';
+export { TotpTokenModelSchema } from './TotpToken.pure';
 export { WalletModelSchema } from './Wallet.pure';
 export { WalletHistoryModelSchema } from './WalletHistory.pure';
 export { LegalDocumentModelSchema } from './LegalDocument.pure';

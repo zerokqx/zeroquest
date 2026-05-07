@@ -11,6 +11,7 @@ export { ReviewResultSchema } from './Review.result';
 export { PaymentResultSchema } from './Payment.result';
 export { SubscribeResultSchema } from './Subscribe.result';
 export { UserResultSchema } from './User.result';
+export { TotpTokenResultSchema } from './TotpToken.result';
 export { WalletResultSchema } from './Wallet.result';
 export { WalletHistoryResultSchema } from './WalletHistory.result';
 export { LegalDocumentResultSchema } from './LegalDocument.result';

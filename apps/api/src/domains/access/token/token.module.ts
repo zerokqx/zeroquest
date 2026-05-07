@@ -3,6 +3,8 @@ import { TokenService } from './token.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '@/config/configuration';
+import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { EnvironmentVariables } from '@/config/configuration';
       },
     }),
   ],
-  providers: [TokenService],
+  providers: [TokenService, JwtAccessStrategy, JwtRefreshStrategy],
   exports: [TokenService],
 })
 export class TokenModule {}

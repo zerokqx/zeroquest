@@ -80,6 +80,11 @@ export type Subscribe = Prisma.SubscribeModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model TotpToken
+ * 
+ */
+export type TotpToken = Prisma.TotpTokenModel
+/**
  * Model Wallet
  * 
  */

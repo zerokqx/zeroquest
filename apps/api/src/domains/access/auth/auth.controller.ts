@@ -40,6 +40,7 @@ import { CookieJwtManager } from './cookie-manager.service';
 import { CsrfPublic } from '@/domains/security/csrf/csrf.decorator';
 import { Fingerprint } from '@/domains/security/fingerprint/fingerprint.decorator';
 import { CsrfService } from '@/domains/security/csrf/csrf.service';
+import { RESPONSE_CODES } from '@zeroquest/constants';
 
 type RequestWithClientType = {
   clientType: string;
@@ -124,7 +125,7 @@ export class AuthController {
     const csrf = this.csrfService.generateCsrfToken();
     this.cookieManager.setCsrf(res, csrf);
     await this.csrfService.trackCsrfToken(csrf, fingerprint);
-    return { message: 'Успешный вход' };
+    return { message: 'OK', code: RESPONSE_CODES.AUTHENTICATED };
   }
 
   @Post('register')

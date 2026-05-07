@@ -3,7 +3,8 @@ import type { Prisma } from '../../client';
 import { UserRoleSchema } from '../enums/UserRole.schema';
 import { SubscribeUncheckedCreateNestedManyWithoutUserInputObjectSchema as SubscribeUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './SubscribeUncheckedCreateNestedManyWithoutUserInput.schema';
 import { PaymentUncheckedCreateNestedManyWithoutUserInputObjectSchema as PaymentUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './PaymentUncheckedCreateNestedManyWithoutUserInput.schema';
-import { ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema as ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './ReviewUncheckedCreateNestedOneWithoutUserInput.schema'
+import { ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema as ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './ReviewUncheckedCreateNestedOneWithoutUserInput.schema';
+import { TotpTokenUncheckedCreateNestedOneWithoutUserInputObjectSchema as TotpTokenUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './TotpTokenUncheckedCreateNestedOneWithoutUserInput.schema'
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
@@ -18,7 +19,8 @@ const makeSchema = () => z.object({
   walletId: z.string(),
   subscribes: z.lazy(() => SubscribeUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional(),
   payments: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  review: z.lazy(() => ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional()
+  review: z.lazy(() => ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional(),
+  totp: z.lazy(() => TotpTokenUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional()
 }).strict();
 export const UserUncheckedCreateWithoutLegalAcceptancesInputObjectSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutLegalAcceptancesInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUncheckedCreateWithoutLegalAcceptancesInput>;
 export const UserUncheckedCreateWithoutLegalAcceptancesInputObjectZodSchema = makeSchema();

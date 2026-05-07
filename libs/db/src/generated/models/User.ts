@@ -261,6 +261,7 @@ export type UserWhereInput = {
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
   wallet?: Prisma.XOR<Prisma.WalletScalarRelationFilter, Prisma.WalletWhereInput>
   legalAcceptances?: Prisma.LegalAcceptancesListRelationFilter
+  totp?: Prisma.XOR<Prisma.TotpTokenNullableScalarRelationFilter, Prisma.TotpTokenWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -279,6 +280,7 @@ export type UserOrderByWithRelationInput = {
   review?: Prisma.ReviewOrderByWithRelationInput
   wallet?: Prisma.WalletOrderByWithRelationInput
   legalAcceptances?: Prisma.LegalAcceptancesOrderByRelationAggregateInput
+  totp?: Prisma.TotpTokenOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -300,6 +302,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
   wallet?: Prisma.XOR<Prisma.WalletScalarRelationFilter, Prisma.WalletWhereInput>
   legalAcceptances?: Prisma.LegalAcceptancesListRelationFilter
+  totp?: Prisma.XOR<Prisma.TotpTokenNullableScalarRelationFilter, Prisma.TotpTokenWhereInput> | null
 }, "id" | "login" | "walletId">
 
 export type UserOrderByWithAggregationInput = {
@@ -351,6 +354,7 @@ export type UserCreateInput = {
   review?: Prisma.ReviewCreateNestedOneWithoutUserInput
   wallet: Prisma.WalletCreateNestedOneWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -368,6 +372,7 @@ export type UserUncheckedCreateInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -385,6 +390,7 @@ export type UserUpdateInput = {
   review?: Prisma.ReviewUpdateOneWithoutUserNestedInput
   wallet?: Prisma.WalletUpdateOneRequiredWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -402,6 +408,7 @@ export type UserUncheckedUpdateInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -545,6 +552,20 @@ export type EnumUserRoleFieldUpdateOperationsInput = {
   set?: $Enums.UserRole
 }
 
+export type UserCreateNestedOneWithoutTotpInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTotpInput, Prisma.UserUncheckedCreateWithoutTotpInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTotpInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTotpNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTotpInput, Prisma.UserUncheckedCreateWithoutTotpInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTotpInput
+  upsert?: Prisma.UserUpsertWithoutTotpInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTotpInput, Prisma.UserUpdateWithoutTotpInput>, Prisma.UserUncheckedUpdateWithoutTotpInput>
+}
+
 export type UserCreateNestedOneWithoutWalletInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutWalletInput, Prisma.UserUncheckedCreateWithoutWalletInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutWalletInput
@@ -605,6 +626,7 @@ export type UserCreateWithoutReviewInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   wallet: Prisma.WalletCreateNestedOneWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReviewInput = {
@@ -621,6 +643,7 @@ export type UserUncheckedCreateWithoutReviewInput = {
   subscribes?: Prisma.SubscribeUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReviewInput = {
@@ -653,6 +676,7 @@ export type UserUpdateWithoutReviewInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   wallet?: Prisma.WalletUpdateOneRequiredWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewInput = {
@@ -669,6 +693,7 @@ export type UserUncheckedUpdateWithoutReviewInput = {
   subscribes?: Prisma.SubscribeUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPaymentsInput = {
@@ -685,6 +710,7 @@ export type UserCreateWithoutPaymentsInput = {
   review?: Prisma.ReviewCreateNestedOneWithoutUserInput
   wallet: Prisma.WalletCreateNestedOneWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -701,6 +727,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   subscribes?: Prisma.SubscribeUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -733,6 +760,7 @@ export type UserUpdateWithoutPaymentsInput = {
   review?: Prisma.ReviewUpdateOneWithoutUserNestedInput
   wallet?: Prisma.WalletUpdateOneRequiredWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -749,6 +777,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   subscribes?: Prisma.SubscribeUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubscribesInput = {
@@ -765,6 +794,7 @@ export type UserCreateWithoutSubscribesInput = {
   review?: Prisma.ReviewCreateNestedOneWithoutUserInput
   wallet: Prisma.WalletCreateNestedOneWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscribesInput = {
@@ -781,6 +811,7 @@ export type UserUncheckedCreateWithoutSubscribesInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscribesInput = {
@@ -813,6 +844,7 @@ export type UserUpdateWithoutSubscribesInput = {
   review?: Prisma.ReviewUpdateOneWithoutUserNestedInput
   wallet?: Prisma.WalletUpdateOneRequiredWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscribesInput = {
@@ -826,6 +858,91 @@ export type UserUncheckedUpdateWithoutSubscribesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
   walletId?: Prisma.StringFieldUpdateOperationsInput | string
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
+  review?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  legalAcceptances?: Prisma.LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutTotpInput = {
+  id?: string
+  login: string
+  telegramId?: number | null
+  passwordHash: string
+  isBanned?: boolean
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  canComment?: boolean
+  subscribes?: Prisma.SubscribeCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
+  review?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  wallet: Prisma.WalletCreateNestedOneWithoutUserInput
+  legalAcceptances?: Prisma.LegalAcceptancesCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTotpInput = {
+  id?: string
+  login: string
+  telegramId?: number | null
+  passwordHash: string
+  isBanned?: boolean
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  canComment?: boolean
+  walletId: string
+  subscribes?: Prisma.SubscribeUncheckedCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
+  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  legalAcceptances?: Prisma.LegalAcceptancesUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTotpInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTotpInput, Prisma.UserUncheckedCreateWithoutTotpInput>
+}
+
+export type UserUpsertWithoutTotpInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTotpInput, Prisma.UserUncheckedUpdateWithoutTotpInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTotpInput, Prisma.UserUncheckedCreateWithoutTotpInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTotpInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTotpInput, Prisma.UserUncheckedUpdateWithoutTotpInput>
+}
+
+export type UserUpdateWithoutTotpInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  login?: Prisma.StringFieldUpdateOperationsInput | string
+  telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  subscribes?: Prisma.SubscribeUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
+  review?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneRequiredWithoutUserNestedInput
+  legalAcceptances?: Prisma.LegalAcceptancesUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTotpInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  login?: Prisma.StringFieldUpdateOperationsInput | string
+  telegramId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canComment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  walletId?: Prisma.StringFieldUpdateOperationsInput | string
+  subscribes?: Prisma.SubscribeUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInput
@@ -845,6 +962,7 @@ export type UserCreateWithoutWalletInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedOneWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWalletInput = {
@@ -861,6 +979,7 @@ export type UserUncheckedCreateWithoutWalletInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedCreateNestedManyWithoutUserInput
+  totp?: Prisma.TotpTokenUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWalletInput = {
@@ -893,6 +1012,7 @@ export type UserUpdateWithoutWalletInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateOneWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWalletInput = {
@@ -909,6 +1029,7 @@ export type UserUncheckedUpdateWithoutWalletInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
   legalAcceptances?: Prisma.LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLegalAcceptancesInput = {
@@ -925,6 +1046,7 @@ export type UserCreateWithoutLegalAcceptancesInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedOneWithoutUserInput
   wallet: Prisma.WalletCreateNestedOneWithoutUserInput
+  totp?: Prisma.TotpTokenCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLegalAcceptancesInput = {
@@ -941,6 +1063,7 @@ export type UserUncheckedCreateWithoutLegalAcceptancesInput = {
   subscribes?: Prisma.SubscribeUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  totp?: Prisma.TotpTokenUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLegalAcceptancesInput = {
@@ -973,6 +1096,7 @@ export type UserUpdateWithoutLegalAcceptancesInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateOneWithoutUserNestedInput
   wallet?: Prisma.WalletUpdateOneRequiredWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLegalAcceptancesInput = {
@@ -989,6 +1113,7 @@ export type UserUncheckedUpdateWithoutLegalAcceptancesInput = {
   subscribes?: Prisma.SubscribeUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  totp?: Prisma.TotpTokenUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -1056,6 +1181,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   review?: boolean | Prisma.User$reviewArgs<ExtArgs>
   wallet?: boolean | Prisma.WalletDefaultArgs<ExtArgs>
   legalAcceptances?: boolean | Prisma.User$legalAcceptancesArgs<ExtArgs>
+  totp?: boolean | Prisma.User$totpArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1107,6 +1233,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   review?: boolean | Prisma.User$reviewArgs<ExtArgs>
   wallet?: boolean | Prisma.WalletDefaultArgs<ExtArgs>
   legalAcceptances?: boolean | Prisma.User$legalAcceptancesArgs<ExtArgs>
+  totp?: boolean | Prisma.User$totpArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1124,6 +1251,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     review: Prisma.$ReviewPayload<ExtArgs> | null
     wallet: Prisma.$WalletPayload<ExtArgs>
     legalAcceptances: Prisma.$LegalAcceptancesPayload<ExtArgs>[]
+    totp: Prisma.$TotpTokenPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1535,6 +1663,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   review<T extends Prisma.User$reviewArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewArgs<ExtArgs>>): Prisma.Prisma__ReviewClient<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   wallet<T extends Prisma.WalletDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WalletDefaultArgs<ExtArgs>>): Prisma.Prisma__WalletClient<runtime.Types.Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   legalAcceptances<T extends Prisma.User$legalAcceptancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$legalAcceptancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegalAcceptancesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  totp<T extends Prisma.User$totpArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$totpArgs<ExtArgs>>): Prisma.Prisma__TotpTokenClient<runtime.Types.Result.GetResult<Prisma.$TotpTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2063,6 +2192,25 @@ export type User$legalAcceptancesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.LegalAcceptancesScalarFieldEnum | Prisma.LegalAcceptancesScalarFieldEnum[]
+}
+
+/**
+ * User.totp
+ */
+export type User$totpArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TotpToken
+   */
+  select?: Prisma.TotpTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TotpToken
+   */
+  omit?: Prisma.TotpTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TotpTokenInclude<ExtArgs> | null
+  where?: Prisma.TotpTokenWhereInput
 }
 
 /**

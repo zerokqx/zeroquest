@@ -48,8 +48,13 @@ const config = () => ({
   redis: {
     host: getRequiredEnv('REDIS_HOST'),
     port: getRequiredPositiveIntEnv('REDIS_PORT'),
+    password: process.env.REDIS_PASSWORD?.trim() ?? '',
+    url: getRequiredEnv('REDIS_URL'),
   },
 
+  totp: {
+    encryptionKey: getRequiredEnv('TOTP_ENCRYPTION_KEY'),
+  },
   jwt: {
     secret: process.env.JWT_SECRET,
     accessExpireTimeMs: toPositiveInt(
