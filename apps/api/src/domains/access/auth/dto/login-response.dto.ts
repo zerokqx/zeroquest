@@ -1,11 +1,12 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { RESPONSE_CODES, ResponseCodes } from '@zeroquest/constants';
-import { IsString, IsUUID, Length, Max, MaxLength } from 'class-validator';
+import { IsString, IsUUID, Length } from 'class-validator';
 
 export type LoginResponseType =
   | typeof RESPONSE_CODES.TOTP_REQUIRED
   | typeof RESPONSE_CODES.AUTHENTICATED
   | typeof RESPONSE_CODES.AUTHENTICATED_FAILED_BECAUSE_USER_IS_BANNED;
+
 
 export class LoginAuthenticatedResponseDto {
   @ApiProperty({

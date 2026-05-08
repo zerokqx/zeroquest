@@ -21,6 +21,10 @@ import {
   LoginTotpValidateDto,
 } from './dto/login-response.dto';
 import { TotpLoginService } from '@/domains/security/totp/totp-login.service';
+import {
+  AuthenticatedOk,
+  TotpRequired,
+} from './dto/login-password-returns.dto';
 
 @Injectable()
 export class AuthService {
@@ -68,10 +72,7 @@ export class AuthService {
         uid: f.uid,
       });
 
-      return {
-        type: RESPONSE_CODES.AUTHENTICATED,
-        tokens,
-      };
+      return new AuthenticatedOk(tokens);
     }
 
     throw new UnauthorizedException({
@@ -85,11 +86,12 @@ export class AuthService {
     ua: string,
   ) {
     const user = await this.authRepository.findUserByLogin(login);
-    if (user && user?.isBanned)
+    if (user && user?.isBanned) {
       throw new ForbiddenException({
         message: 'User banned',
         code: RESPONSE_CODES.AUTHENTICATED_FAILED_BECAUSE_USER_IS_BANNED,
       });
+    }
     if (user && (await compare(password, user?.passwordHash))) {
       await this.policyService.acceptRequiredPolicies(user.id, policy, [
         LegalDocumentType.PRIVACY,
@@ -102,10 +104,7 @@ export class AuthService {
             ct,
             ua,
           );
-        return new LoginTotpRequiredResponseDto({
-          challengeId,
-          type: 'TOTP_REQUIRED',
-        });
+        return new TotpRequired({ challengeId });
       }
 
       const sid = nanoid();
@@ -125,10 +124,7 @@ export class AuthService {
         uid: user.id,
       });
 
-      return {
-        type: RESPONSE_CODES.AUTHENTICATED,
-        tokens,
-      };
+      return new AuthenticatedOk(tokens);
     }
     this.logger.warn(
       `Неуспешная попытка входа: login=${login}, clientType=${ct}`,
@@ -136,7 +132,6 @@ export class AuthService {
     throw new UnauthorizedException('Invalid login or password');
   }
 
-  async totpVerify() {}
   async register(login: string, password: string) {
     const user = await this.authRepository.findUserLoginByLogin(login);
     this.logger.debug(`Проверка возможности регистрации: login=${login}`);
@@ -182,10 +177,6 @@ export class AuthService {
   }
 
   async logout(accessPayload: AuthServiceTypes.JwtPayloadSchemaType) {
-    // await Promise.all([
-    //   this.tokenService.removeTrackedToken(accessPayload),
-    //   this.tokenService.removeTrackedToken(refreshPayload),
-    // ]);
     return await this.sessionService.deleteSession({
       sid: accessPayload.sid,
       uid: accessPayload.sub,
