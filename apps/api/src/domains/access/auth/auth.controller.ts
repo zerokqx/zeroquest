@@ -48,6 +48,7 @@ import {
   LoginTotpRequiredResponseDto,
   LoginTotpValidateDto,
 } from './dto/login-response.dto';
+import { AuthenticatedOk, TotpRequired } from './dto/login-password-returns.dto';
 
 type RequestWithClientType = {
   clientType: string;
@@ -111,8 +112,8 @@ export class AuthController {
   @ApiOkResponse({
     schema: {
       oneOf: [
-        { $ref: getSchemaPath(LoginAuthenticatedResponseDto) },
-        { $ref: getSchemaPath(LoginTotpRequiredResponseDto) },
+        { $ref: getSchemaPath(TotpRequired) },
+        { $ref: getSchemaPath(AuthenticatedOk) },
       ],
       discriminator: {
         propertyName: 'type',
@@ -147,14 +148,12 @@ export class AuthController {
       req.clientType,
       userAgent,
     );
+    this.logger.debug(result)
     if (result.type === RESPONSE_CODES.TOTP_REQUIRED) {
-      return {
-        type: RESPONSE_CODES.TOTP_REQUIRED,
-        challengeId: result.challengeId,
-      };
+      return result;
     }
 
-    this.cookieManager.setAuthCookies(res, result.tokens);
+    this.cookieManager.setAuthCookies(res, result.data);
     const csrf = this.csrfService.generateCsrfToken();
     this.cookieManager.setCsrf(res, csrf);
     await this.csrfService.trackCsrfToken(csrf, fingerprint);
@@ -284,7 +283,6 @@ export class AuthController {
   @ClientType('web')
   @ApiUserAgent()
   @ApiClientType()
-
   @Get('csrf')
   async getCsrf(
     @Res({ passthrough: true }) res: Response,
@@ -296,8 +294,6 @@ export class AuthController {
     return { ok: true };
   }
   @Post('totp')
-
-
   @ClientType('web')
   @ApiOperation({
     summary: 'Валидация TOTP кода для логина',
@@ -305,6 +301,7 @@ export class AuthController {
   @ApiClientType()
   @ApiUserAgent()
   @ApiConsumes('application/json')
+  @Public()
   @ApiBody({
     type: LoginTotpValidateDto,
     description: 'Данные для валидации',
@@ -321,7 +318,7 @@ export class AuthController {
       req.clientType,
       ua,
     );
-    this.cookieManager.setAuthCookies(res, result.tokens);
+    this.cookieManager.setAuthCookies(res, result.data);
     const csrf = this.csrfService.generateCsrfToken();
     this.cookieManager.setCsrf(res, csrf);
     await this.csrfService.trackCsrfToken(csrf, fingerprint);

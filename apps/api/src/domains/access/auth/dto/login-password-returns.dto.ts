@@ -1,7 +1,11 @@
-import { RESPONSE_CODES, ResponseCodes } from '@zeroquest/constants';
+import { ApiOkResponse, ApiProperty } from '@nestjs/swagger';
+import { RESPONSE_CODES } from '@zeroquest/constants';
 
 export class TotpRequired {
+  @ApiProperty()
   type = RESPONSE_CODES.TOTP_REQUIRED;
+
+  @ApiProperty()
   data!: {
     challengeId: string;
   };
@@ -12,7 +16,10 @@ export class TotpRequired {
 }
 
 export class AuthenticatedOk {
+  @ApiProperty()
   type = RESPONSE_CODES.AUTHENTICATED;
+
+  @ApiProperty()
   data!: { refreshToken: string; accessToken: string };
 
   constructor(data: typeof this.data) {
