@@ -119,7 +119,6 @@ export class TotpService {
     const secret = this.totpEncrypt.decrypt(user.totp);
     const { valid } = await verify({
       token: value.padStart(6, '0'),
-      
       secret,
     });
 

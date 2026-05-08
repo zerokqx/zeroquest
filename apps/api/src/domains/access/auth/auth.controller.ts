@@ -21,6 +21,8 @@ import {
   ApiUnauthorizedResponse,
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  getSchemaPath,
+  ApiExtraModels,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -41,6 +43,10 @@ import { CsrfPublic } from '@/domains/security/csrf/csrf.decorator';
 import { Fingerprint } from '@/domains/security/fingerprint/fingerprint.decorator';
 import { CsrfService } from '@/domains/security/csrf/csrf.service';
 import { RESPONSE_CODES } from '@zeroquest/constants';
+import {
+  LoginAuthenticatedResponseDto,
+  LoginTotpRequiredResponseDto,
+} from './dto/login-response.dto';
 
 type RequestWithClientType = {
   clientType: string;
@@ -99,6 +105,26 @@ export class AuthController {
   })
   @ApiForbiddenResponse({
     description: 'Указан неподдерживаемый client type.',
+  })
+  @ApiExtraModels(LoginAuthenticatedResponseDto, LoginTotpRequiredResponseDto)
+  @ApiOkResponse({
+    schema: {
+      oneOf: [
+        { $ref: getSchemaPath(LoginAuthenticatedResponseDto) },
+        { $ref: getSchemaPath(LoginTotpRequiredResponseDto) },
+      ],
+      discriminator: {
+        propertyName: 'type',
+        mapping: {
+          [RESPONSE_CODES.AUTHENTICATED]: getSchemaPath(
+            LoginAuthenticatedResponseDto,
+          ),
+          [RESPONSE_CODES.TOTP_REQUIRED]: getSchemaPath(
+            LoginTotpRequiredResponseDto,
+          ),
+        },
+      },
+    },
   })
   async password(
     @Body() body: LoginDto,
@@ -261,4 +287,6 @@ export class AuthController {
     await this.csrfService.trackCsrfToken(token, fingerprint);
     return { ok: true };
   }
+  @Post('totp')
+  totpLogin(@Body() body: LoginDto) {}
 }

@@ -11,6 +11,7 @@ import { JwtDecodePipe } from '@/domains/security/jwt/jwt-decode.pipe';
 import { CsrfModule } from '@/domains/security/csrf/csrf.module';
 import { JwtRefreshStrategy } from '../token/strategies/jwt-refresh.strategy';
 import { JwtAccessStrategy } from '../token/strategies/jwt-access.strategy';
+import { TotpModule } from '@/domains/security/totp/totp.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtAccessStrategy } from '../token/strategies/jwt-access.strategy';
     SessionModule,
     PolicyModule,
     CsrfModule,
+    TotpModule,
   ],
   controllers: [AuthController],
   providers: [

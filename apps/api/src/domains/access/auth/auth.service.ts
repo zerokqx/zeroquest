@@ -16,6 +16,8 @@ import { PolicyService } from '@/domains/content/policy/policy.service';
 import { SessionService } from '../session/session.service';
 import { nanoid } from 'nanoid';
 import { RESPONSE_CODES } from '@zeroquest/constants';
+import { LoginTotpRequiredResponseDto } from './dto/login-response.dto';
+import { TotpLoginService } from '@/domains/security/totp/totp-login.service';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +27,7 @@ export class AuthService {
     private readonly tokenService: TokenService,
     private readonly sessionService: SessionService,
     private readonly policyService: PolicyService,
+    private readonly totpLoginService: TotpLoginService,
   ) {}
 
   sha256(data: string) {
@@ -46,6 +49,20 @@ export class AuthService {
       await this.policyService.acceptRequiredPolicies(user.id, policy, [
         LegalDocumentType.PRIVACY,
       ]);
+      if (user.totp) {
+        const challengeId =
+          await this.totpLoginService.createNewValidationChallenge(
+            user.login,
+            user.id,
+            ct,
+            ua,
+          );
+        return new LoginTotpRequiredResponseDto({
+          challengeId,
+          type: 'TOTP_REQUIRED',
+        });
+      }
+
       const sid = nanoid();
 
       const [tokens, inputs] = await this.tokenService.createTokenPair({
@@ -71,6 +88,7 @@ export class AuthService {
     throw new UnauthorizedException('Invalid login or password');
   }
 
+  async totpVerify() {}
   async register(login: string, password: string) {
     const user = await this.authRepository.findUserLoginByLogin(login);
     this.logger.debug(`Проверка возможности регистрации: login=${login}`);
