@@ -46,6 +46,7 @@ import { RESPONSE_CODES } from '@zeroquest/constants';
 import {
   LoginAuthenticatedResponseDto,
   LoginTotpRequiredResponseDto,
+  LoginTotpValidateDto,
 } from './dto/login-response.dto';
 
 type RequestWithClientType = {
@@ -141,13 +142,19 @@ export class AuthController {
       req.clientType ?? 'ClientType',
       getRequestHeader(req, 'x-forwarded-for') ?? 'NotFound',
     );
-    const tokens = await this.authService.password(
+    const result = await this.authService.password(
       body,
       req.clientType,
       userAgent,
     );
+    if (result.type === RESPONSE_CODES.TOTP_REQUIRED) {
+      return {
+        type: RESPONSE_CODES.TOTP_REQUIRED,
+        challengeId: result.challengeId,
+      };
+    }
 
-    this.cookieManager.setAuthCookies(res, tokens);
+    this.cookieManager.setAuthCookies(res, result.tokens);
     const csrf = this.csrfService.generateCsrfToken();
     this.cookieManager.setCsrf(res, csrf);
     await this.csrfService.trackCsrfToken(csrf, fingerprint);
@@ -277,6 +284,7 @@ export class AuthController {
   @ClientType('web')
   @ApiUserAgent()
   @ApiClientType()
+
   @Get('csrf')
   async getCsrf(
     @Res({ passthrough: true }) res: Response,
@@ -288,5 +296,35 @@ export class AuthController {
     return { ok: true };
   }
   @Post('totp')
-  totpLogin(@Body() body: LoginDto) {}
+
+
+  @ClientType('web')
+  @ApiOperation({
+    summary: 'Валидация TOTP кода для логина',
+  })
+  @ApiClientType()
+  @ApiUserAgent()
+  @ApiConsumes('application/json')
+  @ApiBody({
+    type: LoginTotpValidateDto,
+    description: 'Данные для валидации',
+  })
+  async totpLogin(
+    @Body() body: LoginTotpValidateDto,
+    @Headers('user-agent') ua: string,
+    @Req() req: RequestWithClientType,
+    @Fingerprint() fingerprint: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.totpValidate(
+      body,
+      req.clientType,
+      ua,
+    );
+    this.cookieManager.setAuthCookies(res, result.tokens);
+    const csrf = this.csrfService.generateCsrfToken();
+    this.cookieManager.setCsrf(res, csrf);
+    await this.csrfService.trackCsrfToken(csrf, fingerprint);
+    return { message: 'OK', code: RESPONSE_CODES.AUTHENTICATED };
+  }
 }

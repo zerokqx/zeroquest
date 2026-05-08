@@ -16,7 +16,10 @@ import { PolicyService } from '@/domains/content/policy/policy.service';
 import { SessionService } from '../session/session.service';
 import { nanoid } from 'nanoid';
 import { RESPONSE_CODES } from '@zeroquest/constants';
-import { LoginTotpRequiredResponseDto } from './dto/login-response.dto';
+import {
+  LoginTotpRequiredResponseDto,
+  LoginTotpValidateDto,
+} from './dto/login-response.dto';
 import { TotpLoginService } from '@/domains/security/totp/totp-login.service';
 
 @Injectable()
@@ -34,6 +37,48 @@ export class AuthService {
     return createHash('sha256').update(data).digest('hex');
   }
 
+  async totpValidate(
+    { challengeId, vallue }: LoginTotpValidateDto,
+
+    ct: string,
+    ua: string,
+  ) {
+    const f = await this.totpLoginService.validateVallue(challengeId, vallue);
+    if (f.valid) {
+      const user = await this.authRepository.findUserById(f.uid);
+      if (user && user?.isBanned)
+        throw new ForbiddenException({
+          message: 'User banned',
+          code: RESPONSE_CODES.AUTHENTICATED_FAILED_BECAUSE_USER_IS_BANNED,
+        });
+      const sid = nanoid();
+
+      const [tokens, inputs] = await this.tokenService.createTokenPair({
+        ct,
+        sid,
+        ua,
+        sub: f.uid,
+      });
+      await this.sessionService.createSession({
+        ajti: inputs.accessTokenJti,
+        rjti: inputs.refreshTokenJti,
+        sid,
+        ct,
+        ua,
+        uid: f.uid,
+      });
+
+      return {
+        type: RESPONSE_CODES.AUTHENTICATED,
+        tokens,
+      };
+    }
+
+    throw new UnauthorizedException({
+      message: 'Totp invalid',
+      code: RESPONSE_CODES.TOTP_INVALID_CHALLANGE,
+    });
+  }
   async password(
     { login, password, policy }: LoginDto,
     ct: string,
@@ -80,7 +125,10 @@ export class AuthService {
         uid: user.id,
       });
 
-      return tokens;
+      return {
+        type: RESPONSE_CODES.AUTHENTICATED,
+        tokens,
+      };
     }
     this.logger.warn(
       `Неуспешная попытка входа: login=${login}, clientType=${ct}`,

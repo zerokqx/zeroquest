@@ -11,12 +11,18 @@ export class AuthRepository {
     return this.prisma.$transaction(callback);
   }
 
-
+  findUserById(id: User['id']) {
+    return this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
   findUserByLogin(login: string) {
     this.logger.debug(`Поиск пользователя для входа: login=${login}`);
     return this.prisma.user.findUnique({
       where: { login },
-      include:{totp:true,}
+      include: { totp: true },
     });
   }
 
@@ -42,7 +48,6 @@ export class AuthRepository {
       include: { clientType: true, user: true },
     });
   }
-
 
   updateSessionTokensDataIfJtiMatches(
     id: string,

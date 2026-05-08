@@ -64,6 +64,6 @@ export class TotpLoginService {
     });
 
     if (valid) await this.cacheManager.del(key);
-    return { valid, uid: challenge.uid };
+    return { valid, ...challenge };
   }
 }
