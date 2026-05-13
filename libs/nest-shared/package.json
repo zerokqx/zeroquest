@@ -10,6 +10,11 @@
       "import": "./src/index.ts",
       "default": "./src/index.ts"
     },
+    "./security/mfa/*": {
+      "types": "./src/lib/security/mfa/*.ts",
+      "import": "./src/lib/security/mfa/*.ts",
+      "default": "./src/lib/security/mfa/*.ts"
+    },
     "./package.json": "./package.json"
   },
   "dependencies": {

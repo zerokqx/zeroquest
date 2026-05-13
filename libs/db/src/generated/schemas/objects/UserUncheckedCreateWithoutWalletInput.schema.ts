@@ -5,7 +5,7 @@ import { SubscribeUncheckedCreateNestedManyWithoutUserInputObjectSchema as Subsc
 import { PaymentUncheckedCreateNestedManyWithoutUserInputObjectSchema as PaymentUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './PaymentUncheckedCreateNestedManyWithoutUserInput.schema';
 import { ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema as ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './ReviewUncheckedCreateNestedOneWithoutUserInput.schema';
 import { LegalAcceptancesUncheckedCreateNestedManyWithoutUserInputObjectSchema as LegalAcceptancesUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './LegalAcceptancesUncheckedCreateNestedManyWithoutUserInput.schema';
-import { TotpTokenUncheckedCreateNestedOneWithoutUserInputObjectSchema as TotpTokenUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './TotpTokenUncheckedCreateNestedOneWithoutUserInput.schema'
+import { TotpMfaUncheckedCreateNestedOneWithoutUserInputObjectSchema as TotpMfaUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './TotpMfaUncheckedCreateNestedOneWithoutUserInput.schema'
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
@@ -21,7 +21,7 @@ const makeSchema = () => z.object({
   payments: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional(),
   review: z.lazy(() => ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  totp: z.lazy(() => TotpTokenUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional()
+  totpMfa: z.lazy(() => TotpMfaUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional()
 }).strict();
 export const UserUncheckedCreateWithoutWalletInputObjectSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutWalletInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUncheckedCreateWithoutWalletInput>;
 export const UserUncheckedCreateWithoutWalletInputObjectZodSchema = makeSchema();

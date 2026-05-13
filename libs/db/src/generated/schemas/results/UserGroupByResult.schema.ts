@@ -25,7 +25,7 @@ export const UserGroupByResultSchema = z.array(z.object({
     wallet: z.number(),
     walletId: z.number(),
     legalAcceptances: z.number(),
-    totp: z.number()
+    totpMfa: z.number()
   }).optional(),
   _sum: z.object({
     telegramId: z.number().nullable()

@@ -4,6 +4,7 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { LoggerModule } from 'nestjs-pino';
 import configuration, { EnvironmentVariables } from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from '../domains/access/auth/auth.module';
@@ -18,7 +19,7 @@ import { ClientTypeModule } from '@/domains/access/client-type/client-type.modul
 import { ZeroquestConfigModule } from '@zeroquest/config';
 import { ZeroquestDbModule } from '@zeroquest/db';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { ClientTypeGuard, RoleGuard } from '@zeroquest/nest-shared';
+import { ClientTypeGuard, MfaModule, RoleGuard } from '@zeroquest/nest-shared';
 import { WalletModule } from '@/domains/billing/wallet/wallet.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BillingModule } from '@/domains/billing/billing/billing.module';
@@ -34,6 +35,7 @@ import { IpInfoModule } from '@/domains/network/ipinfo/ipinfo.module';
 import { RedisModule } from '@/common/modules/redis.module';
 import { BanModule } from '@/domains/access/ban/ban.module';
 import { TotpModule } from '@/domains/security/totp/totp.module';
+import { TotpMethodModule } from '@/domains/security/totp/totp-v2.module';
 
 @Module({
   imports: [
@@ -93,6 +95,9 @@ import { TotpModule } from '@/domains/security/totp/totp.module';
     IpInfoModule,
     RedisModule,
     TotpModule,
+    // MfaModule.forRoot({
+    //   methods: [TotpMethodModule],
+    // }),
   ],
   providers: [
     {

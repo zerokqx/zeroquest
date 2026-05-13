@@ -16,7 +16,6 @@ import {
 import { PrismaService, User } from '@zeroquest/db';
 import { RESPONSE_CODES } from '@zeroquest/constants';
 import { TotpEncrypt } from './totp.encrypt';
-
 @Injectable()
 export class TotpService {
   constructor(
@@ -24,15 +23,12 @@ export class TotpService {
     private readonly prisma: PrismaService,
     private readonly totpEncrypt: TotpEncrypt,
   ) {}
-
   cacheKey(challangeId: string) {
     return `totp:challenge:${challangeId}`;
   }
-
   async generateNewTotp(userId: User['id']): Promise<TotpTokenData> {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new BadRequestException('User is not found');
-
     const secret = generateSecret();
     const token = await generate({ secret });
     const uri = generateURI({
@@ -40,13 +36,8 @@ export class TotpService {
       label: user.login,
       secret,
     });
-    return {
-      secret,
-      token,
-      uri,
-    };
+    return { secret, token, uri };
   }
-
   async createNewTotpChallenge(encrypted: EncryptData) {
     const challengeId = crypto.randomUUID();
     const key = this.cacheKey(challengeId);
@@ -55,39 +46,27 @@ export class TotpService {
       { ...encrypted, attempts: 0 },
       300000,
     );
-
     return challengeId;
   }
-
   createUserTotp(userId: User['id'], encrypted: EncryptData) {
     return this.prisma.user.update({
       where: { id: userId },
-      data: {
-        totp: {
-          create: encrypted,
-        },
-      },
+      data: { totp: { create: encrypted } },
     });
   }
-
   async validateChallenge(
     challengeId: string,
     value: string,
   ): Promise<ValidateObject> {
     const key = this.cacheKey(challengeId);
     const raw = await this.cacheManager.get<ChallengeObject>(key);
-
     console.log(raw);
     if (!raw)
       throw new NotFoundException({
         message: 'Challange not found',
         code: RESPONSE_CODES.TOTP_CHALLENGE_NOT_FOUND,
       });
-
-    const { attempts, ...encrypted } = raw;
-
-    // if(attempts > 5) throw new
-
+    const { attempts, ...encrypted } = raw; // if(attempts > 5) throw new
     const secret = this.totpEncrypt.decrypt(encrypted);
     const { valid } = await verify({
       token: value.padStart(6, '0'),

@@ -14,7 +14,7 @@ import {
  * Флаг-декоратор для DiscoveryService: помечает класс как стратегию MFA
  * Используется для автоматического поиска через DiscoveryService
  */
-export const MfaStrategy = DiscoveryService.createDecorator();
+export const MfaStrategyDecorator = DiscoveryService.createDecorator();
 
 /**
  * Уникальное имя стратегии MFA
@@ -33,7 +33,7 @@ export const MfaSchemas = (data: MfaSchemasType) =>
  * Флаг-декоратор для DiscoveryService: помечает класс как Setup для MFA
  * Используется для автоматического поиска через DiscoveryService
  */
-export const MfaSetup = DiscoveryService.createDecorator();
+export const MfaSetupDecorator = DiscoveryService.createDecorator();
 
 /**
  * Указывает для какой стратегии предназначен Setup
@@ -46,7 +46,7 @@ export const MfaSetupFor = (forStrategy: string) =>
  * Флаг-декоратор для DiscoveryService: помечает класс как Sender для MFA
  * Используется для автоматического поиска через DiscoveryService
  */
-export const MfaSender = DiscoveryService.createDecorator();
+export const MfaSenderDecorator = DiscoveryService.createDecorator();
 
 /**
  * Указывает для какой стратегии предназначен Sender
@@ -55,7 +55,7 @@ export const MfaSender = DiscoveryService.createDecorator();
 export const MfaSenderFor = (forStrategy: string) =>
   SetMetadata(MFA_SENDER_FOR, forStrategy);
 
-export const MfaValidator = DiscoveryService.createDecorator();
+export const MfaValidatorDecorator = DiscoveryService.createDecorator();
 
 export const MfaValidatorFor = (forStrategy: string) =>
   SetMetadata(MFA_VALIDATOR_FOR, forStrategy);

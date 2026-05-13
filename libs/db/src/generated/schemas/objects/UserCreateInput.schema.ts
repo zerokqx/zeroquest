@@ -6,7 +6,7 @@ import { PaymentCreateNestedManyWithoutUserInputObjectSchema as PaymentCreateNes
 import { ReviewCreateNestedOneWithoutUserInputObjectSchema as ReviewCreateNestedOneWithoutUserInputObjectSchema } from './ReviewCreateNestedOneWithoutUserInput.schema';
 import { WalletCreateNestedOneWithoutUserInputObjectSchema as WalletCreateNestedOneWithoutUserInputObjectSchema } from './WalletCreateNestedOneWithoutUserInput.schema';
 import { LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema as LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema } from './LegalAcceptancesCreateNestedManyWithoutUserInput.schema';
-import { TotpTokenCreateNestedOneWithoutUserInputObjectSchema as TotpTokenCreateNestedOneWithoutUserInputObjectSchema } from './TotpTokenCreateNestedOneWithoutUserInput.schema'
+import { TotpMfaCreateNestedOneWithoutUserInputObjectSchema as TotpMfaCreateNestedOneWithoutUserInputObjectSchema } from './TotpMfaCreateNestedOneWithoutUserInput.schema'
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
@@ -22,7 +22,7 @@ const makeSchema = () => z.object({
   review: z.lazy(() => ReviewCreateNestedOneWithoutUserInputObjectSchema).optional(),
   wallet: z.lazy(() => WalletCreateNestedOneWithoutUserInputObjectSchema),
   legalAcceptances: z.lazy(() => LegalAcceptancesCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  totp: z.lazy(() => TotpTokenCreateNestedOneWithoutUserInputObjectSchema).optional()
+  totpMfa: z.lazy(() => TotpMfaCreateNestedOneWithoutUserInputObjectSchema).optional()
 }).strict();
 export const UserCreateInputObjectSchema: z.ZodType<Prisma.UserCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateInput>;
 export const UserCreateInputObjectZodSchema = makeSchema();

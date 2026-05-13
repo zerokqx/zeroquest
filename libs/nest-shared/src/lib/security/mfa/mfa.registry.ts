@@ -3,10 +3,10 @@ import { DiscoveryService, Reflector } from '@nestjs/core';
 import { MfaStrategy as MfaStrategyInterface } from './mfa-strategy.interface';
 import { MfaSetup as MfaSetupInterface } from './mfa-setup.abstract';
 import {
-  MfaSender,
-  MfaSetup,
-  MfaStrategy,
-  MfaValidator,
+  MfaSenderDecorator,
+  MfaSetupDecorator,
+  MfaStrategyDecorator,
+  MfaValidatorDecorator,
 } from './mfa.decorators';
 import { MfaValidator as MfaValidatorInterface } from './mfa-validator.interface';
 import { MfaMethodsMap } from './mfa.types';
@@ -14,7 +14,7 @@ import {
   MFA_NAME,
   MFA_SENDER_FOR,
   MFA_SETUP_FOR,
-  MFA_VALIDATOR,
+  MFA_VALIDATOR_FOR,
 } from './mfa-tokens';
 import { MfaSender as MfaSenderInterface } from './mfa-sender.abstract';
 
@@ -35,11 +35,11 @@ export class MfaRegistry implements OnModuleInit {
     for (const p of this.discovery.getProviders()) {
       if (!p.instance) continue;
       if (!p.metatype) continue;
-      const isStrategy = this.discovery.getMetadataByDecorator(MfaStrategy, p);
-      const isSetup = this.discovery.getMetadataByDecorator(MfaSetup, p);
-      const isSender = this.discovery.getMetadataByDecorator(MfaSender, p);
+      const isStrategy = this.discovery.getMetadataByDecorator(MfaStrategyDecorator, p);
+      const isSetup = this.discovery.getMetadataByDecorator(MfaSetupDecorator, p);
+      const isSender = this.discovery.getMetadataByDecorator(MfaSenderDecorator, p);
       const isValidator = this.discovery.getMetadataByDecorator(
-        MfaValidator,
+        MfaValidatorDecorator,
         p,
       );
 
@@ -74,7 +74,7 @@ export class MfaRegistry implements OnModuleInit {
       }
       if (isValidator) {
         const validatorFor = this.reflector.get<string | undefined>(
-          MFA_VALIDATOR,
+          MFA_VALIDATOR_FOR,
           p.metatype,
         );
         if (!validatorFor)

@@ -17,7 +17,7 @@ export const UserResultSchema = z.object({
     wallet: z.unknown(),
     walletId: z.string(),
     legalAcceptances: z.array(z.unknown()),
-    totp: z.unknown().nullable()
+    totpMfa: z.unknown().nullable()
 }).strict();
 
 export type UserResultType = z.infer<typeof UserResultSchema>;

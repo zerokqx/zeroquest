@@ -9,7 +9,7 @@ import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOp
 import { SubscribeUncheckedUpdateManyWithoutUserNestedInputObjectSchema as SubscribeUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './SubscribeUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { ReviewUncheckedUpdateOneWithoutUserNestedInputObjectSchema as ReviewUncheckedUpdateOneWithoutUserNestedInputObjectSchema } from './ReviewUncheckedUpdateOneWithoutUserNestedInput.schema';
 import { LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInputObjectSchema as LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInput.schema';
-import { TotpTokenUncheckedUpdateOneWithoutUserNestedInputObjectSchema as TotpTokenUncheckedUpdateOneWithoutUserNestedInputObjectSchema } from './TotpTokenUncheckedUpdateOneWithoutUserNestedInput.schema'
+import { TotpMfaUncheckedUpdateOneWithoutUserNestedInputObjectSchema as TotpMfaUncheckedUpdateOneWithoutUserNestedInputObjectSchema } from './TotpMfaUncheckedUpdateOneWithoutUserNestedInput.schema'
 
 const makeSchema = () => z.object({
   id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -25,7 +25,7 @@ const makeSchema = () => z.object({
   subscribes: z.lazy(() => SubscribeUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   review: z.lazy(() => ReviewUncheckedUpdateOneWithoutUserNestedInputObjectSchema).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional(),
-  totp: z.lazy(() => TotpTokenUncheckedUpdateOneWithoutUserNestedInputObjectSchema).optional()
+  totpMfa: z.lazy(() => TotpMfaUncheckedUpdateOneWithoutUserNestedInputObjectSchema).optional()
 }).strict();
 export const UserUncheckedUpdateWithoutPaymentsInputObjectSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutPaymentsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUncheckedUpdateWithoutPaymentsInput>;
 export const UserUncheckedUpdateWithoutPaymentsInputObjectZodSchema = makeSchema();

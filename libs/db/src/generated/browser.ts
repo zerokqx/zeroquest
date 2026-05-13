@@ -58,11 +58,6 @@ export type Subscribe = Prisma.SubscribeModel
  */
 export type User = Prisma.UserModel
 /**
- * Model TotpToken
- * 
- */
-export type TotpToken = Prisma.TotpTokenModel
-/**
  * Model Wallet
  * 
  */
@@ -87,3 +82,8 @@ export type Ip = Prisma.IpModel
  * 
  */
 export type LegalAcceptances = Prisma.LegalAcceptancesModel
+/**
+ * Model TotpMfa
+ * 
+ */
+export type TotpMfa = Prisma.TotpMfaModel

@@ -7,7 +7,7 @@ import { PaymentOrderByRelationAggregateInputObjectSchema as PaymentOrderByRelat
 import { ReviewOrderByWithRelationInputObjectSchema as ReviewOrderByWithRelationInputObjectSchema } from './ReviewOrderByWithRelationInput.schema';
 import { WalletOrderByWithRelationInputObjectSchema as WalletOrderByWithRelationInputObjectSchema } from './WalletOrderByWithRelationInput.schema';
 import { LegalAcceptancesOrderByRelationAggregateInputObjectSchema as LegalAcceptancesOrderByRelationAggregateInputObjectSchema } from './LegalAcceptancesOrderByRelationAggregateInput.schema';
-import { TotpTokenOrderByWithRelationInputObjectSchema as TotpTokenOrderByWithRelationInputObjectSchema } from './TotpTokenOrderByWithRelationInput.schema'
+import { TotpMfaOrderByWithRelationInputObjectSchema as TotpMfaOrderByWithRelationInputObjectSchema } from './TotpMfaOrderByWithRelationInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
@@ -25,7 +25,7 @@ const makeSchema = () => z.object({
   review: z.lazy(() => ReviewOrderByWithRelationInputObjectSchema).optional(),
   wallet: z.lazy(() => WalletOrderByWithRelationInputObjectSchema).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesOrderByRelationAggregateInputObjectSchema).optional(),
-  totp: z.lazy(() => TotpTokenOrderByWithRelationInputObjectSchema).optional()
+  totpMfa: z.lazy(() => TotpMfaOrderByWithRelationInputObjectSchema).optional()
 }).strict();
 export const UserOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.UserOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.UserOrderByWithRelationInput>;
 export const UserOrderByWithRelationInputObjectZodSchema = makeSchema();

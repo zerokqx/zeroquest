@@ -392,12 +392,12 @@ export const ModelName = {
   Payment: 'Payment',
   Subscribe: 'Subscribe',
   User: 'User',
-  TotpToken: 'TotpToken',
   Wallet: 'Wallet',
   WalletHistory: 'WalletHistory',
   LegalDocument: 'LegalDocument',
   Ip: 'Ip',
-  LegalAcceptances: 'LegalAcceptances'
+  LegalAcceptances: 'LegalAcceptances',
+  TotpMfa: 'TotpMfa'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -413,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "clientType" | "refund" | "inbound" | "plan" | "review" | "payment" | "subscribe" | "user" | "totpToken" | "wallet" | "walletHistory" | "legalDocument" | "ip" | "legalAcceptances"
+    modelProps: "clientType" | "refund" | "inbound" | "plan" | "review" | "payment" | "subscribe" | "user" | "wallet" | "walletHistory" | "legalDocument" | "ip" | "legalAcceptances" | "totpMfa"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1009,80 +1009,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    TotpToken: {
-      payload: Prisma.$TotpTokenPayload<ExtArgs>
-      fields: Prisma.TotpTokenFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.TotpTokenFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.TotpTokenFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload>
-        }
-        findFirst: {
-          args: Prisma.TotpTokenFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.TotpTokenFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload>
-        }
-        findMany: {
-          args: Prisma.TotpTokenFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload>[]
-        }
-        create: {
-          args: Prisma.TotpTokenCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload>
-        }
-        createMany: {
-          args: Prisma.TotpTokenCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.TotpTokenCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload>[]
-        }
-        delete: {
-          args: Prisma.TotpTokenDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload>
-        }
-        update: {
-          args: Prisma.TotpTokenUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload>
-        }
-        deleteMany: {
-          args: Prisma.TotpTokenDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.TotpTokenUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.TotpTokenUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload>[]
-        }
-        upsert: {
-          args: Prisma.TotpTokenUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpTokenPayload>
-        }
-        aggregate: {
-          args: Prisma.TotpTokenAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTotpToken>
-        }
-        groupBy: {
-          args: Prisma.TotpTokenGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TotpTokenGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.TotpTokenCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TotpTokenCountAggregateOutputType> | number
-        }
-      }
-    }
     Wallet: {
       payload: Prisma.$WalletPayload<ExtArgs>
       fields: Prisma.WalletFieldRefs
@@ -1453,6 +1379,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TotpMfa: {
+      payload: Prisma.$TotpMfaPayload<ExtArgs>
+      fields: Prisma.TotpMfaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TotpMfaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TotpMfaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload>
+        }
+        findFirst: {
+          args: Prisma.TotpMfaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TotpMfaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload>
+        }
+        findMany: {
+          args: Prisma.TotpMfaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload>[]
+        }
+        create: {
+          args: Prisma.TotpMfaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload>
+        }
+        createMany: {
+          args: Prisma.TotpMfaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TotpMfaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload>[]
+        }
+        delete: {
+          args: Prisma.TotpMfaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload>
+        }
+        update: {
+          args: Prisma.TotpMfaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload>
+        }
+        deleteMany: {
+          args: Prisma.TotpMfaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TotpMfaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TotpMfaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload>[]
+        }
+        upsert: {
+          args: Prisma.TotpMfaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TotpMfaPayload>
+        }
+        aggregate: {
+          args: Prisma.TotpMfaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTotpMfa>
+        }
+        groupBy: {
+          args: Prisma.TotpMfaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TotpMfaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TotpMfaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TotpMfaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1601,20 +1601,6 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const TotpTokenScalarFieldEnum = {
-  id: 'id',
-  enabled: 'enabled',
-  ciphertext: 'ciphertext',
-  iv: 'iv',
-  authTag: 'authTag',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  userId: 'userId'
-} as const
-
-export type TotpTokenScalarFieldEnum = (typeof TotpTokenScalarFieldEnum)[keyof typeof TotpTokenScalarFieldEnum]
-
-
 export const WalletScalarFieldEnum = {
   id: 'id',
   held: 'held',
@@ -1673,6 +1659,20 @@ export const LegalAcceptancesScalarFieldEnum = {
 } as const
 
 export type LegalAcceptancesScalarFieldEnum = (typeof LegalAcceptancesScalarFieldEnum)[keyof typeof LegalAcceptancesScalarFieldEnum]
+
+
+export const TotpMfaScalarFieldEnum = {
+  id: 'id',
+  enabled: 'enabled',
+  ciphertext: 'ciphertext',
+  iv: 'iv',
+  authTag: 'authTag',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type TotpMfaScalarFieldEnum = (typeof TotpMfaScalarFieldEnum)[keyof typeof TotpMfaScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1982,12 +1982,12 @@ export type GlobalOmitConfig = {
   payment?: Prisma.PaymentOmit
   subscribe?: Prisma.SubscribeOmit
   user?: Prisma.UserOmit
-  totpToken?: Prisma.TotpTokenOmit
   wallet?: Prisma.WalletOmit
   walletHistory?: Prisma.WalletHistoryOmit
   legalDocument?: Prisma.LegalDocumentOmit
   ip?: Prisma.IpOmit
   legalAcceptances?: Prisma.LegalAcceptancesOmit
+  totpMfa?: Prisma.TotpMfaOmit
 }
 
 /* Types for Logging */

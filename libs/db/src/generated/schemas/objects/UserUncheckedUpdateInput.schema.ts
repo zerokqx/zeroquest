@@ -10,7 +10,7 @@ import { SubscribeUncheckedUpdateManyWithoutUserNestedInputObjectSchema as Subsc
 import { PaymentUncheckedUpdateManyWithoutUserNestedInputObjectSchema as PaymentUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './PaymentUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { ReviewUncheckedUpdateOneWithoutUserNestedInputObjectSchema as ReviewUncheckedUpdateOneWithoutUserNestedInputObjectSchema } from './ReviewUncheckedUpdateOneWithoutUserNestedInput.schema';
 import { LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInputObjectSchema as LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInput.schema';
-import { TotpTokenUncheckedUpdateOneWithoutUserNestedInputObjectSchema as TotpTokenUncheckedUpdateOneWithoutUserNestedInputObjectSchema } from './TotpTokenUncheckedUpdateOneWithoutUserNestedInput.schema'
+import { TotpMfaUncheckedUpdateOneWithoutUserNestedInputObjectSchema as TotpMfaUncheckedUpdateOneWithoutUserNestedInputObjectSchema } from './TotpMfaUncheckedUpdateOneWithoutUserNestedInput.schema'
 
 const makeSchema = () => z.object({
   id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -27,7 +27,7 @@ const makeSchema = () => z.object({
   payments: z.lazy(() => PaymentUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   review: z.lazy(() => ReviewUncheckedUpdateOneWithoutUserNestedInputObjectSchema).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional(),
-  totp: z.lazy(() => TotpTokenUncheckedUpdateOneWithoutUserNestedInputObjectSchema).optional()
+  totpMfa: z.lazy(() => TotpMfaUncheckedUpdateOneWithoutUserNestedInputObjectSchema).optional()
 }).strict();
 export const UserUncheckedUpdateInputObjectSchema: z.ZodType<Prisma.UserUncheckedUpdateInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUncheckedUpdateInput>;
 export const UserUncheckedUpdateInputObjectZodSchema = makeSchema();
