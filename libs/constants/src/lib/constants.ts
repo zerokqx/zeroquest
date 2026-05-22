@@ -2,6 +2,7 @@ export const COOKIE_NAME = {
   ACCESS: 'zeroquestAccess',
   REFRESH: 'zeroquestRefresh',
   CSRF: 'zeroquestCsrf',
+  TOTP_SETUP_JWT:'zeroquestTotpSetupJwt'
 } as const;
 
 export const HEADERS_NAMES = {

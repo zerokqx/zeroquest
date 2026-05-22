@@ -22,7 +22,6 @@ export class AuthRepository {
     this.logger.debug(`Поиск пользователя для входа: login=${login}`);
     return this.prisma.user.findUnique({
       where: { login },
-      include: { totp: true },
     });
   }
 

@@ -36,6 +36,7 @@ export class IpInfoMiddleware implements NestMiddleware {
   }
 
   async use(req: Request, _res: Response, next: NextFunction) {
+
     const ip = getIp(req);
     const key = this.cacheKey(ip);
     const cachedStatus = await this.cacheManager.get<IpStatus | null>(key);

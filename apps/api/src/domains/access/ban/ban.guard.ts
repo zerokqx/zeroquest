@@ -13,13 +13,12 @@ import { IS_PUBLIC_KEY } from '@zeroquest/nest-shared';
 
 @Injectable()
 export class BanGuard implements CanActivate {
-  constructor(private readonly banService: BanService,
-
-private readonly reflector: Reflector,
+  constructor(
+    private readonly banService: BanService,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -30,7 +29,7 @@ private readonly reflector: Reflector,
     }
     const req = context.switchToHttp().getRequest<Request>();
 
-    if (!req.user) throw new UnauthorizedException("dawdaw");
+    if (!req.user) throw new UnauthorizedException('dawdaw');
     const isBanned = await this.banService.isBanned(req.user.sub);
     if (isBanned)
       throw new ForbiddenException({

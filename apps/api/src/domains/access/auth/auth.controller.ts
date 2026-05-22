@@ -9,6 +9,7 @@ import {
   Post,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -21,8 +22,6 @@ import {
   ApiUnauthorizedResponse,
   ApiBadRequestResponse,
   ApiCreatedResponse,
-  getSchemaPath,
-  ApiExtraModels,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -43,12 +42,8 @@ import { CsrfPublic } from '@/domains/security/csrf/csrf.decorator';
 import { Fingerprint } from '@/domains/security/fingerprint/fingerprint.decorator';
 import { CsrfService } from '@/domains/security/csrf/csrf.service';
 import { RESPONSE_CODES } from '@zeroquest/constants';
-import {
-  LoginAuthenticatedResponseDto,
-  LoginTotpRequiredResponseDto,
-  LoginTotpValidateDto,
-} from './dto/login-response.dto';
-import { AuthenticatedOk, TotpRequired } from './dto/login-password-returns.dto';
+import { LocalGuard } from './local.guard';
+import { TotpGuard } from '@/domains/security/totp/totp.guard';
 
 type RequestWithClientType = {
   clientType: string;
@@ -85,6 +80,7 @@ export class AuthController {
   }
 
   @Post('password')
+  @UseGuards(LocalGuard, TotpGuard)
   @Public()
   @ClientType('web')
   @ApiOperation({
@@ -108,23 +104,12 @@ export class AuthController {
   @ApiForbiddenResponse({
     description: 'Указан неподдерживаемый client type.',
   })
-  @ApiExtraModels(LoginAuthenticatedResponseDto, LoginTotpRequiredResponseDto)
   @ApiOkResponse({
+    description: 'Пользователь успешно авторизован',
     schema: {
-      oneOf: [
-        { $ref: getSchemaPath(TotpRequired) },
-        { $ref: getSchemaPath(AuthenticatedOk) },
-      ],
-      discriminator: {
-        propertyName: 'type',
-        mapping: {
-          [RESPONSE_CODES.AUTHENTICATED]: getSchemaPath(
-            LoginAuthenticatedResponseDto,
-          ),
-          [RESPONSE_CODES.TOTP_REQUIRED]: getSchemaPath(
-            LoginTotpRequiredResponseDto,
-          ),
-        },
+      example: {
+        message: 'OK',
+        code: RESPONSE_CODES.AUTHENTICATED,
       },
     },
   })
@@ -148,10 +133,7 @@ export class AuthController {
       req.clientType,
       userAgent,
     );
-    this.logger.debug(result)
-    if (result.type === RESPONSE_CODES.TOTP_REQUIRED) {
-      return result;
-    }
+    this.logger.debug(result);
 
     this.cookieManager.setAuthCookies(res, result.data);
     const csrf = this.csrfService.generateCsrfToken();
@@ -292,36 +274,5 @@ export class AuthController {
     this.cookieManager.setCsrf(res, token);
     await this.csrfService.trackCsrfToken(token, fingerprint);
     return { ok: true };
-  }
-  @Post('totp')
-  @ClientType('web')
-  @ApiOperation({
-    summary: 'Валидация TOTP кода для логина',
-  })
-  @ApiClientType()
-  @ApiUserAgent()
-  @ApiConsumes('application/json')
-  @Public()
-  @ApiBody({
-    type: LoginTotpValidateDto,
-    description: 'Данные для валидации',
-  })
-  async totpLogin(
-    @Body() body: LoginTotpValidateDto,
-    @Headers('user-agent') ua: string,
-    @Req() req: RequestWithClientType,
-    @Fingerprint() fingerprint: string,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const result = await this.authService.totpValidate(
-      body,
-      req.clientType,
-      ua,
-    );
-    this.cookieManager.setAuthCookies(res, result.data);
-    const csrf = this.csrfService.generateCsrfToken();
-    this.cookieManager.setCsrf(res, csrf);
-    await this.csrfService.trackCsrfToken(csrf, fingerprint);
-    return { message: 'OK', code: RESPONSE_CODES.AUTHENTICATED };
   }
 }

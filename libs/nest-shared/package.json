@@ -10,10 +10,10 @@
       "import": "./src/index.ts",
       "default": "./src/index.ts"
     },
-    "./security/mfa/*": {
-      "types": "./src/lib/security/mfa/*.ts",
-      "import": "./src/lib/security/mfa/*.ts",
-      "default": "./src/lib/security/mfa/*.ts"
+    "./cookie-manager": {
+      "types": "./src/lib/cookie/cookie-manager.ts",
+      "import": "./src/lib/cookie/cookie-manager.ts",
+      "default": "./src/lib/cookie/cookie-manager.ts"
     },
     "./package.json": "./package.json"
   },

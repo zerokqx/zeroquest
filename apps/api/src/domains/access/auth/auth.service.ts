@@ -4,82 +4,44 @@ import {
   ForbiddenException,
   Injectable,
   Logger,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import { createHash } from 'crypto';
 import { TokenService } from '@/domains/access/token/token.service';
 import { AuthRepository } from './auth.repository';
-import { LegalDocumentType } from '@zeroquest/db';
+import { LegalDocumentType, PrismaService } from '@zeroquest/db';
 import { LoginDto } from './dto/login.dto';
 import { PolicyService } from '@/domains/content/policy/policy.service';
 import { SessionService } from '../session/session.service';
 import { nanoid } from 'nanoid';
 import { RESPONSE_CODES } from '@zeroquest/constants';
-import {
-  LoginTotpRequiredResponseDto,
-  LoginTotpValidateDto,
-} from './dto/login-response.dto';
-import { TotpLoginService } from '@/domains/security/totp/totp-login.service';
-import {
-  AuthenticatedOk,
-  TotpRequired,
-} from './dto/login-password-returns.dto';
+import { AuthenticatedOk } from './dto/login-password-returns.dto';
 
 @Injectable()
 export class AuthService {
   private logger = new Logger(AuthService.name);
   constructor(
+    private readonly prisma: PrismaService,
     private readonly authRepository: AuthRepository,
     private readonly tokenService: TokenService,
     private readonly sessionService: SessionService,
     private readonly policyService: PolicyService,
-    private readonly totpLoginService: TotpLoginService,
   ) {}
 
   sha256(data: string) {
     return createHash('sha256').update(data).digest('hex');
   }
 
-  async totpValidate(
-    { challengeId, vallue }: LoginTotpValidateDto,
-
-    ct: string,
-    ua: string,
-  ) {
-    const f = await this.totpLoginService.validateVallue(challengeId, vallue);
-    if (f.valid) {
-      const user = await this.authRepository.findUserById(f.uid);
-      if (user && user?.isBanned)
-        throw new ForbiddenException({
-          message: 'User banned',
-          code: RESPONSE_CODES.AUTHENTICATED_FAILED_BECAUSE_USER_IS_BANNED,
-        });
-      const sid = nanoid();
-
-      const [tokens, inputs] = await this.tokenService.createTokenPair({
-        ct,
-        sid,
-        ua,
-        sub: f.uid,
-      });
-      await this.sessionService.createSession({
-        ajti: inputs.accessTokenJti,
-        rjti: inputs.refreshTokenJti,
-        sid,
-        ct,
-        ua,
-        uid: f.uid,
-      });
-
-      return new AuthenticatedOk(tokens);
-    }
-
-    throw new UnauthorizedException({
-      message: 'Totp invalid',
-      code: RESPONSE_CODES.TOTP_INVALID_CHALLANGE,
-    });
+  async validateUser(login: string, password: string) {
+    const user = await this.prisma.user.findUnique({ where: { login } });
+    if (!user) throw new NotFoundException('User not found');
+    const isValidPassword = compare(password, user.passwordHash);
+    if(!isValidPassword) throw new UnauthorizedException()
+    return user
   }
+
   async password(
     { login, password, policy }: LoginDto,
     ct: string,
@@ -96,17 +58,6 @@ export class AuthService {
       await this.policyService.acceptRequiredPolicies(user.id, policy, [
         LegalDocumentType.PRIVACY,
       ]);
-      if (user.totp) {
-        const challengeId =
-          await this.totpLoginService.createNewValidationChallenge(
-            user.login,
-            user.id,
-            ct,
-            ua,
-          );
-        return new TotpRequired({ challengeId });
-      }
-
       const sid = nanoid();
 
       const [tokens, inputs] = await this.tokenService.createTokenPair({
