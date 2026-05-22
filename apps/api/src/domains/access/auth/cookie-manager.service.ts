@@ -2,8 +2,8 @@ import { EnvironmentVariables } from '@/config/configuration';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { COOKIE_NAME } from '@zeroquest/constants';
+import { CookieManager } from '@zeroquest/nest-shared/cookie-manager';
 import type { AuthServiceTypes } from '@zeroquest/types';
-import { log } from 'console';
 import type { CookieOptions, Request, Response } from 'express';
 
 type JwtTokenPair = {
@@ -16,6 +16,7 @@ export class CookieJwtManager {
   private isProd: boolean;
   private readonly accessCookieMaxAge: number;
   private readonly refreshCookieMaxAge: number;
+  private readonly cookieManager: CookieManager;
 
   constructor(private readonly config: ConfigService<EnvironmentVariables>) {
     const app = this.config.getOrThrow('app', { infer: true });
@@ -24,10 +25,10 @@ export class CookieJwtManager {
     this.isProd = app.isProduction;
     this.accessCookieMaxAge = jwt.accessExpireTimeMs;
     this.refreshCookieMaxAge = jwt.refreshExpireTimeMs;
+    this.cookieManager = new CookieManager(this.baseOptions());
   }
 
   baseOptions(): CookieOptions {
-    log(this.isProd);
     return {
       httpOnly: true,
       secure: this.isProd,
@@ -55,8 +56,18 @@ export class CookieJwtManager {
     };
   }
   setAuthCookies(res: Response, tokens: JwtTokenPair): void {
-    res.cookie(COOKIE_NAME.ACCESS, tokens.accessToken, this.accessCookie());
-    res.cookie(COOKIE_NAME.REFRESH, tokens.refreshToken, this.refreshCookie());
+    this.cookieManager.set(
+      res,
+      COOKIE_NAME.ACCESS,
+      tokens.accessToken,
+      this.accessCookie(),
+    );
+    this.cookieManager.set(
+      res,
+      COOKIE_NAME.REFRESH,
+      tokens.refreshToken,
+      this.refreshCookie(),
+    );
   }
 
   readAuthCookies(req: Request): Partial<AuthServiceTypes.AuthCookie> {
@@ -71,11 +82,11 @@ export class CookieJwtManager {
   }
 
   setCsrf(res: Response, token: string) {
-    res.cookie(COOKIE_NAME.CSRF, token, this.csrfCookie());
+    this.cookieManager.set(res, COOKIE_NAME.CSRF, token, this.csrfCookie());
   }
   clearAuthCookies(res: Response): void {
-    res.clearCookie(COOKIE_NAME.ACCESS, this.accessCookie());
-    res.clearCookie(COOKIE_NAME.REFRESH, this.refreshCookie());
-    res.clearCookie(COOKIE_NAME.CSRF, this.csrfCookie());
+    this.cookieManager.clear(res, COOKIE_NAME.ACCESS, this.accessCookie());
+    this.cookieManager.clear(res, COOKIE_NAME.REFRESH, this.refreshCookie());
+    this.cookieManager.clear(res, COOKIE_NAME.CSRF, this.csrfCookie());
   }
 }

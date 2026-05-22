@@ -14,7 +14,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PatchMeDto } from './dto/patch-me.dto';
-import { AuthPayload } from '@zeroquest/nest-shared';
+import { ApiClientType, AuthPayload, ClientType } from '@zeroquest/nest-shared';
 import { UserEntity } from './entities/user.entity';
 import { SkipThrottle } from '@nestjs/throttler';
 
@@ -30,6 +30,7 @@ export class UserController {
     summary: 'Получить мой профиль',
     description: 'Возвращает профиль текущего пользователя.',
   })
+  @ApiClientType()
   @ApiOkResponse({
     type: UserEntity,
     description: 'Профиль успешно получен.',

@@ -51,6 +51,29 @@ export interface UpdatePlanDto {
   duratationDays?: number;
 }
 
+export type LoginAuthenticatedResponseDtoType = typeof LoginAuthenticatedResponseDtoType[keyof typeof LoginAuthenticatedResponseDtoType];
+
+
+export const LoginAuthenticatedResponseDtoType = {
+  AUTHENTICATED: 'AUTHENTICATED',
+} as const;
+
+export interface LoginAuthenticatedResponseDto {
+  type: LoginAuthenticatedResponseDtoType;
+}
+
+export type LoginTotpRequiredResponseDtoType = typeof LoginTotpRequiredResponseDtoType[keyof typeof LoginTotpRequiredResponseDtoType];
+
+
+export const LoginTotpRequiredResponseDtoType = {
+  TOTP_REQUIRED: 'TOTP_REQUIRED',
+} as const;
+
+export interface LoginTotpRequiredResponseDto {
+  type: LoginTotpRequiredResponseDtoType;
+  challengeId: string;
+}
+
 export type AcceptedPolicyDtoType = typeof AcceptedPolicyDtoType[keyof typeof AcceptedPolicyDtoType];
 
 
@@ -74,6 +97,11 @@ export interface LoginDto {
 export interface RegisterDto {
   login: string;
   password: string;
+}
+
+export interface LoginTotpValidateDto {
+  challengeId: string;
+  vallue: string;
 }
 
 export interface SessionEntity {
@@ -105,6 +133,24 @@ export interface PolicyEntity {
   type: PolicyEntityType;
   version: string;
   content: string;
+}
+
+export interface TotpValidateDto {
+  /** UUID challenge, полученный из `POST /totp/setup`. */
+  challengeId: string;
+  /**
+     * 6-значный TOTP код из приложения-аутентификатора.
+     * @pattern ^\d{6}$
+     */
+  value: string;
+}
+
+export interface TotpRemoveDto {
+  /**
+     * 6-значный TOTP код для подтверждения отключения двухфакторной аутентификации.
+     * @pattern ^\d{6}$
+     */
+  value: string;
 }
 
 export interface CreateInboundDto {
@@ -190,70 +236,6 @@ export interface UpdateUserDto {
   canComment?: boolean;
 }
 
-export interface CreateRefundDto {
-  /** Локальный идентификатор платежа в таблице payments. */
-  paymentId: number;
-}
-
-export type RefundEntityStatus = typeof RefundEntityStatus[keyof typeof RefundEntityStatus];
-
-
-export const RefundEntityStatus = {
-  PENDING: 'PENDING',
-  APPROVE: 'APPROVE',
-  REJECTED: 'REJECTED',
-} as const;
-
-export interface RefundEntity {
-  id: number;
-  status: RefundEntityStatus;
-  paymentId: number;
-}
-
-export interface CreditWalletDto { [key: string]: unknown }
-
-export interface DebitWalletDto { [key: string]: unknown }
-
-export interface CreateWalletDto {
-  /** @minimum 0 */
-  held?: number;
-  /** @minimum 0 */
-  balance?: number;
-}
-
-export interface UpdateWalletDto {
-  /** @minimum 0 */
-  held?: number;
-  /** @minimum 0 */
-  balance?: number;
-}
-
-export interface CreateReviewDto {
-  /** Текст отзыва. */
-  content: string;
-  /**
-     * Оценка от 1 до 5.
-     * @minimum 1
-     * @maximum 5
-     */
-  rating: number;
-}
-
-export interface ReviewUserEntity {
-  id: string;
-  login: string;
-}
-
-export interface ReviewEntity {
-  id: number;
-  userId: string;
-  content: string;
-  rating: number;
-  createdAt: string;
-  updatedAt: string;
-  user: ReviewUserEntity;
-}
-
 export interface CreatePaymentDto {
   /** Сумма пополнения в рублях строкой. */
   amount: string;
@@ -293,6 +275,24 @@ export interface GiveBonusDto {
   userId: string;
   /** Сумма бонуса в минимальных единицах (копейки). */
   amount: number;
+}
+
+export interface CreditWalletDto { [key: string]: unknown }
+
+export interface DebitWalletDto { [key: string]: unknown }
+
+export interface CreateWalletDto {
+  /** @minimum 0 */
+  held?: number;
+  /** @minimum 0 */
+  balance?: number;
+}
+
+export interface UpdateWalletDto {
+  /** @minimum 0 */
+  held?: number;
+  /** @minimum 0 */
+  balance?: number;
 }
 
 export interface SubscribeBuyDto {

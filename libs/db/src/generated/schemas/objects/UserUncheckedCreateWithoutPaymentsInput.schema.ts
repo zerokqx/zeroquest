@@ -4,7 +4,7 @@ import { UserRoleSchema } from '../enums/UserRole.schema';
 import { SubscribeUncheckedCreateNestedManyWithoutUserInputObjectSchema as SubscribeUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './SubscribeUncheckedCreateNestedManyWithoutUserInput.schema';
 import { ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema as ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './ReviewUncheckedCreateNestedOneWithoutUserInput.schema';
 import { LegalAcceptancesUncheckedCreateNestedManyWithoutUserInputObjectSchema as LegalAcceptancesUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './LegalAcceptancesUncheckedCreateNestedManyWithoutUserInput.schema';
-import { TotpTokenUncheckedCreateNestedOneWithoutUserInputObjectSchema as TotpTokenUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './TotpTokenUncheckedCreateNestedOneWithoutUserInput.schema'
+import { TotpMfaUncheckedCreateNestedOneWithoutUserInputObjectSchema as TotpMfaUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './TotpMfaUncheckedCreateNestedOneWithoutUserInput.schema'
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
@@ -20,7 +20,7 @@ const makeSchema = () => z.object({
   subscribes: z.lazy(() => SubscribeUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional(),
   review: z.lazy(() => ReviewUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  totp: z.lazy(() => TotpTokenUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional()
+  totpMfa: z.lazy(() => TotpMfaUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional()
 }).strict();
 export const UserUncheckedCreateWithoutPaymentsInputObjectSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutPaymentsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUncheckedCreateWithoutPaymentsInput>;
 export const UserUncheckedCreateWithoutPaymentsInputObjectZodSchema = makeSchema();

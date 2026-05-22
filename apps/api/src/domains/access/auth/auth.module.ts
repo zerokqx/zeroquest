@@ -11,15 +11,10 @@ import { JwtDecodePipe } from '@/domains/security/jwt/jwt-decode.pipe';
 import { CsrfModule } from '@/domains/security/csrf/csrf.module';
 import { JwtRefreshStrategy } from '../token/strategies/jwt-refresh.strategy';
 import { JwtAccessStrategy } from '../token/strategies/jwt-access.strategy';
+import { LocalAuthStrategy } from './local.strategy';
 
 @Module({
-  imports: [
-    PassportModule,
-    TokenModule,
-    SessionModule,
-    PolicyModule,
-    CsrfModule,
-  ],
+  imports: [PassportModule, TokenModule, SessionModule, PolicyModule, CsrfModule],
   controllers: [AuthController],
   providers: [
     AuthService,
@@ -27,6 +22,7 @@ import { JwtAccessStrategy } from '../token/strategies/jwt-access.strategy';
     CookieJwtManager,
     JwtDecodePipe,
     JwtAccessStrategy,
+    LocalAuthStrategy,
     JwtRefreshStrategy,
   ],
   exports: [TokenModule],

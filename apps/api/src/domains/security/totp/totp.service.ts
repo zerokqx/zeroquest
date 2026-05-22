@@ -1,135 +1,93 @@
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { generate, generateSecret, generateURI, verify } from 'otplib';
-import { EncryptData } from './types/encrypt.types';
-import {
-  ChallengeObject,
-  TotpTokenData,
-  ValidateObject,
-} from './types/totp.types';
+import { Response, Request, CookieOptions } from 'express';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { PrismaService, User } from '@zeroquest/db';
-import { RESPONSE_CODES } from '@zeroquest/constants';
-import { TotpEncrypt } from './totp.encrypt';
+import { generateSecret, generateURI, verify } from 'otplib';
+import { CryptoService, getRequestCookie } from '@zeroquest/nest-shared';
+import { type Tagged } from 'type-fest';
+import { COOKIE_NAME } from '@zeroquest/constants';
+import { ConfigService } from '@nestjs/config';
+import { EnvironmentVariables } from '@/config/configuration';
+import { TotpSetupDto } from './dto/totp-setup.dto';
+
+export type SetupType = Tagged<string, 'Setup'>;
+
+export interface SetupJwt {
+  type: SetupType;
+  uid: User['id'];
+  authTag: string;
+  iv: string;
+  ciphertext: string;
+}
 
 @Injectable()
 export class TotpService {
+  private readonly isProd!: boolean;
+  private readonly jwtSecret!: string;
+
   constructor(
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    private readonly config: ConfigService<EnvironmentVariables>,
     private readonly prisma: PrismaService,
-    private readonly totpEncrypt: TotpEncrypt,
-  ) {}
+    private readonly jwtService: JwtService,
+    private readonly cryptoService: CryptoService,
+  ) {
+    const isProd = this.config.getOrThrow('app.isProduction', { infer: true });
+    const jwt = this.config.getOrThrow('jwt', { infer: true });
+    if (!jwt.secret) throw new Error('JWT SECRET IS NOT DEFINED');
 
-  cacheKey(challangeId: string) {
-    return `totp:challenge:${challangeId}`;
+    this.isProd = isProd;
+    this.jwtSecret = jwt.secret;
   }
 
-  async generateNewTotp(userId: User['id']): Promise<TotpTokenData> {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!user) throw new BadRequestException('User is not found');
+  getUserTotp(id: User['id']) {
+    return this.prisma.totpMfa.findUnique({ where: { userId: id } });
+  }
 
+  options(): CookieOptions {
+    return {
+      httpOnly: true,
+      secure: this.isProd,
+      sameSite: this.isProd ? 'none' : 'lax',
+      path: '/',
+    };
+  }
+  async createSetup(res: Response, uid: User['id']) {
+    const totp = await this.getUserTotp(uid);
+    if (totp) throw new BadRequestException('Totp already exists');
     const secret = generateSecret();
-    const token = await generate({ secret });
-    const uri = generateURI({
-      issuer: 'ZeroQuest VPN',
-      label: user.login,
-      secret,
-    });
-    return {
-      secret,
-      token,
-      uri,
+    const encrypted = this.cryptoService.encrypt(secret);
+
+    const jwtPayload: SetupJwt = {
+      type: 'setup' as SetupType,
+      uid,
+      ...encrypted,
     };
-  }
 
-  async createNewTotpChallenge(encrypted: EncryptData) {
-    const challengeId = crypto.randomUUID();
-    const key = this.cacheKey(challengeId);
-    await this.cacheManager.set<ChallengeObject>(
-      key,
-      { ...encrypted, attempts: 0 },
-      300000,
-    );
-
-    return challengeId;
-  }
-
-  createUserTotp(userId: User['id'], encrypted: EncryptData) {
-    return this.prisma.user.update({
-      where: { id: userId },
-      data: {
-        totp: {
-          create: encrypted,
-        },
-      },
+    const jwt = await this.jwtService.signAsync<SetupJwt>(jwtPayload, {
+      secret: this.jwtSecret,
+      expiresIn: '5m',
     });
+    const uri = generateURI({ issuer: 'ZeroQuest VPN', label: 'TEST', secret });
+    res.cookie(COOKIE_NAME.TOTP_SETUP_JWT, jwt, this.options());
+    return { uri };
   }
 
-  async validateChallenge(
-    challengeId: string,
-    value: string,
-  ): Promise<ValidateObject> {
-    const key = this.cacheKey(challengeId);
-    const raw = await this.cacheManager.get<ChallengeObject>(key);
-
-    console.log(raw);
-    if (!raw)
-      throw new NotFoundException({
-        message: 'Challange not found',
-        code: RESPONSE_CODES.TOTP_CHALLENGE_NOT_FOUND,
+  async validateSetup(req: Request, res: Response, body: TotpSetupDto) {
+    const setupCookie = getRequestCookie(req, COOKIE_NAME.TOTP_SETUP_JWT);
+    if (!setupCookie)
+      throw new BadRequestException('Setup cookie is not defined.');
+    const { authTag, ciphertext, iv, uid } =
+      await this.jwtService.verifyAsync<SetupJwt>(setupCookie, {
+        secret: this.jwtSecret,
       });
+    const secret = this.cryptoService.decrypt({ authTag, ciphertext, iv });
 
-    const { attempts, ...encrypted } = raw;
-
-    // if(attempts > 5) throw new
-
-    const secret = this.totpEncrypt.decrypt(encrypted);
-    const { valid } = await verify({
-      token: value.padStart(6, '0'),
-      secret,
+    const { valid } = await verify({ secret, token: body.value });
+    if (!valid) throw new BadRequestException('Not valid');
+    const totp = await this.prisma.totpMfa.create({
+      data: { user: { connect: { id: uid } }, authTag, ciphertext, iv },
     });
-
-    if (!valid) {
-      throw new UnauthorizedException({
-        message: 'Invalid TOTP code',
-        code: RESPONSE_CODES.TOTP_INVALID_CHALLANGE,
-      });
-    }
-
-    await this.cacheManager.del(key);
-    return {
-      valid: true,
-      encrypted,
-    };
-  }
-
-  async removeTotp(userId: User['id'], value: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-
-      include: { totp: true },
-    });
-    if (!user || !user.totp)
-      throw new BadRequestException('User or totp not found');
-    const secret = this.totpEncrypt.decrypt(user.totp);
-    const { valid } = await verify({
-      token: value.padStart(6, '0'),
-      
-      secret,
-    });
-
-    if (valid) {
-      await this.prisma.totpToken.delete({ where: { id: user.totp.id } });
-    } else {
-      throw new BadRequestException({
-        message: 'Invalid TOTP code',
-        code: 'TOTP_INVALIDE',
-      });
-    }
+    res.clearCookie(COOKIE_NAME.TOTP_SETUP_JWT, this.options());
+    return totp;
   }
 }

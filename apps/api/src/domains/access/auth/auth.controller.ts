@@ -9,6 +9,7 @@ import {
   Post,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -41,6 +42,8 @@ import { CsrfPublic } from '@/domains/security/csrf/csrf.decorator';
 import { Fingerprint } from '@/domains/security/fingerprint/fingerprint.decorator';
 import { CsrfService } from '@/domains/security/csrf/csrf.service';
 import { RESPONSE_CODES } from '@zeroquest/constants';
+import { LocalGuard } from './local.guard';
+import { TotpGuard } from '@/domains/security/totp/totp.guard';
 
 type RequestWithClientType = {
   clientType: string;
@@ -77,6 +80,7 @@ export class AuthController {
   }
 
   @Post('password')
+  @UseGuards(LocalGuard, TotpGuard)
   @Public()
   @ClientType('web')
   @ApiOperation({
@@ -100,6 +104,15 @@ export class AuthController {
   @ApiForbiddenResponse({
     description: 'Указан неподдерживаемый client type.',
   })
+  @ApiOkResponse({
+    description: 'Пользователь успешно авторизован',
+    schema: {
+      example: {
+        message: 'OK',
+        code: RESPONSE_CODES.AUTHENTICATED,
+      },
+    },
+  })
   async password(
     @Body() body: LoginDto,
     @Headers('user-agent') userAgent: string,
@@ -115,13 +128,14 @@ export class AuthController {
       req.clientType ?? 'ClientType',
       getRequestHeader(req, 'x-forwarded-for') ?? 'NotFound',
     );
-    const tokens = await this.authService.password(
+    const result = await this.authService.password(
       body,
       req.clientType,
       userAgent,
     );
+    this.logger.debug(result);
 
-    this.cookieManager.setAuthCookies(res, tokens);
+    this.cookieManager.setAuthCookies(res, result.data);
     const csrf = this.csrfService.generateCsrfToken();
     this.cookieManager.setCsrf(res, csrf);
     await this.csrfService.trackCsrfToken(csrf, fingerprint);

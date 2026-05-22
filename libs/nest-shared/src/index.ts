@@ -3,6 +3,7 @@ export * from './lib/auth/auth.decorator';
 export * from './lib/client-type/client-type.decorator';
 export * from './lib/client-type/client-type.guard';
 export * from './lib/cookie/cookie.decorator';
+export * from './lib/cookie/cookie-manager';
 export * from './lib/decorators/log-access-to-route.decorator';
 export * from './lib/decorators/log-access-to-route.interceptor';
 export * from './lib/ip/allow-api.guard';
@@ -17,3 +18,6 @@ export * from './lib/role/role.guard';
 export * from './lib/user-agent/user-agent.decorator';
 export * from './lib/react-admin';
 export * from './lib/react-admin-simple-rest';
+
+export * from './lib/enum-maker';
+export * from "./lib/crypto/"

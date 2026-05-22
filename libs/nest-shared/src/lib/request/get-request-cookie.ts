@@ -1,9 +1,7 @@
-type RequestLikeWithCookies = {
-  cookies?: Record<string, unknown>;
-};
+import {Request} from "express"
 
 export const getRequestCookie = (
-  request: RequestLikeWithCookies,
+  request: Request,
   cookieName: string,
 ): string | undefined => {
   const cookie = request.cookies?.[cookieName];

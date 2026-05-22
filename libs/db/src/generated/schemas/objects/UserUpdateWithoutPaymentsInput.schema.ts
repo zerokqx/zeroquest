@@ -10,7 +10,7 @@ import { SubscribeUpdateManyWithoutUserNestedInputObjectSchema as SubscribeUpdat
 import { ReviewUpdateOneWithoutUserNestedInputObjectSchema as ReviewUpdateOneWithoutUserNestedInputObjectSchema } from './ReviewUpdateOneWithoutUserNestedInput.schema';
 import { WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema as WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema } from './WalletUpdateOneRequiredWithoutUserNestedInput.schema';
 import { LegalAcceptancesUpdateManyWithoutUserNestedInputObjectSchema as LegalAcceptancesUpdateManyWithoutUserNestedInputObjectSchema } from './LegalAcceptancesUpdateManyWithoutUserNestedInput.schema';
-import { TotpTokenUpdateOneWithoutUserNestedInputObjectSchema as TotpTokenUpdateOneWithoutUserNestedInputObjectSchema } from './TotpTokenUpdateOneWithoutUserNestedInput.schema'
+import { TotpMfaUpdateOneWithoutUserNestedInputObjectSchema as TotpMfaUpdateOneWithoutUserNestedInputObjectSchema } from './TotpMfaUpdateOneWithoutUserNestedInput.schema'
 
 const makeSchema = () => z.object({
   id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -26,7 +26,7 @@ const makeSchema = () => z.object({
   review: z.lazy(() => ReviewUpdateOneWithoutUserNestedInputObjectSchema).optional(),
   wallet: z.lazy(() => WalletUpdateOneRequiredWithoutUserNestedInputObjectSchema).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesUpdateManyWithoutUserNestedInputObjectSchema).optional(),
-  totp: z.lazy(() => TotpTokenUpdateOneWithoutUserNestedInputObjectSchema).optional()
+  totpMfa: z.lazy(() => TotpMfaUpdateOneWithoutUserNestedInputObjectSchema).optional()
 }).strict();
 export const UserUpdateWithoutPaymentsInputObjectSchema: z.ZodType<Prisma.UserUpdateWithoutPaymentsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUpdateWithoutPaymentsInput>;
 export const UserUpdateWithoutPaymentsInputObjectZodSchema = makeSchema();

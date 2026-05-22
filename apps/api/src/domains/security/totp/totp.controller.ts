@@ -1,149 +1,86 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { TotpService } from './totp.service';
-import { TotpEncrypt } from './totp.encrypt';
-import { TotpValidateDto } from './dto/totp-validate.dto';
 import { ApiClientType, AuthPayload, ClientType } from '@zeroquest/nest-shared';
-import { AuthServiceTypes } from '@zeroquest/types';
 import {
-  ApiBadRequestResponse,
   ApiBody,
   ApiCookieAuth,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiForbiddenResponse,
-  ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { RESPONSE_CODES } from '@zeroquest/constants';
-import { TotpRemoveDto } from './dto/totp-remove.dto';
+import { TotpGuard } from './totp.guard';
 
 @ApiTags('TOTP')
 @ApiCookieAuth('zeroquestAccess')
 @Controller('totp')
 export class TotpController {
-  constructor(
-    private readonly totpService: TotpService,
-    private readonly totpEncrypt: TotpEncrypt,
-  ) {}
+
+  constructor(private readonly totpService: TotpService) {}
 
   @ClientType()
   @ApiClientType()
   @Post('setup')
   @ApiOperation({
-    summary: 'Создать TOTP challenge',
-    description:
-      'Генерирует новый TOTP секрет, шифрует его и возвращает идентификатор challenge для последующей валидации кода.',
+    summary: 'Setup TOTP',
+    description: 'Создает setup jwt cookie и возвращает uri для приложения.',
   })
   @ApiCreatedResponse({
-    description: 'TOTP challenge успешно создан.',
-    schema: {
-      type: 'string',
-      format: 'uuid',
-      example: '91f6f5ac-8858-4dfb-92bc-e6786f064571',
-    },
-  })
-  @ApiForbiddenResponse({
-    description: 'Указан неподдерживаемый client type.',
-  })
-  async setup(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
-    const token = await this.totpService.generateNewTotp(payload.sub);
-    const encrypted = this.totpEncrypt.encrypt(token.secret);
-    const challengeId =
-      await this.totpService.createNewTotpChallenge(encrypted);
-    return {
-      challengeId,
-      uri: token.uri,
-    };
-  }
-
-  @ClientType()
-  @ApiClientType()
-  @Post('validate')
-  @ApiOperation({
-    summary: 'Подтвердить TOTP код',
-    description:
-      'Проверяет введённый 6-значный TOTP код по challengeId и, если код валиден, привязывает TOTP к текущему пользователю.',
-  })
-  @ApiBody({
-    type: TotpValidateDto,
-    description: 'Данные для проверки TOTP challenge.',
-  })
-  @ApiCreatedResponse({
-    description: 'TOTP код подтверждён, TOTP успешно подключён к пользователю.',
-  })
-  @ApiBadRequestResponse({
-    description: 'Некорректный формат challengeId или TOTP кода.',
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Неверный TOTP код.',
+    description: 'Setup успешно создан',
     schema: {
       example: {
-        message: 'Invalid TOTP code',
-        code: RESPONSE_CODES.TOTP_INVALID_CHALLANGE,
+        uri: 'otpauth://totp/ZeroQuest%20VPN:TEST?secret=SECRET&issuer=ZeroQuest%20VPN',
       },
     },
   })
-  @ApiNotFoundResponse({
-    description: 'Challenge не найден или истёк.',
-    schema: {
-      example: {
-        message: 'Challange not found',
-        code: RESPONSE_CODES.TOTP_CHALLENGE_NOT_FOUND,
-      },
-    },
-  })
-  @ApiForbiddenResponse({
-    description: 'Указан неподдерживаемый client type.',
-  })
-  async validate(
-    @Body() { challengeId, value }: TotpValidateDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+  async setup(
+    @AuthPayload() payload: any,
+    @Res({ passthrough: true }) res: any,
   ) {
-    const validateObject = await this.totpService.validateChallenge(
-      challengeId,
-      value,
-    );
-    if (validateObject.valid) {
-      await this.totpService.createUserTotp(
-        payload.sub,
-        validateObject.encrypted,
-      );
-    }
+    return await this.totpService.createSetup(res, payload.sub);
   }
 
   @ClientType()
   @ApiClientType()
-  @Delete()
+  @Post('setup/validate')
   @ApiOperation({
-    summary: 'Отключить TOTP',
-    description:
-      'Удаляет TOTP у текущего пользователя после подтверждения 6-значным кодом из приложения-аутентификатора.',
+    summary: 'Validate setup TOTP',
+    description: 'Проверяет код и сохраняет TOTP для пользователя.',
   })
   @ApiBody({
-    type: TotpRemoveDto,
-    description: 'Код подтверждения для отключения TOTP.',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        value: {
+          type: 'string',
+          example: '123456',
+        },
+      },
+      required: ['value'],
+    },
   })
   @ApiOkResponse({
-    description: 'TOTP успешно отключён.',
-    schema: {
-      example: {
-        message: 'TOTP disabled',
-      },
-    },
+    description: 'TOTP setup подтвержден',
   })
-  @ApiBadRequestResponse({
-    description: 'Пользователь/TOTP не найден или код TOTP неверный.',
-  })
-  @ApiForbiddenResponse({
-    description: 'Указан неподдерживаемый client type.',
-  })
-  async remove(
-    @Body() { value }: TotpRemoveDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+  async validateSetup(
+    @Body() body: any,
+    @Req() req: any,
+    @Res({ passthrough: true }) res: any,
   ) {
-    await this.totpService.removeTotp(payload.sub, value);
-    return { message: 'TOTP disabled' };
+    return await this.totpService.validateSetup(req, res, body);
+  }
+
+  @ClientType()
+  @ApiBody({})
+  @ApiClientType()
+  @UseGuards(TotpGuard)
+  @Post('test')
+  @ApiOperation({
+    summary: 'Test TOTP guard',
+    description: 'Тестовый endpoint для проверки работы TotpGuard.',
+  })
+  testGuard() {
+    return { ok: true };
   }
 }

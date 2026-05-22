@@ -7,6 +7,11 @@ export class AxiosState {
   private fingerprint?: string;
   private handledErrors = new Set<string>();
 
+  reset() {
+    this.refreshPromise = null;
+    this.csrfPromise = null;
+    this.handledErrors = new Set();
+  }
   getRefreshPromise(refreshFn: () => Promise<AxiosResponse>) {
     this.refreshPromise ??= refreshFn().finally(() => {
       this.refreshPromise = null;

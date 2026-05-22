@@ -13,8 +13,8 @@ import { ReviewWhereInputObjectSchema as ReviewWhereInputObjectSchema } from './
 import { WalletScalarRelationFilterObjectSchema as WalletScalarRelationFilterObjectSchema } from './WalletScalarRelationFilter.schema';
 import { WalletWhereInputObjectSchema as WalletWhereInputObjectSchema } from './WalletWhereInput.schema';
 import { LegalAcceptancesListRelationFilterObjectSchema as LegalAcceptancesListRelationFilterObjectSchema } from './LegalAcceptancesListRelationFilter.schema';
-import { TotpTokenNullableScalarRelationFilterObjectSchema as TotpTokenNullableScalarRelationFilterObjectSchema } from './TotpTokenNullableScalarRelationFilter.schema';
-import { TotpTokenWhereInputObjectSchema as TotpTokenWhereInputObjectSchema } from './TotpTokenWhereInput.schema'
+import { TotpMfaNullableScalarRelationFilterObjectSchema as TotpMfaNullableScalarRelationFilterObjectSchema } from './TotpMfaNullableScalarRelationFilter.schema';
+import { TotpMfaWhereInputObjectSchema as TotpMfaWhereInputObjectSchema } from './TotpMfaWhereInput.schema'
 
 const userwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => UserWhereInputObjectSchema), z.lazy(() => UserWhereInputObjectSchema).array()]).optional(),
@@ -35,7 +35,7 @@ const userwhereinputSchema = z.object({
   review: z.union([z.lazy(() => ReviewNullableScalarRelationFilterObjectSchema), z.lazy(() => ReviewWhereInputObjectSchema)]).optional(),
   wallet: z.union([z.lazy(() => WalletScalarRelationFilterObjectSchema), z.lazy(() => WalletWhereInputObjectSchema)]).optional(),
   legalAcceptances: z.lazy(() => LegalAcceptancesListRelationFilterObjectSchema).optional(),
-  totp: z.union([z.lazy(() => TotpTokenNullableScalarRelationFilterObjectSchema), z.lazy(() => TotpTokenWhereInputObjectSchema)]).optional()
+  totpMfa: z.union([z.lazy(() => TotpMfaNullableScalarRelationFilterObjectSchema), z.lazy(() => TotpMfaWhereInputObjectSchema)]).optional()
 }).strict();
 export const UserWhereInputObjectSchema: z.ZodType<Prisma.UserWhereInput> = userwhereinputSchema as unknown as z.ZodType<Prisma.UserWhereInput>;
 export const UserWhereInputObjectZodSchema = userwhereinputSchema;

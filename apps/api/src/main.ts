@@ -14,12 +14,14 @@ import cookieParser from 'cookie-parser';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { logger } from './logger.config';
 import { ConfigService } from '@nestjs/config';
+import { Logger  as PinoLogger} from 'nestjs-pino';
 import { EnvironmentVariables } from './config/configuration';
 import { HEADERS_NAMES } from '@zeroquest/constants';
 import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
     logger,
   });
   const config = app.get<ConfigService<EnvironmentVariables>>(ConfigService);

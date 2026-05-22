@@ -10,6 +10,11 @@
       "import": "./src/index.ts",
       "default": "./src/index.ts"
     },
+    "./cookie-manager": {
+      "types": "./src/lib/cookie/cookie-manager.ts",
+      "import": "./src/lib/cookie/cookie-manager.ts",
+      "default": "./src/lib/cookie/cookie-manager.ts"
+    },
     "./package.json": "./package.json"
   },
   "dependencies": {

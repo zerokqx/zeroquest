@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Prisma, PrismaService } from '@zeroquest/db';
+import { Prisma, PrismaService, User } from '@zeroquest/db';
 
 @Injectable()
 export class AuthRepository {
@@ -11,6 +11,13 @@ export class AuthRepository {
     return this.prisma.$transaction(callback);
   }
 
+  findUserById(id: User['id']) {
+    return this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
   findUserByLogin(login: string) {
     this.logger.debug(`Поиск пользователя для входа: login=${login}`);
     return this.prisma.user.findUnique({
@@ -40,7 +47,6 @@ export class AuthRepository {
       include: { clientType: true, user: true },
     });
   }
-
 
   updateSessionTokensDataIfJtiMatches(
     id: string,

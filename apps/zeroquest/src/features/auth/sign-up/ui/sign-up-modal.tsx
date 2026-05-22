@@ -12,13 +12,19 @@ import {
 } from '@mantine/core';
 import { AlertCircle } from 'lucide-react';
 import { useMediaQuery } from '@mantine/hooks';
-import { useSignUpForm } from '../model/use-sign-up-form';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useAuthControllerRegister } from '@/shared/api/orval/base-api/auth/auth';
+import { RegisterDto } from '@/shared/api/orval/base-api/base-api.schemas';
+import { getAuthErrorMessage } from '@/features/auth/shared/get-auth-error-message';
 
 interface SignUpModalProps
   extends Pick<ModalProps, 'opened' | 'onClose' | 'stackId'> {
   onOpenSignIn: () => void;
   onSuccess?: () => void;
 }
+
+type SignUpValues = RegisterDto & { confirmPassword: string };
 
 export const SignUpModal = ({
   opened,
@@ -27,15 +33,38 @@ export const SignUpModal = ({
   onOpenSignIn,
   onSuccess,
 }: SignUpModalProps) => {
+  const [submitError, setSubmitError] = useState('');
   const {
     register,
-    errors,
-    submitError,
-    isPending,
     handleSubmit,
-    onSubmit,
     getValues,
-  } = useSignUpForm({ onSuccess });
+    formState: { errors },
+  } = useForm<SignUpValues>({
+    defaultValues: {
+      login: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
+  const { mutateAsync, isPending } = useAuthControllerRegister();
+
+  const onSubmit = async (values: SignUpValues) => {
+    setSubmitError('');
+
+    try {
+      await mutateAsync({
+        data: {
+          login: values.login.trim(),
+          password: values.password,
+        },
+      });
+
+      onSuccess?.();
+    } catch (error) {
+      setSubmitError(getAuthErrorMessage(error));
+    }
+  };
+
   const isMobile = useMediaQuery('(max-width: 48em)');
 
   return (

@@ -13,9 +13,10 @@ import { useNavigate } from '@tanstack/react-router';
 import { SignInModal } from '@/features/auth/sign-in';
 import { SignUpModal } from '@/features/auth/sign-up';
 import { getUserControllerMeQueryKey } from '@/shared/api/orval/base-api/user/user';
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
+import { TotpModal } from '@/features/auth/totp/ui/totp-modal';
 
-type AuthModalId = 'sign-in' | 'sign-up';
+type AuthModalId = 'sign-in' | 'sign-up' | 'totp';
 
 interface AuthMoodalStackProps {
   mode?: AuthModalId;
@@ -23,7 +24,8 @@ interface AuthMoodalStackProps {
 export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const stack = useModalsStack<AuthModalId>(['sign-in', 'sign-up']);
+  const [challengeId, setChallengeId] = useState('');
+  const stack = useModalsStack<AuthModalId>(['sign-in', 'sign-up', 'totp']);
 
   const handleAuthSuccess = async () => {
     await queryClient.refetchQueries({
@@ -33,6 +35,11 @@ export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
     setIsAuth(true);
     stack.closeAll();
     await navigate({ to: '/' });
+  };
+
+  const handleTotpRequired = (nextChallengeId: string) => {
+    setChallengeId(nextChallengeId);
+    stack.open('totp');
   };
 
   useLayoutEffect(() => {
@@ -61,6 +68,7 @@ export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
           {...stack.register('sign-in')}
           onOpenSignUp={() => stack.open('sign-up')}
           onSuccess={handleAuthSuccess}
+          onTotpRequired={handleTotpRequired}
         />
         <SignUpModal
           {...stack.register('sign-up')}
@@ -68,6 +76,11 @@ export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
           onSuccess={() => {
             stack.open('sign-in');
           }}
+        />
+        <TotpModal
+          challengeId={challengeId}
+          onSuccess={handleAuthSuccess}
+          {...stack.register('totp')}
         />
       </Modal.Stack>
     </Center>

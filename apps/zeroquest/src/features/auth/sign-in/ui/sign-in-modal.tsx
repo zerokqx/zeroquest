@@ -13,12 +13,24 @@ import {
 } from '@mantine/core';
 import { AlertCircle } from 'lucide-react';
 import { useMediaQuery } from '@mantine/hooks';
-import { useSignInForm } from '../model/use-sign-in-form';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useAuthControllerPassword } from '@/shared/api/orval/base-api/auth/auth';
+import { PolicyEntityType } from '@/shared/api/orval/base-api/base-api.schemas';
+import { getAuthErrorMessage } from '@/features/auth/shared/get-auth-error-message';
+import { useGetActualPolicy } from '@/entites/policy/api/get-actual-policy';
 
 interface SignInModalProps
   extends Pick<ModalProps, 'opened' | 'onClose' | 'stackId'> {
   onOpenSignUp: () => void;
   onSuccess?: () => void;
+  onTotpRequired?: (challengeId: string) => void;
+}
+
+interface SignInFormValues {
+  login: string;
+  password: string;
+  privacyAccepted: boolean;
 }
 
 export const SignInModal = ({
@@ -27,16 +39,66 @@ export const SignInModal = ({
   stackId,
   onOpenSignUp,
   onSuccess,
+  onTotpRequired,
 }: SignInModalProps) => {
+  const [submitError, setSubmitError] = useState('');
+  const { data: actualPrivacyPolicy, isLoading: isPolicyLoading } =
+    useGetActualPolicy(PolicyEntityType.PRIVACY);
   const {
     register,
-    errors,
-    submitError,
-    isPending,
-    isPolicyLoading,
     handleSubmit,
-    onSubmit,
-  } = useSignInForm({ onSuccess });
+    formState: { errors },
+  } = useForm<SignInFormValues>({
+    defaultValues: {
+      login: '',
+      password: '',
+      privacyAccepted: false,
+    },
+  });
+  const { mutateAsync, isPending } = useAuthControllerPassword();
+
+  const onSubmit = async (values: SignInFormValues) => {
+    setSubmitError('');
+
+    const policyVersion = actualPrivacyPolicy?.version;
+    if (!policyVersion) {
+      setSubmitError('Не удалось получить актуальную версию политики');
+      return;
+    }
+
+    try {
+      const result = await mutateAsync({
+        data: {
+          login: values.login.trim(),
+          password: values.password,
+          policy: [
+            {
+              type: PolicyEntityType.PRIVACY,
+              version: policyVersion,
+            },
+          ],
+        },
+      });
+
+      if (result.type === 'TOTP_REQUIRED') {
+        const challengeId =
+          (result as { challengeId?: string }).challengeId ??
+          (result as { data?: { challengeId?: string } }).data?.challengeId;
+        if (!challengeId) {
+          setSubmitError('Не удалось получить challenge для проверки TOTP');
+          return;
+        }
+
+        onTotpRequired?.(challengeId);
+        return;
+      }
+
+      onSuccess?.();
+    } catch (error) {
+      setSubmitError(getAuthErrorMessage(error));
+    }
+  };
+
   const isMobile = useMediaQuery('(max-width: 48em)');
 
   return (

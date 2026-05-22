@@ -17,7 +17,7 @@ export const UserInputSchema = z.object({
     wallet: z.unknown(),
     walletId: z.string(),
     legalAcceptances: z.array(z.unknown()),
-    totp: z.unknown().optional().nullable()
+    totpMfa: z.unknown().optional().nullable()
 }).strict();
 
 export type UserInputType = z.infer<typeof UserInputSchema>;
