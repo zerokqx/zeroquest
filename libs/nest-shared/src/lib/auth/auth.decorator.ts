@@ -10,17 +10,18 @@ export const IS_PUBLIC_KEY = 'isPubic';
 export const AUTH_TOKEN_TYPE_KEY = 'authTokenType';
 
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+
 export const AuthToken = (
   type: AuthServiceTypes.JwtPayloadSchemaType['type'],
 ) => SetMetadata(AUTH_TOKEN_TYPE_KEY, type);
 
-export const AuthPayload = createParamDecorator(
+export const User = createParamDecorator(
   (
     _data: unknown,
     ctx: ExecutionContext,
   ): AuthServiceTypes.JwtPayloadSchemaType => {
-    const request = ctx.switchToHttp().getRequest();
-    const user = request?.user;
+    const req = ctx.switchToHttp().getRequest();
+    const user = req?.user;
     if (user) {
       return user satisfies AuthServiceTypes.JwtPayloadSchemaType;
     }

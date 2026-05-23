@@ -18,8 +18,3 @@ export class LoginDto extends RegisterDto {
   @IsArray()
   policy!: AcceptedPolicyDto[];
 }
-
-
-
-
-

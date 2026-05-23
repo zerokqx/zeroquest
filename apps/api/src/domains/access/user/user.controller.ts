@@ -14,7 +14,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PatchMeDto } from './dto/patch-me.dto';
-import { ApiClientType, AuthPayload, ClientType } from '@zeroquest/nest-shared';
+import { ApiClientType, User, ClientType } from '@zeroquest/nest-shared';
 import { UserEntity } from './entities/user.entity';
 import { SkipThrottle } from '@nestjs/throttler';
 
@@ -35,7 +35,7 @@ export class UserController {
     type: UserEntity,
     description: 'Профиль успешно получен.',
   })
-  async me(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
+  async me(@User() payload: AuthServiceTypes.JwtPayloadSchemaType) {
     const data = await this.userService.me(payload);
 
     return new UserEntity(data);
@@ -56,7 +56,7 @@ export class UserController {
   })
   async mePatch(
     @Body() body: PatchMeDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.userService.patchMe(payload, body);
 

@@ -9,6 +9,7 @@ import { COOKIE_NAME } from '@zeroquest/constants';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '@/config/configuration';
 import { TotpSetupDto } from './dto/totp-setup.dto';
+import { TotpToggleDto } from './dto/totp-toggle.dto';
 
 export type SetupType = Tagged<string, 'Setup'>;
 
@@ -89,5 +90,14 @@ export class TotpService {
     });
     res.clearCookie(COOKIE_NAME.TOTP_SETUP_JWT, this.options());
     return totp;
+  }
+
+  async toggle(userId: User['id'], { status }: TotpToggleDto) {
+    return this.prisma.totpMfa.update({
+      where: {
+        userId,
+      },
+      data: { enabled: status },
+    });
   }
 }

@@ -18,7 +18,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthPayload, Role } from '@zeroquest/nest-shared';
+import { User, Role } from '@zeroquest/nest-shared';
 import { SubscribeBuyDto } from './dto/subscribe-buy.dto';
 import { ResetSubscribeDto } from './dto/reset-subscribe.dto';
 import { SubscribeEntity } from './entities/subscribe.entity';
@@ -39,14 +39,14 @@ export class SubscribeController {
   @Get('link/:id')
   getLink(
     @Param('id') id: Subscribe['id'],
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.subscribeService.getLink(id, payload);
   }
   @Post()
   async buy(
     @Body() body: SubscribeBuyDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.subscribeService.buy(body, payload);
   }
@@ -54,7 +54,7 @@ export class SubscribeController {
   @Post('reset')
   async resetSubscribe(
     @Body() body: ResetSubscribeDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.subscribeService.resetSubscribtion(
       body.subscribeId,
@@ -72,7 +72,7 @@ export class SubscribeController {
     type: SubscribeEntity,
     description: 'Список подписок успешно получен.',
   })
-  async findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
+  async findAll(@User() payload: AuthServiceTypes.JwtPayloadSchemaType) {
     const data = await this.subscribeService.findAll(payload);
     return data.map((subscribe) => new SubscribeEntity(subscribe));
   }
@@ -94,7 +94,7 @@ export class SubscribeController {
   findOne(
     @Param('id') id: string,
 
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.subscribeService.findOne(id, payload);
   }
@@ -143,7 +143,7 @@ export class SubscribeController {
   })
   remove(
     @Param('id') id: string,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.subscribeService.remove(id, payload);
   }

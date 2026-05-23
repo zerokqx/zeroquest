@@ -30,7 +30,7 @@ export class BanGuard implements CanActivate {
     const req = context.switchToHttp().getRequest<Request>();
 
     if (!req.user) throw new UnauthorizedException('dawdaw');
-    const isBanned = await this.banService.isBanned(req.user.sub);
+    const isBanned = await this.banService.isBanned(req.user.id);
     if (isBanned)
       throw new ForbiddenException({
         message: 'You are banned',

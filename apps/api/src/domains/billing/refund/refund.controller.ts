@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { RefundService } from './refund.service';
 import { CreateRefundDto } from './dto/create-refund.dto';
-import { AuthPayload, Role } from '@zeroquest/nest-shared';
+import { User, Role } from '@zeroquest/nest-shared';
 import {
   ApiBody,
   ApiHeader,
@@ -49,7 +49,7 @@ export class RefundController {
   })
   create(
     @Body() createRefundDto: CreateRefundDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.refundService.create(createRefundDto, payload);
   }

@@ -7,6 +7,7 @@ import { type Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { EnvironmentVariables } from '@/config/configuration';
 import { AuthServiceTypes } from '@zeroquest/types';
+import { PrismaService } from '@zeroquest/db';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -14,7 +15,8 @@ export class JwtRefreshStrategy extends PassportStrategy(
   'jwt-refresh',
 ) {
   constructor(
-    config: ConfigService<EnvironmentVariables>,
+    private readonly prisma: PrismaService,
+    private readonly config: ConfigService<EnvironmentVariables>,
   ) {
     const secret = config.get('jwt', { infer: true })?.secret;
     if (!secret) throw new Error('SECRET IS NOT DEFINED');
@@ -29,8 +31,9 @@ export class JwtRefreshStrategy extends PassportStrategy(
     });
   }
 
-  override async validate(payload: unknown): Promise<AuthServiceTypes.JwtPayloadSchemaType> {
-    const parsed = await AuthServiceTypes.JwtPayloadSchema.safeParseAsync(payload);
+  override async validate(payload: unknown): Promise<Express.User> {
+    const parsed =
+      await AuthServiceTypes.JwtPayloadSchema.safeParseAsync(payload);
 
     if (!parsed.success) {
       throw new UnauthorizedException('Invalid token payload');
@@ -40,7 +43,10 @@ export class JwtRefreshStrategy extends PassportStrategy(
       throw new UnauthorizedException('Invalid token type');
     }
 
+    const user = await this.prisma.user.findUniqueOrThrow({
+      where: { id: parsed.data.sub },
+    });
 
-    return parsed.data;
+    return { ...user, jwtPayload: parsed.data };
   }
 }
