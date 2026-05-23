@@ -28,7 +28,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { AuthPayload, Role } from '@zeroquest/nest-shared';
+import { User, Role } from '@zeroquest/nest-shared';
 import { WalletService } from '@/domains/billing/wallet/wallet.service';
 import { PaymentEntity } from './entities/payment.entity';
 import {
@@ -71,7 +71,7 @@ export class PaymentController {
   })
   async create(
     @Body() createPaymentDto: CreatePaymentDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
     @Headers(IDEMPOTENCE_KEY_HEADER) idempotenceKey?: string,
   ) {
     return this.paymentService.create(createPaymentDto, payload, idempotenceKey);
@@ -105,7 +105,7 @@ export class PaymentController {
     isArray: true,
     description: 'Список платежей успешно получен.',
   })
-  async findAll(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
+  async findAll(@User() payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.paymentService.findAll(payload);
   }
 
@@ -123,7 +123,7 @@ export class PaymentController {
     },
   })
   events(
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
     @Req() req: Request,
   ) {
     this.logger.verbose(
@@ -162,7 +162,7 @@ export class PaymentController {
   })
   findOne(
     @Param('id', ParseIntPipe) id: number,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.paymentService.findOne(id, payload);
   }

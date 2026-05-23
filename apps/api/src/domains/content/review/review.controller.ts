@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { AuthPayload } from '@zeroquest/nest-shared';
+import { User } from '@zeroquest/nest-shared';
 import {
   ApiCookieAuth,
   ApiBody,
@@ -41,7 +41,7 @@ export class ReviewController {
   })
   create(
     @Body() createReviewDto: CreateReviewDto,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.reviewService.create(createReviewDto, payload);
   }
@@ -88,7 +88,7 @@ export class ReviewController {
     type: ReviewEntity,
     description: 'Отзыв успешно удалён.',
   })
-  removeMyReview(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
+  removeMyReview(@User() payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.reviewService.removeMyReview(payload);
   }
 }

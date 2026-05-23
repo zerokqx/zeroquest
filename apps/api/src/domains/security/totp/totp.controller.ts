@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { TotpService } from './totp.service';
-import { ApiClientType, AuthPayload, ClientType } from '@zeroquest/nest-shared';
+import { ApiClientType, User, ClientType } from '@zeroquest/nest-shared';
+import type { Request, Response } from 'express';
 import {
   ApiBody,
   ApiCookieAuth,
@@ -9,13 +10,16 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { TotpSetupDto } from './dto/totp-setup.dto';
+import { AuthServiceTypes } from '@zeroquest/types';
 import { TotpGuard } from './totp.guard';
+import { TotpApiBody } from './totp.decorator';
+import { TotpToggleDto } from './dto/totp-toggle.dto';
 
 @ApiTags('TOTP')
 @ApiCookieAuth('zeroquestAccess')
 @Controller('totp')
 export class TotpController {
-
   constructor(private readonly totpService: TotpService) {}
 
   @ClientType()
@@ -34,8 +38,8 @@ export class TotpController {
     },
   })
   async setup(
-    @AuthPayload() payload: any,
-    @Res({ passthrough: true }) res: any,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @Res({ passthrough: true }) res: Response,
   ) {
     return await this.totpService.createSetup(res, payload.sub);
   }
@@ -49,38 +53,32 @@ export class TotpController {
   })
   @ApiBody({
     required: true,
-    schema: {
-      type: 'object',
-      properties: {
-        value: {
-          type: 'string',
-          example: '123456',
-        },
-      },
-      required: ['value'],
-    },
+    type: TotpSetupDto,
   })
   @ApiOkResponse({
     description: 'TOTP setup подтвержден',
   })
   async validateSetup(
-    @Body() body: any,
-    @Req() req: any,
-    @Res({ passthrough: true }) res: any,
+    @Body() body: TotpSetupDto,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
   ) {
     return await this.totpService.validateSetup(req, res, body);
   }
 
-  @ClientType()
-  @ApiBody({})
-  @ApiClientType()
-  @UseGuards(TotpGuard)
-  @Post('test')
+  @Post('toggle')
+
   @ApiOperation({
-    summary: 'Test TOTP guard',
-    description: 'Тестовый endpoint для проверки работы TotpGuard.',
+    summary: 'Включает или выключает TOTP',
   })
-  testGuard() {
-    return { ok: true };
+
+  @ApiClientType()
+  @TotpApiBody({type: TotpToggleDto})
+  @UseGuards(TotpGuard)
+  async disableTotp(
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @Body() body: TotpToggleDto,
+  ) {
+    await this.totpService.toggle(payload.sub, body);
   }
 }

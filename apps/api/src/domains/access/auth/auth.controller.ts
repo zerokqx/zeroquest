@@ -31,7 +31,7 @@ import type { AuthServiceTypes } from '@zeroquest/types';
 import {
   ApiClientType,
   ApiUserAgent,
-  AuthPayload,
+  User,
   AuthToken,
   ClientType,
   getRequestHeader,
@@ -44,6 +44,8 @@ import { CsrfService } from '@/domains/security/csrf/csrf.service';
 import { RESPONSE_CODES } from '@zeroquest/constants';
 import { LocalGuard } from './local.guard';
 import { TotpGuard } from '@/domains/security/totp/totp.guard';
+import { TotpApiBody } from '@/domains/security/totp/totp.decorator';
+import { JwtPayload } from '../token/token.decorator';
 
 type RequestWithClientType = {
   clientType: string;
@@ -80,8 +82,8 @@ export class AuthController {
   }
 
   @Post('password')
-  @UseGuards(LocalGuard, TotpGuard)
   @Public()
+  @UseGuards(LocalGuard, TotpGuard)
   @ClientType('web')
   @ApiOperation({
     summary: 'Вход по логину и паролю',
@@ -91,7 +93,7 @@ export class AuthController {
   @ApiClientType()
   @ApiUserAgent()
   @ApiConsumes('application/json')
-  @ApiBody({
+  @TotpApiBody({
     type: LoginDto,
     description: 'Данные для входа',
   })
@@ -209,21 +211,20 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
     @Headers('user-agent') ua: string,
-    @AuthPayload()
-    refreshPayload: AuthServiceTypes.JwtPayloadSchemaType,
+    @JwtPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     this.logger.debug(
       `Запрошено обновление токенов: clientType=${req.clientType}`,
     );
     const tokens = await this.authService.refresh(
-      refreshPayload,
+      payload,
       req.clientType!,
       ua,
     );
 
     this.cookieManager.setAuthCookies(res, tokens);
 
-    this.logger.log(`Токены обновлены: sessionId=${refreshPayload.sid}`);
+    this.logger.log(`Токены обновлены: sessionId=${payload.sid}`);
     return { message: 'Токены успешно обновлены' };
   }
 
@@ -251,7 +252,7 @@ export class AuthController {
   @ApiClientType()
   @ApiUserAgent()
   async logout(
-    @AuthPayload() accessPayload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() accessPayload: AuthServiceTypes.JwtPayloadSchemaType,
     @Res({ passthrough: true }) res: Response,
   ) {
     await this.authService.logout(accessPayload);

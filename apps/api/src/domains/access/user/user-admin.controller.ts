@@ -20,7 +20,7 @@ import {
 import {
   ApiClientType,
   ApiUserAgent,
-  AuthPayload,
+  User,
   ReactAdminSimpleRestQueryDto,
   Role,
 } from '@zeroquest/nest-shared';
@@ -79,7 +79,7 @@ export class UserAdminController {
   @SkipThrottle()
   @ApiUserAgent()
   @Get('is-admin')
-  isAdmin(@AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType) {
+  isAdmin(@User() payload: AuthServiceTypes.JwtPayloadSchemaType) {
     return this.userService.isAdmin(payload.sub);
   }
 

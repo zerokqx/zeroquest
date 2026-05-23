@@ -11,7 +11,7 @@ import {
 } from '@nestjs/swagger';
 import {
   ApiClientType,
-  AuthPayload,
+  User,
   AuthToken,
   ClientType,
 } from '@zeroquest/nest-shared';
@@ -33,7 +33,7 @@ export class SessionController {
     type: SessionEntity,
     description: 'Список сессий успешно получен.',
   })
-  async findAll(@AuthPayload() user: AuthServiceTypes.JwtPayloadSchemaType) {
+  async findAll(@User() user: AuthServiceTypes.JwtPayloadSchemaType) {
     const data = await this.sessionService.findAll(user.sub);
     return data
       .map(
@@ -61,7 +61,7 @@ export class SessionController {
     description: 'Текущая сессия успешно получена.',
   })
   async currentUserSession(
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.sessionService.findSessionByRefresh(
       payload.sub,
@@ -87,7 +87,7 @@ export class SessionController {
   })
   async findOne(
     @Param('id') id: string,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.sessionService.findOne(id, payload.sub);
     return new SessionEntity(data);
@@ -118,7 +118,7 @@ export class SessionController {
   })
   async remove(
     @Param('id') id: string,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.sessionService.remove(id, payload);
 

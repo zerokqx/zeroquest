@@ -8,7 +8,7 @@ import { WalletService } from './wallet.service';
 import { type AuthServiceTypes, walletPaterns } from '@zeroquest/types';
 import { CreditWalletDto } from './dto/credit-wallet.dto';
 import { DebitWalletDto } from './dto/debit-wallet.dto';
-import { AuthPayload } from '@zeroquest/nest-shared';
+import { User } from '@zeroquest/nest-shared';
 import { WalletEntity } from './entities/wallet.entity';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 
@@ -31,7 +31,7 @@ export class WalletController {
   @Get('my')
   async getMyWallet(
     @Query('id') id: string,
-    @AuthPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     const data = await this.walletService.findOneByUserId(id, payload.sub);
     return new WalletEntity(data);
