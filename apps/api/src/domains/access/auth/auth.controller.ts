@@ -9,6 +9,7 @@ import {
   Post,
   Req,
   Res,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -22,6 +23,7 @@ import {
   ApiUnauthorizedResponse,
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiExtraModels,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -46,6 +48,7 @@ import { LocalGuard } from './local.guard';
 import { TotpGuard } from '@/domains/security/totp/totp.guard';
 import { TotpApiBody } from '@/domains/security/totp/totp.decorator';
 import { JwtPayload } from '../token/token.decorator';
+import { ApiEnvelopeResponse, EnvelopeDto } from '@/common/swagger/envelope';
 
 type RequestWithClientType = {
   clientType: string;
@@ -109,6 +112,10 @@ export class AuthController {
   @ApiOkResponse({
     description: 'Пользователь успешно авторизован',
     schema: {
+      oneOf:[{
+
+
+      }],
       example: {
         message: 'OK',
         code: RESPONSE_CODES.AUTHENTICATED,
@@ -141,7 +148,7 @@ export class AuthController {
     const csrf = this.csrfService.generateCsrfToken();
     this.cookieManager.setCsrf(res, csrf);
     await this.csrfService.trackCsrfToken(csrf, fingerprint);
-    return { message: 'OK', code: RESPONSE_CODES.AUTHENTICATED };
+    return new EnvelopeDto({ type: RESPONSE_CODES.AUTHENTICATED });
   }
 
   @Post('register')
@@ -216,11 +223,7 @@ export class AuthController {
     this.logger.debug(
       `Запрошено обновление токенов: clientType=${req.clientType}`,
     );
-    const tokens = await this.authService.refresh(
-      payload,
-      req.clientType!,
-      ua,
-    );
+    const tokens = await this.authService.refresh(payload, req.clientType!, ua);
 
     this.cookieManager.setAuthCookies(res, tokens);
 
@@ -252,10 +255,11 @@ export class AuthController {
   @ApiClientType()
   @ApiUserAgent()
   async logout(
-    @User() accessPayload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() user: Express.User ,
     @Res({ passthrough: true }) res: Response,
   ) {
-    await this.authService.logout(accessPayload);
+    if(!user.jwtPayload) throw new UnauthorizedException()
+    await this.authService.logout(user.jwtPayload);
     this.cookieManager.clearAuthCookies(res);
     return;
   }

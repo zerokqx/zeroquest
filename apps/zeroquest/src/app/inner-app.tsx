@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { router } from './main';
 
 export const InnerApp = () => {
+
   const { data: auth, isLoading, isSuccess, isError } = useUserControllerMe({
     query: {
       retry: false,

@@ -38,49 +38,44 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { login } });
     if (!user) throw new NotFoundException('User not found');
     const isValidPassword = compare(password, user.passwordHash);
-    if(!isValidPassword) throw new UnauthorizedException()
-    return user
+    if (!isValidPassword) throw new UnauthorizedException();
+    return user;
   }
 
   async password(
-    { login, password, policy }: LoginDto,
+    { login, policy }: LoginDto,
     ct: string,
     ua: string,
   ) {
     const user = await this.authRepository.findUserByLogin(login);
+    if (!user) throw new NotFoundException();
     if (user && user?.isBanned) {
       throw new ForbiddenException({
         message: 'User banned',
         code: RESPONSE_CODES.AUTHENTICATED_FAILED_BECAUSE_USER_IS_BANNED,
       });
     }
-    if (user && (await compare(password, user?.passwordHash))) {
-      await this.policyService.acceptRequiredPolicies(user.id, policy, [
-        LegalDocumentType.PRIVACY,
-      ]);
-      const sid = nanoid();
+    await this.policyService.acceptRequiredPolicies(user.id, policy, [
+      LegalDocumentType.PRIVACY,
+    ]);
+    const sid = nanoid();
 
-      const [tokens, inputs] = await this.tokenService.createTokenPair({
-        ct,
-        sid,
-        ua,
-        sub: user.id,
-      });
-      await this.sessionService.createSession({
-        ajti: inputs.accessTokenJti,
-        rjti: inputs.refreshTokenJti,
-        sid,
-        ct,
-        ua,
-        uid: user.id,
-      });
+    const [tokens, inputs] = await this.tokenService.createTokenPair({
+      ct,
+      sid,
+      ua,
+      sub: user.id,
+    });
+    await this.sessionService.createSession({
+      ajti: inputs.accessTokenJti,
+      rjti: inputs.refreshTokenJti,
+      sid,
+      ct,
+      ua,
+      uid: user.id,
+    });
 
-      return new AuthenticatedOk(tokens);
-    }
-    this.logger.warn(
-      `Неуспешная попытка входа: login=${login}, clientType=${ct}`,
-    );
-    throw new UnauthorizedException('Invalid login or password');
+    return new AuthenticatedOk(tokens);
   }
 
   async register(login: string, password: string) {

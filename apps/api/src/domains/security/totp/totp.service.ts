@@ -41,6 +41,7 @@ export class TotpService {
   }
 
   getUserTotp(id: User['id']) {
+    console.log(id)
     return this.prisma.totpMfa.findUnique({ where: { userId: id } });
   }
 

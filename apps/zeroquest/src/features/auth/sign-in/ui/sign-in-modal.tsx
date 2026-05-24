@@ -19,12 +19,16 @@ import { useAuthControllerPassword } from '@/shared/api/orval/base-api/auth/auth
 import { PolicyEntityType } from '@/shared/api/orval/base-api/base-api.schemas';
 import { getAuthErrorMessage } from '@/features/auth/shared/get-auth-error-message';
 import { useGetActualPolicy } from '@/entites/policy/api/get-actual-policy';
+import { RESPONSE_CODES } from '@zeroquest/constants';
+import { TotpModal } from '../../totp/ui/totp-modal';
+import { useModal } from '../../totp/model/use-modal';
+import { useAuthStore, waitForTotp } from '../../shared/state';
 
 interface SignInModalProps
   extends Pick<ModalProps, 'opened' | 'onClose' | 'stackId'> {
   onOpenSignUp: () => void;
   onSuccess?: () => void;
-  onTotpRequired?: (challengeId: string) => void;
+  onTotpRequired?: () => void;
 }
 
 interface SignInFormValues {
@@ -55,8 +59,7 @@ export const SignInModal = ({
       privacyAccepted: false,
     },
   });
-  const { mutateAsync, isPending } = useAuthControllerPassword();
-
+  const { mutateAsync, isPending, error } = useAuthControllerPassword();
   const onSubmit = async (values: SignInFormValues) => {
     setSubmitError('');
 
@@ -67,7 +70,7 @@ export const SignInModal = ({
     }
 
     try {
-      const result = await mutateAsync({
+       await mutateAsync({
         data: {
           login: values.login.trim(),
           password: values.password,
@@ -79,23 +82,30 @@ export const SignInModal = ({
           ],
         },
       });
-
-      if (result.type === 'TOTP_REQUIRED') {
-        const challengeId =
-          (result as { challengeId?: string }).challengeId ??
-          (result as { data?: { challengeId?: string } }).data?.challengeId;
-        if (!challengeId) {
-          setSubmitError('Не удалось получить challenge для проверки TOTP');
-          return;
-        }
-
-        onTotpRequired?.(challengeId);
-        return;
+      console.log(error);
+    } catch (error) {
+      console.log(error.response.data);
+      if (error.response.data?.details.code === RESPONSE_CODES.TOTP_REQUIRED) {
+        onTotpRequired?.();
+        const code = await waitForTotp()
+        console.log(code);
+        await mutateAsync({
+          data: {
+            token: code,
+            login: values.login.trim(),
+            password: values.password,
+            policy: [
+              {
+                type: PolicyEntityType.PRIVACY,
+                version: policyVersion,
+              },
+            ],
+          },
+        });
       }
 
       onSuccess?.();
-    } catch (error) {
-      setSubmitError(getAuthErrorMessage(error));
+      return;
     }
   };
 
@@ -103,70 +113,75 @@ export const SignInModal = ({
 
   return (
     <Modal
-      opened={opened}
-      onClose={onClose}
-      stackId={stackId}
-      title="Вход"
-      centered
-      fullScreen={isMobile}
-    >
-      <Stack gap="md">
-        {submitError && (
-          <Alert color="red" icon={<AlertCircle size={16} />}>
-            {submitError}
-          </Alert>
-        )}
+        opened={opened}
+        onClose={onClose}
+        stackId={stackId}
+        title="Вход"
+        centered
+        fullScreen={isMobile}
+      >
+        <Stack gap="md">
+          {submitError && (
+            <Alert color="red" icon={<AlertCircle size={16} />}>
+              {submitError}
+            </Alert>
+          )}
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <Stack gap="sm">
-            <TextInput
-              label="Логин"
-              error={errors.login?.message}
-              autoComplete="username"
-              {...register('login', { required: 'Введите логин' })}
-              required
-            />
-            <PasswordInput
-              label="Пароль"
-              error={errors.password?.message}
-              autoComplete="current-password"
-              {...register('password', { required: 'Введите пароль' })}
-              required
-            />
-            <Checkbox
-              error={errors.privacyAccepted?.message}
-              {...register('privacyAccepted', {
-                required: 'Нужно принять Политику конфиденциальности',
-              })}
-              label={
-                <Text size="sm">
-                  Я принимаю{' '}
-                  <Anchor href="/policy?type=PRIVACY" target="_blank">
-                    Политику конфиденциальности
-                  </Anchor>
-                </Text>
-              }
-            />
-            <Button
-              type="submit"
-              loading={isPending || isPolicyLoading}
-              disabled={isPolicyLoading}
-              fullWidth
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <Stack gap="sm">
+              <TextInput
+                label="Логин"
+                error={errors.login?.message}
+                autoComplete="username"
+                {...register('login', { required: 'Введите логин' })}
+                required
+              />
+              <PasswordInput
+                label="Пароль"
+                error={errors.password?.message}
+                autoComplete="current-password"
+                {...register('password', { required: 'Введите пароль' })}
+                required
+              />
+              <Checkbox
+                error={errors.privacyAccepted?.message}
+                {...register('privacyAccepted', {
+                  required: 'Нужно принять Политику конфиденциальности',
+                })}
+                label={
+                  <Text size="sm">
+                    Я принимаю{' '}
+                    <Anchor href="/policy?type=PRIVACY" target="_blank">
+                      Политику конфиденциальности
+                    </Anchor>
+                  </Text>
+                }
+              />
+              <Button
+                type="submit"
+                loading={isPending || isPolicyLoading}
+                disabled={isPolicyLoading}
+                fullWidth
+              >
+                Войти
+              </Button>
+            </Stack>
+          </form>
+
+          <Group justify="space-between" gap="xs">
+            <Text size="sm" c="dimmed">
+              Нет аккаунта?
+            </Text>
+            <Anchor
+              component="button"
+              type="button"
+              size="sm"
+              onClick={onOpenSignUp}
             >
-              Войти
-            </Button>
-          </Stack>
-        </form>
-
-        <Group justify="space-between" gap="xs">
-          <Text size="sm" c="dimmed">
-            Нет аккаунта?
-          </Text>
-          <Anchor component="button" type="button" size="sm" onClick={onOpenSignUp}>
-            Создать аккаунт
-          </Anchor>
-        </Group>
-      </Stack>
-    </Modal>
+              Создать аккаунт
+            </Anchor>
+          </Group>
+        </Stack>
+      </Modal>
   );
 };

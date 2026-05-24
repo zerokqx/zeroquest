@@ -76,9 +76,9 @@ export class TotpController {
   @TotpApiBody({type: TotpToggleDto})
   @UseGuards(TotpGuard)
   async disableTotp(
-    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @User() payload: Express.User,
     @Body() body: TotpToggleDto,
   ) {
-    await this.totpService.toggle(payload.sub, body);
+    await this.totpService.toggle(payload.id, body);
   }
 }

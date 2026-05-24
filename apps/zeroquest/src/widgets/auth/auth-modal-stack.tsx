@@ -24,7 +24,6 @@ interface AuthMoodalStackProps {
 export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [challengeId, setChallengeId] = useState('');
   const stack = useModalsStack<AuthModalId>(['sign-in', 'sign-up', 'totp']);
 
   const handleAuthSuccess = async () => {
@@ -37,10 +36,6 @@ export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
     await navigate({ to: '/' });
   };
 
-  const handleTotpRequired = (nextChallengeId: string) => {
-    setChallengeId(nextChallengeId);
-    stack.open('totp');
-  };
 
   useLayoutEffect(() => {
     if (!mode) return;
@@ -68,7 +63,9 @@ export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
           {...stack.register('sign-in')}
           onOpenSignUp={() => stack.open('sign-up')}
           onSuccess={handleAuthSuccess}
-          onTotpRequired={handleTotpRequired}
+          onTotpRequired={() => {
+            stack.open('totp');
+          }}
         />
         <SignUpModal
           {...stack.register('sign-up')}
@@ -77,11 +74,7 @@ export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
             stack.open('sign-in');
           }}
         />
-        <TotpModal
-          challengeId={challengeId}
-          onSuccess={handleAuthSuccess}
-          {...stack.register('totp')}
-        />
+        <TotpModal {...stack.register('totp')} />
       </Modal.Stack>
     </Center>
   );

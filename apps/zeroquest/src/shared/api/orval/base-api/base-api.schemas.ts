@@ -51,28 +51,7 @@ export interface UpdatePlanDto {
   duratationDays?: number;
 }
 
-export type LoginAuthenticatedResponseDtoType = typeof LoginAuthenticatedResponseDtoType[keyof typeof LoginAuthenticatedResponseDtoType];
-
-
-export const LoginAuthenticatedResponseDtoType = {
-  AUTHENTICATED: 'AUTHENTICATED',
-} as const;
-
-export interface LoginAuthenticatedResponseDto {
-  type: LoginAuthenticatedResponseDtoType;
-}
-
-export type LoginTotpRequiredResponseDtoType = typeof LoginTotpRequiredResponseDtoType[keyof typeof LoginTotpRequiredResponseDtoType];
-
-
-export const LoginTotpRequiredResponseDtoType = {
-  TOTP_REQUIRED: 'TOTP_REQUIRED',
-} as const;
-
-export interface LoginTotpRequiredResponseDto {
-  type: LoginTotpRequiredResponseDtoType;
-  challengeId: string;
-}
+export interface EnvelopeDto { [key: string]: unknown }
 
 export type AcceptedPolicyDtoType = typeof AcceptedPolicyDtoType[keyof typeof AcceptedPolicyDtoType];
 
@@ -94,14 +73,17 @@ export interface LoginDto {
   policy: AcceptedPolicyDto[];
 }
 
+export interface IntersectionTotpRequestLoginDto {
+  /** TOTP verification code */
+  token?: string;
+  login: string;
+  password: string;
+  policy: AcceptedPolicyDto[];
+}
+
 export interface RegisterDto {
   login: string;
   password: string;
-}
-
-export interface LoginTotpValidateDto {
-  challengeId: string;
-  vallue: string;
 }
 
 export interface SessionEntity {
@@ -133,24 +115,6 @@ export interface PolicyEntity {
   type: PolicyEntityType;
   version: string;
   content: string;
-}
-
-export interface TotpValidateDto {
-  /** UUID challenge, полученный из `POST /totp/setup`. */
-  challengeId: string;
-  /**
-     * 6-значный TOTP код из приложения-аутентификатора.
-     * @pattern ^\d{6}$
-     */
-  value: string;
-}
-
-export interface TotpRemoveDto {
-  /**
-     * 6-значный TOTP код для подтверждения отключения двухфакторной аутентификации.
-     * @pattern ^\d{6}$
-     */
-  value: string;
 }
 
 export interface CreateInboundDto {
@@ -338,6 +302,14 @@ export interface ClientTypeExistDto {
   clientTypeName: string;
 }
 
+export interface TotpSetupDto { [key: string]: unknown }
+
+export interface IntersectionTotpRequestTotpToggleDto {
+  /** TOTP verification code */
+  token?: string;
+  status: boolean;
+}
+
 export type PlanAdminControllerFindAllParams = {
 /**
  * JSON-массив вида [field, order]
@@ -355,6 +327,21 @@ filter?: Object;
  * JSON-массив embed-полей
  */
 embed?: string;
+};
+
+export type AuthControllerPassword200Type = typeof AuthControllerPassword200Type[keyof typeof AuthControllerPassword200Type];
+
+
+export const AuthControllerPassword200Type = {
+  success: 'success',
+  totp: 'totp',
+} as const;
+
+export type AuthControllerPassword200Data = LoginDto | { [key: string]: unknown };
+
+export type AuthControllerPassword200 = EnvelopeDto & {
+  type: AuthControllerPassword200Type;
+  data: AuthControllerPassword200Data;
 };
 
 export type PolicyControllerGetActualParams = {

@@ -14,8 +14,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  TotpRemoveDto,
-  TotpValidateDto
+  IntersectionTotpRequestTotpToggleDto,
+  TotpSetupDto
 } from '../base-api.schemas';
 
 import { customInstance } from '../../../axios-client';
@@ -31,8 +31,8 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Генерирует новый TOTP секрет, шифрует его и возвращает идентификатор challenge для последующей валидации кода.
- * @summary Создать TOTP challenge
+ * Создает setup jwt cookie и возвращает uri для приложения.
+ * @summary Setup TOTP
  */
 export const totpControllerSetup = (
 
@@ -40,7 +40,7 @@ export const totpControllerSetup = (
 ) => {
 
 
-      return customInstance<string>(
+      return customInstance<unknown>(
       {url: `/api/totp/setup`, method: 'POST', signal
     },
       options);
@@ -48,7 +48,7 @@ export const totpControllerSetup = (
 
 
 
-export const getTotpControllerSetupMutationOptions = <TError = ErrorType<void>,
+export const getTotpControllerSetupMutationOptions = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerSetup>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof totpControllerSetup>>, TError,void, TContext> => {
 
@@ -77,12 +77,12 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type TotpControllerSetupMutationResult = NonNullable<Awaited<ReturnType<typeof totpControllerSetup>>>
 
-    export type TotpControllerSetupMutationError = ErrorType<void>
+    export type TotpControllerSetupMutationError = ErrorType<unknown>
 
     /**
- * @summary Создать TOTP challenge
+ * @summary Setup TOTP
  */
-export const useTotpControllerSetup = <TError = ErrorType<void>,
+export const useTotpControllerSetup = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerSetup>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof totpControllerSetup>>,
@@ -93,30 +93,30 @@ export const useTotpControllerSetup = <TError = ErrorType<void>,
       return useMutation(getTotpControllerSetupMutationOptions(options));
     }
     /**
- * Проверяет введённый 6-значный TOTP код по challengeId и, если код валиден, привязывает TOTP к текущему пользователю.
- * @summary Подтвердить TOTP код
+ * Проверяет код и сохраняет TOTP для пользователя.
+ * @summary Validate setup TOTP
  */
-export const totpControllerValidate = (
-    totpValidateDto: BodyType<TotpValidateDto>,
+export const totpControllerValidateSetup = (
+    totpSetupDto: BodyType<TotpSetupDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
 
       return customInstance<void>(
-      {url: `/api/totp/validate`, method: 'POST',
+      {url: `/api/totp/setup/validate`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: totpValidateDto, signal
+      data: totpSetupDto, signal
     },
       options);
     }
 
 
 
-export const getTotpControllerValidateMutationOptions = <TError = ErrorType<void | unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerValidate>>, TError,{data: BodyType<TotpValidateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof totpControllerValidate>>, TError,{data: BodyType<TotpValidateDto>}, TContext> => {
+export const getTotpControllerValidateSetupMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerValidateSetup>>, TError,{data: BodyType<TotpSetupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof totpControllerValidateSetup>>, TError,{data: BodyType<TotpSetupDto>}, TContext> => {
 
-const mutationKey = ['totpControllerValidate'];
+const mutationKey = ['totpControllerValidateSetup'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -126,10 +126,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof totpControllerValidate>>, {data: BodyType<TotpValidateDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof totpControllerValidateSetup>>, {data: BodyType<TotpSetupDto>}> = (props) => {
           const {data} = props ?? {};
 
-          return  totpControllerValidate(data,requestOptions)
+          return  totpControllerValidateSetup(data,requestOptions)
         }
 
 
@@ -139,48 +139,47 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type TotpControllerValidateMutationResult = NonNullable<Awaited<ReturnType<typeof totpControllerValidate>>>
-    export type TotpControllerValidateMutationBody = BodyType<TotpValidateDto>
-    export type TotpControllerValidateMutationError = ErrorType<void | unknown>
+    export type TotpControllerValidateSetupMutationResult = NonNullable<Awaited<ReturnType<typeof totpControllerValidateSetup>>>
+    export type TotpControllerValidateSetupMutationBody = BodyType<TotpSetupDto>
+    export type TotpControllerValidateSetupMutationError = ErrorType<unknown>
 
     /**
- * @summary Подтвердить TOTP код
+ * @summary Validate setup TOTP
  */
-export const useTotpControllerValidate = <TError = ErrorType<void | unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerValidate>>, TError,{data: BodyType<TotpValidateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useTotpControllerValidateSetup = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerValidateSetup>>, TError,{data: BodyType<TotpSetupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
-        Awaited<ReturnType<typeof totpControllerValidate>>,
+        Awaited<ReturnType<typeof totpControllerValidateSetup>>,
         TError,
-        {data: BodyType<TotpValidateDto>},
+        {data: BodyType<TotpSetupDto>},
         TContext
       > => {
-      return useMutation(getTotpControllerValidateMutationOptions(options));
+      return useMutation(getTotpControllerValidateSetupMutationOptions(options));
     }
     /**
- * Удаляет TOTP у текущего пользователя после подтверждения 6-значным кодом из приложения-аутентификатора.
- * @summary Отключить TOTP
+ * @summary Включает или выключает TOTP
  */
-export const totpControllerRemove = (
-    totpRemoveDto: BodyType<TotpRemoveDto>,
+export const totpControllerDisableTotp = (
+    intersectionTotpRequestTotpToggleDto: BodyType<IntersectionTotpRequestTotpToggleDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
 
-      return customInstance<unknown>(
-      {url: `/api/totp`, method: 'DELETE',
+      return customInstance<void>(
+      {url: `/api/totp/toggle`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: totpRemoveDto, signal
+      data: intersectionTotpRequestTotpToggleDto, signal
     },
       options);
     }
 
 
 
-export const getTotpControllerRemoveMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerRemove>>, TError,{data: BodyType<TotpRemoveDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof totpControllerRemove>>, TError,{data: BodyType<TotpRemoveDto>}, TContext> => {
+export const getTotpControllerDisableTotpMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerDisableTotp>>, TError,{data: BodyType<IntersectionTotpRequestTotpToggleDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof totpControllerDisableTotp>>, TError,{data: BodyType<IntersectionTotpRequestTotpToggleDto>}, TContext> => {
 
-const mutationKey = ['totpControllerRemove'];
+const mutationKey = ['totpControllerDisableTotp'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -190,10 +189,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof totpControllerRemove>>, {data: BodyType<TotpRemoveDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof totpControllerDisableTotp>>, {data: BodyType<IntersectionTotpRequestTotpToggleDto>}> = (props) => {
           const {data} = props ?? {};
 
-          return  totpControllerRemove(data,requestOptions)
+          return  totpControllerDisableTotp(data,requestOptions)
         }
 
 
@@ -203,20 +202,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type TotpControllerRemoveMutationResult = NonNullable<Awaited<ReturnType<typeof totpControllerRemove>>>
-    export type TotpControllerRemoveMutationBody = BodyType<TotpRemoveDto>
-    export type TotpControllerRemoveMutationError = ErrorType<void>
+    export type TotpControllerDisableTotpMutationResult = NonNullable<Awaited<ReturnType<typeof totpControllerDisableTotp>>>
+    export type TotpControllerDisableTotpMutationBody = BodyType<IntersectionTotpRequestTotpToggleDto>
+    export type TotpControllerDisableTotpMutationError = ErrorType<unknown>
 
     /**
- * @summary Отключить TOTP
+ * @summary Включает или выключает TOTP
  */
-export const useTotpControllerRemove = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerRemove>>, TError,{data: BodyType<TotpRemoveDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useTotpControllerDisableTotp = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof totpControllerDisableTotp>>, TError,{data: BodyType<IntersectionTotpRequestTotpToggleDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
-        Awaited<ReturnType<typeof totpControllerRemove>>,
+        Awaited<ReturnType<typeof totpControllerDisableTotp>>,
         TError,
-        {data: BodyType<TotpRemoveDto>},
+        {data: BodyType<IntersectionTotpRequestTotpToggleDto>},
         TContext
       > => {
-      return useMutation(getTotpControllerRemoveMutationOptions(options));
+      return useMutation(getTotpControllerDisableTotpMutationOptions(options));
     }

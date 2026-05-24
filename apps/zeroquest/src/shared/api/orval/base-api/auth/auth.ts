@@ -19,10 +19,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  LoginAuthenticatedResponseDto,
-  LoginDto,
-  LoginTotpRequiredResponseDto,
-  LoginTotpValidateDto,
+  AuthControllerPassword200,
+  IntersectionTotpRequestLoginDto,
   RegisterDto
 } from '../base-api.schemas';
 
@@ -112,15 +110,15 @@ export function useAuthControllerTest<TData = Awaited<ReturnType<typeof authCont
  * @summary Вход по логину и паролю
  */
 export const authControllerPassword = (
-    loginDto: BodyType<LoginDto>,
+    intersectionTotpRequestLoginDto: BodyType<IntersectionTotpRequestLoginDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
 
-      return customInstance<LoginAuthenticatedResponseDto | LoginTotpRequiredResponseDto>(
+      return customInstance<AuthControllerPassword200>(
       {url: `/api/auth/password`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: loginDto, signal
+      data: intersectionTotpRequestLoginDto, signal
     },
       options);
     }
@@ -128,8 +126,8 @@ export const authControllerPassword = (
 
 
 export const getAuthControllerPasswordMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerPassword>>, TError,{data: BodyType<LoginDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof authControllerPassword>>, TError,{data: BodyType<LoginDto>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerPassword>>, TError,{data: BodyType<IntersectionTotpRequestLoginDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof authControllerPassword>>, TError,{data: BodyType<IntersectionTotpRequestLoginDto>}, TContext> => {
 
 const mutationKey = ['authControllerPassword'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -141,7 +139,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerPassword>>, {data: BodyType<LoginDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerPassword>>, {data: BodyType<IntersectionTotpRequestLoginDto>}> = (props) => {
           const {data} = props ?? {};
 
           return  authControllerPassword(data,requestOptions)
@@ -155,18 +153,18 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type AuthControllerPasswordMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerPassword>>>
-    export type AuthControllerPasswordMutationBody = BodyType<LoginDto>
+    export type AuthControllerPasswordMutationBody = BodyType<IntersectionTotpRequestLoginDto>
     export type AuthControllerPasswordMutationError = ErrorType<void>
 
     /**
  * @summary Вход по логину и паролю
  */
 export const useAuthControllerPassword = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerPassword>>, TError,{data: BodyType<LoginDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerPassword>>, TError,{data: BodyType<IntersectionTotpRequestLoginDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof authControllerPassword>>,
         TError,
-        {data: BodyType<LoginDto>},
+        {data: BodyType<IntersectionTotpRequestLoginDto>},
         TContext
       > => {
       return useMutation(getAuthControllerPasswordMutationOptions(options));
@@ -491,66 +489,3 @@ export function useAuthControllerGetCsrf<TData = Awaited<ReturnType<typeof authC
 
 
 
-/**
- * @summary Валидация TOTP кода для логина
- */
-export const authControllerTotpLogin = (
-    loginTotpValidateDto: BodyType<LoginTotpValidateDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<void>(
-      {url: `/api/auth/totp`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: loginTotpValidateDto, signal
-    },
-      options);
-    }
-
-
-
-export const getAuthControllerTotpLoginMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerTotpLogin>>, TError,{data: BodyType<LoginTotpValidateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof authControllerTotpLogin>>, TError,{data: BodyType<LoginTotpValidateDto>}, TContext> => {
-
-const mutationKey = ['authControllerTotpLogin'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerTotpLogin>>, {data: BodyType<LoginTotpValidateDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authControllerTotpLogin(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerTotpLoginMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerTotpLogin>>>
-    export type AuthControllerTotpLoginMutationBody = BodyType<LoginTotpValidateDto>
-    export type AuthControllerTotpLoginMutationError = ErrorType<unknown>
-
-    /**
- * @summary Валидация TOTP кода для логина
- */
-export const useAuthControllerTotpLogin = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerTotpLogin>>, TError,{data: BodyType<LoginTotpValidateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authControllerTotpLogin>>,
-        TError,
-        {data: BodyType<LoginTotpValidateDto>},
-        TContext
-      > => {
-      return useMutation(getAuthControllerTotpLoginMutationOptions(options));
-    }

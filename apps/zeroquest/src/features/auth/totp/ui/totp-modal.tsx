@@ -12,27 +12,17 @@ import {
 import { AlertCircle, ShieldCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useValidateTotp } from '../api/validate-totp';
-import { getAuthErrorMessage } from '@/features/auth/shared/get-auth-error-message';
+import { useAuthStore } from '../../shared/state';
 
 interface TotpModalProps
-  extends Pick<Modal.Props, 'opened' | 'onClose' | 'stackId'> {
-  onSuccess?: () => void;
-  challengeId: string;
-}
+  extends Pick<Modal.Props, 'onClose' | 'opened' | 'stackId'> {}
+
 interface TotpModalState {
   value: string;
 }
 
-export const TotpModal = ({
-  opened,
-  onClose,
-  onSuccess,
-  stackId,
-  challengeId,
-}: TotpModalProps) => {
+export const TotpModal = ({ opened, onClose }: TotpModalProps) => {
   const [submitError, setSubmitError] = useState('');
-  const { mutateAsync, isPending } = useValidateTotp();
   const { control, handleSubmit, reset } = useForm<TotpModalState>({
     defaultValues: { value: '' },
   });
@@ -43,32 +33,16 @@ export const TotpModal = ({
     reset({ value: '' });
   }, [opened, reset]);
 
-  const submit: SubmitHandler<TotpModalState> = async ({ value }) => {
-    setSubmitError('');
-    if (!challengeId) {
-      setSubmitError('Сессия подтверждения истекла. Войдите снова.');
-      return;
-    }
-
-    const normalizedValue = value.replace(/\D/g, '').slice(0, 6);
-    if (normalizedValue.length !== 6) {
-      setSubmitError('Введите 6-значный код');
-      return;
-    }
-
-    try {
-      await mutateAsync({ data: { challengeId, vallue: normalizedValue } });
-      onSuccess?.();
-    } catch (error) {
-      setSubmitError(getAuthErrorMessage(error));
-    }
+  const submit: SubmitHandler<TotpModalState> = ({ value }) => {
+    useAuthStore.setState({ totpCode: value });
+    onClose();
   };
 
   return (
     <Modal
+      zIndex={1000000}
       opened={opened}
       onClose={onClose}
-      stackId={stackId}
       title="Подтверждение входа"
       centered
       size="sm"
@@ -99,11 +73,17 @@ export const TotpModal = ({
             control={control}
             name="value"
             render={({ field }) => (
-              <PinInput {...field} length={6} type="number" size="lg" oneTimeCode />
+              <PinInput
+                {...field}
+                length={6}
+                type="number"
+                size="lg"
+                oneTimeCode
+              />
             )}
           />
         </Center>
-        <Button type="submit" loading={isPending} fullWidth>
+        <Button type="submit" fullWidth>
           Подтвердить
         </Button>
       </Stack>
