@@ -48,12 +48,13 @@ export class SessionCacheService {
 
   async getUserSessions(uid: Session['uid']): Promise<Session[]> {
     const sessionIds = await this.redis.smembers(this.userSessionsKey(uid));
+    console.log(sessionIds)
     if (sessionIds.length === 0) return [];
 
     const raws = await this.redis.mget(
       sessionIds.map((sessionId) => this.sessionKey(sessionId)),
     );
-
+    console.log(raws)
     return raws.flatMap((raw) => {
       if (!raw) return [];
       try {

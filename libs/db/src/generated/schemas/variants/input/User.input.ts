@@ -5,7 +5,7 @@ export const UserInputSchema = z.object({
     id: z.string(),
     login: z.string(),
     telegramId: z.number().int().optional().nullable(),
-    passwordHash: z.string(),
+    passwordHash: z.string().optional().nullable(),
     subscribes: z.array(z.unknown()),
     isBanned: z.boolean(),
     role: UserRoleSchema,

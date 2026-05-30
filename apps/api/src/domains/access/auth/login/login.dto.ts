@@ -1,13 +1,14 @@
+
 import {
   ArrayMinSize,
   IsArray,
   IsNotEmpty,
   ValidateNested,
 } from 'class-validator';
-import { RegisterDto } from './register.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { AcceptedPolicyDto } from '@/domains/content/policy/dto/accepted-policy.dto';
+import { RegisterDto } from '../register/register.dto';
 
 export class LoginDto extends RegisterDto {
   @ApiProperty({ type: AcceptedPolicyDto, isArray: true })

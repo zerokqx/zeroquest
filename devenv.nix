@@ -1,8 +1,5 @@
 {
   pkgs,
-  lib,
-  config,
-  inputs,
   ...
 }:
 
@@ -43,9 +40,9 @@
 
   scripts.run-full.exec = "nx run-many -t serve -p api zeroquest";
   scripts.run-full-with-ngrok.exec = "nx run-many -t serve -p api zeroquest && nx ngrok:run api";
-scripts.zellij-start-app.exec = ''
-  zellij --new-session-with-layout ./layout.kdl --session zeroquest
-'';
+  scripts.zellij-start-app.exec = ''
+    zellij --new-session-with-layout ./layout.kdl --session zeroquest
+  '';
 
   enterShell = ''
     hello         # Run scripts directly

@@ -16,7 +16,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnauthorizedSignUpRouteImport } from './routes/_unauthorized/sign-up'
 import { Route as GeneralPolicyRouteImport } from './routes/_general/policy'
 import { Route as AuthorizedSessionsRouteImport } from './routes/_authorized/sessions'
-import { Route as AuthorizedReviewRouteImport } from './routes/_authorized/review'
 import { Route as AuthorizedPaymentHistoryRouteImport } from './routes/_authorized/payment-history'
 import { Route as AuthorizedMagazineRouteImport } from './routes/_authorized/magazine'
 import { Route as AuthorizedDashboardRouteImport } from './routes/_authorized/dashboard'
@@ -55,11 +54,6 @@ const AuthorizedSessionsRoute = AuthorizedSessionsRouteImport.update({
   path: '/sessions',
   getParentRoute: () => AuthorizedRouteRoute,
 } as any)
-const AuthorizedReviewRoute = AuthorizedReviewRouteImport.update({
-  id: '/review',
-  path: '/review',
-  getParentRoute: () => AuthorizedRouteRoute,
-} as any)
 const AuthorizedPaymentHistoryRoute =
   AuthorizedPaymentHistoryRouteImport.update({
     id: '/payment-history',
@@ -89,7 +83,6 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthorizedDashboardRoute
   '/magazine': typeof AuthorizedMagazineRoute
   '/payment-history': typeof AuthorizedPaymentHistoryRoute
-  '/review': typeof AuthorizedReviewRoute
   '/sessions': typeof AuthorizedSessionsRoute
   '/policy': typeof GeneralPolicyRoute
   '/sign-up': typeof UnauthorizedSignUpRoute
@@ -101,7 +94,6 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthorizedDashboardRoute
   '/magazine': typeof AuthorizedMagazineRoute
   '/payment-history': typeof AuthorizedPaymentHistoryRoute
-  '/review': typeof AuthorizedReviewRoute
   '/sessions': typeof AuthorizedSessionsRoute
   '/policy': typeof GeneralPolicyRoute
   '/sign-up': typeof UnauthorizedSignUpRoute
@@ -116,7 +108,6 @@ export interface FileRoutesById {
   '/_authorized/dashboard': typeof AuthorizedDashboardRoute
   '/_authorized/magazine': typeof AuthorizedMagazineRoute
   '/_authorized/payment-history': typeof AuthorizedPaymentHistoryRoute
-  '/_authorized/review': typeof AuthorizedReviewRoute
   '/_authorized/sessions': typeof AuthorizedSessionsRoute
   '/_general/policy': typeof GeneralPolicyRoute
   '/_unauthorized/sign-up': typeof UnauthorizedSignUpRoute
@@ -130,7 +121,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/magazine'
     | '/payment-history'
-    | '/review'
     | '/sessions'
     | '/policy'
     | '/sign-up'
@@ -142,7 +132,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/magazine'
     | '/payment-history'
-    | '/review'
     | '/sessions'
     | '/policy'
     | '/sign-up'
@@ -156,7 +145,6 @@ export interface FileRouteTypes {
     | '/_authorized/dashboard'
     | '/_authorized/magazine'
     | '/_authorized/payment-history'
-    | '/_authorized/review'
     | '/_authorized/sessions'
     | '/_general/policy'
     | '/_unauthorized/sign-up'
@@ -222,13 +210,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedSessionsRouteImport
       parentRoute: typeof AuthorizedRouteRoute
     }
-    '/_authorized/review': {
-      id: '/_authorized/review'
-      path: '/review'
-      fullPath: '/review'
-      preLoaderRoute: typeof AuthorizedReviewRouteImport
-      parentRoute: typeof AuthorizedRouteRoute
-    }
     '/_authorized/payment-history': {
       id: '/_authorized/payment-history'
       path: '/payment-history'
@@ -276,7 +257,6 @@ interface AuthorizedRouteRouteChildren {
   AuthorizedDashboardRoute: typeof AuthorizedDashboardRoute
   AuthorizedMagazineRoute: typeof AuthorizedMagazineRoute
   AuthorizedPaymentHistoryRoute: typeof AuthorizedPaymentHistoryRoute
-  AuthorizedReviewRoute: typeof AuthorizedReviewRoute
   AuthorizedSessionsRoute: typeof AuthorizedSessionsRoute
 }
 
@@ -284,7 +264,6 @@ const AuthorizedRouteRouteChildren: AuthorizedRouteRouteChildren = {
   AuthorizedDashboardRoute: AuthorizedDashboardRoute,
   AuthorizedMagazineRoute: AuthorizedMagazineRoute,
   AuthorizedPaymentHistoryRoute: AuthorizedPaymentHistoryRoute,
-  AuthorizedReviewRoute: AuthorizedReviewRoute,
   AuthorizedSessionsRoute: AuthorizedSessionsRoute,
 }
 

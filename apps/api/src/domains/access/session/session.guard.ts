@@ -1,6 +1,5 @@
 import { type Request } from 'express';
 import {
-  BadRequestException,
   CanActivate,
   ExecutionContext,
   ForbiddenException,
@@ -9,8 +8,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { SessionService } from './session.service';
-import { AuthServiceTypes } from '@zeroquest/types';
-import { Session } from './dto/schemas/session.schema';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '@zeroquest/nest-shared';
 import { RESPONSE_CODES } from '@zeroquest/constants';

@@ -5,11 +5,10 @@ services:
     build:
       context: .
       dockerfile: ./apps/zeroquest/Dockerfile
-      network: host
     networks:
       - insight-network
     ports:
-      - "127.0.0.1:4200:4200"
+      - "127.0.0.1:4200:3000"
     env_file: ./.env
     environment:
       HOST: 0.0.0.0
@@ -34,6 +33,7 @@ services:
     env_file: ./.env
     environment:
       BACKEND_HOST: 0.0.0.0
+      PORT: 4000
       BACKEND_PORT: 4000
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
@@ -48,11 +48,11 @@ services:
     depends_on:
       - redis
       - postgres
-  nginx:
-    image: nginx:alpine
-    network_mode: "host"
-    volumes:
-      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  # nginx:
+  #   image: nginx:alpine
+  #   network_mode: "host"
+  #   volumes:
+  #     - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
   redis:
     networks:
       - insight-network

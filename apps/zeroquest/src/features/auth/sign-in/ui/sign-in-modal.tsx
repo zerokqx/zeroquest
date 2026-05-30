@@ -17,14 +17,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuthControllerPassword } from '@/shared/api/orval/base-api/auth/auth';
 import { PolicyEntityType } from '@/shared/api/orval/base-api/base-api.schemas';
-import { getAuthErrorMessage } from '@/features/auth/shared/get-auth-error-message';
 import { useGetActualPolicy } from '@/entites/policy/api/get-actual-policy';
+import { RESPONSE_CODES } from '@zeroquest/constants';
+import { waitForTotp } from '../../shared/state';
 
 interface SignInModalProps
   extends Pick<ModalProps, 'opened' | 'onClose' | 'stackId'> {
   onOpenSignUp: () => void;
   onSuccess?: () => void;
-  onTotpRequired?: (challengeId: string) => void;
+  onTotpRequired?: () => void;
 }
 
 interface SignInFormValues {
@@ -42,8 +43,13 @@ export const SignInModal = ({
   onTotpRequired,
 }: SignInModalProps) => {
   const [submitError, setSubmitError] = useState('');
+  const [isInternalPending, setIsInternalPending] = useState(false); // Для удержания лоадера во время waitForTotp
+
+  const isMobile = useMediaQuery('(max-width: 48em)');
+
   const { data: actualPrivacyPolicy, isLoading: isPolicyLoading } =
     useGetActualPolicy(PolicyEntityType.PRIVACY);
+
   const {
     register,
     handleSubmit,
@@ -55,9 +61,13 @@ export const SignInModal = ({
       privacyAccepted: false,
     },
   });
+
   const { mutateAsync, isPending } = useAuthControllerPassword();
 
-  const onSubmit = async (values: SignInFormValues) => {
+  const onSubmit = async ({
+    login,
+    password,
+  }: SignInFormValues) => {
     setSubmitError('');
 
     const policyVersion = actualPrivacyPolicy?.version;
@@ -66,40 +76,63 @@ export const SignInModal = ({
       return;
     }
 
-    try {
-      const result = await mutateAsync({
-        data: {
-          login: values.login.trim(),
-          password: values.password,
-          policy: [
-            {
-              type: PolicyEntityType.PRIVACY,
-              version: policyVersion,
-            },
-          ],
+    const baseData = {
+      login: login.trim(),
+      password: password,
+      policy: [
+        {
+          type: PolicyEntityType.PRIVACY,
+          version: policyVersion,
         },
-      });
+      ],
+    };
 
-      if (result.type === 'TOTP_REQUIRED') {
-        const challengeId =
-          (result as { challengeId?: string }).challengeId ??
-          (result as { data?: { challengeId?: string } }).data?.challengeId;
-        if (!challengeId) {
-          setSubmitError('Не удалось получить challenge для проверки TOTP');
-          return;
-        }
-
-        onTotpRequired?.(challengeId);
-        return;
-      }
+    try {
+      await mutateAsync({ data: baseData });
 
       onSuccess?.();
-    } catch (error) {
-      setSubmitError(getAuthErrorMessage(error));
+      onClose();
+    } catch (error: any) {
+      const apiCode = error?.response?.data?.details?.code;
+
+      if (apiCode === RESPONSE_CODES.TOTP_REQUIRED) {
+        try {
+          setIsInternalPending(true);
+          onTotpRequired?.(); // Оповещаем родителя, что открываем ввод TOTP
+          const code = await waitForTotp();
+
+          if (!code) {
+            return;
+          }
+
+          // 3. Повторный запрос, теперь уже с токеном
+          await mutateAsync({
+            data: {
+              ...baseData,
+              token: code.trim(),
+            },
+          });
+          onSuccess?.();
+          onClose();
+        } catch (secondError: any) {
+          // Обрабатываем ошибку именно второго запроса (например, неверный код TOTP)
+          setSubmitError(
+            secondError?.response?.data?.message ||
+              'Неверный код подтверждения',
+          );
+        } finally {
+          setIsInternalPending(false); // Выключаем ручной лоадер
+        }
+
+        return; // Выходим, чтобы не сработал общий catch ниже
+      }
+
+      // Обработка обычных ошибок первого запроса (неверный пароль, логин и т.д.)
+      setSubmitError(
+        error?.response?.data?.message || 'Произошла ошибка при авторизации',
+      );
     }
   };
-
-  const isMobile = useMediaQuery('(max-width: 48em)');
 
   return (
     <Modal
@@ -149,7 +182,8 @@ export const SignInModal = ({
             />
             <Button
               type="submit"
-              loading={isPending || isPolicyLoading}
+              // Объединяем лоадер мутации и наш внутренний стейт ожидания кода
+              loading={isPending || isInternalPending || isPolicyLoading}
               disabled={isPolicyLoading}
               fullWidth
             >
@@ -162,7 +196,12 @@ export const SignInModal = ({
           <Text size="sm" c="dimmed">
             Нет аккаунта?
           </Text>
-          <Anchor component="button" type="button" size="sm" onClick={onOpenSignUp}>
+          <Anchor
+            component="button"
+            type="button"
+            size="sm"
+            onClick={onOpenSignUp}
+          >
             Создать аккаунт
           </Anchor>
         </Group>

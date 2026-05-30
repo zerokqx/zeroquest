@@ -19,12 +19,11 @@ export class TotpAuthStrategy extends PassportStrategy(Strategy, 'totp') {
   override async validate(req: Request): Promise<Express.User> {
     const { token } = req.body ?? {};
     const user = req.user;
-    this.logger.debug(user);
+    if (!token)
+      throw new UnauthorizedException({ code: RESPONSE_CODES.TOTP_REQUIRED });
     if (!user) throw new UnauthorizedException();
     const totp = await this.totpService.getUserTotp(user.id);
     if (!totp || !totp.enabled) return user;
-    if (!token)
-      throw new UnauthorizedException({ code: RESPONSE_CODES.TOTP_REQUIRED });
     const secret = this.cryptoService.decrypt({
       authTag: totp.authTag,
       ciphertext: totp.ciphertext,

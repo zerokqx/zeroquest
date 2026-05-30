@@ -3,7 +3,7 @@ export const UserFindFirstResultSchema = z.nullable(z.object({
   id: z.string(),
   login: z.string(),
   telegramId: z.number().int().optional(),
-  passwordHash: z.string(),
+  passwordHash: z.string().optional(),
   subscribes: z.array(z.unknown()),
   isBanned: z.boolean(),
   role: z.unknown(),

@@ -1,5 +1,4 @@
 import {
-  Alert,
   Button,
   Center,
   Modal,
@@ -9,66 +8,40 @@ import {
   ThemeIcon,
   Title,
 } from '@mantine/core';
-import { AlertCircle, ShieldCheck } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { ShieldCheck } from 'lucide-react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useValidateTotp } from '../api/validate-totp';
-import { getAuthErrorMessage } from '@/features/auth/shared/get-auth-error-message';
+import { useAuthStore } from '../../shared/state';
 
-interface TotpModalProps
-  extends Pick<Modal.Props, 'opened' | 'onClose' | 'stackId'> {
-  onSuccess?: () => void;
-  challengeId: string;
-}
+type TotpModalProps = Pick<Modal.Props, 'onClose' | 'opened' | 'stackId'>
+
 interface TotpModalState {
   value: string;
 }
 
-export const TotpModal = ({
-  opened,
-  onClose,
-  onSuccess,
-  stackId,
-  challengeId,
-}: TotpModalProps) => {
-  const [submitError, setSubmitError] = useState('');
-  const { mutateAsync, isPending } = useValidateTotp();
+export const TotpModal = ({ opened, onClose, stackId }: TotpModalProps) => {
   const { control, handleSubmit, reset } = useForm<TotpModalState>({
     defaultValues: { value: '' },
   });
 
   useEffect(() => {
     if (!opened) return;
-    setSubmitError('');
     reset({ value: '' });
   }, [opened, reset]);
 
-  const submit: SubmitHandler<TotpModalState> = async ({ value }) => {
-    setSubmitError('');
-    if (!challengeId) {
-      setSubmitError('Сессия подтверждения истекла. Войдите снова.');
-      return;
-    }
-
-    const normalizedValue = value.replace(/\D/g, '').slice(0, 6);
-    if (normalizedValue.length !== 6) {
-      setSubmitError('Введите 6-значный код');
-      return;
-    }
-
-    try {
-      await mutateAsync({ data: { challengeId, vallue: normalizedValue } });
-      onSuccess?.();
-    } catch (error) {
-      setSubmitError(getAuthErrorMessage(error));
-    }
+  const submit: SubmitHandler<TotpModalState> = ({ value }) => {
+    useAuthStore.setState({ totpCode: value });
+    onClose();
   };
 
   return (
     <Modal
-      opened={opened}
-      onClose={onClose}
       stackId={stackId}
+      opened={opened}
+      onClose={() => {
+        useAuthStore.setState({ totpCode: '' });
+        onClose();
+      }}
       title="Подтверждение входа"
       centered
       size="sm"
@@ -88,22 +61,22 @@ export const TotpModal = ({
           </Text>
         </Stack>
 
-        {submitError && (
-          <Alert color="red" icon={<AlertCircle size={16} />}>
-            {submitError}
-          </Alert>
-        )}
-
         <Center>
           <Controller
             control={control}
             name="value"
             render={({ field }) => (
-              <PinInput {...field} length={6} type="number" size="lg" oneTimeCode />
+              <PinInput
+                {...field}
+                length={6}
+                type="number"
+                size="lg"
+                oneTimeCode
+              />
             )}
           />
         </Center>
-        <Button type="submit" loading={isPending} fullWidth>
+        <Button type="submit" fullWidth>
           Подтвердить
         </Button>
       </Stack>

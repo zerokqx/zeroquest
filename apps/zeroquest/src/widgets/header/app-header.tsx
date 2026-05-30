@@ -12,7 +12,6 @@ import {
   ShoppingBag,
   UserStar,
 } from 'lucide-react';
-import { Logotype } from '@/shared/ui/logotype';
 import { UserEntityRole } from '@/shared/api/orval/base-api/base-api.schemas';
 
 export const AppHeader = () => {
@@ -35,12 +34,6 @@ export const AppHeader = () => {
       }}
     >
       <Group justify="space-between" align="center" wrap="wrap">
-        <Logotype
-          onClick={() => {
-            navigate({ to: '/' });
-          }}
-        />
-
         <Menu
           shadow="md"
           width={240}
@@ -67,14 +60,6 @@ export const AppHeader = () => {
               Дом
             </Menu.Item>
 
-            <Menu.Item
-              leftSection={<UserStar size={14} />}
-              onClick={() => {
-                navigate({ to: '/review' });
-              }}
-            >
-              Отзывы
-            </Menu.Item>
             <Menu.Item
               leftSection={<ShoppingBag size={14} />}
               onClick={() => {

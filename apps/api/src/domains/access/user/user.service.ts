@@ -17,14 +17,8 @@ export class UserService {
     private readonly userCache: UserCache,
   ) {}
 
-  private getAuthorizedUserId(userId: string | undefined): string {
-    if (!userId) throw new UnauthorizedException('Unauthorized user context');
 
-    return userId;
-  }
-
-  async me(payload: AuthServiceTypes.JwtPayloadSchemaType) {
-    const userId = this.getAuthorizedUserId(payload.sub);
+  async me(userId: User['id']) {
     const user = await this.userRepository.findById({
       where: {
         id: userId,
@@ -39,8 +33,7 @@ export class UserService {
     return user;
   }
 
-  async patchMe(payload: AuthServiceTypes.JwtPayloadSchemaType, dto: PatchMeDto) {
-    const userId = this.getAuthorizedUserId(payload.sub);
+  async patchMe(userId: User['id'], dto: PatchMeDto) {
     try {
       const updatedUser = await this.userRepository.updateById({
         where: {

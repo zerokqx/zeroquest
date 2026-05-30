@@ -1,5 +1,9 @@
 import { applyDecorators, Type } from '@nestjs/common';
-import { ApiBody, ApiBodyOptions, IntersectionType } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiBodyOptions,
+  IntersectionType,
+} from '@nestjs/swagger';
 import { TotpRequest } from './dto/totp-request.dto';
 
 export const TotpApiBody = (options: ApiBodyOptions) =>
@@ -11,3 +15,4 @@ export const TotpApiBody = (options: ApiBodyOptions) =>
       }),
     }),
   );
+

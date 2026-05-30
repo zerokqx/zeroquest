@@ -2,6 +2,7 @@ import * as z from 'zod';
 import type { Prisma } from '../../client';
 import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
 import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
+import { StringNullableFilterObjectSchema as StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { BoolFilterObjectSchema as BoolFilterObjectSchema } from './BoolFilter.schema';
 import { EnumUserRoleFilterObjectSchema as EnumUserRoleFilterObjectSchema } from './EnumUserRoleFilter.schema';
 import { UserRoleSchema } from '../enums/UserRole.schema';
@@ -23,7 +24,7 @@ const userwhereinputSchema = z.object({
   id: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   login: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   telegramId: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).optional().nullable(),
-  passwordHash: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
+  passwordHash: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
   isBanned: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   role: z.union([z.lazy(() => EnumUserRoleFilterObjectSchema), UserRoleSchema]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),

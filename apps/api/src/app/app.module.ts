@@ -4,7 +4,6 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { LoggerModule } from 'nestjs-pino';
 import configuration, { EnvironmentVariables } from '../config/configuration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from '../domains/access/auth/auth.module';
@@ -112,7 +111,7 @@ import { TotpModule } from '@/domains/security/totp/totp.module';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    { provide: APP_GUARD, useClass: ClientTypeGuard },
+    // { provide: APP_GUARD, useClass: ClientTypeGuard },
     { provide: APP_GUARD, useClass: RoleGuard },
   ],
 })

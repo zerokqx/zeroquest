@@ -35,8 +35,8 @@ export class UserController {
     type: UserEntity,
     description: 'Профиль успешно получен.',
   })
-  async me(@User() payload: AuthServiceTypes.JwtPayloadSchemaType) {
-    const data = await this.userService.me(payload);
+  async me(@User() user: Express.User) {
+    const data = await this.userService.me(user.id);
 
     return new UserEntity(data);
   }
