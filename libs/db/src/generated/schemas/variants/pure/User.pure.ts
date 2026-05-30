@@ -5,7 +5,7 @@ export const UserModelSchema = z.object({
     id: z.string(),
     login: z.string(),
     telegramId: z.number().int().nullable(),
-    passwordHash: z.string(),
+    passwordHash: z.string().nullable(),
     subscribes: z.array(z.unknown()),
     isBanned: z.boolean(),
     role: UserRoleSchema,

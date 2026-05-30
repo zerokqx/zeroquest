@@ -4,6 +4,16 @@
   "private": true,
   "nx": {
     "targets": {
+      "pm2:run": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "pm2 serve dist 4200 --spa --name zeroquest-client",
+          "cwd": "apps/zeroquest"
+        },
+        "dependsOn": [
+          "build"
+        ]
+      },
       "forward-port:run": {
         "executor": "nx:run-commands",
         "options": {

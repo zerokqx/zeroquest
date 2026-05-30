@@ -8,10 +8,8 @@ export interface AuthCookie {
 }
 
 export const JwtPayloadSchema = z.object({
-  sub: z.cuid(),
+  sub: z.cuid2(),
   sid: z.nanoid(),
-  ua: z.string().min(1),
-  ct: z.string(),
   type: z.enum(['access', 'refresh']),
   jti: z.string(),
 });

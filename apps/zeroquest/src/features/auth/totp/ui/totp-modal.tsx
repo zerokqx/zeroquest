@@ -1,5 +1,4 @@
 import {
-  Alert,
   Button,
   Center,
   Modal,
@@ -9,27 +8,24 @@ import {
   ThemeIcon,
   Title,
 } from '@mantine/core';
-import { AlertCircle, ShieldCheck } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { ShieldCheck } from 'lucide-react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useAuthStore } from '../../shared/state';
 
-interface TotpModalProps
-  extends Pick<Modal.Props, 'onClose' | 'opened' | 'stackId'> {}
+type TotpModalProps = Pick<Modal.Props, 'onClose' | 'opened' | 'stackId'>
 
 interface TotpModalState {
   value: string;
 }
 
-export const TotpModal = ({ opened, onClose }: TotpModalProps) => {
-  const [submitError, setSubmitError] = useState('');
+export const TotpModal = ({ opened, onClose, stackId }: TotpModalProps) => {
   const { control, handleSubmit, reset } = useForm<TotpModalState>({
     defaultValues: { value: '' },
   });
 
   useEffect(() => {
     if (!opened) return;
-    setSubmitError('');
     reset({ value: '' });
   }, [opened, reset]);
 
@@ -40,9 +36,12 @@ export const TotpModal = ({ opened, onClose }: TotpModalProps) => {
 
   return (
     <Modal
-      zIndex={1000000}
+      stackId={stackId}
       opened={opened}
-      onClose={onClose}
+      onClose={() => {
+        useAuthStore.setState({ totpCode: '' });
+        onClose();
+      }}
       title="Подтверждение входа"
       centered
       size="sm"
@@ -61,12 +60,6 @@ export const TotpModal = ({ opened, onClose }: TotpModalProps) => {
             Откройте приложение-аутентификатор и введите 6 цифр
           </Text>
         </Stack>
-
-        {submitError && (
-          <Alert color="red" icon={<AlertCircle size={16} />}>
-            {submitError}
-          </Alert>
-        )}
 
         <Center>
           <Controller

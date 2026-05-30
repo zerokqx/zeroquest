@@ -23,6 +23,9 @@ import { SubscribeBuyDto } from './dto/subscribe-buy.dto';
 import { ResetSubscribeDto } from './dto/reset-subscribe.dto';
 import { SubscribeEntity } from './entities/subscribe.entity';
 import { Subscribe } from '@zeroquest/db';
+import { SubscribeRemovePost } from './decorators/remove-post';
+import { SubscribeUpdatePost } from './decorators/update-post';
+import { SubscribeFindOneGet } from './decorators/find-one-get';
 
 @ApiTags('Subscribe')
 @ApiCookieAuth('zeroquestAccess')
@@ -77,47 +80,15 @@ export class SubscribeController {
     return data.map((subscribe) => new SubscribeEntity(subscribe));
   }
 
-  @Get(':id')
-  @ApiOperation({
-    summary: 'Получить подписку по id',
-    description: 'Возвращает одну подписку текущего пользователя.',
-  })
-  @ApiParam({
-    name: 'id',
-    type: String,
-    description: 'Идентификатор подписки.',
-  })
-  @ApiOkResponse({
-    type: SubscribeEntity,
-    description: 'Подписка успешно найдена.',
-  })
+  @SubscribeFindOneGet()
   findOne(
     @Param('id') id: string,
-
     @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
   ) {
     return this.subscribeService.findOne(id, payload);
   }
 
-  @Role('ADMIN')
-  @Patch(':id')
-  @ApiOperation({
-    summary: 'Обновить подписку',
-    description: 'Обновляет подписку. Доступно только ADMIN.',
-  })
-  @ApiParam({
-    name: 'id',
-    type: String,
-    description: 'Идентификатор подписки.',
-  })
-  @ApiBody({
-    type: UpdateSubscribeDto,
-    description: 'Поля подписки для обновления.',
-  })
-  @ApiOkResponse({
-    type: SubscribeEntity,
-    description: 'Подписка успешно обновлена.',
-  })
+  @SubscribeUpdatePost()
   update(
     @Param('id') id: string,
     @Body() updateSubscribeDto: UpdateSubscribeDto,
@@ -128,19 +99,7 @@ export class SubscribeController {
     });
   }
 
-  @Delete(':id')
-  @ApiOperation({
-    summary: 'Удалить подписку',
-    description: 'Удаляет подписку текущего пользователя.',
-  })
-  @ApiParam({
-    name: 'id',
-    type: String,
-    description: 'Идентификатор подписки.',
-  })
-  @ApiOkResponse({
-    description: 'Подписка успешно удалена.',
-  })
+  @SubscribeRemovePost()
   remove(
     @Param('id') id: string,
     @User() payload: AuthServiceTypes.JwtPayloadSchemaType,

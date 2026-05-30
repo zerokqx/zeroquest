@@ -32,11 +32,13 @@ export class TokenService {
     const parsedPayload = await TokenCreateSchema.parseAsync(payload);
     const accessTokenJti = crypto.randomUUID();
     const refreshTokenJti = crypto.randomUUID();
+
     const accessPayload = {
       ...parsedPayload,
       type: 'access',
       jti: accessTokenJti,
     } satisfies AuthServiceTypes.JwtPayloadSchemaType;
+
     const accessToken = await this.jwtService.signAsync(accessPayload, {
       expiresIn: `${this.jwtEnvironment.accessExpireTimeMs}ms`,
     });

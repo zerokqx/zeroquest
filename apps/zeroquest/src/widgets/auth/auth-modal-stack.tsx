@@ -1,4 +1,5 @@
 import { setIsAuth } from '@/entites/user/model';
+import { GoogleButton } from '@skybin-tech/brandkit';
 import {
   Button,
   Center,
@@ -8,12 +9,9 @@ import {
   Title,
   useModalsStack,
 } from '@mantine/core';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
+import { useRouter } from '@tanstack/react-router';
 import { SignInModal } from '@/features/auth/sign-in';
 import { SignUpModal } from '@/features/auth/sign-up';
-import { getUserControllerMeQueryKey } from '@/shared/api/orval/base-api/user/user';
-import { useLayoutEffect, useState } from 'react';
 import { TotpModal } from '@/features/auth/totp/ui/totp-modal';
 
 type AuthModalId = 'sign-in' | 'sign-up' | 'totp';
@@ -22,28 +20,14 @@ interface AuthMoodalStackProps {
   mode?: AuthModalId;
 }
 export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const router = useRouter();
   const stack = useModalsStack<AuthModalId>(['sign-in', 'sign-up', 'totp']);
 
   const handleAuthSuccess = async () => {
-    await queryClient.refetchQueries({
-      queryKey: getUserControllerMeQueryKey(),
-      exact: true,
-    });
     setIsAuth(true);
     stack.closeAll();
-    await navigate({ to: '/' });
+    await router.invalidate();
   };
-
-
-  useLayoutEffect(() => {
-    if (!mode) return;
-    const timeoutId = setTimeout(() => {
-      stack.open(mode);
-    }, 200);
-    return () => clearTimeout(timeoutId);
-  }, [mode]);
 
   return (
     <Center mih="calc(100dvh - 16px)">
@@ -56,9 +40,16 @@ export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
         <Button variant="default" onClick={() => stack.open('sign-up')}>
           Регистрация
         </Button>
+        <GoogleButton
+          shape="square"
+          onClick={() => {
+            window.location.href = 'http://localhost:4000/api/auth/google';
+          }}
+        />
       </Stack>
 
       <Modal.Stack>
+        <TotpModal {...stack.register('totp')} />
         <SignInModal
           {...stack.register('sign-in')}
           onOpenSignUp={() => stack.open('sign-up')}
@@ -74,7 +65,6 @@ export const AuthModalStack = ({ mode }: AuthMoodalStackProps) => {
             stack.open('sign-in');
           }}
         />
-        <TotpModal {...stack.register('totp')} />
       </Modal.Stack>
     </Center>
   );

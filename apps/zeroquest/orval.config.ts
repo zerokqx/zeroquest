@@ -26,6 +26,7 @@ export default defineConfig({
       mode: 'tags-split',
       namingConvention: 'kebab-case',
       override: {
+        useTypeOverInterfaces:true,
         mutator: MUTATOR_CONFIG,
       },
     },

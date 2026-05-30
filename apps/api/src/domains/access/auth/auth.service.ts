@@ -1,33 +1,19 @@
-import { genSalt, compare, hash } from 'bcryptjs';
+import { compare } from 'bcryptjs';
 import {
-  ConflictException,
-  ForbiddenException,
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import type { AuthServiceTypes } from '@zeroquest/types';
 import { createHash } from 'crypto';
-import { TokenService } from '@/domains/access/token/token.service';
-import { AuthRepository } from './auth.repository';
-import { LegalDocumentType, PrismaService } from '@zeroquest/db';
-import { LoginDto } from './dto/login.dto';
-import { PolicyService } from '@/domains/content/policy/policy.service';
+import { PrismaService } from '@zeroquest/db';
 import { SessionService } from '../session/session.service';
-import { nanoid } from 'nanoid';
-import { RESPONSE_CODES } from '@zeroquest/constants';
-import { AuthenticatedOk } from './dto/login-password-returns.dto';
 
 @Injectable()
 export class AuthService {
-  private logger = new Logger(AuthService.name);
   constructor(
     private readonly prisma: PrismaService,
-    private readonly authRepository: AuthRepository,
-    private readonly tokenService: TokenService,
     private readonly sessionService: SessionService,
-    private readonly policyService: PolicyService,
   ) {}
 
   sha256(data: string) {
@@ -37,89 +23,10 @@ export class AuthService {
   async validateUser(login: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { login } });
     if (!user) throw new NotFoundException('User not found');
+    if (!user.passwordHash) throw new UnauthorizedException('Google account');
     const isValidPassword = compare(password, user.passwordHash);
     if (!isValidPassword) throw new UnauthorizedException();
     return user;
-  }
-
-  async password(
-    { login, policy }: LoginDto,
-    ct: string,
-    ua: string,
-  ) {
-    const user = await this.authRepository.findUserByLogin(login);
-    if (!user) throw new NotFoundException();
-    if (user && user?.isBanned) {
-      throw new ForbiddenException({
-        message: 'User banned',
-        code: RESPONSE_CODES.AUTHENTICATED_FAILED_BECAUSE_USER_IS_BANNED,
-      });
-    }
-    await this.policyService.acceptRequiredPolicies(user.id, policy, [
-      LegalDocumentType.PRIVACY,
-    ]);
-    const sid = nanoid();
-
-    const [tokens, inputs] = await this.tokenService.createTokenPair({
-      ct,
-      sid,
-      ua,
-      sub: user.id,
-    });
-    await this.sessionService.createSession({
-      ajti: inputs.accessTokenJti,
-      rjti: inputs.refreshTokenJti,
-      sid,
-      ct,
-      ua,
-      uid: user.id,
-    });
-
-    return new AuthenticatedOk(tokens);
-  }
-
-  async register(login: string, password: string) {
-    const user = await this.authRepository.findUserLoginByLogin(login);
-    this.logger.debug(`Проверка возможности регистрации: login=${login}`);
-
-    if (user?.login === login) {
-      this.logger.warn(`Регистрация отклонена: login=${login} уже существует`);
-      throw new ConflictException('User with this login already exists');
-    }
-    const salt = await genSalt();
-    const passwordHash = await hash(password, salt);
-    await this.authRepository.createUser({
-      wallet: {
-        create: {},
-      },
-      login,
-      passwordHash,
-    });
-
-    this.logger.log(`Пользователь зарегистрирован: login=${login}`);
-  }
-
-  async refresh(
-    refreshPayload: AuthServiceTypes.JwtPayloadSchemaType,
-    ct: string,
-    ua: string,
-  ) {
-    const session = (await this.sessionService.getSession(refreshPayload.sid))!;
-
-    const [tokens, inputs] = await this.tokenService.createTokenPair({
-      ua,
-      ct,
-      sid: session.sid,
-      sub: session.uid,
-    });
-
-    await this.sessionService.updateSession(session.sid, {
-      ajti: inputs.accessTokenJti,
-      rjti: inputs.refreshTokenJti,
-    });
-
-    this.logger.log(`Refresh выполнен успешно: sessionId=${session.uid}`);
-    return tokens;
   }
 
   async logout(accessPayload: AuthServiceTypes.JwtPayloadSchemaType) {

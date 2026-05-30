@@ -68,46 +68,12 @@ enum SubscribeStatus {
 model ClientType {
   id   Int    @id @default(autoincrement())
   name String @unique
-  // sessions Session[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("client_types")
 }
-
-// model Session {
-//   id               String     @id @default(cuid())
-//   userAgentHash    String     @map("user_agent_hash")
-//   clientType       ClientType @relation(fields: [clientTypeId], references: [id], onDelete: Cascade)
-//   clientTypeId     Int        @map("client_type_id")
-//   refreshTokenJti  String     @map("refresh_token_jti")
-//   accessTokenJti   String     @map("access_token_jti")
-//   refreshTokenHash String     @map("refresh_token_hash")
-//   ip               Ip?        @relation(fields: [ipId], references: [id])
-//   expriesAt        DateTime   @map("expires_at")
-//   createdAt        DateTime   @default(now()) @map("created_at")
-//   user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   userId           String     @map("user_id")
-//   ipId             Int?
-//
-//   @@unique([id, userId])
-//   @@map("sessions")
-// }
-
-// model Device {
-//   id          String   @id @default(cuid())
-//   fingerprint String   @unique
-//   createdAt   DateTime @default(now()) @map("created_at")
-//   updatedAt   DateTime @updatedAt @map("updated_at")
-//   session     Session? @relation(fields: [sessionId], references: [id])
-//   ip          String?
-//   sessionId   String?  @unique @map("session_id")
-//   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   userId      String   @map("user_id")
-//
-//   @@unique([fingerprint, userId])
-// }
 
 model Refund {
   id     Int          @id @default(autoincrement())
@@ -145,18 +111,6 @@ model Plan {
   duratationDays    Int         @default(30) @map("durataton_days")
 
   @@map("plans")
-}
-
-model Review {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String   @unique @map("user_id")
-  content   String
-  rating    Int
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("reviews")
 }
 
 model Payment {
@@ -204,16 +158,13 @@ model User {
   id               String             @id @default(cuid())
   login            String             @unique
   telegramId       Int?               @map("telegram_id")
-  passwordHash     String             @map("password_hash")
+  passwordHash     String?            @map("password_hash")
   subscribes       Subscribe[]
   isBanned         Boolean            @default(false) @map("is_banned")
   role             UserRole           @default(USER)
   createdAt        DateTime           @default(now()) @map("created_at")
   updatedAt        DateTime           @updatedAt @map("updated_at")
   payments         Payment[]
-  // sessions         Session[]
-  review           Review?
-  canComment       Boolean            @default(true) @map("can_comment")
   wallet           Wallet             @relation(fields: [walletId], references: [id])
   walletId         String             @unique @map("wallet_id")
   legalAcceptances LegalAcceptances[]
@@ -273,7 +224,6 @@ model Ip {
   status    IpStatus @default(ACTIVE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  // sessions  Session[]
 
   @@map("ip")
 }

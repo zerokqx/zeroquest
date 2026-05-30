@@ -35,6 +35,7 @@ import {
   IDEMPOTENCE_KEY_HEADER,
   IDEMPOTENCE_KEY_HEADER_DESCRIPTION,
 } from './dto/create-payment.dto';
+import { JwtPayload } from '@/domains/access/token/token.decorator';
 
 @ApiTags('Payment')
 @ApiCookieAuth('zeroquestAccess')
@@ -71,7 +72,7 @@ export class PaymentController {
   })
   async create(
     @Body() createPaymentDto: CreatePaymentDto,
-    @User() payload: AuthServiceTypes.JwtPayloadSchemaType,
+    @JwtPayload() payload: AuthServiceTypes.JwtPayloadSchemaType,
     @Headers(IDEMPOTENCE_KEY_HEADER) idempotenceKey?: string,
   ) {
     return this.paymentService.create(createPaymentDto, payload, idempotenceKey);

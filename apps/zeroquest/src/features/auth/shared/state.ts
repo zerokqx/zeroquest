@@ -5,31 +5,28 @@ interface AuthStore {
   setTotpCode: (newCode: AuthStore['totpCode']) => void;
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>((set, get) => ({
   totpCode: null,
   setTotpCode: (newCode) => set({ totpCode: newCode }),
-  clearCode: () => set({ totpCode: null }),
 }));
 
-
-
 export const waitForTotp = (): Promise<string> => {
-  return new Promise((resolve) => {
-    // 1. Подписываемся на изменения ВСЕГО стейта в Zustand
+  return new Promise<string>((resolve) => {
+    useAuthStore.getState().setTotpCode(null);
+
     const unsub = useAuthStore.subscribe((state) => {
-
-      // 2. Ждем, когда в стейте появится код (пользователь нажал "Подтвердить")
-      if (state.totpCode) {
-
-        // 3. unsub() отписывает нас. Если этого не сделать,
-        // подписка будет висеть вечно и плодить баги.
+      if (state.totpCode?.length === 6) {
         unsub();
-
-        // 4. resolve(code) — это то, что заставляет твой await в onSubmit "проснуться"
         resolve(state.totpCode);
-
-        // 5. Чистим стор, чтобы следующий логин был "чистым"
         useAuthStore.getState().setTotpCode(null);
+        return;
+      }
+
+      if (state.totpCode === '') {
+        unsub();
+        resolve('');
+        useAuthStore.getState().setTotpCode(null);
+        return;
       }
     });
   });

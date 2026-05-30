@@ -14,7 +14,7 @@ export const SessionSchema = z.object({
   /**
    * User ID — идентификатор пользователя (CUID)
    */
-  uid: z.cuid().min(1),
+  uid: z.cuid2().min(1),
 
   /**
    * Access JTI — уникальный идентификатор access-токена (UUIDv4)
@@ -37,11 +37,6 @@ export const SessionSchema = z.object({
   ua: z.string().min(1),
 
   /**
-   * Client Type — тип клиента (например, web, mobile, api)
-   */
-  ct: z.string().min(1),
-
-  /**
    * Created At — дата создания сессии
    * */
   cat: z.number().int().positive(),
@@ -59,7 +54,6 @@ export const SessionCreateSchema = SessionSchema.omit({
 export const SessionUpdateSchema = SessionSchema.omit({
   uid: true,
   sid: true,
-  ct: true,
 }).partial();
 
 export const SessionDeleteSchema = SessionSchema.pick({
